@@ -6,7 +6,7 @@
       <a href="https://www.github.com/sendya/" target="_blank">@Sendya</a> -->
     </template>
     <template v-slot:copyright>
-      <a>@2010</a>
+      <a>@2020</a>
     </template>
   </global-footer>
 </template>
