@@ -31,6 +31,22 @@ export const asyncRouterMap = [
           }
         ]
       },
+      // user-manage
+      {
+        path: '/system',
+        name: 'system',
+        redirect: '/system/user-manage',
+        component: RouteView,
+        meta: { title: '系统管理', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+        children: [
+          {
+            path: '/system/user-manage',
+            name: 'UserManage',
+            component: () => import('@/pages/user/UserManage'),
+            meta: { title: '用户管理', keepAlive: true, permission: ['dashboard'] }
+          }
+        ]
+      },
       // account
       {
         path: '/account',
@@ -125,7 +141,7 @@ export const constantRouterMap = [
     name: 'exception',
     component: RouteView,
     redirect: '/exception/403',
-    meta: { title: '异常页', icon: 'warning', permission: [ 'exception' ] },
+    meta: { title: '异常页', icon: 'warning', permission: [ 'ROLE_ADMIN' ] },
     children: [
       {
         path: '/exception/403',

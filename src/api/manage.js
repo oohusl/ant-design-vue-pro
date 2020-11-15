@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 const api = {
-  user: '/user',
+  user: '/users',
   role: '/role',
   service: '/service',
   permission: '/permission',
@@ -16,6 +16,14 @@ export function getUserList (parameter) {
     url: api.user,
     method: 'get',
     params: parameter
+  })
+}
+
+export function saveUser (parameter) {
+  return request({
+    url: api.user,
+    method: parameter.id ? 'put' : 'post',
+    data: parameter
   })
 }
 
