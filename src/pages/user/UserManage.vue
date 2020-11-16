@@ -265,8 +265,10 @@ export default {
               form.resetFields()
               // 刷新表格
               this.$refs.table.refresh()
-
               this.$message.info('新增成功')
+            }).catch(e => {
+              this.$message.error('新增失败')
+              this.confirmLoading = false
             })
           }
         } else {
@@ -276,7 +278,7 @@ export default {
     },
     handleCancel () {
       this.visible = false
-
+      this.confirmLoading = false
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
     },

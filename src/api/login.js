@@ -4,6 +4,7 @@ const userApi = {
   Login: '/authenticate',
   Logout: '/logout',
   ForgePassword: '/auth/forge-password',
+  ChangePassword: '/account/change-password',
   Register: '/auth/register',
   twoStepCode: '/auth/2step-code',
   SendSms: '/account/sms',
@@ -74,6 +75,14 @@ export function logout () {
 export function get2step (parameter) {
   return request({
     url: userApi.twoStepCode,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function changePassword (parameter) {
+  return request({
+    url: userApi.ChangePassword,
     method: 'post',
     data: parameter
   })
