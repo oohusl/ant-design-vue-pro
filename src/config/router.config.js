@@ -21,13 +21,13 @@ export const asyncRouterMap = [
         name: 'home',
         redirect: '/home/welcome',
         component: RouteView,
-        meta: { title: 'Home', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+        meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
         children: [
           {
             path: '/home/welcome',
             name: 'Home',
             component: () => import('@/pages/home/home'),
-            meta: { title: '工作台', keepAlive: true, permission: ['dashboard'] }
+            meta: { title: '房源查询', keepAlive: true, permission: ['dashboard'] }
           }
         ]
       },

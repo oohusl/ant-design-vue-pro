@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="新建规则"
+    title="新建用户"
     :width="640"
     :visible="visible"
     :confirmLoading="loading"

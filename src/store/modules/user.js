@@ -16,6 +16,8 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+      if (token) storage.set(ACCESS_TOKEN, token)
+      else storage.remove(ACCESS_TOKEN)
     },
     SET_NAME: (state, { name, welcome }) => {
       state.name = name
@@ -85,15 +87,19 @@ const user = {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
-          storage.remove(ACCESS_TOKEN)
           resolve()
         }).catch(() => {
           resolve()
         }).finally(() => {
         })
       })
-    }
+    },
 
+    // 登出
+    PreLogin ({ commit, state }) {
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+    }
   }
 }
 

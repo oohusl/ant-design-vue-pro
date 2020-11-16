@@ -1,4 +1,4 @@
-    env=house@wwwtest.datoucoin.cn
+    env=house@47.98.42.1
     www=/home/house/www/
     project=hk.tar
     npm run build

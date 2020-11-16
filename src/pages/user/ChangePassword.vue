@@ -49,6 +49,7 @@
           @click.stop.prevent="handleSubmit"
           :disabled="registerBtn">确认
         </a-button>
+        <router-link class="login" :to="{ name: 'login' }">取消</router-link>
       </a-form-item>
     </a-form>
   </div>
@@ -269,7 +270,7 @@ export default {
     }
 
     .register-button {
-      width: 100%;
+      width: 50%;
     }
 
     .login {

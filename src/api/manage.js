@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   user: '/users',
+  createUser: '/usersRegister',
   role: '/role',
   service: '/service',
   permission: '/permission',
@@ -21,7 +22,7 @@ export function getUserList (parameter) {
 
 export function saveUser (parameter) {
   return request({
-    url: api.user,
+    url: api.createUser,
     method: parameter.id ? 'put' : 'post',
     data: parameter
   })

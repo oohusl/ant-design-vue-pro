@@ -152,9 +152,10 @@ export default {
     //     this.requiredTwoStepCaptcha = false
     //   })
     // this.requiredTwoStepCaptcha = true
+    store.dispatch('PreLogin')
   },
   methods: {
-    ...mapActions(['Login', 'Logout', 'GetInfo']),
+    ...mapActions(['Login', 'Logout', 'GetInfo', 'PreLogin']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -263,20 +264,8 @@ export default {
         }).catch(e => {
             this.$router.push({ path: 'change-password' })
         })
-
-      // check res.homePage define, set $router.push name res.homePage
-      // Why not enter onComplete
-      /*
-      this.$router.push({ name: 'analysis' }, () => {
-        console.log('onComplete')
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
-        })
-      })
-      */
     },
-    requestFailed (err) {
+    requestFailed () {
       this.isLoginError = true
     }
   }

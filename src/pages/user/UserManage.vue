@@ -256,7 +256,6 @@ export default {
           } else {
             // 新增
             const user = {}
-            user.login = values.iphone
             user.iphone = values.iphone
             saveUser(user).then().then(res => {
               this.visible = false
