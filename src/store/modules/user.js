@@ -89,6 +89,8 @@ const user = {
           commit('SET_ROLES', [])
           resolve()
         }).catch(() => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
           resolve()
         }).finally(() => {
         })

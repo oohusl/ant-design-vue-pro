@@ -12,21 +12,21 @@ export const asyncRouterMap = [
     path: '/',
     name: 'index',
     component: BasicLayout,
-    meta: { title: 'menu.home' },
-    redirect: '/home/welcome',
+    meta: { title: '主页' },
+    redirect: '/home/house',
     children: [
       // dashboard
       {
         path: '/home',
         name: 'home',
-        redirect: '/home/welcome',
+        redirect: '/home/house',
         component: RouteView,
         meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
         children: [
           {
-            path: '/home/welcome',
-            name: 'Home',
-            component: () => import('@/pages/home/home'),
+            path: '/home/house',
+            name: 'HouseManage',
+            component: () => import('@/pages/workspace/HouseManage'),
             meta: { title: '房源查询', keepAlive: true, permission: ['dashboard'] }
           }
         ]
