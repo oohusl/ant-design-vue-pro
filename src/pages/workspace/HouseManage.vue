@@ -1,11 +1,26 @@
 <template>
   <a-card :bordered="false">
-    <a-card-grid style="width:300px; padding: 25px 15px 15px 15px">
+    <a-card-grid style="width:300px; padding: 25px 12px 12px 12px">
       <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
         <a-form-item v-bind="tailFormItemLayout">
           <a-button type="primary" style="width: 100%">
             筛选
           </a-button>
+        </a-form-item>
+        <a-form-item
+          label="最近筛选"
+        >
+          <a-tag color="pink">李二</a-tag><a-tag color="red">李一</a-tag>
+          <a-tag color="orange">张三</a-tag><a-tag color="green">李四</a-tag>
+          <a-tag color="cyan">热门</a-tag>
+          <br>
+          <a-tag style="background: #fff; borderStyle: dashed;">
+            <a-icon type="plus" /> 新建筛选
+          </a-tag>
+          <a-tag style="background: #fff; borderStyle: dashed;">
+            <a-icon type="minus" /> 删除筛选
+          </a-tag>
+
         </a-form-item>
         <a-form-item
           label="区域"
@@ -116,11 +131,6 @@
           label="Field B"
         >
           <a-input placeholder="input placeholder" />
-        </a-form-item>
-        <a-form-item v-bind="tailFormItemLayout">
-          <a-button type="primary" style="width: 100%">
-            筛选
-          </a-button>
         </a-form-item>
       </a-form>
     </a-card-grid>
