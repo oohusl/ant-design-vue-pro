@@ -1,95 +1,52 @@
 <template>
   <a-card :bordered="false">
-    <a-card-grid style="width:300px; padding: 25px 12px 12px 12px">
+    <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px">
       <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
         <a-form-item v-bind="tailFormItemLayout">
-          <a-button type="primary" style="width: 100%">
-            筛选
-          </a-button>
+          <a-button type="primary" style="width: 100%"> 筛选 </a-button>
         </a-form-item>
-        <a-form-item
-          label="最近筛选"
-        >
-          <a-tag color="pink">李二</a-tag><a-tag color="red">李一</a-tag>
-          <a-tag color="orange">张三</a-tag><a-tag color="green">李四</a-tag>
+        <a-form-item label="最近筛选">
+          <a-tag color="pink">李二</a-tag><a-tag color="red">李一</a-tag> <a-tag color="orange">张三</a-tag
+          ><a-tag color="green">李四</a-tag>
           <a-tag color="cyan">热门</a-tag>
-          <br>
-          <a-tag style="background: #fff; borderStyle: dashed;">
-            <a-icon type="plus" /> 新建筛选
-          </a-tag>
-          <a-tag style="background: #fff; borderStyle: dashed;">
-            <a-icon type="minus" /> 删除筛选
-          </a-tag>
-
+          <br />
+          <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="plus" /> 新建筛选 </a-tag>
+          <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="minus" /> 删除筛选 </a-tag>
         </a-form-item>
-        <a-form-item
-          label="区域"
-        >
-          <a-select default-value="浦东" >
-            <a-select-option value="jack">
-              浦东
-            </a-select-option>
-            <a-select-option value="lucy">
-              徐汇
-            </a-select-option>
-            <a-select-option value="disabled" disabled>
-              静安
-            </a-select-option>
-            <a-select-option value="Yiminghe">
-              长宁
-            </a-select-option>
+        <a-form-item label="区域">
+          <a-select default-value="浦东">
+            <a-select-option value="jack"> 浦东 </a-select-option>
+            <a-select-option value="lucy"> 徐汇 </a-select-option>
+            <a-select-option value="disabled" disabled> 静安 </a-select-option>
+            <a-select-option value="Yiminghe"> 长宁 </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="售价(万)">
-          <a-form-item
-            :style="{ display: 'inline-block', width: 'calc(50% - 12px)'}"
-          >
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input style="width: 100%" />
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center'}">
-            -
-          </span>
+          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input style="width: 100%" />
           </a-form-item>
         </a-form-item>
-        <a-form-item
-          label="面积"
-        >
-          <a-form-item
-            :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }"
-          >
+        <a-form-item label="面积">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input-number style="width: 100%" />
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }">
-            -
-          </span>
+          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input-number style="width: 100%" />
           </a-form-item>
         </a-form-item>
-        <a-form-item
-          label="房型"
-        >
-          <a-select >
-            <a-select-option value="jack">
-              全部
-            </a-select-option>
-            <a-select-option value="lucy">
-              一室
-            </a-select-option>
-            <a-select-option value="disabled">
-              二室
-            </a-select-option>
-            <a-select-option value="Yiminghe">
-              三室
-            </a-select-option>
-            <a-select-option value="Yiminghe">
-              四室
-            </a-select-option>
-            <a-select-option value="Yiminghe">
-              五室以上
-            </a-select-option>
+        <a-form-item label="房型">
+          <a-select>
+            <a-select-option value="jack">全部</a-select-option>
+            <a-select-option value="lucy">一室</a-select-option>
+            <a-select-option value="disabled">二室</a-select-option>
+            <a-select-option value="Yiminghe">三室</a-select-option>
+            <a-select-option value="Yiminghe">四室</a-select-option>
+            <a-select-option value="Yiminghe">五室以上</a-select-option>
           </a-select>
         </a-form-item>
       </a-form>
@@ -245,8 +202,7 @@ export default {
       return statusMap[type].status
     }
   },
-  created () {
-  },
+  created () {},
   computed: {
     rowSelection () {
       return {
@@ -287,10 +243,10 @@ export default {
   white-space: nowrap;
 }
 
-.ant-form-item{
+.ant-form-item {
   margin-bottom: 12px;
 }
-.ant-form-item .ant-form-item{
+.ant-form-item .ant-form-item {
   margin-bottom: 0px;
 }
 </style>

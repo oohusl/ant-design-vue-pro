@@ -13,7 +13,7 @@
       广告代码 真实项目中请移除
       production remove this Ads
     -->
-    <ads v-if="isProPreviewSite && !collapsed"/>
+    <ads v-if="isProPreviewSite && !collapsed" />
     <!-- Ads end -->
 
     <!-- 1.0.0+ 版本 pro-layout 提供 API，
@@ -96,13 +96,18 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: (state) => state.permission.addRouters
     })
   },
   created () {
-    const routes = asyncRouterMap.find((item) => item.path === '/')
+    this.$store
+          .dispatch('GetInfo')
+          .then(res => {
+            const asyncRouter = this.filterAsyncRouter(asyncRouterMap, res.authorities)
+                const routes = asyncRouter.find((item) => item.path === '/')
+                this.menus = (routes && routes.children) || []
+          })
     // const routes = this.mainMenu.find((item) => item.path === '/')
-    this.menus = (routes && routes.children) || []
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
       this.$store.commit(SIDEBAR_TYPE, this.collapsed)
@@ -162,11 +167,26 @@ export default {
           }
           break
       }
+    },
+    filterAsyncRouter (routerMap, roles) {
+      if (roles.indexOf('ROLE_ADMIN') >= 0) {
+        return routerMap
+      }
+      const accessedRouters = routerMap.filter((route) => {
+        if (!route.authority || route.authority.filter(x => roles.indexOf(x) >= 0).size >= 0) {
+          if (route.children && route.children.length) {
+            route.children = this.filterAsyncRouter(route.children, roles)
+          }
+          return true
+        }
+        return false
+      })
+      return accessedRouters
     }
   }
 }
 </script>
 
 <style lang="less">
-@import "./BasicLayout.less";
+@import './BasicLayout.less';
 </style>
