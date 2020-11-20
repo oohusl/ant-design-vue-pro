@@ -252,6 +252,10 @@ export default {
       store
           .dispatch('GetInfo')
           .then(res => {
+            if (res.createdBy === 'admin' && res.createdDate === res.lastModifiedDate) {
+                this.$router.push({ path: 'change-password' })
+                return
+            }
             this.$router.push({ path: '/' })
           // 延迟 1 秒显示欢迎信息
           setTimeout(() => {

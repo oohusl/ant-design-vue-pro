@@ -1,57 +1,71 @@
 <template>
   <div class="main user-layout-register">
-    <h3><span>修改密码</span></h3>
-    <a-form ref="formRegister" :form="form" id="formRegister">
-      <a-form-item>
-        <a-input-password
-          size="large"
-          placeholder="原密码"
-          v-decorator="['currentPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}], validateTrigger: ['change', 'blur']}]"
-        ></a-input-password>
-      </a-form-item>
-      <a-popover
-        placement="rightTop"
-        :trigger="['focus']"
-        :getPopupContainer="(trigger) => trigger.parentElement"
-        v-model="state.passwordLevelChecked">
-        <template slot="content">
-          <div :style="{ width: '240px' }" >
-            <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
-            <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
-            <div style="margin-top: 10px;">
-              <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
-            </div>
-          </div>
-        </template>
+    <div v-if="!success">
+      <h3><span>修改密码</span></h3>
+      <a-form ref="formRegister" :form="form" id="formRegister">
         <a-form-item>
           <a-input-password
             size="large"
-            @click="handlePasswordInputClick"
-            placeholder="至少6位密码，区分大小写"
-            v-decorator="['newPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+            placeholder="原密码"
+            v-decorator="['currentPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}], validateTrigger: ['change', 'blur']}]"
           ></a-input-password>
         </a-form-item>
-      </a-popover>
-      <a-form-item>
-        <a-input-password
-          size="large"
-          placeholder="确认密码"
-          v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
-        ></a-input-password>
-      </a-form-item>
-      <a-form-item>
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="register-button"
-          :loading="registerBtn"
-          @click.stop.prevent="handleSubmit"
-          :disabled="registerBtn">确认
-        </a-button>
-        <router-link class="login" :to="{ name: 'login' }">取消</router-link>
-      </a-form-item>
-    </a-form>
+        <a-popover
+          placement="rightTop"
+          :trigger="['focus']"
+          :getPopupContainer="(trigger) => trigger.parentElement"
+          v-model="state.passwordLevelChecked">
+          <template slot="content">
+            <div :style="{ width: '240px' }" >
+              <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
+              <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
+              <div style="margin-top: 10px;">
+                <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
+              </div>
+            </div>
+          </template>
+          <a-form-item>
+            <a-input-password
+              size="large"
+              @click="handlePasswordInputClick"
+              placeholder="至少6位密码，区分大小写"
+              v-decorator="['newPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+            ></a-input-password>
+          </a-form-item>
+        </a-popover>
+        <a-form-item>
+          <a-input-password
+            size="large"
+            placeholder="确认密码"
+            v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+          ></a-input-password>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            class="register-button"
+            :loading="registerBtn"
+            @click.stop.prevent="handleSubmit"
+            :disabled="registerBtn">确认
+          </a-button>
+          <router-link class="login" :to="{ name: 'login' }">取消</router-link>
+        </a-form-item>
+      </a-form>
+    </div>
+    <div class="main user-layout-register" v-if="success">
+      <a-result
+        status="success"
+        title="密码修改成功!"
+        sub-title="">
+        <template #extra>
+          <a-button key="console" type="primary" @click="handleStartClick">
+            开始使用
+          </a-button>
+        </template>
+      </a-result>
+    </div>
   </div>
 </template>
 
@@ -94,7 +108,8 @@ export default {
         percent: 10,
         progressColor: '#FF0000'
       },
-      registerBtn: false
+      registerBtn: false,
+      success: false
     }
   },
   computed: {
@@ -159,6 +174,10 @@ export default {
       callback()
     },
 
+    handleStartClick () {
+      this.$router.push({ path: '/' })
+    },
+
     handlePasswordInputClick () {
       if (!this.isMobile) {
         this.state.passwordLevelChecked = true
@@ -168,12 +187,12 @@ export default {
     },
 
     handleSubmit () {
-      const { form: { validateFields }, state, $router } = this
+      const { form: { validateFields }, state } = this
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
           changePassword({ newPassword: values.newPassword, currentPassword: values.currentPassword }).then(e => {
-            $router.push({ path: '/' })
+            this.success = true
           })
         }
       })

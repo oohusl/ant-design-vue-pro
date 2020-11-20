@@ -8,104 +8,110 @@ const RouteView = {
 }
 
 export const asyncRouterMap = [
-  {
-    path: '/',
-    name: 'index',
-    component: BasicLayout,
-    meta: { title: '主页' },
-    redirect: '/home/house',
-    children: [
-      // dashboard
-      {
-        path: '/home',
-        name: 'home',
-        redirect: '/home/house',
-        component: RouteView,
-        meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
-        children: [
-          {
-            path: '/home/house',
-            name: 'HouseManage',
-            component: () => import('@/pages/workspace/HouseManage'),
-            meta: { title: '房源查询', keepAlive: true, permission: ['dashboard'] }
-          }
-        ]
-      },
-      // user-manage
-      {
-        path: '/system',
-        name: 'system',
-        redirect: '/system/user-manage',
-        component: RouteView,
-        meta: { title: '系统管理', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
-        children: [
-          {
-            path: '/system/user-manage',
-            name: 'UserManage',
-            component: () => import('@/pages/user/UserManage'),
-            meta: { title: '用户管理', keepAlive: true, permission: ['dashboard'] }
-          }
-        ]
-      },
-      // account
-      {
-        path: '/account',
-        component: RouteView,
-        redirect: '/account/center',
-        name: 'account',
-        meta: { title: '个人页', icon: 'user', keepAlive: true, permission: [ 'user' ] },
-        children: [
-          {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/pages/account/center'),
-            meta: { title: '个人中心', keepAlive: true, permission: [ 'user' ] }
-          },
-          {
-            path: '/account/settings',
-            name: 'settings',
-            component: () => import('@/pages/account/settings/Index'),
-            meta: { title: '个人设置', hideHeader: true, permission: [ 'user' ] },
-            redirect: '/account/settings/base',
-            hideChildrenInMenu: true,
-            children: [
-              {
-                path: '/account/settings/base',
-                name: 'BaseSettings',
-                component: () => import('@/pages/account/settings/BaseSetting'),
-                meta: { title: '基本设置', hidden: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/security',
-                name: 'SecuritySettings',
-                component: () => import('@/pages/account/settings/Security'),
-                meta: { title: '安全设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/custom',
-                name: 'CustomSettings',
-                component: () => import('@/pages/account/settings/Custom'),
-                meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/binding',
-                name: 'BindingSettings',
-                component: () => import('@/pages/account/settings/Binding'),
-                meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              },
-              {
-                path: '/account/settings/notification',
-                name: 'NotificationSettings',
-                component: () => import('@/pages/account/settings/Notification'),
-                meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: [ 'user' ] }
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
+         {
+           path: '/',
+           name: 'index',
+           component: BasicLayout,
+           meta: { title: '主页' },
+           redirect: '/house/query',
+           children: [
+             // dashboard
+             {
+               path: '/home',
+               name: 'home',
+               redirect: '/house/query',
+               component: RouteView,
+               meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse, permission: ['dashboard'] },
+               children: [
+                 {
+                   path: '/house/query',
+                   name: 'HouseQuery',
+                   component: () => import('@/pages/workspace/HouseQuery'),
+                   meta: { title: '房源查询', keepAlive: true, permission: ['dashboard'] }
+                 },
+                 {
+                   path: '/house/manage',
+                   name: 'HouseManage',
+                   component: () => import('@/pages/workspace/HouseManage'),
+                   meta: { title: '房源管理', keepAlive: true, permission: ['dashboard'] }
+                 }
+               ]
+             },
+             // user-manage
+             {
+               path: '/system',
+               name: 'system',
+               redirect: '/system/user-manage',
+               component: RouteView,
+               meta: { title: '系统管理', keepAlive: true, icon: 'form', permission: ['dashboard'] },
+               children: [
+                 {
+                   path: '/system/user-manage',
+                   name: 'UserManage',
+                   component: () => import('@/pages/user/UserManage'),
+                   meta: { title: '用户管理', keepAlive: true, permission: ['dashboard'] }
+                 }
+               ]
+             },
+             // account
+             {
+               path: '/account',
+               component: RouteView,
+               redirect: '/account/center',
+               name: 'account',
+               meta: { title: '个人页', icon: 'user', keepAlive: true, permission: ['user'] },
+               children: [
+                 {
+                   path: '/account/center',
+                   name: 'center',
+                   component: () => import('@/pages/account/center'),
+                   meta: { title: '个人中心', keepAlive: true, permission: ['user'] }
+                 },
+                 {
+                   path: '/account/settings',
+                   name: 'settings',
+                   component: () => import('@/pages/account/settings/Index'),
+                   meta: { title: '个人设置', hideHeader: true, permission: ['user'] },
+                   redirect: '/account/settings/base',
+                   hideChildrenInMenu: true,
+                   children: [
+                     {
+                       path: '/account/settings/base',
+                       name: 'BaseSettings',
+                       component: () => import('@/pages/account/settings/BaseSetting'),
+                       meta: { title: '基本设置', hidden: true, permission: ['user'] }
+                     },
+                     {
+                       path: '/account/settings/security',
+                       name: 'SecuritySettings',
+                       component: () => import('@/pages/account/settings/Security'),
+                       meta: { title: '安全设置', hidden: true, keepAlive: true, permission: ['user'] }
+                     },
+                     {
+                       path: '/account/settings/custom',
+                       name: 'CustomSettings',
+                       component: () => import('@/pages/account/settings/Custom'),
+                       meta: { title: '个性化设置', hidden: true, keepAlive: true, permission: ['user'] }
+                     },
+                     {
+                       path: '/account/settings/binding',
+                       name: 'BindingSettings',
+                       component: () => import('@/pages/account/settings/Binding'),
+                       meta: { title: '账户绑定', hidden: true, keepAlive: true, permission: ['user'] }
+                     },
+                     {
+                       path: '/account/settings/notification',
+                       name: 'NotificationSettings',
+                       component: () => import('@/pages/account/settings/Notification'),
+                       meta: { title: '新消息通知', hidden: true, keepAlive: true, permission: ['user'] }
+                     }
+                   ]
+                 }
+               ]
+             }
+           ]
+         }
+       ]
 
 /**
  * 基础路由
