@@ -26,7 +26,7 @@
       </div>
     </template>
 
-    <!-- <setting-drawer :settings="settings" @change="handleSettingChange" /> -->
+    <setting-drawer :settings="settings" @change="handleSettingChange" />
     <template v-slot:rightContentRender>
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
@@ -101,12 +101,13 @@ export default {
   },
   created () {
     this.$store
-          .dispatch('GetInfo')
-          .then(res => {
-            const asyncRouter = this.filterAsyncRouter(asyncRouterMap, res.authorities)
-                const routes = asyncRouter.find((item) => item.path === '/')
-                this.menus = (routes && routes.children) || []
-          })
+      .dispatch('GetInfo')
+      .then((res) => {
+        const asyncRouter = this.filterAsyncRouter(asyncRouterMap, res.authorities)
+        const routes = asyncRouter.find((item) => item.path === '/')
+        this.menus = (routes && routes.children) || []
+      })
+    // .catch(this.$router.push({ path: '/user/login' }))
     // const routes = this.mainMenu.find((item) => item.path === '/')
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
@@ -173,7 +174,7 @@ export default {
         return routerMap
       }
       const accessedRouters = routerMap.filter((route) => {
-        if (!route.authority || route.authority.filter(x => roles.indexOf(x) >= 0).size >= 0) {
+        if (!route.authority || route.authority.filter((x) => roles.indexOf(x) >= 0).size >= 0) {
           if (route.children && route.children.length) {
             route.children = this.filterAsyncRouter(route.children, roles)
           }

@@ -14,10 +14,10 @@
           <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="minus" /> 删除筛选 </a-tag>
         </a-form-item>
         <a-form-item label="区域">
-          <a-select default-value="浦东">
+          <a-select default-value="浦东" mode="multiple">
             <a-select-option value="jack"> 浦东 </a-select-option>
             <a-select-option value="lucy"> 徐汇 </a-select-option>
-            <a-select-option value="disabled" disabled> 静安 </a-select-option>
+            <a-select-option value="disabled"> 静安 </a-select-option>
             <a-select-option value="Yiminghe"> 长宁 </a-select-option>
           </a-select>
         </a-form-item>
@@ -40,8 +40,7 @@
           </a-form-item>
         </a-form-item>
         <a-form-item label="房型">
-          <a-select>
-            <a-select-option value="jack">全部</a-select-option>
+          <a-select mode="multiple">
             <a-select-option value="lucy">一室</a-select-option>
             <a-select-option value="disabled">二室</a-select-option>
             <a-select-option value="Yiminghe">三室</a-select-option>
@@ -49,13 +48,42 @@
             <a-select-option value="Yiminghe">五室以上</a-select-option>
           </a-select>
         </a-form-item>
+        <a-form-item label="建筑年代">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input-number style="width: 100%" />
+          </a-form-item>
+          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input-number style="width: 100%" />
+          </a-form-item>
+        </a-form-item>
+        <a-form-item label="房屋类型">
+          <a-select mode="multiple">
+            <a-select-option value="lucy">公寓</a-select-option>
+            <a-select-option value="disabled">普通住宅</a-select-option>
+            <a-select-option value="Yiminghe">联排</a-select-option>
+            <a-select-option value="dudog">独栋</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="楼层">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input-number style="width: 100%" />
+          </a-form-item>
+          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input-number style="width: 100%" />
+          </a-form-item>
+        </a-form-item>
+        <a-form-item label="其他">
+          <a-checkbox-group v-model="checkedList" :options="otherOptions"/>
+        </a-form-item>
       </a-form>
     </a-card-grid>
     <a-card-grid style="width: calc(100% - 300px)">
       <s-table
         ref="table"
-        size="default"
-        rowKey="key"
+        size="small"
+        rowKey="id"
         :columns="columns"
         :data="loadData"
         :alert="true"
@@ -74,64 +102,63 @@ import { STable, Ellipsis } from '@/components'
 import { getHouse } from '@/api/manage'
 
 const columns = [
-  { title: '小区名称', dataIndex: 'community_name', width: '150px', fixed: true },
-  { title: '区域', dataIndex: 'area', width: '150px' },
-  { title: '板块', dataIndex: 'plate', width: '150px' },
-  { title: '地区规划', dataIndex: 'district_planning', width: '150px' },
-  { title: '到江湾镇时间', dataIndex: 'time_to_jiangwang', width: '150px' },
-  { title: '环线汇总', dataIndex: 'loop_summary', width: '150px' },
-  { title: '小区属性', dataIndex: 'cell_attributes', width: '150px' },
-  { title: '地铁线', dataIndex: 'metro_line', width: '150px' },
-  { title: '地铁站', dataIndex: 'subway_station', width: '150px' },
+  { title: '小区名称', dataIndex: 'communityName', width: '150px', fixed: true },
+  { title: '区域', dataIndex: 'area', width: '100px' },
+  { title: '板块', dataIndex: 'plate', width: '100px' },
+  { title: '地区规划', dataIndex: 'districtPlanning', width: '150px' },
+  { title: '环线汇总', dataIndex: 'loopSummary', width: '150px' },
+  { title: '小区属性', dataIndex: 'cellAttributes', width: '90px' },
+  { title: '地铁线', dataIndex: 'metroLine', width: '150px' },
+  { title: '地铁站', dataIndex: 'subwayStation', width: '100px' },
   { title: '距离', dataIndex: 'distance', width: '150px' },
-  { title: '交易权属', dataIndex: 'transaction_ownership', width: '150px' },
-  { title: '最大楼层', dataIndex: 'max_floor', width: '150px' },
-  { title: '最小楼层', dataIndex: 'min_floor', width: '150px' },
-  { title: '2019成交量', dataIndex: 'volume_2019', width: '150px' },
-  { title: '1房面积段', dataIndex: 'room_area_1', width: '150px' },
-  { title: '2房面积段', dataIndex: 'room_area_2', width: '150px' },
-  { title: '3房面积段', dataIndex: 'room_area_3', width: '150px' },
-  { title: '1房价格段', dataIndex: 'room_price_range_1', width: '150px' },
-  { title: '2房价格段', dataIndex: 'room_price_range_2', width: '150px' },
-  { title: '3房价格段', dataIndex: 'room_price_range_3', width: '150px' },
-  { title: '是否电梯', dataIndex: 'is_lift', width: '150px' },
-  { title: '室外游泳池', dataIndex: 'is_outdoor_swimming_room', width: '150px' },
-  { title: '室内游泳池', dataIndex: 'is_indoor_swimming_pool', width: '150px' },
+  { title: '交易权属', dataIndex: 'transactionOwnership', width: '150px' },
+  { title: '最大楼层', dataIndex: 'maxFloor', width: '150px' },
+  { title: '最小楼层', dataIndex: 'minFloor', width: '150px' },
+  { title: '2019成交量', dataIndex: 'volume2019', width: '150px' },
+  { title: '1房面积段', dataIndex: 'roomArea1Max', width: '150px' },
+  { title: '2房面积段', dataIndex: 'roomArea2Max', width: '150px' },
+  { title: '3房面积段', dataIndex: 'roomArea3Max', width: '150px' },
+  { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '150px' },
+  { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '150px' },
+  { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '150px' },
+  { title: '是否电梯', dataIndex: 'isLift', width: '150px' },
+  { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '150px' },
+  { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '150px' },
   { title: '会所', dataIndex: 'clubhouse', width: '150px' },
   { title: '洋房', dataIndex: 'bungalow', width: '150px' },
-  { title: '双阳台', dataIndex: 'double_balcony', width: '150px' },
-  { title: '大阳台', dataIndex: 'large_balcony', width: '150px' },
-  { title: '带花园', dataIndex: 'with_garden', width: '150px' },
-  { title: '大露台', dataIndex: 'large_terrace', width: '150px' },
-  { title: '人车分流', dataIndex: 'people_and_vehicles', width: '150px' },
-  { title: '建筑类型', dataIndex: 'building_type', width: '150px' },
-  { title: '物业属性', dataIndex: 'property_attributes', width: '150px' },
-  { title: '物业费', dataIndex: 'property_costs', width: '150px' },
-  { title: '栋数', dataIndex: 'building_number', width: '150px' },
-  { title: '户数', dataIndex: 'households_number', width: '150px' },
-  { title: '车位数', dataIndex: 'parking_spaces_number', width: '150px' },
-  { title: '容积率', dataIndex: 'volume_rate', width: '150px' },
-  { title: '绿化率', dataIndex: 'greening_rate', width: '150px' },
-  { title: '挂牌均价', dataIndex: 'average_llisted_price', width: '150px' },
-  { title: '在售-3.20', dataIndex: 'in_stock', width: '150px' },
-  { title: '正租-3.20', dataIndex: 'positive_rent', width: '150px' },
-  { title: '建筑代', dataIndex: 'construction_age', width: '150px' },
+  { title: '双阳台', dataIndex: 'doubleBalcony', width: '150px' },
+  { title: '大阳台', dataIndex: 'largeBalcony', width: '150px' },
+  { title: '带花园', dataIndex: 'withGarden', width: '150px' },
+  { title: '大露台', dataIndex: 'largeTerrace', width: '150px' },
+  { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '150px' },
+  { title: '建筑类型', dataIndex: 'buildingType', width: '150px' },
+  { title: '物业属性', dataIndex: 'propertyAttributes', width: '150px' },
+  { title: '物业费', dataIndex: 'propertyCosts', width: '150px' },
+  { title: '栋数', dataIndex: 'buildingNumber', width: '150px' },
+  { title: '户数', dataIndex: 'householdsNumber', width: '150px' },
+  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '280px' },
+  { title: '容积率', dataIndex: 'volumeRate', width: '150px' },
+  { title: '绿化率', dataIndex: 'greeningRate', width: '150px' },
+  { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '150px' },
+  { title: '在售', dataIndex: 'inStock', width: '150px' },
+  { title: '正租', dataIndex: 'positiveRent', width: '150px' },
+  { title: '建筑年代', dataIndex: 'constructionAge', width: '150px' },
   { title: '开发商', dataIndex: 'developer', width: '150px' },
-  { title: '物业公司', dataIndex: 'property_company', width: '150px' },
-  { title: '小学', dataIndex: 'primary_school', width: '150px' },
-  { title: '梯队表现', dataIndex: 'echelon_performance', width: '150px' },
-  { title: '是否一贯制', dataIndex: 'is_consistent_system', width: '150px' },
-  { title: '中学', dataIndex: 'middle_school', width: '150px' },
-  { title: '市梯队', dataIndex: 'city_echelon', width: '150px' },
-  { title: '区梯队', dataIndex: 'district_echelon', width: '150px' },
-  { title: '叠拼别墅', dataIndex: 'stacked_villa', width: '150px' },
-  { title: '独栋别墅', dataIndex: 'single_family_villa', width: '150px' },
+  { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
+  { title: '小学', dataIndex: 'primarySchool', width: '150px' },
+  { title: '梯队表现', dataIndex: 'echelonPerformance', width: '150px' },
+  { title: '是否一贯制', dataIndex: 'isConsistentSystem', width: '150px' },
+  { title: '中学', dataIndex: 'middleSchool', width: '150px' },
+  { title: '市梯队', dataIndex: 'cityEchelon', width: '150px' },
+  { title: '区梯队', dataIndex: 'districtEchelon', width: '150px' },
+  { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '150px' },
+  { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '150px' },
   { title: '联排别墅', dataIndex: 'townhouse', width: '150px' },
-  { title: '双拼别墅', dataIndex: 'semi_detached_house', width: '150px' },
-  { title: '内部配套', dataIndex: 'internal_supporting', width: '150px' },
+  { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '150px' },
+  { title: '内部配套', dataIndex: 'internalSupporting', width: '350px' },
   { title: '地址', dataIndex: 'address', width: '150px' },
-  { title: '产权年限', dataIndex: 'property_rights', width: '150px' },
-  { title: '小区介绍', dataIndex: 'community_desc', width: '150px' }
+  { title: '产权年限', dataIndex: 'propertyRights', width: '150px' },
+  { title: '小区介绍', dataIndex: 'communityDesc', width: '500px' }
 ]
 
 const statusMap = {
@@ -191,7 +218,8 @@ export default {
             offset: 6
           }
         }
-      }
+      },
+      otherOptions: ['有电梯', '近地铁', '双阳台']
     }
   },
   filters: {
