@@ -107,7 +107,9 @@ export default {
         const routes = asyncRouter.find((item) => item.path === '/')
         this.menus = (routes && routes.children) || []
       })
-    // .catch(this.$router.push({ path: '/user/login' }))
+     .catch(() => {
+       this.$router.push({ path: '/user/login' })
+     })
     // const routes = this.mainMenu.find((item) => item.path === '/')
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {

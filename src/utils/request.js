@@ -25,10 +25,10 @@ const errorHandler = (error) => {
       })
     }
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
-      notification.error({
-        message: 'Unauthorized',
-        description: 'Authorization verification failed'
-      })
+      // notification.error({
+      //   message: '未授权',
+      //   description: '认证授权失败'
+      // })
       if (token) {
         store.dispatch('Logout').then(() => {
           setTimeout(() => {
