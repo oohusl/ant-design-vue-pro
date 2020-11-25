@@ -3,7 +3,7 @@
     <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px">
       <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
         <a-form-item v-bind="tailFormItemLayout">
-          <a-button type="primary" style="width: 100%"> 筛选 </a-button>
+          <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
         </a-form-item>
         <a-form-item label="最近筛选">
           <a-tag color="pink">李二</a-tag><a-tag color="red">李一</a-tag> <a-tag color="orange">张三</a-tag
@@ -14,11 +14,11 @@
           <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="minus" /> 删除筛选 </a-tag>
         </a-form-item>
         <a-form-item label="区域">
-          <a-select default-value="浦东" mode="multiple">
-            <a-select-option value="jack"> 浦东 </a-select-option>
-            <a-select-option value="lucy"> 徐汇 </a-select-option>
-            <a-select-option value="disabled"> 静安 </a-select-option>
-            <a-select-option value="Yiminghe"> 长宁 </a-select-option>
+          <a-select default-value="浦东" mode="multiple" v-model="queryParam.area">
+            <a-select-option value="浦东"> 浦东 </a-select-option>
+            <a-select-option value="徐汇"> 徐汇 </a-select-option>
+            <a-select-option value="静安"> 静安 </a-select-option>
+            <a-select-option value="长宁"> 长宁 </a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="售价(万)">
