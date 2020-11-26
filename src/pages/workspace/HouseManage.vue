@@ -31,7 +31,7 @@
       >
         <span slot="communityName" slot-scope="text, record">
           <template>
-            <a @click="handleEdit(record)">{{text}}</a>
+            <a @click="handleEdit(record)">{{ text }}</a>
           </template>
         </span>
       </s-table>
@@ -44,7 +44,7 @@ import moment from 'moment'
 import storage from 'store'
 import { STable, Ellipsis } from '@/components'
 import { getHouse } from '@/api/manage'
-import { CreateForm } from '@/pages/workspace/CreateForm'
+import HouseForm from '@/pages/workspace/HouseForm'
 
 const columns = [
   { title: '小区名称', dataIndex: 'communityName', width: '150px', fixed: true, scopedSlots: { customRender: 'communityName' } },
@@ -130,7 +130,7 @@ export default {
   components: {
     STable,
     Ellipsis,
-    CreateForm
+    HouseForm
   },
   data () {
     this.columns = columns
@@ -247,10 +247,9 @@ export default {
     },
 
     handleEdit (record) {
-      this.$dialog(CreateForm,
-        // component props
+      this.$dialog(HouseForm,
         {
-          record: {},
+          record: record,
           on: {
             ok () {
               console.log('ok 回调')
@@ -265,7 +264,7 @@ export default {
         },
         // modal props
         {
-          title: '新增',
+          title: '房源编辑',
           width: 700,
           centered: true,
           maskClosable: false
