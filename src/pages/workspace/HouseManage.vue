@@ -5,155 +5,105 @@
         <a-form layout="inline">
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
-              <a-form-item label="规则编号">
-                <a-input v-model="queryParam.id" placeholder=""/>
+              <a-form-item label="小区名称">
+                <a-input v-model="queryParam.communityName" placeholder=""/>
               </a-form-item>
             </a-col>
-            <a-col :md="8" :sm="24">
-              <a-form-item label="使用状态">
-                <a-select v-model="queryParam.status" placeholder="请选择" default-value="0">
-                  <a-select-option value="0">全部</a-select-option>
-                  <a-select-option value="1">关闭</a-select-option>
-                  <a-select-option value="2">运行中</a-select-option>
-                </a-select>
-              </a-form-item>
-            </a-col>
-            <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="调用次数">
-                  <a-input-number v-model="queryParam.callNo" style="width: 100%"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="更新日期">
-                  <a-date-picker v-model="queryParam.date" style="width: 100%" placeholder="请输入更新日期"/>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select v-model="queryParam.useStatus" placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-              <a-col :md="8" :sm="24">
-                <a-form-item label="使用状态">
-                  <a-select placeholder="请选择" default-value="0">
-                    <a-select-option value="0">全部</a-select-option>
-                    <a-select-option value="1">关闭</a-select-option>
-                    <a-select-option value="2">运行中</a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
             <a-col :md="!advanced && 8 || 24" :sm="24">
               <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
                 <a-button type="primary" @click="$refs.table.refresh(true)">查询</a-button>
                 <a-button style="margin-left: 8px" @click="() => this.queryParam = {}">重置</a-button>
-                <a @click="toggleAdvanced" style="margin-left: 8px">
-                  {{ advanced ? '收起' : '展开' }}
-                  <a-icon :type="advanced ? 'up' : 'down'"/>
-                </a>
               </span>
             </a-col>
           </a-row>
         </a-form>
       </div>
-
-      <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-dropdown v-action:edit v-if="selectedRowKeys.length > 0">
-          <a-menu slot="overlay">
-            <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
-            <!-- lock | unlock -->
-            <a-menu-item key="2"><a-icon type="lock" />锁定</a-menu-item>
-          </a-menu>
-          <a-button style="margin-left: 8px">
-            批量操作 <a-icon type="down" />
-          </a-button>
-        </a-dropdown>
-      </div>
       <s-table
         ref="table"
-        size="default"
-        rowKey="key"
+        size="small"
+        rowKey="id"
         :columns="columns"
         :data="loadData"
         :alert="true"
         :scroll="{ x: 1300 }"
         bordered
         showPagination="auto"
-      />
+      >
+        <span slot="communityName" slot-scope="text, record">
+          <template>
+            <a @click="handleEdit(record)">{{text}}</a>
+          </template>
+        </span>
+      </s-table>
     </a-card>
   </page-header-wrapper>
 </template>
 
 <script>
 import moment from 'moment'
+import storage from 'store'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getUserList, saveUser } from '@/api/manage'
+import { getHouse } from '@/api/manage'
+import { CreateForm } from '@/pages/workspace/CreateForm'
 
 const columns = [
-  { title: '小区名称', dataIndex: 'community_name', width: '150px', fixed: true },
-  { title: '区域', dataIndex: 'area', width: '150px' },
-  { title: '板块', dataIndex: 'plate', width: '150px' },
-  { title: '地区规划', dataIndex: 'district_planning', width: '150px' },
-  { title: '到江湾镇时间', dataIndex: 'time_to_jiangwang', width: '150px' },
-  { title: '环线汇总', dataIndex: 'loop_summary', width: '150px' },
-  { title: '小区属性', dataIndex: 'cell_attributes', width: '150px' },
-  { title: '地铁线', dataIndex: 'metro_line', width: '150px' },
-  { title: '地铁站', dataIndex: 'subway_station', width: '150px' },
+  { title: '小区名称', dataIndex: 'communityName', width: '150px', fixed: true, scopedSlots: { customRender: 'communityName' } },
+  { title: '区域', dataIndex: 'area', width: '100px' },
+  { title: '板块', dataIndex: 'plate', width: '100px' },
+  { title: '地区规划', dataIndex: 'districtPlanning', width: '150px' },
+  { title: '环线汇总', dataIndex: 'loopSummary', width: '150px' },
+  { title: '小区属性', dataIndex: 'cellAttributes', width: '90px' },
+  { title: '地铁线', dataIndex: 'metroLine', width: '150px' },
+  { title: '地铁站', dataIndex: 'subwayStation', width: '100px' },
   { title: '距离', dataIndex: 'distance', width: '150px' },
-  { title: '交易权属', dataIndex: 'transaction_ownership', width: '150px' },
-  { title: '最大楼层', dataIndex: 'max_floor', width: '150px' },
-  { title: '最小楼层', dataIndex: 'min_floor', width: '150px' },
-  { title: '2019成交量', dataIndex: 'volume_2019', width: '150px' },
-  { title: '1房面积段', dataIndex: 'room_area_1', width: '150px' },
-  { title: '2房面积段', dataIndex: 'room_area_2', width: '150px' },
-  { title: '3房面积段', dataIndex: 'room_area_3', width: '150px' },
-  { title: '1房价格段', dataIndex: 'room_price_range_1', width: '150px' },
-  { title: '2房价格段', dataIndex: 'room_price_range_2', width: '150px' },
-  { title: '3房价格段', dataIndex: 'room_price_range_3', width: '150px' },
-  { title: '是否电梯', dataIndex: 'is_lift', width: '150px' },
-  { title: '室外游泳池', dataIndex: 'is_outdoor_swimming_room', width: '150px' },
-  { title: '室内游泳池', dataIndex: 'is_indoor_swimming_pool', width: '150px' },
+  { title: '交易权属', dataIndex: 'transactionOwnership', width: '150px' },
+  { title: '最大楼层', dataIndex: 'maxFloor', width: '150px' },
+  { title: '最小楼层', dataIndex: 'minFloor', width: '150px' },
+  // { title: '2019成交量', dataIndex: 'volume2019', width: '150px' },
+  { title: '1房面积段', dataIndex: 'roomArea1Max', width: '150px' },
+  { title: '2房面积段', dataIndex: 'roomArea2Max', width: '150px' },
+  { title: '3房面积段', dataIndex: 'roomArea3Max', width: '150px' },
+  { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '150px' },
+  { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '150px' },
+  { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '150px' },
+  { title: '是否电梯', dataIndex: 'isLift', width: '150px' },
+  { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '150px' },
+  { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '150px' },
   { title: '会所', dataIndex: 'clubhouse', width: '150px' },
   { title: '洋房', dataIndex: 'bungalow', width: '150px' },
-  { title: '双阳台', dataIndex: 'double_balcony', width: '150px' },
-  { title: '大阳台', dataIndex: 'large_balcony', width: '150px' },
-  { title: '带花园', dataIndex: 'with_garden', width: '150px' },
-  { title: '大露台', dataIndex: 'large_terrace', width: '150px' },
-  { title: '人车分流', dataIndex: 'people_and_vehicles', width: '150px' },
-  { title: '建筑类型', dataIndex: 'building_type', width: '150px' },
-  { title: '物业属性', dataIndex: 'property_attributes', width: '150px' },
-  { title: '物业费', dataIndex: 'property_costs', width: '150px' },
-  { title: '栋数', dataIndex: 'building_number', width: '150px' },
-  { title: '户数', dataIndex: 'households_number', width: '150px' },
-  { title: '车位数', dataIndex: 'parking_spaces_number', width: '150px' },
-  { title: '容积率', dataIndex: 'volume_rate', width: '150px' },
-  { title: '绿化率', dataIndex: 'greening_rate', width: '150px' },
-  { title: '挂牌均价', dataIndex: 'average_llisted_price', width: '150px' },
-  { title: '在售-3.20', dataIndex: 'in_stock', width: '150px' },
-  { title: '正租-3.20', dataIndex: 'positive_rent', width: '150px' },
-  { title: '建筑代', dataIndex: 'construction_age', width: '150px' },
+  { title: '双阳台', dataIndex: 'doubleBalcony', width: '150px' },
+  { title: '大阳台', dataIndex: 'largeBalcony', width: '150px' },
+  { title: '带花园', dataIndex: 'withGarden', width: '150px' },
+  { title: '大露台', dataIndex: 'largeTerrace', width: '150px' },
+  { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '150px' },
+  { title: '建筑类型', dataIndex: 'buildingType', width: '150px' },
+  { title: '物业属性', dataIndex: 'propertyAttributes', width: '150px' },
+  { title: '物业费', dataIndex: 'propertyCosts', width: '150px' },
+  { title: '栋数', dataIndex: 'buildingNumber', width: '150px' },
+  { title: '户数', dataIndex: 'householdsNumber', width: '150px' },
+  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '280px' },
+  { title: '容积率', dataIndex: 'volumeRate', width: '150px' },
+  { title: '绿化率', dataIndex: 'greeningRate', width: '150px' },
+  { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '150px' },
+  { title: '在售', dataIndex: 'inStock', width: '150px' },
+  { title: '正租', dataIndex: 'positiveRent', width: '150px' },
+  { title: '建筑年代', dataIndex: 'constructionAge', width: '150px' },
   { title: '开发商', dataIndex: 'developer', width: '150px' },
-  { title: '物业公司', dataIndex: 'property_company', width: '150px' },
-  { title: '小学', dataIndex: 'primary_school', width: '150px' },
-  { title: '梯队表现', dataIndex: 'echelon_performance', width: '150px' },
-  { title: '是否一贯制', dataIndex: 'is_consistent_system', width: '150px' },
-  { title: '中学', dataIndex: 'middle_school', width: '150px' },
-  { title: '市梯队', dataIndex: 'city_echelon', width: '150px' },
-  { title: '区梯队', dataIndex: 'district_echelon', width: '150px' },
-  { title: '叠拼别墅', dataIndex: 'stacked_villa', width: '150px' },
-  { title: '独栋别墅', dataIndex: 'single_family_villa', width: '150px' },
+  { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
+  { title: '小学', dataIndex: 'primarySchool', width: '150px' },
+  { title: '梯队表现', dataIndex: 'echelonPerformance', width: '150px' },
+  { title: '是否一贯制', dataIndex: 'isConsistentSystem', width: '150px' },
+  { title: '中学', dataIndex: 'middleSchool', width: '150px' },
+  { title: '市梯队', dataIndex: 'cityEchelon', width: '150px' },
+  { title: '区梯队', dataIndex: 'districtEchelon', width: '150px' },
+  { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '150px' },
+  { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '150px' },
   { title: '联排别墅', dataIndex: 'townhouse', width: '150px' },
-  { title: '双拼别墅', dataIndex: 'semi_detached_house', width: '150px' },
-  { title: '内部配套', dataIndex: 'internal_supporting', width: '150px' },
+  { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '150px' },
+  { title: '内部配套', dataIndex: 'internalSupporting', width: '350px' },
   { title: '地址', dataIndex: 'address', width: '150px' },
-  { title: '产权年限', dataIndex: 'property_rights', width: '150px' },
-  { title: '小区介绍', dataIndex: 'community_desc', width: '150px' }
+  { title: '产权年限', dataIndex: 'propertyRights', width: '150px' },
+  { title: '小区介绍', dataIndex: 'communityDesc', width: '500px' }
 ]
 
 const statusMap = {
@@ -176,10 +126,11 @@ const statusMap = {
 }
 
 export default {
-  name: 'HouseManage',
+  name: 'HouseQuery',
   components: {
     STable,
-    Ellipsis
+    Ellipsis,
+    CreateForm
   },
   data () {
     this.columns = columns
@@ -192,11 +143,14 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {},
+      inputVisible: false,
+      tags: [],
+      colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
+        const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getUserList(requestParameters).then((res) => {
+        return getHouse(requestParameters).then((res) => {
           return res
         })
       },
@@ -213,7 +167,8 @@ export default {
             offset: 6
           }
         }
-      }
+      },
+      otherOptions: ['isLift', '近地铁', 'doubleBalcony']
     }
   },
   filters: {
@@ -225,7 +180,7 @@ export default {
     }
   },
   created () {
-    getRoleList({ t: new Date() })
+    this.tags = [].concat(JSON.parse(storage.get('tags')))
   },
   computed: {
     rowSelection () {
@@ -236,67 +191,6 @@ export default {
     }
   },
   methods: {
-    handleAdd () {
-      this.mdl = null
-      this.visible = true
-    },
-    handleEdit (record) {
-      this.visible = true
-      this.mdl = { ...record }
-    },
-    handleOk () {
-      const form = this.$refs.createModal.form
-      this.confirmLoading = true
-      form.validateFields((errors, values) => {
-        if (!errors) {
-          console.log('values', values)
-          if (values.id > 0) {
-            // 修改 e.g.
-            new Promise((resolve, reject) => {
-              setTimeout(() => {
-                resolve()
-              }, 1000)
-            }).then((res) => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-
-              this.$message.info('修改成功')
-            })
-          } else {
-            // 新增
-            const user = {}
-            user.iphone = values.iphone
-            saveUser(user)
-              .then()
-              .then((res) => {
-                this.visible = false
-                this.confirmLoading = false
-                // 重置表单数据
-                form.resetFields()
-                // 刷新表格
-                this.$refs.table.refresh()
-                this.$message.info('新增成功')
-              })
-              .catch((e) => {
-                this.$message.error('新增失败')
-                this.confirmLoading = false
-              })
-          }
-        } else {
-          this.confirmLoading = false
-        }
-      })
-    },
-    handleCancel () {
-      this.visible = false
-      this.confirmLoading = false
-      const form = this.$refs.createModal.form
-      form.resetFields() // 清理表单数据（可不做）
-    },
     handleSub (record) {
       if (record.status !== 0) {
         this.$message.info(`${record.no} 订阅成功`)
@@ -315,6 +209,71 @@ export default {
       this.queryParam = {
         date: moment(new Date())
       }
+    },
+    handleClose (removedTag) {
+      const tags = this.tags.filter(tag => tag.label !== removedTag)
+      console.log(tags)
+      this.tags = tags
+    },
+
+    showInput () {
+      this.inputVisible = true
+      this.$nextTick(function () {
+        this.$refs.tagInput.focus()
+      })
+    },
+
+    tagNameChange (e) {
+      this.inputValue = e.target.value
+    },
+
+    tagNameConfirm () {
+      const inputValue = this.inputValue
+      let tags = this.tags
+      if (inputValue && !tags.find(e => e.label === inputValue)) {
+        tags = [ ...tags, { label: inputValue, values: Object.assign({}, this.queryParam) } ]
+      }
+      Object.assign(this, {
+        tags,
+        inputVisible: false,
+        inputValue: ''
+      })
+      storage.set('tags', JSON.stringify(this.tags))
+    },
+
+    tagQuery (tag) {
+      this.queryParam = tag.values
+      this.$refs.table.refresh(true)
+    },
+
+    handleEdit (record) {
+      this.$dialog(CreateForm,
+        // component props
+        {
+          record: {},
+          on: {
+            ok () {
+              console.log('ok 回调')
+            },
+            cancel () {
+              console.log('cancel 回调')
+            },
+            close () {
+              console.log('modal close 回调')
+            }
+          }
+        },
+        // modal props
+        {
+          title: '新增',
+          width: 700,
+          centered: true,
+          maskClosable: false
+        })
+    },
+
+    refresh () {
+      this.$refs.table.refresh(true)
     }
   }
 }
