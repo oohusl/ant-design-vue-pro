@@ -6,15 +6,27 @@
           <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
         </a-form-item>
         <a-form-item label="最近筛选">
-          <a-tag color="pink">李二</a-tag><a-tag color="red">李一</a-tag> <a-tag color="orange">张三</a-tag
-          ><a-tag color="green">李四</a-tag>
-          <a-tag color="cyan">热门</a-tag>
+        <template v-for="(tag, index) in tags">
+          <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
+            {{ `${tag.label}` }}
+          </a-tag>
+        </template>
           <br />
-          <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="plus" /> 新建筛选 </a-tag>
-          <a-tag style="background: #fff; borderstyle: dashed"> <a-icon type="minus" /> 删除筛选 </a-tag>
+          <a-input
+            v-if="inputVisible"
+            ref="tagInput"
+            type="text"
+            size="small"
+            :style="{ width: '78px' }"
+            :value="tagName"
+            @change="tagNameChange"
+            @blur="tagNameConfirm"
+            @keyup.enter="tagNameConfirm"
+          />
+          <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput"> <a-icon type="plus" /> 保存筛选 </a-tag>
         </a-form-item>
         <a-form-item label="区域">
-          <a-select default-value="浦东" mode="multiple" v-model="queryParam.area">
+          <a-select default-value="浦东" v-model="queryParam.areas" mode="multiple" @change="refresh">
             <a-select-option value="浦东"> 浦东 </a-select-option>
             <a-select-option value="徐汇"> 徐汇 </a-select-option>
             <a-select-option value="静安"> 静安 </a-select-option>
@@ -23,23 +35,23 @@
         </a-form-item>
         <a-form-item label="售价(万)">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" />
+            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Min" @pressEnter="refresh"/>
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" />
+            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Max" @pressEnter="refresh"/>
           </a-form-item>
         </a-form-item>
         <a-form-item label="面积">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
+            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Min" @pressEnter="refresh"/>
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
+            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Max" @pressEnter="refresh"/>
           </a-form-item>
         </a-form-item>
-        <a-form-item label="房型">
+        <a-form-item label="环线">
           <a-select mode="multiple">
             <a-select-option value="lucy">一室</a-select-option>
             <a-select-option value="disabled">二室</a-select-option>
@@ -50,11 +62,11 @@
         </a-form-item>
         <a-form-item label="建筑年代">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
+            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMin" @pressEnter="refresh"/>
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
+            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh"/>
           </a-form-item>
         </a-form-item>
         <a-form-item label="房屋类型">
@@ -75,7 +87,10 @@
           </a-form-item>
         </a-form-item>
         <a-form-item label="其他">
-          <a-checkbox-group v-model="checkedList" :options="otherOptions"/>
+          <a-checkbox-group v-model="queryParam.checkedList">
+            <a-checkbox value="1" name="type">有电梯</a-checkbox>
+            <a-checkbox value="2" name="type">人车分流</a-checkbox>
+          </a-checkbox-group>
         </a-form-item>
       </a-form>
     </a-card-grid>
@@ -100,6 +115,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse } from '@/api/manage'
+import storage from 'store'
 
 const columns = [
   { title: '小区名称', dataIndex: 'communityName', width: '150px', fixed: true },
@@ -114,7 +130,7 @@ const columns = [
   { title: '交易权属', dataIndex: 'transactionOwnership', width: '150px' },
   { title: '最大楼层', dataIndex: 'maxFloor', width: '150px' },
   { title: '最小楼层', dataIndex: 'minFloor', width: '150px' },
-  { title: '2019成交量', dataIndex: 'volume2019', width: '150px' },
+  // { title: '2019成交量', dataIndex: 'volume2019', width: '150px' },
   { title: '1房面积段', dataIndex: 'roomArea1Max', width: '150px' },
   { title: '2房面积段', dataIndex: 'roomArea2Max', width: '150px' },
   { title: '3房面积段', dataIndex: 'roomArea3Max', width: '150px' },
@@ -197,6 +213,9 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {},
+      inputVisible: false,
+      tags: [],
+      colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
         const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
@@ -219,7 +238,7 @@ export default {
           }
         }
       },
-      otherOptions: ['有电梯', '近地铁', '双阳台']
+      otherOptions: ['isLift', '近地铁', 'doubleBalcony']
     }
   },
   filters: {
@@ -230,7 +249,9 @@ export default {
       return statusMap[type].status
     }
   },
-  created () {},
+  created () {
+    this.tags = [].concat(JSON.parse(storage.get('tags')))
+  },
   computed: {
     rowSelection () {
       return {
@@ -258,6 +279,45 @@ export default {
       this.queryParam = {
         date: moment(new Date())
       }
+    },
+    handleClose (removedTag) {
+      const tags = this.tags.filter(tag => tag.label !== removedTag)
+      console.log(tags)
+      this.tags = tags
+    },
+
+    showInput () {
+      this.inputVisible = true
+      this.$nextTick(function () {
+        this.$refs.tagInput.focus()
+      })
+    },
+
+    tagNameChange (e) {
+      this.inputValue = e.target.value
+    },
+
+    tagNameConfirm () {
+      const inputValue = this.inputValue
+      let tags = this.tags
+      if (inputValue && !tags.find(e => e.label === inputValue)) {
+        tags = [ ...tags, { label: inputValue, values: Object.assign({}, this.queryParam) } ]
+      }
+      Object.assign(this, {
+        tags,
+        inputVisible: false,
+        inputValue: ''
+      })
+      storage.set('tags', JSON.stringify(this.tags))
+    },
+
+    tagQuery (tag) {
+      this.queryParam = tag.values
+      this.$refs.table.refresh(true)
+    },
+
+    refresh () {
+      this.$refs.table.refresh(true)
     }
   }
 }
