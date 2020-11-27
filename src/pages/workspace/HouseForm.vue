@@ -2,10 +2,10 @@
     <a-spin :spinning="loading">
       <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
         <a-form-item label="小区名称">
-            <a-input style="width: 100%" v-model="model.name" readonly/>
+            <a-input style="width: 100%" v-model="house.communityName" readonly/>
         </a-form-item>
         <a-form-item label="区域">
-          <a-select default-value="浦东" v-model="house.areas">
+          <a-select default-value="浦东" v-model="house.area">
             <a-select-option value="浦东"> 浦东 </a-select-option>
             <a-select-option value="徐汇"> 徐汇 </a-select-option>
             <a-select-option value="静安"> 静安 </a-select-option>
@@ -13,7 +13,7 @@
           </a-select>
         </a-form-item>
         <a-form-item label="售价(万)">
-            <a-input style="width: 100%" v-model="houseroomPriceRange3"/>
+            <a-input style="width: 100%" v-model="house.houseroomPriceRange3"/>
         </a-form-item>
         <a-form-item label="面积">
             <a-input-number style="width: 100%" v-model="house.roomArea3"/>
@@ -37,7 +37,7 @@
           </a-checkbox-group>
         </a-form-item>
       </a-form>
-    </a-spin>
+  </a-spin>
 </template>
 
 <script>
@@ -48,17 +48,9 @@ const fields = ['description', 'id']
 
 export default {
   props: {
-    visible: {
-      type: Boolean,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: () => false
-    },
-    model: {
+    record: {
       type: Object,
-      default: () => {}
+      default: () => { return {} }
     }
   },
   data () {
@@ -73,6 +65,7 @@ export default {
       }
     }
     return {
+      loading: false,
       house: {}
     }
   },
@@ -80,12 +73,14 @@ export default {
     console.log('custom modal created')
 
     // 防止表单未注册
-    fields.forEach(v => this.form.getFieldDecorator(v))
-
     // 当 model 发生改变时，为表单设置值
     this.$watch('model', () => {
       this.model && this.form.setFieldsValue(pick(this.model, fields))
     })
+  },
+
+  mounted () {
+    Object.assign(this.house, this.record)
   }
 }
 </script>

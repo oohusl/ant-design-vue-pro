@@ -249,7 +249,7 @@ export default {
     handleEdit (record) {
       this.$dialog(HouseForm,
         {
-          record: record,
+          record,
           on: {
             ok () {
               console.log('ok 回调')
