@@ -1,42 +1,42 @@
 <template>
-    <a-spin :spinning="loading">
-      <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-        <a-form-item label="小区名称">
-            <a-input style="width: 100%" v-model="house.communityName" readonly/>
+  <a-spin :spinning="loading">
+    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+      <a-form-item label="小区名称">
+        <a-input style="width: 100%" v-model="house.communityName" readonly/>
+      </a-form-item>
+      <a-form-item label="区域">
+        <a-select default-value="浦东" v-model="house.area">
+          <a-select-option value="浦东"> 浦东 </a-select-option>
+          <a-select-option value="徐汇"> 徐汇 </a-select-option>
+          <a-select-option value="静安"> 静安 </a-select-option>
+          <a-select-option value="长宁"> 长宁 </a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="售价(万)">
+        <a-input style="width: 100%" v-model="house.houseroomPriceRange3"/>
+      </a-form-item>
+      <a-form-item label="面积">
+        <a-input-number style="width: 100%" v-model="house.roomArea3"/>
+      </a-form-item>
+      <a-form-item label="建筑年代">
+        <a-input-number style="width: 100%" v-model="house.constructionAge"/>
+      </a-form-item>
+      <a-form-item label="楼层">
+        <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+          <a-input-number style="width: 100%" />
         </a-form-item>
-        <a-form-item label="区域">
-          <a-select default-value="浦东" v-model="house.area">
-            <a-select-option value="浦东"> 浦东 </a-select-option>
-            <a-select-option value="徐汇"> 徐汇 </a-select-option>
-            <a-select-option value="静安"> 静安 </a-select-option>
-            <a-select-option value="长宁"> 长宁 </a-select-option>
-          </a-select>
+        <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+        <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+          <a-input-number style="width: 100%" />
         </a-form-item>
-        <a-form-item label="售价(万)">
-            <a-input style="width: 100%" v-model="house.houseroomPriceRange3"/>
-        </a-form-item>
-        <a-form-item label="面积">
-            <a-input-number style="width: 100%" v-model="house.roomArea3"/>
-        </a-form-item>
-        <a-form-item label="建筑年代">
-            <a-input-number style="width: 100%" v-model="house.constructionAge"/>
-        </a-form-item>
-        <a-form-item label="楼层">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
-          </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
-          </a-form-item>
-        </a-form-item>
-        <a-form-item label="其他">
-          <a-checkbox-group v-model="house.checkedList">
-            <a-checkbox value="1" name="type">有电梯</a-checkbox>
-            <a-checkbox value="2" name="type">人车分流</a-checkbox>
-          </a-checkbox-group>
-        </a-form-item>
-      </a-form>
+      </a-form-item>
+      <a-form-item label="其他">
+        <a-checkbox-group v-model="house.checkedList">
+          <a-checkbox value="1" name="type">有电梯</a-checkbox>
+          <a-checkbox value="2" name="type">人车分流</a-checkbox>
+        </a-checkbox-group>
+      </a-form-item>
+    </a-form>
   </a-spin>
 </template>
 

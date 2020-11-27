@@ -6,11 +6,11 @@
           <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
         </a-form-item>
         <a-form-item label="最近筛选">
-        <template v-for="(tag, index) in tags">
-          <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
-            {{ `${tag.label}` }}
-          </a-tag>
-        </template>
+          <template v-for="(tag, index) in tags">
+            <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
+              {{ `${tag.label}` }}
+            </a-tag>
+          </template>
           <br />
           <a-input
             v-if="inputVisible"
