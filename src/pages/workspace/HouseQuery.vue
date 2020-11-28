@@ -27,13 +27,25 @@
         </a-form-item>
         <a-form-item label="区域">
           <a-select default-value="浦东" v-model="queryParam.areas" mode="multiple" @change="refresh">
+            <a-select-option value="静安"> 静安 </a-select-option>
             <a-select-option value="浦东"> 浦东 </a-select-option>
             <a-select-option value="徐汇"> 徐汇 </a-select-option>
-            <a-select-option value="静安"> 静安 </a-select-option>
+            <a-select-option value="杨浦"> 杨浦 </a-select-option>
+            <a-select-option value="黄浦"> 黄浦 </a-select-option>
             <a-select-option value="长宁"> 长宁 </a-select-option>
+            <a-select-option value="普陀"> 普陀 </a-select-option>
+            <a-select-option value="虹口"> 虹口 </a-select-option>
+            <a-select-option value="松江"> 松江 </a-select-option>
+            <a-select-option value="闵行"> 闵行 </a-select-option>
+            <a-select-option value="宝山"> 宝山 </a-select-option>
+            <a-select-option value="奉贤"> 奉贤 </a-select-option>
+            <a-select-option value="青浦"> 青浦 </a-select-option>
+            <a-select-option value="嘉定"> 嘉定 </a-select-option>
+            <a-select-option value="金山"> 金山 </a-select-option>
+            <a-select-option value="崇明"> 崇明 </a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item label="售价(万)">
+        <a-form-item label="总价(万)">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Min" @pressEnter="refresh"/>
           </a-form-item>
@@ -41,6 +53,18 @@
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Max" @pressEnter="refresh"/>
           </a-form-item>
+        </a-form-item>
+        <a-form-item label="单价(万)">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input style="width: 100%"/>
+          </a-form-item>
+          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input style="width: 100%"/>
+          </a-form-item>
+        </a-form-item>
+        <a-form-item label="年售(套)">
+          <a-input style="width: 100%" v-model="queryParam.volume2019" @pressEnter="refresh"/>
         </a-form-item>
         <a-form-item label="面积">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -51,13 +75,39 @@
             <a-input-number style="width: 100%" v-model="queryParam.roomArea3Max" @pressEnter="refresh"/>
           </a-form-item>
         </a-form-item>
-        <a-form-item label="环线">
-          <a-select mode="multiple">
-            <a-select-option value="lucy">一室</a-select-option>
-            <a-select-option value="disabled">二室</a-select-option>
-            <a-select-option value="Yiminghe">三室</a-select-option>
-            <a-select-option value="Yiminghe">四室</a-select-option>
-            <a-select-option value="Yiminghe">五室以上</a-select-option>
+        <a-form-item label="地铁">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50%)' }">
+            <a-select mode="multiple" v-model="queryParam.metroLine">
+              <a-select-option value="1"> 1号线 </a-select-option>
+              <a-select-option value="2"> 2号线 </a-select-option>
+              <a-select-option value="3"> 3号线 </a-select-option>
+              <a-select-option value="4"> 4号线 </a-select-option>
+              <a-select-option value="5"> 5号线 </a-select-option>
+              <a-select-option value="6"> 6号线 </a-select-option>
+              <a-select-option value="7"> 7号线 </a-select-option>
+              <a-select-option value="8"> 8号线 </a-select-option>
+              <a-select-option value="9"> 9号线 </a-select-option>
+              <a-select-option value="10"> 10号线 </a-select-option>
+              <a-select-option value="11"> 11号线 </a-select-option>
+              <a-select-option value="12"> 12号线 </a-select-option>
+              <a-select-option value="13"> 13号线 </a-select-option>
+              <a-select-option value="14"> 14号线 </a-select-option>
+              <a-select-option value="15"> 15号线 </a-select-option>
+              <a-select-option value="16"> 16号线 </a-select-option>
+              <a-select-option value="17"> 17号线 </a-select-option>
+              <a-select-option value="18"> 18号线 </a-select-option>
+            </a-select>
+          </a-form-item>
+          <span :style="{ display: 'inline-block', width: '12px', textAlign: 'center' }"> - </span>
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+            <a-input style="width: 100%" v-model="queryParam.distance" @pressEnter="refresh" suffix="米"/>
+          </a-form-item>
+        </a-form-item>
+        <a-form-item label="小学学区">
+          <a-select mode="multiple" v-model="queryParam.echelonPerformances">
+            <a-select-option value="一梯队">一梯队</a-select-option>
+            <a-select-option value="二梯队">二梯队</a-select-option>
+            <a-select-option value="三梯队">三梯队</a-select-option>
           </a-select>
         </a-form-item>
         <a-form-item label="建筑年代">
@@ -67,23 +117,6 @@
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
             <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh"/>
-          </a-form-item>
-        </a-form-item>
-        <a-form-item label="房屋类型">
-          <a-select mode="multiple">
-            <a-select-option value="lucy">公寓</a-select-option>
-            <a-select-option value="disabled">普通住宅</a-select-option>
-            <a-select-option value="Yiminghe">联排</a-select-option>
-            <a-select-option value="dudog">独栋</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="楼层">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
-          </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="其他">
@@ -130,7 +163,7 @@ const columns = [
   { title: '交易权属', dataIndex: 'transactionOwnership', width: '150px' },
   { title: '最大楼层', dataIndex: 'maxFloor', width: '150px' },
   { title: '最小楼层', dataIndex: 'minFloor', width: '150px' },
-  // { title: '2019成交量', dataIndex: 'volume2019', width: '150px' },
+  { title: '近一年成交量', dataIndex: 'volume2019', width: '150px' },
   { title: '1房面积段', dataIndex: 'roomArea1Max', width: '150px' },
   { title: '2房面积段', dataIndex: 'roomArea2Max', width: '150px' },
   { title: '3房面积段', dataIndex: 'roomArea3Max', width: '150px' },
