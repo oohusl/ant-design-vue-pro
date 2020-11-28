@@ -56,11 +56,11 @@
         </a-form-item>
         <a-form-item label="单价(万)">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%"/>
+            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin"/>
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%"/>
+            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax"/>
           </a-form-item>
         </a-form-item>
         <a-form-item label="年售(套)">
@@ -77,7 +77,7 @@
         </a-form-item>
         <a-form-item label="地铁">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50%)' }">
-            <a-select mode="multiple" v-model="queryParam.metroLine">
+            <a-select mode="multiple" v-model="queryParam.metroLines" @pressEnter="refresh">
               <a-select-option value="1"> 1号线 </a-select-option>
               <a-select-option value="2"> 2号线 </a-select-option>
               <a-select-option value="3"> 3号线 </a-select-option>
@@ -104,7 +104,7 @@
           </a-form-item>
         </a-form-item>
         <a-form-item label="小学学区">
-          <a-select mode="multiple" v-model="queryParam.echelonPerformances">
+          <a-select mode="multiple" v-model="queryParam.echelonPerformances" @pressEnter="refresh">
             <a-select-option value="一梯队">一梯队</a-select-option>
             <a-select-option value="二梯队">二梯队</a-select-option>
             <a-select-option value="三梯队">三梯队</a-select-option>
