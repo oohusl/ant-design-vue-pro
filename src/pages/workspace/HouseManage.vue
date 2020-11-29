@@ -27,7 +27,7 @@
         rowKey="id"
         :columns="columns"
         :data="loadData"
-        :alert="true"
+        :alert="false"
         :scroll="{ x: 1300 }"
         bordered
         showPagination="auto"

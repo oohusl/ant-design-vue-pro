@@ -134,7 +134,7 @@
         rowKey="id"
         :columns="columns"
         :data="loadData"
-        :alert="true"
+        :alert="false"
         :scroll="{ y: 400, x: 2000 }"
         bordered
         showPagination="auto"

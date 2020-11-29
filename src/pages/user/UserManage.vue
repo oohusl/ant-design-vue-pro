@@ -12,8 +12,7 @@
         rowKey="key"
         :columns="columns"
         :data="loadData"
-        :alert="true"
-        :rowSelection="rowSelection"
+        :alert="false"
         showPagination="auto"
       >
         <span slot="serial" slot-scope="text, record, index">
@@ -51,7 +50,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getRoleList, getUserList, saveUser } from '@/api/manage'
+import { getUserList, saveUser } from '@/api/manage'
 
 import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
@@ -142,7 +141,6 @@ export default {
     }
   },
   created () {
-    getRoleList({ t: new Date() })
   },
   computed: {
     rowSelection () {
