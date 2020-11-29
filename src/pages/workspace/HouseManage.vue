@@ -260,6 +260,10 @@ export default {
       this.house = Object.assign({}, record)
     },
     save () {
+      if (this.house.checkedList) {
+          this.house.checkedList.forEach((e) => { this.house[e] = true })
+          delete this.house.checkedList
+      }
       saveHouse(this.house).then(e => {
         this.refresh()
         this.$notification.success({
