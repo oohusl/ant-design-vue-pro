@@ -1,5 +1,5 @@
 <template>
-  <a-card title="房源查询">
+  <a-card title="房源查询" v-model="visible">
     <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px; height: 540px; overflow: scroll">
       <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
         <a-form-item v-bind="tailFormItemLayout">
@@ -64,7 +64,7 @@
           </a-form-item>
         </a-form-item>
         <a-form-item label="年售(套)">
-          <a-input style="width: 100%" v-model="queryParam.volume2019" @pressEnter="refresh" placeholder="请输入"/>
+          <a-input style="width: 100%" v-model="queryParam.volume2019Min" @pressEnter="refresh" placeholder="请输入"/>
         </a-form-item>
         <a-form-item label="面积">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -76,31 +76,31 @@
           </a-form-item>
         </a-form-item>
         <a-form-item label="地铁">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50%)' }">
+          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
             <a-select mode="multiple" v-model="queryParam.metroLines" @pressEnter="refresh" placeholder="请选择">
-              <a-select-option value="1"> 1号线 </a-select-option>
-              <a-select-option value="2"> 2号线 </a-select-option>
-              <a-select-option value="3"> 3号线 </a-select-option>
-              <a-select-option value="4"> 4号线 </a-select-option>
-              <a-select-option value="5"> 5号线 </a-select-option>
-              <a-select-option value="6"> 6号线 </a-select-option>
-              <a-select-option value="7"> 7号线 </a-select-option>
-              <a-select-option value="8"> 8号线 </a-select-option>
-              <a-select-option value="9"> 9号线 </a-select-option>
-              <a-select-option value="10"> 10号线 </a-select-option>
-              <a-select-option value="11"> 11号线 </a-select-option>
-              <a-select-option value="12"> 12号线 </a-select-option>
-              <a-select-option value="13"> 13号线 </a-select-option>
-              <a-select-option value="14"> 14号线 </a-select-option>
-              <a-select-option value="15"> 15号线 </a-select-option>
-              <a-select-option value="16"> 16号线 </a-select-option>
-              <a-select-option value="17"> 17号线 </a-select-option>
-              <a-select-option value="18"> 18号线 </a-select-option>
+              <a-select-option value="1">1号线</a-select-option>
+              <a-select-option value="2">2号线</a-select-option>
+              <a-select-option value="3">3号线</a-select-option>
+              <a-select-option value="4">4号线</a-select-option>
+              <a-select-option value="5">5号线</a-select-option>
+              <a-select-option value="6">6号线</a-select-option>
+              <a-select-option value="7">7号线</a-select-option>
+              <a-select-option value="8">8号线</a-select-option>
+              <a-select-option value="9">9号线</a-select-option>
+              <a-select-option value="10">10号线</a-select-option>
+              <a-select-option value="11">11号线</a-select-option>
+              <a-select-option value="12">12号线</a-select-option>
+              <a-select-option value="13">13号线</a-select-option>
+              <a-select-option value="14">14号线</a-select-option>
+              <a-select-option value="15">15号线</a-select-option>
+              <a-select-option value="16">16号线</a-select-option>
+              <a-select-option value="17">17号线</a-select-option>
+              <a-select-option value="18">18号线</a-select-option>
             </a-select>
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '12px', textAlign: 'center' }"> - </span>
+          <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.distance" @pressEnter="refresh" addon-after="米" placeholder="请输入"/>
+            <a-input style="width: 100%" v-model="queryParam.distance" @pressEnter="refresh" placeholder="地铁距离"/>
           </a-form-item>
         </a-form-item>
         <a-form-item label="小学学区">
@@ -121,8 +121,8 @@
         </a-form-item>
         <a-form-item label="其他">
           <a-checkbox-group v-model="queryParam.checkedList">
-            <a-checkbox value="1" name="type">有电梯</a-checkbox>
-            <a-checkbox value="2" name="type">人车分流</a-checkbox>
+            <a-checkbox value="isLift">有电梯</a-checkbox>
+            <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
           </a-checkbox-group>
         </a-form-item>
       </a-form>
@@ -135,7 +135,7 @@
         :columns="columns"
         :data="loadData"
         :alert="true"
-        :scroll="{ x: 1300 }"
+        :scroll="{ y: 400, x: 2000 }"
         bordered
         showPagination="auto"
       >
@@ -252,6 +252,10 @@ export default {
       // 加载数据方法 必须为 Promise 对象
       loadData: (parameter) => {
         const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
+        if (this.queryParam.checkedList) {
+          this.queryParam.checkedList.forEach((e) => { requestParameters[e] = true })
+          delete requestParameters.checkedList
+        }
         console.log('loadData request parameters:', requestParameters)
         return getHouse(requestParameters).then((res) => {
           return res

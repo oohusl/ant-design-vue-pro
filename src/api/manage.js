@@ -8,7 +8,8 @@ const api = {
   permission: '/permission',
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
-  house: '/community-infos/query'
+  house: '/community-infos/query',
+  editHouse: '/community-infos'
 }
 
 export default api
@@ -83,6 +84,14 @@ export function getHouse (parameter) {
   return request({
     url: api.house,
     method: 'post',
+    data: parameter
+  })
+}
+
+export function saveHouse (parameter) {
+  return request({
+    url: api.editHouse,
+    method: 'put',
     data: parameter
   })
 }
