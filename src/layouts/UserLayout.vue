@@ -4,7 +4,7 @@
       <div class="top">
         <div class="header">
           <a href="/">
-            <img src="~@/assets/logo.svg" class="logo" alt="logo">
+            <img src="~@/assets/logo.png" class="logo" alt="logo">
             <span class="title">房产管理系统</span>
           </a>
         </div>
