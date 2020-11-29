@@ -54,6 +54,9 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  if (response.headers['x-total-count']) {
+    response.data['x-total-count'] = response.headers['x-total-count']
+  }
   return response.data
 }, errorHandler)
 
