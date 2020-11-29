@@ -18,6 +18,9 @@
           </a-row>
         </a-form>
       </div>
+      <div class="table-operator">
+        <a-button type="primary" icon="plus" @click="visible = true">新建</a-button>
+      </div>
       <s-table
         ref="table"
         size="small"
@@ -261,17 +264,20 @@ export default {
         this.refresh()
         this.$notification.success({
           message: '通知',
-          description: '修改成功'
+          description: this.house.id ? '修改成功' : '保存成功'
         })
       })
       .catch(
         () => {
-          this.$notification.error('保存失败')
-        }
-      )
+          this.$notification.error({
+          message: '通知',
+          description: this.house.id ? '修改失败' : '保存失败'
+        })
+      })
       .finally(
         () => {
           this.visible = false
+          this.house = {}
         }
       )
     },

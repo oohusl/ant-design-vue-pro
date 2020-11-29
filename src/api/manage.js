@@ -91,7 +91,7 @@ export function getHouse (parameter) {
 export function saveHouse (parameter) {
   return request({
     url: api.editHouse,
-    method: 'put',
+    method: parameter.id ? 'put' : 'post',
     data: parameter
   })
 }
