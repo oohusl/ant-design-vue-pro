@@ -50,9 +50,9 @@ export default {
   mounted () {
     setTimeout(() => {
       this.currentUser = {
-        name: 'Serati Ma'
+        name: this.$store.getters.userInfo.login.replace(/^(\d{3})\d{4}(\d+)/, '$1****$2')
       }
-    }, 1500)
+    }, 500)
   }
 }
 </script>
