@@ -82,7 +82,7 @@ export function saveSub (sub) {
 
 export function getHouse (parameter) {
   return request({
-    url: api.house,
+    url: `${api.house}?page=${parameter.page}&sort=${parameter.sort}&size=${parameter.size}`,
     method: 'post',
     data: parameter
   })
