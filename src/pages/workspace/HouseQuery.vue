@@ -1,147 +1,149 @@
 <template>
-  <a-card title="房源查询" v-model="visible">
-    <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px; height: 540px; overflow: scroll">
-      <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
-        <a-form-item v-bind="tailFormItemLayout">
-          <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
-        </a-form-item>
-        <a-form-item label="最近筛选">
-          <template v-for="(tag, index) in tags">
-            <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
-              {{ `${tag.label}` }}
-            </a-tag>
-          </template>
-          <br />
-          <a-input
-            v-if="inputVisible"
-            ref="tagInput"
-            type="text"
-            size="small"
-            :style="{ width: '78px' }"
-            :value="tagName"
-            @change="tagNameChange"
-            @blur="tagNameConfirm"
-            @keyup.enter="tagNameConfirm"
-          />
-          <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput"> <a-icon type="plus" /> 保存筛选 </a-tag>
-        </a-form-item>
-        <a-form-item label="区域">
-          <a-select default-value="浦东" v-model="queryParam.areas" mode="multiple" @change="refresh" placeholder="请选择">
-            <a-select-option value="静安"> 静安 </a-select-option>
-            <a-select-option value="浦东"> 浦东 </a-select-option>
-            <a-select-option value="徐汇"> 徐汇 </a-select-option>
-            <a-select-option value="杨浦"> 杨浦 </a-select-option>
-            <a-select-option value="黄浦"> 黄浦 </a-select-option>
-            <a-select-option value="长宁"> 长宁 </a-select-option>
-            <a-select-option value="普陀"> 普陀 </a-select-option>
-            <a-select-option value="虹口"> 虹口 </a-select-option>
-            <a-select-option value="松江"> 松江 </a-select-option>
-            <a-select-option value="闵行"> 闵行 </a-select-option>
-            <a-select-option value="宝山"> 宝山 </a-select-option>
-            <a-select-option value="奉贤"> 奉贤 </a-select-option>
-            <a-select-option value="青浦"> 青浦 </a-select-option>
-            <a-select-option value="嘉定"> 嘉定 </a-select-option>
-            <a-select-option value="金山"> 金山 </a-select-option>
-            <a-select-option value="崇明"> 崇明 </a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="总价(万)">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Min" @pressEnter="refresh" placeholder="请输入"/>
+  <page-header-wrapper>
+    <a-card v-model="visible">
+      <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px; height: 540px; overflow: scroll">
+        <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
+          <a-form-item v-bind="tailFormItemLayout">
+            <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Max" @pressEnter="refresh" placeholder="请输入"/>
+          <a-form-item label="最近筛选">
+            <template v-for="(tag, index) in tags">
+              <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
+                {{ `${tag.label}` }}
+              </a-tag>
+            </template>
+            <br />
+            <a-input
+              v-if="inputVisible"
+              ref="tagInput"
+              type="text"
+              size="small"
+              :style="{ width: '78px' }"
+              :value="tagName"
+              @change="tagNameChange"
+              @blur="tagNameConfirm"
+              @keyup.enter="tagNameConfirm"
+            />
+            <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput"> <a-icon type="plus" /> 保存筛选 </a-tag>
           </a-form-item>
-        </a-form-item>
-        <a-form-item label="单价(万)">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" placeholder="请输入"/>
-          </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" placeholder="请输入"/>
-          </a-form-item>
-        </a-form-item>
-        <a-form-item label="年售(套)">
-          <a-input style="width: 100%" v-model="queryParam.volume2019Min" @pressEnter="refresh" placeholder="请输入"/>
-        </a-form-item>
-        <a-form-item label="面积">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Min" @pressEnter="refresh" placeholder="请输入"/>
-          </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Max" @pressEnter="refresh" placeholder="请输入"/>
-          </a-form-item>
-        </a-form-item>
-        <a-form-item label="地铁">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-select mode="multiple" v-model="queryParam.metroLines" @pressEnter="refresh" placeholder="请选择">
-              <a-select-option value="1">1号线</a-select-option>
-              <a-select-option value="2">2号线</a-select-option>
-              <a-select-option value="3">3号线</a-select-option>
-              <a-select-option value="4">4号线</a-select-option>
-              <a-select-option value="5">5号线</a-select-option>
-              <a-select-option value="6">6号线</a-select-option>
-              <a-select-option value="7">7号线</a-select-option>
-              <a-select-option value="8">8号线</a-select-option>
-              <a-select-option value="9">9号线</a-select-option>
-              <a-select-option value="10">10号线</a-select-option>
-              <a-select-option value="11">11号线</a-select-option>
-              <a-select-option value="12">12号线</a-select-option>
-              <a-select-option value="13">13号线</a-select-option>
-              <a-select-option value="14">14号线</a-select-option>
-              <a-select-option value="15">15号线</a-select-option>
-              <a-select-option value="16">16号线</a-select-option>
-              <a-select-option value="17">17号线</a-select-option>
-              <a-select-option value="18">18号线</a-select-option>
+          <a-form-item label="区域">
+            <a-select default-value="浦东" v-model="queryParam.areas" mode="multiple" @change="refresh" placeholder="请选择">
+              <a-select-option value="静安"> 静安 </a-select-option>
+              <a-select-option value="浦东"> 浦东 </a-select-option>
+              <a-select-option value="徐汇"> 徐汇 </a-select-option>
+              <a-select-option value="杨浦"> 杨浦 </a-select-option>
+              <a-select-option value="黄浦"> 黄浦 </a-select-option>
+              <a-select-option value="长宁"> 长宁 </a-select-option>
+              <a-select-option value="普陀"> 普陀 </a-select-option>
+              <a-select-option value="虹口"> 虹口 </a-select-option>
+              <a-select-option value="松江"> 松江 </a-select-option>
+              <a-select-option value="闵行"> 闵行 </a-select-option>
+              <a-select-option value="宝山"> 宝山 </a-select-option>
+              <a-select-option value="奉贤"> 奉贤 </a-select-option>
+              <a-select-option value="青浦"> 青浦 </a-select-option>
+              <a-select-option value="嘉定"> 嘉定 </a-select-option>
+              <a-select-option value="金山"> 金山 </a-select-option>
+              <a-select-option value="崇明"> 崇明 </a-select-option>
             </a-select>
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.distance" @pressEnter="refresh" placeholder="地铁距离"/>
+          <a-form-item label="总价(万)">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Min" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Max" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
           </a-form-item>
-        </a-form-item>
-        <a-form-item label="小学学区">
-          <a-select mode="multiple" v-model="queryParam.echelonPerformances" @pressEnter="refresh" placeholder="请选择">
-            <a-select-option value="一梯队">一梯队</a-select-option>
-            <a-select-option value="二梯队">二梯队</a-select-option>
-            <a-select-option value="三梯队">三梯队</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item label="建筑年代">
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMin" @pressEnter="refresh" placeholder="请输入"/>
+          <a-form-item label="单价(万)">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" placeholder="请输入"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" placeholder="请输入"/>
+            </a-form-item>
           </a-form-item>
-          <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
-          <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh" placeholder="请输入"/>
+          <a-form-item label="年售(套)">
+            <a-input style="width: 100%" v-model="queryParam.volume2019Min" @pressEnter="refresh" placeholder="请输入"/>
           </a-form-item>
-        </a-form-item>
-        <a-form-item label="其他">
-          <a-checkbox-group v-model="queryParam.checkedList">
-            <a-checkbox value="isLift">有电梯</a-checkbox>
-            <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
-          </a-checkbox-group>
-        </a-form-item>
-      </a-form>
-    </a-card-grid>
-    <a-card-grid style="width: calc(100% - 300px); height: 540px; overflow: scroll">
-      <s-table
-        ref="table"
-        size="small"
-        rowKey="id"
-        :columns="columns"
-        :data="loadData"
-        :alert="false"
-        :scroll="{ x: 2000 }"
-        bordered
-        showPagination="auto"
-      >
-      </s-table>
-    </a-card-grid>
-  </a-card>
+          <a-form-item label="面积">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.roomArea3Min" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.roomArea3Max" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
+          </a-form-item>
+          <a-form-item label="地铁">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-select mode="multiple" v-model="queryParam.metroLines" @pressEnter="refresh" placeholder="请选择">
+                <a-select-option value="1">1号线</a-select-option>
+                <a-select-option value="2">2号线</a-select-option>
+                <a-select-option value="3">3号线</a-select-option>
+                <a-select-option value="4">4号线</a-select-option>
+                <a-select-option value="5">5号线</a-select-option>
+                <a-select-option value="6">6号线</a-select-option>
+                <a-select-option value="7">7号线</a-select-option>
+                <a-select-option value="8">8号线</a-select-option>
+                <a-select-option value="9">9号线</a-select-option>
+                <a-select-option value="10">10号线</a-select-option>
+                <a-select-option value="11">11号线</a-select-option>
+                <a-select-option value="12">12号线</a-select-option>
+                <a-select-option value="13">13号线</a-select-option>
+                <a-select-option value="14">14号线</a-select-option>
+                <a-select-option value="15">15号线</a-select-option>
+                <a-select-option value="16">16号线</a-select-option>
+                <a-select-option value="17">17号线</a-select-option>
+                <a-select-option value="18">18号线</a-select-option>
+              </a-select>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="queryParam.distance" @pressEnter="refresh" placeholder="地铁距离"/>
+            </a-form-item>
+          </a-form-item>
+          <a-form-item label="小学学区">
+            <a-select mode="multiple" v-model="queryParam.echelonPerformances" @pressEnter="refresh" placeholder="请选择">
+              <a-select-option value="一梯队">一梯队</a-select-option>
+              <a-select-option value="二梯队">二梯队</a-select-option>
+              <a-select-option value="三梯队">三梯队</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="建筑年代">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMin" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh" placeholder="请输入"/>
+            </a-form-item>
+          </a-form-item>
+          <a-form-item label="其他">
+            <a-checkbox-group v-model="queryParam.checkedList">
+              <a-checkbox value="isLift">有电梯</a-checkbox>
+              <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+        </a-form>
+      </a-card-grid>
+      <a-card-grid style="width: calc(100% - 300px); height: 540px; overflow: scroll">
+        <s-table
+          ref="table"
+          size="small"
+          rowKey="id"
+          :columns="columns"
+          :data="loadData"
+          :alert="false"
+          :scroll="{ x: 2000 }"
+          bordered
+          showPagination="auto"
+        >
+        </s-table>
+      </a-card-grid>
+    </a-card>
+  </page-header-wrapper>
 </template>
 
 <script>
@@ -375,6 +377,6 @@ export default {
   margin-bottom: 0px;
 }
 .ant-card-grid{
-  padding: 2px;
+  padding: 0px;
 }
 </style>

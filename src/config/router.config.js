@@ -64,12 +64,6 @@ export const asyncRouterMap = [
         meta: { title: '个人页', icon: 'user', keepAlive: true },
         children: [
           {
-            path: '/account/center',
-            name: 'center',
-            component: () => import('@/pages/account/center'),
-            meta: { title: '个人中心', keepAlive: true }
-          },
-          {
             path: '/account/settings',
             name: 'settings',
             component: () => import('@/pages/account/settings/Index'),
