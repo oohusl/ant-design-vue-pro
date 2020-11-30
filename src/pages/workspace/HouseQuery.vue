@@ -135,7 +135,7 @@
         :columns="columns"
         :data="loadData"
         :alert="false"
-        :scroll="{ y: 400, x: 2000 }"
+        :scroll="{ x: 2000 }"
         bordered
         showPagination="auto"
       >
