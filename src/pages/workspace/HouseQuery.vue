@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper>
     <a-card v-model="visible">
-      <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px; height: 540px; overflow: scroll">
+      <a-card-grid style="width: 300px; padding: 25px 12px 12px 12px; height: 540px; overflow-y: scroll">
         <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
           <a-form-item v-bind="tailFormItemLayout">
             <a-button type="primary" style="width: 100%" @click="$refs.table.refresh(true)"> 筛选 </a-button>
@@ -187,7 +187,7 @@ const columns = [
   { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
   { title: '栋数', dataIndex: 'buildingNumber', width: '60px' },
   { title: '户数', dataIndex: 'householdsNumber', width: '60px' },
-  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '60px' },
+  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '300px' },
   { title: '容积率', dataIndex: 'volumeRate', width: '60px' },
   { title: '绿化率', dataIndex: 'greeningRate', width: '90px' },
   { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '90px' },
@@ -289,7 +289,7 @@ export default {
     }
   },
   created () {
-    this.tags = [].concat(JSON.parse(storage.get('tags')))
+    this.tags = storage.get('tags') ? [].concat(JSON.parse(storage.get('tags'))) : []
   },
   computed: {
     rowSelection () {

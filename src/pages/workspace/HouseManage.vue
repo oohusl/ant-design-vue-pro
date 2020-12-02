@@ -162,7 +162,7 @@ const columns = [
   { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
   { title: '栋数', dataIndex: 'buildingNumber', width: '60px' },
   { title: '户数', dataIndex: 'householdsNumber', width: '60px' },
-  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '60px' },
+  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '300px' },
   { title: '容积率', dataIndex: 'volumeRate', width: '60px' },
   { title: '绿化率', dataIndex: 'greeningRate', width: '90px' },
   { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '90px' },
