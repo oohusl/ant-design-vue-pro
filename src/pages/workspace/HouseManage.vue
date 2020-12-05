@@ -37,6 +37,11 @@
             <a @click="handleEdit(record)">{{ text }}</a>
           </template>
         </span>
+        <span slot="isXXX" slot-scope="text">
+          <template>
+            {{ text ? '是' : '' }}
+          </template>
+        </span>
       </s-table>
     </a-card>
     <a-modal title="房源编辑" v-model="visible" @ok="save" :bodyStyle="{ height: '500px', 'overflow-y': 'scroll'}">
@@ -243,10 +248,7 @@
             </a-select>
           </a-form-item>
           <a-form-item label="一贯制">
-            <a-checkbox-group v-model="house.isConsistentSystem">
-              <a-checkbox value="1">
-              </a-checkbox>
-            </a-checkbox-group>
+            <a-switch v-model="house.isConsistentSystem" />
           </a-form-item>
           <a-form-item label="中学">
             <a-input style="width: 100%" v-model="house.middleSchool" placeholder="请输入"/>
@@ -329,16 +331,16 @@ const columns = [
   { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '90px' },
   { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '90px' },
   { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '90px' },
-  { title: '电梯', dataIndex: 'isLift', width: '60px' },
-  { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '100px' },
-  { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '100px' },
-  { title: '会所', dataIndex: 'clubhouse', width: '60px' },
-  { title: '洋房', dataIndex: 'bungalow', width: '60px' },
-  { title: '双阳台', dataIndex: 'doubleBalcony', width: '60px' },
-  { title: '大阳台', dataIndex: 'largeBalcony', width: '60px' },
-  { title: '带花园', dataIndex: 'withGarden', width: '60px' },
-  { title: '大露台', dataIndex: 'largeTerrace', width: '60px' },
-  { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '70px' },
+  { title: '电梯', dataIndex: 'isLift', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '100px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '100px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '会所', dataIndex: 'clubhouse', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '洋房', dataIndex: 'bungalow', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '双阳台', dataIndex: 'doubleBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '大阳台', dataIndex: 'largeBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '带花园', dataIndex: 'withGarden', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '大露台', dataIndex: 'largeTerrace', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '70px', scopedSlots: { customRender: 'isXXX' } },
   { title: '建筑类型', dataIndex: 'buildingType', width: '90px' },
   { title: '物业属性', dataIndex: 'propertyAttributes', width: '90px' },
   { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
@@ -355,14 +357,14 @@ const columns = [
   { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
   { title: '小学', dataIndex: 'primarySchool', width: '100px' },
   { title: '梯队表现', dataIndex: 'echelonPerformance', width: '90px' },
-  { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px' },
+  { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '中学', dataIndex: 'middleSchool', width: '120px' },
   { title: '市梯队', dataIndex: 'cityEchelon', width: '90px' },
   { title: '区梯队', dataIndex: 'districtEchelon', width: '90px' },
-  { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px' },
-  { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px' },
-  { title: '联排别墅', dataIndex: 'townhouse', width: '90px' },
-  { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '90px' },
+  { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '联排别墅', dataIndex: 'townhouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '内部配套', dataIndex: 'internalSupporting', width: '150px' },
   { title: '地址', dataIndex: 'address', width: '150px' },
   { title: '产权年限', dataIndex: 'propertyRights', width: '350px' },
@@ -408,8 +410,7 @@ export default {
             offset: 6
           }
         }
-      },
-      otherOptions: ['isLift', '近地铁', 'doubleBalcony']
+      }
     }
   },
   created () {

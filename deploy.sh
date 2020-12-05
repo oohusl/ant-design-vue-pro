@@ -7,3 +7,4 @@
     tar -zcvf ${project} *
     scp ${project} ${env}:${www}
     ssh ${env} tar -xzvf ${www}${project} -C ${www}
+    ssh ${env} rm ${www}${project}
