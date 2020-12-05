@@ -112,7 +112,7 @@
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-              <a-input style="width: 100%" v-model="house.distance" placeholder="地铁距离"/>
+              <a-input-number style="width: 100%" v-model="house.distance" placeholder="地铁距离"/>
             </a-form-item>
           </a-form-item>
           <a-form-item label="交易权属">
