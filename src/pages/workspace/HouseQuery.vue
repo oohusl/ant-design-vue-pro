@@ -200,12 +200,14 @@
               <a-select-option value="普通住宅">普通住宅</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="小学学区">
-            <a-select mode="multiple" v-model="queryParam.echelonPerformances" @pressEnter="refresh" placeholder="请选择">
-              <a-select-option value="一梯队">一梯队</a-select-option>
-              <a-select-option value="二梯队">二梯队</a-select-option>
-              <a-select-option value="三梯队">三梯队</a-select-option>
-            </a-select>
+          <a-form-item label="栋数">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.buildingNumberMin" @pressEnter="refresh" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input-number style="width: 100%" v-model="queryParam.buildingNumberMax" @pressEnter="refresh" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="户数">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -279,10 +281,47 @@
               <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh" placeholder="请输入"/>
             </a-form-item>
           </a-form-item>
+          <a-form-item label="小学学区">
+            <a-select mode="multiple" v-model="queryParam.echelonPerformances" @pressEnter="refresh" placeholder="请选择">
+              <a-select-option value="一梯队">一梯队</a-select-option>
+              <a-select-option value="二梯队">二梯队</a-select-option>
+              <a-select-option value="三梯队">三梯队</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="中学学区">
+            <a-select v-model="queryParam.middleSchool" placeholder="请选择">
+              <a-select-option value="cityEchelon">市梯队</a-select-option>
+              <a-select-option value="districtEchelon">区梯队</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="别墅类型">
+            <a-checkbox-group v-model="queryParam.bighouse">
+              <a-checkbox value="1" name="stackedVilla">
+                叠拼别墅
+              </a-checkbox>
+              <a-checkbox value="2" name="singleFamilyVilla">
+                独栋别墅
+              </a-checkbox>
+              <a-checkbox value="3" name="townhouse">
+                联排别墅
+              </a-checkbox>
+              <a-checkbox value="4" name="semiDetachedHouse">
+                双拼别墅
+              </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="其他">
             <a-checkbox-group v-model="queryParam.checkedList">
               <a-checkbox value="isLift">有电梯</a-checkbox>
               <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
+              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
+              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
+              <a-checkbox value="largeBalcony">大阳台</a-checkbox>
+              <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
+              <a-checkbox value="bungalow">洋房</a-checkbox>
+              <a-checkbox value="clubhouse">会所</a-checkbox>
+              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
+              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
         </a-form>

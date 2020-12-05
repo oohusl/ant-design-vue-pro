@@ -39,7 +39,7 @@
         </span>
       </s-table>
     </a-card>
-    <a-modal title="房源编辑" v-model="visible" @ok="save">
+    <a-modal title="房源编辑" v-model="visible" @ok="save" :bodyStyle="{ height: '500px', 'overflow-y': 'scroll'}">
       <a-spin :spinning="saveLoading">
         <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
           <a-form-item label="小区名称">
@@ -65,39 +65,147 @@
               <a-select-option value="崇明"> 崇明 </a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="单价(万)">
-            <a-input style="width: 100%" v-model="house.averageLlistedPrice" placeholder="请输入"/>
+          <a-form-item label="板块">
+            <a-select default-value="嘉定新城" v-model="house.plate" placeholder="请选择">
+              <a-select-option value="嘉定新城"> 嘉定新城 </a-select-option>
+              <a-select-option value="豫园"> 豫园 </a-select-option>
+              <a-select-option value="临港新城"> 临港新城 </a-select-option>
+            </a-select>
           </a-form-item>
-          <a-form-item label="年售(套)">
-            <a-input style="width: 100%" v-model="house.volume2019" placeholder="请输入"/>
+          <a-form-item label="地区规划">
+            <a-select default-value="城市主中心" v-model="house.districtPlanning" placeholder="请选择">
+              <a-select-option value="城市主中心"> 城市主中心</a-select-option>
+              <a-select-option value="城市副中心"> 城市副中心 </a-select-option>
+              <a-select-option value="地区中心"> 地区中心 </a-select-option>
+            </a-select>
           </a-form-item>
-          <a-form-item label="地铁">
+          <a-form-item label="环线">
+            <a-select default-value="内环内" v-model="house.loopSummary" placeholder="请选择">
+              <a-select-option value="内环内"> 内环内</a-select-option>
+              <a-select-option value="外环内"> 外环内</a-select-option>
+              <a-select-option value="外环外"> 外环外 </a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="小区属性">
+            <a-select default-value="住宅" v-model="house.cellAttributes" placeholder="请选择">
+              <a-select-option value="住宅"> 住宅</a-select-option>
+              <a-select-option value="商户"> 商户</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="地铁线">
+            <a-select default-value="1号线" v-model="house.metroLine" placeholder="请选择">
+              <a-select-option value="1">1号线</a-select-option>
+              <a-select-option value="2">2号线</a-select-option>
+              <a-select-option value="3">3号线</a-select-option>
+              <a-select-option value="4">4号线</a-select-option>
+              <a-select-option value="5">5号线</a-select-option>
+              <a-select-option value="6">6号线</a-select-option>
+              <a-select-option value="7">7号线</a-select-option>
+              <a-select-option value="8">8号线</a-select-option>
+              <a-select-option value="9">9号线</a-select-option>
+              <a-select-option value="10">10号线</a-select-option>
+              <a-select-option value="11">11号线</a-select-option>
+              <a-select-option value="12">12号线</a-select-option>
+              <a-select-option value="13">13号线</a-select-option>
+              <a-select-option value="14">14号线</a-select-option>
+              <a-select-option value="15">15号线</a-select-option>
+              <a-select-option value="16">16号线</a-select-option>
+              <a-select-option value="17">17号线</a-select-option>
+              <a-select-option value="18">18号线</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="地铁站">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-              <a-select v-model="house.metroLine" placeholder="请选择">
-                <a-select-option value="1">1号线</a-select-option>
-                <a-select-option value="2">2号线</a-select-option>
-                <a-select-option value="3">3号线</a-select-option>
-                <a-select-option value="4">4号线</a-select-option>
-                <a-select-option value="5">5号线</a-select-option>
-                <a-select-option value="6">6号线</a-select-option>
-                <a-select-option value="7">7号线</a-select-option>
-                <a-select-option value="8">8号线</a-select-option>
-                <a-select-option value="9">9号线</a-select-option>
-                <a-select-option value="10">10号线</a-select-option>
-                <a-select-option value="11">11号线</a-select-option>
-                <a-select-option value="12">12号线</a-select-option>
-                <a-select-option value="13">13号线</a-select-option>
-                <a-select-option value="14">14号线</a-select-option>
-                <a-select-option value="15">15号线</a-select-option>
-                <a-select-option value="16">16号线</a-select-option>
-                <a-select-option value="17">17号线</a-select-option>
-                <a-select-option value="18">18号线</a-select-option>
+              <a-select v-model="house.subwayStation" placeholder="请选择">
+                <a-select-option value="人民广场"> 人民广场</a-select-option>
+                <a-select-option value="世纪大道"> 世纪大道</a-select-option>
               </a-select>
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
               <a-input style="width: 100%" v-model="house.distance" placeholder="地铁距离"/>
             </a-form-item>
+          </a-form-item>
+          <a-form-item label="交易权属">
+            <a-select default-value="住宅" v-model="house.transactionOwnership" placeholder="请选择">
+              <a-select-option value="住宅"> 住宅</a-select-option>
+              <a-select-option value="商户"> 商户</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="楼层">
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input style="width: 100%" v-model="house.minFloor" placeholder="最小楼层"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.maxFloor" placeholder="最大楼层"/>
+            </a-form-item>
+          </a-form-item>
+          <a-form-item label="年售(套)">
+            <a-input style="width: 100%" v-model="house.volume2019" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="1房面积段">
+            <a-input style="width: 100%" v-model="house.roomArea1Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="2房面积段">
+            <a-input style="width: 100%" v-model="house.roomArea2Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="3房面积段">
+            <a-input style="width: 100%" v-model="house.roomArea3Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="1房价格段">
+            <a-input style="width: 100%" v-model="house.roomPriceRange1Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="2房价格段">
+            <a-input style="width: 100%" v-model="house.roomPriceRange2Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="3房价格段">
+            <a-input style="width: 100%" v-model="house.roomPriceRange3Max" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="建筑类型">
+            <a-select v-model="house.buildingType" @pressEnter="refresh" placeholder="请选择">
+              <a-select-option value="塔楼">塔楼</a-select-option>
+              <a-select-option value="板楼">板楼</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="物业属性">
+            <a-select v-model="house.propertyAttributes" @pressEnter="refresh" placeholder="请选择">
+              <a-select-option value="公寓住宅">公寓住宅</a-select-option>
+              <a-select-option value="普通住宅">普通住宅</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="栋数">
+            <a-input style="width: 100%" v-model="house.buildingNumber" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="户数">
+            <a-input style="width: 100%" v-model="house.householdsNumber" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="车位数">
+            <a-input style="width: 100%" v-model="house.householdsNumber" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="容积率">
+            <a-input style="width: 100%" v-model="house.volumeRate" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="绿化率">
+            <a-input style="width: 100%" v-model="house.greeningRate" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="挂牌均价">
+            <a-input style="width: 100%" v-model="house.averageLlistedPrice" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="在售">
+            <a-input style="width: 100%" v-model="house.inStock" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="正租">
+            <a-input style="width: 100%" v-model="house.positiveRent" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="建筑年代">
+            <a-input style="width: 100%" v-model="house.constructionAge" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="开发商">
+            <a-input style="width: 100%" v-model="house.developer" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="物业公司">
+            <a-input style="width: 100%" v-model="house.propertyCompany" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="小学学区">
             <a-select v-model="house.echelonPerformance" placeholder="请选择">
@@ -106,13 +214,52 @@
               <a-select-option value="三梯队">三梯队</a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item label="建筑年代">
-            <a-input-number style="width: 100%" v-model="house.constructionAge" placeholder="请输入"/>
+          <a-form-item label="中学学区">
+            <a-select v-model="house.middleSchool" placeholder="请选择">
+              <a-select-option value="cityEchelon">市梯队</a-select-option>
+              <a-select-option value="districtEchelon">区梯队</a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label="别墅类型">
+            <a-checkbox-group v-model="house.bighouse">
+              <a-checkbox value="1" name="stackedVilla">
+                叠拼别墅
+              </a-checkbox>
+              <a-checkbox value="2" name="singleFamilyVilla">
+                独栋别墅
+              </a-checkbox>
+              <a-checkbox value="3" name="townhouse">
+                联排别墅
+              </a-checkbox>
+              <a-checkbox value="4" name="semiDetachedHouse">
+                双拼别墅
+              </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="内部配套">
+            <a-input style="width: 100%" v-model="house.internalSupporting" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="地址">
+            <a-input style="width: 100%" v-model="house.address" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="产权年限">
+            <a-input style="width: 100%" v-model="house.propertyRights" placeholder="请输入"/>
+          </a-form-item>
+          <a-form-item label="小区介绍">
+            <a-input style="width: 100%" v-model="house.communityDesc" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="其他">
             <a-checkbox-group v-model="house.checkedList">
               <a-checkbox value="isLift">有电梯</a-checkbox>
               <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
+              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
+              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
+              <a-checkbox value="largeBalcony">大阳台</a-checkbox>
+              <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
+              <a-checkbox value="bungalow">洋房</a-checkbox>
+              <a-checkbox value="clubhouse">会所</a-checkbox>
+              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
+              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
         </a-form>
@@ -263,6 +410,10 @@ export default {
       if (this.house.checkedList) {
           this.house.checkedList.forEach((e) => { this.house[e] = true })
           delete this.house.checkedList
+      }
+      if (this.house.bighouse) {
+          this.house.bighouse.forEach((e) => { this.house[e] = true })
+          delete this.house.bighouse
       }
       saveHouse(this.house).then(e => {
         this.refresh()
