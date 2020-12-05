@@ -320,8 +320,6 @@
               <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
               <a-checkbox value="bungalow">洋房</a-checkbox>
               <a-checkbox value="clubhouse">会所</a-checkbox>
-              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
-              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
         </a-form>

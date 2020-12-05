@@ -66,18 +66,10 @@
             </a-select>
           </a-form-item>
           <a-form-item label="板块">
-            <a-select default-value="嘉定新城" v-model="house.plate" placeholder="请选择">
-              <a-select-option value="嘉定新城"> 嘉定新城 </a-select-option>
-              <a-select-option value="豫园"> 豫园 </a-select-option>
-              <a-select-option value="临港新城"> 临港新城 </a-select-option>
-            </a-select>
+            <a-input v-model="house.plate" placeholder=""/>
           </a-form-item>
           <a-form-item label="地区规划">
-            <a-select default-value="城市主中心" v-model="house.districtPlanning" placeholder="请选择">
-              <a-select-option value="城市主中心"> 城市主中心</a-select-option>
-              <a-select-option value="城市副中心"> 城市副中心 </a-select-option>
-              <a-select-option value="地区中心"> 地区中心 </a-select-option>
-            </a-select>
+            <a-input v-model="house.districtPlanning" placeholder=""/>
           </a-form-item>
           <a-form-item label="环线">
             <a-select default-value="内环内" v-model="house.loopSummary" placeholder="请选择">
@@ -116,10 +108,7 @@
           </a-form-item>
           <a-form-item label="地铁站">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-              <a-select v-model="house.subwayStation" placeholder="请选择">
-                <a-select-option value="人民广场"> 人民广场</a-select-option>
-                <a-select-option value="世纪大道"> 世纪大道</a-select-option>
-              </a-select>
+              <a-input v-model="house.subwayStation"/>
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -145,22 +134,58 @@
             <a-input style="width: 100%" v-model="house.volume2019" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="1房面积段">
-            <a-input style="width: 100%" v-model="house.roomArea1Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomArea1Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomArea1Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="2房面积段">
-            <a-input style="width: 100%" v-model="house.roomArea2Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomArea2Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomArea2Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="3房面积段">
-            <a-input style="width: 100%" v-model="house.roomArea3Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomArea2Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomArea2Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="1房价格段">
-            <a-input style="width: 100%" v-model="house.roomPriceRange1Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomPriceRange1Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomPriceRange1Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="2房价格段">
-            <a-input style="width: 100%" v-model="house.roomPriceRange2Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomPriceRange2Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomPriceRange2Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="3房价格段">
-            <a-input style="width: 100%" v-model="house.roomPriceRange3Max" placeholder="请输入"/>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
+              <a-input v-model="house.roomPriceRange2Min"/>
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-input style="width: 100%" v-model="house.roomPriceRange2Max" />
+            </a-form-item>
           </a-form-item>
           <a-form-item label="建筑类型">
             <a-select v-model="house.buildingType" @pressEnter="refresh" placeholder="请选择">
@@ -270,8 +295,6 @@
               <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
               <a-checkbox value="bungalow">洋房</a-checkbox>
               <a-checkbox value="clubhouse">会所</a-checkbox>
-              <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
-              <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
         </a-form>
