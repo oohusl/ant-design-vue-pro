@@ -193,16 +193,19 @@
             </a-form-item>
           </a-form-item>
           <a-form-item label="建筑类型">
-            <a-select v-model="house.buildingType" @pressEnter="refresh" placeholder="请选择">
+            <a-select v-model="house.buildingType" placeholder="请选择">
               <a-select-option value="塔楼">塔楼</a-select-option>
               <a-select-option value="板楼">板楼</a-select-option>
             </a-select>
           </a-form-item>
           <a-form-item label="物业属性">
-            <a-select v-model="house.propertyAttributes" @pressEnter="refresh" placeholder="请选择">
+            <a-select v-model="house.propertyAttributes" placeholder="请选择">
               <a-select-option value="公寓住宅">公寓住宅</a-select-option>
               <a-select-option value="普通住宅">普通住宅</a-select-option>
             </a-select>
+          </a-form-item>
+          <a-form-item label="物业费">
+            <a-input style="width: 100%" v-model="house.propertyCosts" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="栋数">
             <a-input style="width: 100%" v-model="house.buildingNumber" placeholder="请输入"/>
@@ -293,6 +296,8 @@
               <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
               <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
               <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
+              <a-checkbox value="withGarden">带花园</a-checkbox>
+              <a-checkbox value="largeTerrace">大露台</a-checkbox>
               <a-checkbox value="largeBalcony">大阳台</a-checkbox>
               <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
               <a-checkbox value="bungalow">洋房</a-checkbox>

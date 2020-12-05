@@ -47,18 +47,10 @@
             </a-select>
           </a-form-item>
           <a-form-item label="板块">
-            <a-select default-value="嘉定新城" v-model="queryParam.plate" placeholder="请选择">
-              <a-select-option value="嘉定新城"> 嘉定新城 </a-select-option>
-              <a-select-option value="豫园"> 豫园 </a-select-option>
-              <a-select-option value="临港新城"> 临港新城 </a-select-option>
-            </a-select>
+            <a-input v-model="queryParam.plate" placeholder="请选择"/>
           </a-form-item>
           <a-form-item label="地区规划">
-            <a-select default-value="城市主中心" v-model="queryParam.districtPlanning" placeholder="请选择">
-              <a-select-option value="城市主中心"> 城市主中心</a-select-option>
-              <a-select-option value="城市副中心"> 城市副中心 </a-select-option>
-              <a-select-option value="地区中心"> 地区中心 </a-select-option>
-            </a-select>
+            <a-input v-model="queryParam.districtPlanning" placeholder="请选择"/>
           </a-form-item>
           <a-form-item label="环线">
             <a-select default-value="内环内" v-model="queryParam.loopSummary" placeholder="请选择">
@@ -97,10 +89,7 @@
           </a-form-item>
           <a-form-item label="地铁站">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-              <a-select v-model="queryParam.subwayStation" placeholder="请选择">
-                <a-select-option value="人民广场"> 人民广场</a-select-option>
-                <a-select-option value="世纪大道"> 世纪大道</a-select-option>
-              </a-select>
+              <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择"/>
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -316,6 +305,8 @@
               <a-checkbox value="peopleAndVehicles">人车分流</a-checkbox>
               <a-checkbox value="isIndoorSwimmingPool">室内游泳池</a-checkbox>
               <a-checkbox value="isOutdoorSwimmingRoom">室外游泳池</a-checkbox>
+              <a-checkbox value="withGarden">带花园</a-checkbox>
+              <a-checkbox value="largeTerrace">大露台</a-checkbox>
               <a-checkbox value="largeBalcony">大阳台</a-checkbox>
               <a-checkbox value="doubleBalcony">双阳台</a-checkbox>
               <a-checkbox value="bungalow">洋房</a-checkbox>
