@@ -207,6 +207,9 @@
           <a-form-item label="物业公司">
             <a-input style="width: 100%" v-model="house.propertyCompany" placeholder="请输入"/>
           </a-form-item>
+          <a-form-item label="小学">
+            <a-input style="width: 100%" v-model="house.primarySchool" placeholder="请输入"/>
+          </a-form-item>
           <a-form-item label="小学学区">
             <a-select v-model="house.echelonPerformance" placeholder="请选择">
               <a-select-option value="一梯队">一梯队</a-select-option>
@@ -214,11 +217,20 @@
               <a-select-option value="三梯队">三梯队</a-select-option>
             </a-select>
           </a-form-item>
+          <a-form-item label="一贯制">
+            <a-checkbox-group v-model="house.isConsistentSystem">
+              <a-checkbox value="1">
+              </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="中学">
+            <a-input style="width: 100%" v-model="house.middleSchool" placeholder="请输入"/>
+          </a-form-item>
           <a-form-item label="中学学区">
-            <a-select v-model="house.middleSchool" placeholder="请选择">
-              <a-select-option value="cityEchelon">市梯队</a-select-option>
-              <a-select-option value="districtEchelon">区梯队</a-select-option>
-            </a-select>
+            <a-checkbox-group v-model="house.middleSchoolEchelon" >
+              <a-checkbox value="1" name="cityEchelon">市梯队</a-checkbox>
+              <a-checkbox value="2" name="districtEchelon">区梯队</a-checkbox>
+            </a-checkbox-group>
           </a-form-item>
           <a-form-item label="别墅类型">
             <a-checkbox-group v-model="house.bighouse">
@@ -414,6 +426,10 @@ export default {
       if (this.house.bighouse) {
           this.house.bighouse.forEach((e) => { this.house[e] = true })
           delete this.house.bighouse
+      }
+       if (this.house.middleSchoolEchelon) {
+          this.house.middleSchoolEchelon.forEach((e) => { this.house[e] = true })
+          delete this.house.middleSchoolEchelon
       }
       saveHouse(this.house).then(e => {
         this.refresh()
