@@ -6,7 +6,7 @@
           <a-row :gutter="48">
             <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons">
-                <a-button style="margin-left: 8px" @click="() => this.moreQuery = true">查询</a-button>
+                <a-button style="margin-left: 8px" @click="() => (this.moreQuery = true)">查询</a-button>
               </span>
             </a-col>
           </a-row>
@@ -37,7 +37,13 @@
         </a-form-item>
         <a-form-item label="最近查询">
           <template v-for="(tag, index) in tags">
-            <a-tag :key="tag.label" :color="colors[index%7]" closable @click="tagQuery(tag)" @close="() => handleClose(tag.label)">
+            <a-tag
+              :key="tag.label"
+              :color="colors[index % 7]"
+              closable
+              @click="tagQuery(tag)"
+              @close="() => handleClose(tag.label)"
+            >
               {{ `${tag.label}` }}
             </a-tag>
           </template>
@@ -53,10 +59,18 @@
             @blur="tagNameConfirm"
             @keyup.enter="tagNameConfirm"
           />
-          <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput"> <a-icon type="plus" /> 保存筛选 </a-tag>
+          <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput">
+            <a-icon type="plus" /> 保存筛选
+          </a-tag>
         </a-form-item>
         <a-form-item label="区域">
-          <a-select default-value="浦东" v-model="queryParam.areas" mode="multiple" @change="refresh" placeholder="请选择">
+          <a-select
+            default-value="浦东"
+            v-model="queryParam.areas"
+            mode="multiple"
+            @change="refresh"
+            placeholder="请选择"
+          >
             <a-select-option value="静安"> 静安 </a-select-option>
             <a-select-option value="浦东"> 浦东 </a-select-option>
             <a-select-option value="徐汇"> 徐汇 </a-select-option>
@@ -76,10 +90,10 @@
           </a-select>
         </a-form-item>
         <a-form-item label="板块">
-          <a-input v-model="queryParam.plate" placeholder="请选择"/>
+          <a-input v-model="queryParam.plate" placeholder="请选择" />
         </a-form-item>
         <a-form-item label="地区规划">
-          <a-input v-model="queryParam.districtPlanning" placeholder="请选择"/>
+          <a-input v-model="queryParam.districtPlanning" placeholder="请选择" />
         </a-form-item>
         <a-form-item label="环线">
           <a-select default-value="内环内" v-model="queryParam.loopSummary" placeholder="请选择">
@@ -118,11 +132,11 @@
         </a-form-item>
         <a-form-item label="地铁站">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择"/>
+            <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.distance" placeholder="地铁距离"/>
+            <a-input style="width: 100%" v-model="queryParam.distance" placeholder="地铁距离" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="交易权属">
@@ -133,11 +147,11 @@
         </a-form-item>
         <a-form-item label="楼层">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-input style="width: 100%" v-model="queryParam.minFloor" placeholder="最小楼层"/>
+            <a-input style="width: 100%" v-model="queryParam.minFloor" placeholder="最小楼层" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.maxFloor" placeholder="最大楼层"/>
+            <a-input style="width: 100%" v-model="queryParam.maxFloor" placeholder="最大楼层" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="年售(套)">
@@ -151,59 +165,79 @@
         </a-form-item>
         <a-form-item label="1房面积段">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea1Min" placeholder="最小面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea1Min" placeholder="最小面积" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea1Max" placeholder="最大面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea1Max" placeholder="最大面积" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="2房面积段">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea2Min" placeholder="最小面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea2Min" placeholder="最小面积" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea2Max" placeholder="最大面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea2Max" placeholder="最大面积" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="3房面积段">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea3Min" placeholder="最小面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea3Min" placeholder="最小面积" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomArea3Max" placeholder="最大面积"/>
+            <a-input style="width: 100%" v-model="queryParam.roomArea3Max" placeholder="最大面积" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="总价(万)">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Min" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input
+              style="width: 100%"
+              v-model="queryParam.roomPriceRange3Min"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.roomPriceRange3Max" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input
+              style="width: 100%"
+              v-model="queryParam.roomPriceRange3Max"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
         </a-form-item>
         <a-form-item label="单价(万)">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" placeholder="请输入"/>
+            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" placeholder="请输入" />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" placeholder="请输入"/>
+            <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" placeholder="请输入" />
           </a-form-item>
         </a-form-item>
         <a-form-item label="年售(套)">
-          <a-input style="width: 100%" v-model="queryParam.volume2019Min" @pressEnter="refresh" placeholder="请输入"/>
+          <a-input style="width: 100%" v-model="queryParam.volume2019Min" @pressEnter="refresh" placeholder="请输入" />
         </a-form-item>
         <a-form-item label="面积">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Min" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input-number
+              style="width: 100%"
+              v-model="queryParam.roomArea3Min"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.roomArea3Max" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input-number
+              style="width: 100%"
+              v-model="queryParam.roomArea3Max"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
         </a-form-item>
         <a-form-item label="建筑类型">
@@ -292,11 +326,21 @@
         </a-form-item>
         <a-form-item label="建筑年代">
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMin" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input-number
+              style="width: 100%"
+              v-model="queryParam.constructionAgeMin"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
           <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }"> - </span>
           <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-            <a-input-number style="width: 100%" v-model="queryParam.constructionAgeMax" @pressEnter="refresh" placeholder="请输入"/>
+            <a-input-number
+              style="width: 100%"
+              v-model="queryParam.constructionAgeMax"
+              @pressEnter="refresh"
+              placeholder="请输入"
+            />
           </a-form-item>
         </a-form-item>
         <a-form-item label="小学学区">
@@ -314,18 +358,10 @@
         </a-form-item>
         <a-form-item label="别墅类型">
           <a-checkbox-group v-model="queryParam.bighouse">
-            <a-checkbox value="1" name="stackedVilla">
-              叠拼别墅
-            </a-checkbox>
-            <a-checkbox value="2" name="singleFamilyVilla">
-              独栋别墅
-            </a-checkbox>
-            <a-checkbox value="3" name="townhouse">
-              联排别墅
-            </a-checkbox>
-            <a-checkbox value="4" name="semiDetachedHouse">
-              双拼别墅
-            </a-checkbox>
+            <a-checkbox value="1" name="stackedVilla"> 叠拼别墅 </a-checkbox>
+            <a-checkbox value="2" name="singleFamilyVilla"> 独栋别墅 </a-checkbox>
+            <a-checkbox value="3" name="townhouse"> 联排别墅 </a-checkbox>
+            <a-checkbox value="4" name="semiDetachedHouse"> 双拼别墅 </a-checkbox>
           </a-checkbox-group>
         </a-form-item>
         <a-form-item label="其他">
@@ -354,7 +390,13 @@ import { getHouse } from '@/api/manage'
 import storage from 'store'
 
 const columns = [
-  { title: '小区名称', dataIndex: 'communityName', width: '150px', fixed: true, scopedSlots: { customRender: 'communityName' } },
+  {
+    title: '小区名称',
+    dataIndex: 'communityName',
+    width: '150px',
+    fixed: true,
+    scopedSlots: { customRender: 'communityName' }
+  },
   { title: '区域', dataIndex: 'area', width: '50px' },
   { title: '板块', dataIndex: 'plate', width: '80px' },
   { title: '地区规划', dataIndex: 'districtPlanning', width: '100px' },
@@ -454,14 +496,16 @@ export default {
       tags: [],
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       // 加载数据方法 必须为 Promise 对象
-      loadData: (parameter) => {
+      loadData: parameter => {
         const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
         if (this.queryParam.checkedList) {
-          this.queryParam.checkedList.forEach((e) => { requestParameters[e] = true })
+          this.queryParam.checkedList.forEach(e => {
+            requestParameters[e] = true
+          })
           delete requestParameters.checkedList
         }
         console.log('loadData request parameters:', requestParameters)
-        return getHouse(requestParameters).then((res) => {
+        return getHouse(requestParameters).then(res => {
           return res
         })
       },
@@ -546,7 +590,7 @@ export default {
       const inputValue = this.inputValue
       let tags = this.tags
       if (inputValue && !tags.find(e => e.label === inputValue)) {
-        tags = [ ...tags, { label: inputValue, values: Object.assign({}, this.queryParam) } ]
+        tags = [...tags, { label: inputValue, values: Object.assign({}, this.queryParam) }]
       }
       Object.assign(this, {
         tags,
@@ -582,7 +626,7 @@ export default {
 .ant-form-item .ant-form-item {
   margin-bottom: 0px;
 }
-.ant-card-grid{
+.ant-card-grid {
   padding: 0px;
 }
 </style>
