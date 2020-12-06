@@ -214,7 +214,7 @@
             <a-input style="width: 100%" v-model="house.householdsNumber" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="车位数">
-            <a-input style="width: 100%" v-model="house.householdsNumber" placeholder="请输入"/>
+            <a-input style="width: 100%" v-model="house.parkingSpacesNumber" placeholder="请输入"/>
           </a-form-item>
           <a-form-item label="容积率">
             <a-input style="width: 100%" v-model="house.volumeRate" placeholder="请输入"/>
@@ -258,22 +258,22 @@
           </a-form-item>
           <a-form-item label="中学学区">
             <a-checkbox-group v-model="house.middleSchoolEchelon" >
-              <a-checkbox value="1" name="cityEchelon">市梯队</a-checkbox>
-              <a-checkbox value="2" name="districtEchelon">区梯队</a-checkbox>
+              <a-checkbox value="cityEchelon" name="cityEchelon">市梯队</a-checkbox>
+              <a-checkbox value="districtEchelon" name="districtEchelon">区梯队</a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="别墅类型">
             <a-checkbox-group v-model="house.bighouse">
-              <a-checkbox value="1" name="stackedVilla">
+              <a-checkbox value="stackedVilla">
                 叠拼别墅
               </a-checkbox>
-              <a-checkbox value="2" name="singleFamilyVilla">
+              <a-checkbox value="singleFamilyVilla">
                 独栋别墅
               </a-checkbox>
-              <a-checkbox value="3" name="townhouse">
+              <a-checkbox value="townhouse">
                 联排别墅
               </a-checkbox>
-              <a-checkbox value="4" name="semiDetachedHouse">
+              <a-checkbox value="semiDetachedHouse">
                 双拼别墅
               </a-checkbox>
             </a-checkbox-group>
@@ -364,8 +364,8 @@ const columns = [
   { title: '梯队表现', dataIndex: 'echelonPerformance', width: '90px' },
   { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '中学', dataIndex: 'middleSchool', width: '120px' },
-  { title: '市梯队', dataIndex: 'cityEchelon', width: '90px' },
-  { title: '区梯队', dataIndex: 'districtEchelon', width: '90px' },
+  { title: '市梯队', dataIndex: 'cityEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+  { title: '区梯队', dataIndex: 'districtEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
   { title: '联排别墅', dataIndex: 'townhouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
