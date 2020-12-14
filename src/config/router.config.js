@@ -68,13 +68,13 @@ export const asyncRouterMap = [
             name: 'settings',
             component: () => import('@/pages/account/settings/Index'),
             meta: { title: '个人设置', hideHeader: true },
-            redirect: '/account/settings/base',
+            redirect: '/account/settings/changepassword',
             hideChildrenInMenu: true,
             children: [
               {
                 path: '/account/settings/base',
                 name: 'BaseSettings',
-                component: () => import('@/pages/account/settings/BaseSetting'),
+                component: () => import('@/pages/account/settings/ChangePassword'),
                 meta: { title: '基本设置', hidden: true }
               },
               {
@@ -82,6 +82,12 @@ export const asyncRouterMap = [
                 name: 'SecuritySettings',
                 component: () => import('@/pages/account/settings/Security'),
                 meta: { title: '安全设置', hidden: true, keepAlive: true }
+              },
+              {
+                path: '/account/settings/changepassword',
+                name: 'ChangePassword',
+                component: () => import('@/pages/account/settings/ChangePassword'),
+                meta: { title: '修改密码', hidden: true, keepAlive: true }
               },
               {
                 path: '/account/settings/custom',
@@ -125,11 +131,11 @@ export const constantRouterMap = [
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/pages/user/Login')
       },
-      {
-        path: 'change-password',
-        name: 'change-password',
-        component: () => import(/* webpackChunkName: "user" */ '@/pages/user/ChangePassword')
-      },
+      // {
+      //   path: 'change-password',
+      //   name: 'change-password',
+      //   component: () => import(/* webpackChunkName: "user" */ '@/pages/user/ChangePassword')
+      // },
       {
         path: 'recover',
         name: 'recover',
