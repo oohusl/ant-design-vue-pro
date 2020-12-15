@@ -75,7 +75,7 @@ export const asyncRouterMap = [
                 path: '/account/settings/base',
                 name: 'BaseSettings',
                 component: () => import('@/pages/account/settings/ChangePassword'),
-                meta: { title: '基本设置', hidden: true }
+                meta: { title: '修改密码', hidden: true }
               },
               {
                 path: '/account/settings/security',

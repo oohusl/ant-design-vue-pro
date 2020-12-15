@@ -1,24 +1,29 @@
 <template>
   <div class="main user-layout-register">
     <div v-if="!success">
-      <h3><span>修改密码</span></h3>
       <a-form ref="formRegister" :form="form" id="formRegister">
         <a-form-item>
           <a-input-password
             size="large"
             placeholder="原密码"
-            v-decorator="['currentPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}], validateTrigger: ['change', 'blur']}]"
+            v-decorator="[
+              'currentPassword',
+              { rules: [{ required: true, message: '至少6位密码，区分大小写' }], validateTrigger: ['change', 'blur'] }
+            ]"
           ></a-input-password>
         </a-form-item>
         <a-popover
           placement="rightTop"
           :trigger="['focus']"
-          :getPopupContainer="(trigger) => trigger.parentElement"
-          v-model="state.passwordLevelChecked">
+          :getPopupContainer="trigger => trigger.parentElement"
+          v-model="state.passwordLevelChecked"
+        >
           <template slot="content">
-            <div :style="{ width: '240px' }" >
-              <div :class="['user-register', passwordLevelClass]">强度：<span>{{ passwordLevelName }}</span></div>
-              <a-progress :percent="state.percent" :showInfo="false" :strokeColor=" passwordLevelColor " />
+            <div :style="{ width: '240px' }">
+              <div :class="['user-register', passwordLevelClass]">
+                强度：<span>{{ passwordLevelName }}</span>
+              </div>
+              <a-progress :percent="state.percent" :showInfo="false" :strokeColor="passwordLevelColor" />
               <div style="margin-top: 10px;">
                 <span>请至少输入 6 个字符。请不要使用容易被猜到的密码。</span>
               </div>
@@ -29,7 +34,16 @@
               size="large"
               @click="handlePasswordInputClick"
               placeholder="至少6位密码，区分大小写"
-              v-decorator="['newPassword', {rules: [{ required: true, message: '至少6位密码，区分大小写'}, { validator: this.handlePasswordLevel }], validateTrigger: ['change', 'blur']}]"
+              v-decorator="[
+                'newPassword',
+                {
+                  rules: [
+                    { required: true, message: '至少6位密码，区分大小写' },
+                    { validator: this.handlePasswordLevel }
+                  ],
+                  validateTrigger: ['change', 'blur']
+                }
+              ]"
             ></a-input-password>
           </a-form-item>
         </a-popover>
@@ -37,7 +51,16 @@
           <a-input-password
             size="large"
             placeholder="确认密码"
-            v-decorator="['password2', {rules: [{ required: true, message: '至少6位密码，区分大小写' }, { validator: this.handlePasswordCheck }], validateTrigger: ['change', 'blur']}]"
+            v-decorator="[
+              'password2',
+              {
+                rules: [
+                  { required: true, message: '至少6位密码，区分大小写' },
+                  { validator: this.handlePasswordCheck }
+                ],
+                validateTrigger: ['change', 'blur']
+              }
+            ]"
           ></a-input-password>
         </a-form-item>
         <a-form-item>
@@ -48,17 +71,15 @@
             class="register-button"
             :loading="registerBtn"
             @click.stop.prevent="handleSubmit"
-            :disabled="registerBtn">确认
+            :disabled="registerBtn"
+          >确认
           </a-button>
           <router-link class="login" :to="{ name: 'login' }">取消</router-link>
         </a-form-item>
       </a-form>
     </div>
     <div class="main user-layout-register" v-if="success">
-      <a-result
-        status="success"
-        title="密码修改成功!"
-        sub-title="">
+      <a-result status="success" title="密码修改成功!" sub-title="">
         <template #extra>
           <a-button key="console" type="primary" @click="handleStartClick">
             开始使用
@@ -93,8 +114,7 @@ const levelColor = {
 }
 export default {
   name: 'ChangePassword',
-  components: {
-  },
+  components: {},
   mixins: [deviceMixin],
   data () {
     return {
@@ -187,7 +207,10 @@ export default {
     },
 
     handleSubmit () {
-      const { form: { validateFields }, state } = this
+      const {
+        form: { validateFields },
+        state
+      } = this
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           state.passwordLevelChecked = false
@@ -200,40 +223,45 @@ export default {
 
     getCaptcha (e) {
       e.preventDefault()
-      const { form: { validateFields }, state, $message, $notification } = this
+      const {
+        form: { validateFields },
+        state,
+        $message,
+        $notification
+      } = this
 
-      validateFields(['mobile'], { force: true },
-        (err, values) => {
-          if (!err) {
-            state.smsSendBtn = true
+      validateFields(['mobile'], { force: true }, (err, values) => {
+        if (!err) {
+          state.smsSendBtn = true
 
-            const interval = window.setInterval(() => {
-              if (state.time-- <= 0) {
-                state.time = 60
-                state.smsSendBtn = false
-                window.clearInterval(interval)
-              }
-            }, 1000)
+          const interval = window.setInterval(() => {
+            if (state.time-- <= 0) {
+              state.time = 60
+              state.smsSendBtn = false
+              window.clearInterval(interval)
+            }
+          }, 1000)
 
-            const hide = $message.loading('验证码发送中..', 0)
+          const hide = $message.loading('验证码发送中..', 0)
 
-            getSmsCaptcha({ mobile: values.mobile }).then(res => {
+          getSmsCaptcha({ mobile: values.mobile })
+            .then(res => {
               setTimeout(hide, 2500)
               $notification['success']({
                 message: '提示',
                 description: '验证码获取成功，您的验证码为：' + res.result.captcha,
                 duration: 8
               })
-            }).catch(err => {
+            })
+            .catch(err => {
               setTimeout(hide, 1)
               clearInterval(interval)
               state.time = 60
               state.smsSendBtn = false
               this.requestFailed(err)
             })
-          }
         }
-      )
+      })
     },
     requestFailed (err) {
       this.$notification['error']({
@@ -252,49 +280,46 @@ export default {
 }
 </script>
 <style lang="less">
-  .user-register {
-
-    &.error {
-      color: #ff0000;
-    }
-
-    &.warning {
-      color: #ff7e05;
-    }
-
-    &.success {
-      color: #52c41a;
-    }
-
+.user-register {
+  &.error {
+    color: #ff0000;
   }
 
-  .user-layout-register {
-    .ant-input-group-addon:first-child {
-      background-color: #fff;
-    }
+  &.warning {
+    color: #ff7e05;
   }
+
+  &.success {
+    color: #52c41a;
+  }
+}
+
+.user-layout-register {
+  .ant-input-group-addon:first-child {
+    background-color: #fff;
+  }
+}
 </style>
 <style lang="less" scoped>
-  .user-layout-register {
-
-    & > h3 {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .getCaptcha {
-      display: block;
-      width: 100%;
-      height: 40px;
-    }
-
-    .register-button {
-      width: 50%;
-    }
-
-    .login {
-      float: right;
-      line-height: 40px;
-    }
+.user-layout-register {
+  & > h3 {
+    font-size: 16px;
+    margin-bottom: 20px;
   }
+
+  .getCaptcha {
+    display: block;
+    width: 100%;
+    height: 40px;
+  }
+
+  .register-button {
+    width: 50%;
+  }
+
+  .login {
+    float: right;
+    line-height: 40px;
+  }
+}
 </style>
