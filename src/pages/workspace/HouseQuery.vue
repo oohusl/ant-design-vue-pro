@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper>
     <a-layout>
-      <a-layout-header :style="{ background: '#f5f5f5', padding: 0 }" >
+      <a-layout-header :style="{ background: '#f5f5f5', padding: 0 }">
         <div class="house-query-search-holder">
           <AutoComplete
             class="house-query-search"
@@ -11,15 +11,12 @@
             size="large"
             style="width: 100%"
             placeholder="请输入区域或楼盘名开始找房"
-            option-label-prop="value">
+            option-label-prop="value"
+          >
             <template slot="dataSource">
               <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
                 Found {{ item.query }} on
-                <a
-                  :href="`https://s.taobao.com/search?q=${item.query}`"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a :href="`https://s.taobao.com/search?q=${item.query}`" target="_blank" rel="noopener noreferrer">
                   {{ item.category }}
                 </a>
                 <span className="global-search-item-count">{{ item.count }} results</span>
@@ -31,29 +28,29 @@
           </AutoComplete>
         </div>
       </a-layout-header>
-      <a-layout-content :style="{background: '#ffffff', margin: '24px 16px 0' }">
+      <a-layout-content :style="{ background: '#ffffff', margin: '24px 16px 0' }">
         <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 16 }">
           <a-form-item label="位置">
             <template>
               <a-tabs default-active-key="1" type="card">
                 <a-tab-pane key="1" tab="区域">
-                  <a-checkbox-group v-model="queryParam.areas">
-                    <a-checkbox name="青浦" value="青浦" > 青浦 </a-checkbox>
-                    <a-checkbox name="松江" value="松江" > 松江 </a-checkbox>
-                    <a-checkbox name="嘉定" value="嘉定" > 嘉定 </a-checkbox>
-                    <a-checkbox name="奉贤" value="奉贤" > 奉贤 </a-checkbox>
-                    <a-checkbox name="浦东" value="浦东" > 浦东 </a-checkbox>
-                    <a-checkbox name="宝山" value="宝山" > 宝山 </a-checkbox>
-                    <a-checkbox name="闵行" value="闵行" > 闵行 </a-checkbox>
-                    <a-checkbox name="徐汇" value="徐汇" > 徐汇 </a-checkbox>
-                    <a-checkbox name="长宁" value="长宁" > 长宁 </a-checkbox>
-                    <a-checkbox name="静安" value="静安" > 静安 </a-checkbox>
-                    <a-checkbox name="普陀" value="普陀" > 普陀 </a-checkbox>
-                    <a-checkbox name="杨浦" value="杨浦" > 杨浦 </a-checkbox>
-                    <a-checkbox name="黄浦" value="黄浦" > 黄浦 </a-checkbox>
-                    <a-checkbox name="虹口" value="虹口" > 虹口 </a-checkbox>
-                    <a-checkbox name="金山" value="金山" > 金山 </a-checkbox>
-                    <a-checkbox name="崇明" value="崇明" > 崇明 </a-checkbox>
+                  <a-checkbox-group v-model="queryParam.areas" size="small">
+                    <a-checkbox name="青浦" value="青浦"> 青浦 </a-checkbox>
+                    <a-checkbox name="松江" value="松江"> 松江 </a-checkbox>
+                    <a-checkbox name="嘉定" value="嘉定"> 嘉定 </a-checkbox>
+                    <a-checkbox name="奉贤" value="奉贤"> 奉贤 </a-checkbox>
+                    <a-checkbox name="浦东" value="浦东"> 浦东 </a-checkbox>
+                    <a-checkbox name="宝山" value="宝山"> 宝山 </a-checkbox>
+                    <a-checkbox name="闵行" value="闵行"> 闵行 </a-checkbox>
+                    <a-checkbox name="徐汇" value="徐汇"> 徐汇 </a-checkbox>
+                    <a-checkbox name="长宁" value="长宁"> 长宁 </a-checkbox>
+                    <a-checkbox name="静安" value="静安"> 静安 </a-checkbox>
+                    <a-checkbox name="普陀" value="普陀"> 普陀 </a-checkbox>
+                    <a-checkbox name="杨浦" value="杨浦"> 杨浦 </a-checkbox>
+                    <a-checkbox name="黄浦" value="黄浦"> 黄浦 </a-checkbox>
+                    <a-checkbox name="虹口" value="虹口"> 虹口 </a-checkbox>
+                    <a-checkbox name="金山" value="金山"> 金山 </a-checkbox>
+                    <a-checkbox name="崇明" value="崇明"> 崇明 </a-checkbox>
                   </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab="板块">
@@ -68,7 +65,7 @@
                   </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="4" tab="地铁线">
-                  <a-checkbox-group v-model="queryParam.metroLine" >
+                  <a-checkbox-group v-model="queryParam.metroLine">
                     <a-checkbox value="1" name="1">1号线</a-checkbox>
                     <a-checkbox value="2" name="2">2号线</a-checkbox>
                     <a-checkbox value="3" name="3">3号线</a-checkbox>
@@ -90,7 +87,7 @@
                     <a-checkbox value="19" name="19">磁悬浮</a-checkbox>
                   </a-checkbox-group>
                   <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-                    <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择" />
+                    <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择" size="small" />
                   </a-form-item>
                   <!-- <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
                   <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -136,11 +133,11 @@
               <a-checkbox value="3" name="townhouse"> 6万以上 </a-checkbox>
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Min" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Min" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Max" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Max" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
           </a-form-item>
@@ -156,11 +153,11 @@
               <a-checkbox value="8" name="semiDetachedHouse"> 2000万以上 </a-checkbox>
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange1Min" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange1Min" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange1Max" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange1Max" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
           </a-form-item>
@@ -175,11 +172,11 @@
               <a-checkbox value="7" name="townhouse"> 150平方以上 </a-checkbox>
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Min" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Min" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Max" />
+              <a-input style="width: 100%" v-model="queryParam.roomPriceRange2Max" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '44px', textAlign: 'center' }"> 平方 </span>
           </a-form-item>
@@ -226,8 +223,8 @@
           </a-form-item>
         </a-form>
         <a-card :bordered="false">
-          <a-layout >
-            <a-layout-header :style="{ background: '#ffffff', padding: '0 128px',height:'50px',display:'flex' }">
+          <a-layout>
+            <a-layout-header :style="{ background: '#ffffff', padding: '0 128px', height: '50px', display: 'flex' }">
               <div class="result">
                 共找到<span>500</span>套 符合条件房源
               </div>
@@ -244,8 +241,7 @@
                 </a-button>
               </a-button-group>
             </a-layout-header>
-            <a-layout-content>
-            </a-layout-content>
+            <a-layout-content> </a-layout-content>
           </a-layout>
         </a-card>
       </a-layout-content>
@@ -534,19 +530,22 @@ export default {
 .ant-card-grid {
   padding: 0px;
 }
-.house-query-search-holder{
+.house-query-search-holder {
   width: 552px;
   margin: 0 auto;
 }
-.ant-checkbox-wrapper + .ant-checkbox-wrapper{
+.ant-checkbox-wrapper + .ant-checkbox-wrapper {
   margin-left: 0;
 }
-.result{
-  flex:1;
+.result {
+  flex: 1;
   font-size: 20px;
   color: #262626;
 }
-.result span{
-  color: #B71C2B;
+.result span {
+  color: #b71c2b;
+}
+.ant-checkbox + span {
+  padding-right: 0px;
 }
 </style>
