@@ -27,6 +27,7 @@ import ArticleListContent from '@/components/ArticleListContent'
 
 import Dialog from '@/components/Dialog'
 
+import GlobalSearch from '@/components/Search/GlobalSearch'
 export {
   AvatarList,
   Bar,
@@ -51,6 +52,6 @@ export {
   TagSelect,
   StandardFormRow,
   ArticleListContent,
-
+  GlobalSearch,
   Dialog
 }
