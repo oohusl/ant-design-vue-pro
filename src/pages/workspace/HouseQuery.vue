@@ -86,9 +86,6 @@
                     <a-checkbox value="18" name="18">18号线</a-checkbox>
                     <a-checkbox value="19" name="19">磁悬浮</a-checkbox>
                   </a-checkbox-group>
-                  <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-                    <a-input style="width: 100%" v-model="queryParam.subwayStation" placeholder="请选择" size="small" />
-                  </a-form-item>
                   <!-- <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
                   <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
                     <a-input style="width: 100%" v-model="queryParam.distance" placeholder="地铁距离" />
