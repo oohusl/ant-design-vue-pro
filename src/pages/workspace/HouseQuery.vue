@@ -12,18 +12,19 @@
             style="width: 100%"
             placeholder="请输入区域或楼盘名开始找房"
             option-label-prop="value"
+            @search="search"
           >
             <template slot="dataSource">
-              <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
+              <!-- <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
                 Found {{ item.query }} on
                 <a :href="`https://s.taobao.com/search?q=${item.query}`" target="_blank" rel="noopener noreferrer">
                   {{ item.category }}
                 </a>
                 <span className="global-search-item-count">{{ item.count }} results</span>
-              </a-select-option>
+              </a-select-option> -->
             </template>
             <a-input>
-              <a-icon slot="suffix" type="search" class="certain-category-icon" />
+              <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search"/>
             </a-input>
           </AutoComplete>
         </div>
@@ -57,7 +58,7 @@
                   <a-input v-model="queryParam.plate" placeholder="请选择" />
                 </a-tab-pane>
                 <a-tab-pane key="3" tab="环线">
-                  <a-checkbox-group v-model="queryParam.loopSummary">
+                  <a-checkbox-group v-model="queryParam.loopSummary" @change="refresh">
                     <a-checkbox value="内环内"> 内环内 </a-checkbox>
                     <a-checkbox value="内环至中环"> 内环至中环 </a-checkbox>
                     <a-checkbox value="中环至外环"> 中环至外环 </a-checkbox>
@@ -65,7 +66,7 @@
                   </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="4" tab="地铁线">
-                  <a-checkbox-group v-model="queryParam.metroLine">
+                  <a-checkbox-group v-model="queryParam.metroLine" @change="refresh">
                     <a-checkbox value="1">1号线</a-checkbox>
                     <a-checkbox value="2">2号线</a-checkbox>
                     <a-checkbox value="3">3号线</a-checkbox>
@@ -91,27 +92,22 @@
                     <a-input style="width: 100%" v-model="queryParam.distance" placeholder="地铁距离" />
                   </a-form-item> -->
                 </a-tab-pane>
-                <a-tab-pane key="5" tab="学校">
-                  <a-checkbox-group v-model="queryParam.echelonPerformances" @pressEnter="refresh">
-                    <a-checkbox value="小学">小学</a-checkbox>
-                    <a-checkbox value="中学">中学</a-checkbox>
-                    <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
-                  </a-checkbox-group>
-                </a-tab-pane>
               </a-tabs>
             </template>
           </a-form-item>
-          <!-- <a-form-item label="类型">
-            <a-checkbox-group v-model="queryParam.housetypes">
-              <a-checkbox value="1" > 住宅 </a-checkbox>
-              <a-checkbox value="2" > 别墅 </a-checkbox>
-              <a-checkbox value="3" > 商办 </a-checkbox>
-              <a-checkbox value="4" > 商铺 </a-checkbox>
-              <a-checkbox value="5" > 写字楼 </a-checkbox>
+          <a-form-item label="学校">
+            <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
+              <a-checkbox value="小学">小学</a-checkbox>
+              <a-checkbox value="中学">中学</a-checkbox>
+              <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
             </a-checkbox-group>
-          </a-form-item> -->
+            <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
+              <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
+            </a-form-item>
+            <a-button size="small" @click="refresh">确定</a-button>
+          </a-form-item>
           <a-form-item label="户型">
-            <a-checkbox-group v-model="queryParam.roomType">
+            <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>
               <a-checkbox value="3"> 三房 </a-checkbox>
@@ -119,7 +115,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价">
-            <a-checkbox-group v-model="queryParam.averageLlistedPrice">
+            <a-checkbox-group v-model="queryParam.averageLlistedPrice" @change="refresh">
               <a-checkbox value="1"> 2万以下 </a-checkbox>
               <a-checkbox value="2"> 2-2.5万 </a-checkbox>
               <a-checkbox value="3"> 2.5-3万 </a-checkbox>
@@ -137,10 +133,10 @@
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
-            <a-button size="small">确定</a-button>
+            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="总价">
-            <a-checkbox-group v-model="queryParam.totalPrice">
+            <a-checkbox-group v-model="queryParam.totalPrice" @change="refresh">
               <a-checkbox value="1"> 200万以下 </a-checkbox>
               <a-checkbox value="2"> 200-300万 </a-checkbox>
               <a-checkbox value="3"> 300-400万 </a-checkbox>
@@ -158,10 +154,10 @@
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
-            <a-button size="small">确定</a-button>
+            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="面积">
-            <a-checkbox-group v-model="queryParam.roomArea">
+            <a-checkbox-group v-model="queryParam.roomArea" @change="refresh">
               <a-checkbox value="1"> 50平方以下 </a-checkbox>
               <a-checkbox value="2"> 50-70平方 </a-checkbox>
               <a-checkbox value="3"> 70-90平方 </a-checkbox>
@@ -178,7 +174,7 @@
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '44px', textAlign: 'center' }"> 平方 </span>
-            <a-button size="small">确定</a-button>
+            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <!-- <a-form-item label="成交量">
             <a-checkbox-group v-model="queryParam.prices">
@@ -192,7 +188,7 @@
             </a-checkbox-group>
           </a-form-item> -->
           <a-form-item label="建筑年代">
-            <a-checkbox-group v-model="queryParam.constructionAge">
+            <a-checkbox-group v-model="queryParam.constructionAge" @change="refresh">
               <a-checkbox value="1"> 1900年以前 </a-checkbox>
               <a-checkbox value="2"> 1990-1995 </a-checkbox>
               <a-checkbox value="3"> 1995-2000 </a-checkbox>
@@ -202,7 +198,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="建筑类型">
-            <a-checkbox-group v-model="queryParam.buildingType">
+            <a-checkbox-group v-model="queryParam.buildingType" @change="refresh">
               <a-checkbox value="1"> 塔楼 </a-checkbox>
               <a-checkbox value="2"> 板楼 </a-checkbox>
               <a-checkbox value="3"> 塔板结合 </a-checkbox>
@@ -210,13 +206,13 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="小区属性">
-            <a-checkbox-group v-model="queryParam.cellAttributes">
+            <a-checkbox-group v-model="queryParam.cellAttributes" @change="refresh">
               <a-checkbox value="1"> 住宅 </a-checkbox>
               <a-checkbox value="2"> 别墅 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="电梯">
-            <a-checkbox-group v-model="queryParam.isLift">
+            <a-checkbox-group v-model="queryParam.isLift" @change="refresh">
               <a-checkbox value="1"> 有电梯 </a-checkbox>
               <a-checkbox value="0"> 无电梯 </a-checkbox>
             </a-checkbox-group>
@@ -226,7 +222,7 @@
           <a-layout>
             <a-layout-header :style="{ background: '#ffffff', padding: '0 128px', height: '50px', display: 'flex' }">
               <div class="result">
-                共找到<span>500</span>套 符合条件房源
+                共找到<span>{{ results.length }}</span>套 符合条件房源
               </div>
               <a-button-group>
                 <a-button>综合排序</a-button>
@@ -242,7 +238,7 @@
               </a-button-group>
             </a-layout-header>
             <a-layout-content>
-              <a-card :bordered="false" :style="{ background: '#ffffff', padding: '25px 17px'}" class="house-list">
+              <a-card :bordered="false" :style="{ background: '#ffffff', padding: '25px 17px'}" class="house-list" v-for="community of results" v-bind:key="community.id">
                 <a-layout :style="{ background: '#ffffff'}">
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
                     <img src="@/assets/house.png" >
@@ -250,18 +246,18 @@
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                     <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'left' }">
                       <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#000000','font-size':'20px', height:'24px','line-height': '24px' }">
-                        复地雅园公馆
+                        {{ community.communityName }}
                       </a-layout-header>
                       <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','algin-item':'flex-end' }">
                         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 8 }" :label-align="left" style="width:100%">
                           <a-form-item label="地址" :style="{height:'30px'}">
-                            <span>上海市黄浦区昼锦路与馆驿街交叉路口</span>
+                            <span>{{ community.address }}</span>
                           </a-form-item>
                           <a-form-item label="环线" :style="{height:'30px'}">
-                            <span>内环内</span>
+                            <span>{{ community.loopSummary }}</span>
                           </a-form-item>
                           <a-form-item label="地铁" :style="{height:'30px'}" >
-                            <span>10号线 豫园站</span>
+                            <span>{{ community.metroLine?community.metroLine +'号线':'' }} {{ community.subwayStation }}</span>
                           </a-form-item>
                         </a-form>
                       </a-layout-content>
@@ -278,55 +274,10 @@
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
                     <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'center' }">
                       <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#B71C2B','font-size':'16px' }" width="200">
-                        均价<span style="font-size:24px;font-weight:bold">125,000</span>元/m²
+                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice }}</span>元/m²
                       </a-layout-header>
-                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','algin-item':'flex-end' }">
-                        <a-button>查看详情</a-button>
-                      </a-layout-content>
-                    </a-layout>
-                  </a-layout-sider>
-                </a-layout>
-              </a-card>
-              <a-card :bordered="false" :style="{ background: '#ffffff', padding: '25px 17px'}" class="house-list">
-                <a-layout :style="{ background: '#ffffff'}">
-                  <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                    <img src="@/assets/house.png" >
-                  </a-layout-sider>
-                  <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
-                    <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'left' }">
-                      <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#000000','font-size':'20px', height:'24px','line-height': '24px' }">
-                        复地雅园公馆
-                      </a-layout-header>
-                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','algin-item':'flex-end' }">
-                        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 8 }" :label-align="left" style="width:100%">
-                          <a-form-item label="地址" :style="{height:'30px'}">
-                            <span>上海市黄浦区昼锦路与馆驿街交叉路口</span>
-                          </a-form-item>
-                          <a-form-item label="环线" :style="{height:'30px'}">
-                            <span>内环内</span>
-                          </a-form-item>
-                          <a-form-item label="地铁" :style="{height:'30px'}" >
-                            <span>10号线 豫园站</span>
-                          </a-form-item>
-                        </a-form>
-                      </a-layout-content>
-                      <a-layout-footer :style="{ background: '#ffffff', display:'flex',padding:0}">
-                        <a-tag color="pink">
-                          黄浦
-                        </a-tag>
-                        <a-tag color="red">
-                          豫园
-                        </a-tag>
-                      </a-layout-footer>
-                    </a-layout>
-                  </a-layout-content>
-                  <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
-                    <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'center' }">
-                      <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#B71C2B','font-size':'16px' }" width="200">
-                        均价<span style="font-size:24px;font-weight:bold">125,000</span>元/m²
-                      </a-layout-header>
-                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','algin-item':'flex-end' }">
-                        <a-button @click="() => (this.moreQuery = true)">查看详情</a-button>
+                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','align-items':'flex-end' }">
+                        <a-button @click="showdetail(community)">查看详情</a-button>
                       </a-layout-content>
                     </a-layout>
                   </a-layout-sider>
@@ -372,7 +323,7 @@
         <a-layout-header :style="{ padding: '0', height: '80px' }">
           <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
             <a-layout-content :style="{ background: '#ffffff', padding: '0','line-height': '32px','font-size': '24px',color:'#000000'}">
-              <div>复地雅园公馆<span style="font-size:16px;color: #B71C2B;">均价 125,000元/m²</span></div>
+              <div>{{ resultdata.communityName }}<span style="font-size:16px;color: #B71C2B;">均价 {{ resultdata.averageLlistedPrice }}元/m²</span></div>
               <div>
                 <a-tag>会所</a-tag>
                 <a-tag>室外游泳池</a-tag>
@@ -398,130 +349,130 @@
         <a-layout-content>
           <a-descriptions title="基本信息" :column="4">
             <a-descriptions-item label="楼盘名称" :span="2">
-              复地雅园公馆
+              {{ resultdata.communityName }}
             </a-descriptions-item>
             <a-descriptions-item label="楼盘地址" :span="2">
-              上海市黄浦区昼锦路与馆驿街交叉路口
+              {{ resultdata.communityName }}
             </a-descriptions-item>
             <a-descriptions-item label="所属区域">
-              黄浦区
+              {{ resultdata.area }}
             </a-descriptions-item>
             <a-descriptions-item label="所属板块">
-              豫园
+              {{ resultdata.plate }}
             </a-descriptions-item>
             <a-descriptions-item label="所属环线">
-              内环内
+              {{ resultdata.loopSummary }}
             </a-descriptions-item>
             <a-descriptions-item label="板块距离">
-              距内环1.9km
+              <!-- {{ resultdata.loopSummary }} -->
             </a-descriptions-item>
             <a-descriptions-item label="区域规划">
-              城市主中心
+              {{ resultdata.districtPlanning }}
             </a-descriptions-item>
             <a-descriptions-item label="地铁线路">
-              10号线
+              {{ resultdata.metroLine?resultdata.metroLine +'号线':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="地铁站名">
-              豫园站
+              {{ resultdata.subwayStation }}
             </a-descriptions-item>
             <a-descriptions-item label="地铁距离">
-              700m
+              {{ resultdata.distance }}
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="楼盘概况" :column="4">
             <a-descriptions-item label="开发商" :span="2">
-              上海复地新河房地产开发有限公司
+              {{ resultdata.developer }}
             </a-descriptions-item>
             <a-descriptions-item label="物业公司" :span="2">
-              上海复瑞物业管理有限公司
+              {{ resultdata.propertyCompany }}
             </a-descriptions-item>
             <a-descriptions-item label="小区属性">
-              住宅
+              {{ resultdata.cellAttributes }}
             </a-descriptions-item>
             <a-descriptions-item label="交易权属">
-              黄浦区
+              {{ resultdata.transactionOwnership }}
             </a-descriptions-item>
             <a-descriptions-item label="产权年限">
-              豫园
+              {{ resultdata.propertyRights?resultdata.propertyRights +'年':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="建筑时间">
-              内环内
+              {{ resultdata.constructionAge?resultdata.constructionAge +'年':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="小区栋数">
-              距内环1.9km
+              {{ resultdata.buildingNumber?resultdata.buildingNumber +'栋':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="小区户数">
-              城市主中心
+              {{ resultdata.householdsNumber?resultdata.householdsNumber +'户':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="停车位数">
-              10号线
+              {{ resultdata.parkingSpacesNumber }}
             </a-descriptions-item>
             <a-descriptions-item label="人车分流">
-              豫园站
+              {{ resultdata.peopleAndVehicles?'是':'否' }}
             </a-descriptions-item>
             <a-descriptions-item label="容积率">
-              700m
+              {{ resultdata.volumeRate?resultdata.volumeRate +'%':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="绿化率">
-              内环内
+              {{ resultdata.greeningRate?resultdata.greeningRate +'%':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="建筑类型">
-              距内环1.9km
+              {{ resultdata.buildingType }}
             </a-descriptions-item>
             <a-descriptions-item label="是否电梯">
-              城市主中心
+              {{ resultdata.isLift?'是':'否' }}
             </a-descriptions-item>
             <a-descriptions-item label="最大层数">
-              10号线
+              {{ resultdata.maxFloor?resultdata.maxFloor +'层':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="最小层数">
-              豫园站
+              {{ resultdata.minFloor?resultdata.minFloor +'层':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="物业属性">
-              700m
+              {{ resultdata.propertyAttributes }}
             </a-descriptions-item>
             <a-descriptions-item label="物业费">
-              700m
+              {{ resultdata.propertyCosts?resultdata.propertyCosts +'元/m²*月':'' }}
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
             <a-descriptions-item label="是否一贯制" :span="4">
-              是九年一贯制
+              {{ resultdata.isConsistentSystem?'是':'否' }}
             </a-descriptions-item>
             <a-descriptions-item label="对口小学">
-              蓬莱路第二小学
+              {{ resultdata.primarySchool }}
             </a-descriptions-item>
             <a-descriptions-item label="小学梯队">
-              第二梯队
+              {{ resultdata.echelonPerformance }}
             </a-descriptions-item>
             <a-descriptions-item label="对口中学">
-              上海市第十中学
+              {{ resultdata.middleSchool }}
             </a-descriptions-item>
             <a-descriptions-item label="中学梯队">
-              第三梯队
+              {{ resultdata.cityEchelon }} {{ resultdata.districtEchelon }}
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
             <a-descriptions-item label="1居">
-              90-108m²，900-1100万
+              {{ resultdata.roomArea1Min?resultdata.roomArea1Min +'-':'' }}{{ resultdata.roomArea1Max?resultdata.roomArea1Max +'m²':'' }}，{{ resultdata.roomPriceRange1Min?resultdata.roomPriceRange1Min +'-':'' }}{{ resultdata.roomPriceRange1Max?resultdata.roomPriceRange1Max +'万':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="2居">
-              104-118m²，1100-1500万
+              {{ resultdata.roomArea2Min?resultdata.roomArea2Min +'-':'' }}{{ resultdata.roomArea2Max?resultdata.roomArea2Max +'m²':'' }}，{{ resultdata.roomPriceRange2Min?resultdata.roomPriceRange2Min +'-':'' }}{{ resultdata.roomPriceRange2Max?resultdata.roomPriceRange2Max +'万':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="3居">
-              104-140m²，1100-1700万
+              {{ resultdata.roomArea3Min?resultdata.roomArea3Min +'-':'' }}{{ resultdata.roomArea3Max?resultdata.roomArea3Max +'m²':'' }}，{{ resultdata.roomPriceRange3Min?resultdata.roomPriceRange3Min +'-':'' }}{{ resultdata.roomPriceRange3Max?resultdata.roomPriceRange3Max +'万':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="4居室">
-              130-180m²，1600-2100万
+              <!-- {{ resultdata. }}，{{ resultdata. }} -->
             </a-descriptions-item>
             <a-descriptions-item label="在售套数">
-              6套
+              {{ resultdata.inStock?resultdata.inStock +'套':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="在租套数">
-              13套
+              {{ resultdata.positiveRent?resultdata.positiveRent +'套':'' }}
             </a-descriptions-item>
             <a-descriptions-item label="2019年成交">
-              3套
+              {{ resultdata.volume2019?resultdata.volume2019 +'套':'' }}
             </a-descriptions-item>
           </a-descriptions>
         </a-layout-content>
@@ -762,9 +713,30 @@ export default {
       this.$refs.table.refresh(true)
     },
 
+    search (parameter) {
+        const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
+        if (this.queryParam.checkedList) {
+          this.queryParam.checkedList.forEach(e => {
+            requestParameters[e] = true
+          })
+          delete requestParameters.checkedList
+        }
+        console.log('loadData request parameters:', requestParameters)
+        getHouse(requestParameters).then(res => {
+          console.log(res)
+          this.results = res
+        })
+    },
+
     refresh (a) {
       // this.$refs.table.refresh(true)
-      console.log(Array.from(a))
+      // console.log(Array.from(a))
+      this.search()
+    },
+
+    showdetail (community) {
+      this.moreQuery = true
+      this.resultdata = community
     }
   }
 }
