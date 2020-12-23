@@ -221,9 +221,9 @@
         <!-- 列表 -->
         <a-card :bordered="false">
           <a-layout>
-            <a-layout-header :style="{ background: '#ffffff', padding: '0 128px', height: '50px', display: 'flex' }">
+            <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '50px', display: 'flex' }">
               <div class="result">
-                共找到<span>{{ results.length }}</span>套 符合条件房源
+                共找到<span>{{ results['x-total-count'] }}</span>套 符合条件房源
               </div>
               <a-button-group>
                 <a-button @click="sortfilter('id')">
