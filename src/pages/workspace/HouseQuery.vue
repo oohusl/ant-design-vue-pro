@@ -199,25 +199,26 @@
           </a-form-item>
           <a-form-item label="建筑类型">
             <a-checkbox-group v-model="queryParam.buildingType" @change="refresh">
-              <a-checkbox value="1"> 塔楼 </a-checkbox>
-              <a-checkbox value="2"> 板楼 </a-checkbox>
-              <a-checkbox value="3"> 塔板结合 </a-checkbox>
-              <a-checkbox value="4"> 其他 </a-checkbox>
+              <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
+              <a-checkbox value="板楼"> 板楼 </a-checkbox>
+              <a-checkbox value="塔板结合"> 塔板结合 </a-checkbox>
+              <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="小区属性">
             <a-checkbox-group v-model="queryParam.cellAttributes" @change="refresh">
-              <a-checkbox value="1"> 住宅 </a-checkbox>
-              <a-checkbox value="2"> 别墅 </a-checkbox>
+              <a-checkbox value="住宅"> 住宅 </a-checkbox>
+              <a-checkbox value="别墅"> 别墅 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="电梯">
             <a-checkbox-group v-model="queryParam.isLift" @change="refresh">
-              <a-checkbox value="1"> 有电梯 </a-checkbox>
-              <a-checkbox value="0"> 无电梯 </a-checkbox>
+              <a-checkbox value="true"> 有电梯 </a-checkbox>
+              <a-checkbox value="false"> 无电梯 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
         </a-form>
+        <!-- 列表 -->
         <a-card :bordered="false">
           <a-layout>
             <a-layout-header :style="{ background: '#ffffff', padding: '0 128px', height: '50px', display: 'flex' }">
@@ -225,14 +226,16 @@
                 共找到<span>{{ results.length }}</span>套 符合条件房源
               </div>
               <a-button-group>
-                <a-button>综合排序</a-button>
-                <a-button>
+                <a-button @click="sortfilter('id')">
+                  综合排序
+                </a-button>
+                <a-button @click="sortfilter('totalPrice')">
                   房屋总价
                 </a-button>
-                <a-button>
+                <a-button @click="sortfilter('averageLlistedPrice')">
                   房屋单价
                 </a-button>
-                <a-button>
+                <a-button @click="sortfilter('volume2019')">
                   成交量
                 </a-button>
               </a-button-group>
@@ -631,7 +634,8 @@ export default {
       prices2: [],
       left: 'left',
       results: [],
-      resultdata: {}
+      resultdata: {},
+      sort: 'id,asc'
     }
   },
   filters: {
@@ -714,7 +718,7 @@ export default {
     },
 
     search (parameter) {
-        const requestParameters = Object.assign({ sort: 'id,asc' }, parameter, this.queryParam)
+        const requestParameters = Object.assign({ sort: this.sort }, parameter, this.queryParam)
         if (this.queryParam.checkedList) {
           this.queryParam.checkedList.forEach(e => {
             requestParameters[e] = true
@@ -737,6 +741,13 @@ export default {
     showdetail (community) {
       this.moreQuery = true
       this.resultdata = community
+    },
+    sortfilter (type) {
+      console.log(type)
+      if (type) {
+        this.sort = type + ',asc'
+        this.search()
+      }
     }
   }
 }
