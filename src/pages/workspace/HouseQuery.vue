@@ -35,27 +35,12 @@
             <template>
               <a-tabs default-active-key="1" type="card">
                 <a-tab-pane key="1" tab="区域">
-                  <a-checkbox-group v-model="queryParam.area" size="small" @change="refresh">
-                    <a-checkbox value="青浦"> 青浦 </a-checkbox>
-                    <a-checkbox value="松江"> 松江 </a-checkbox>
-                    <a-checkbox value="嘉定"> 嘉定 </a-checkbox>
-                    <a-checkbox value="奉贤"> 奉贤 </a-checkbox>
-                    <a-checkbox value="浦东"> 浦东 </a-checkbox>
-                    <a-checkbox value="宝山"> 宝山 </a-checkbox>
-                    <a-checkbox value="闵行"> 闵行 </a-checkbox>
-                    <a-checkbox value="徐汇"> 徐汇 </a-checkbox>
-                    <a-checkbox value="长宁"> 长宁 </a-checkbox>
-                    <a-checkbox value="静安"> 静安 </a-checkbox>
-                    <a-checkbox value="普陀"> 普陀 </a-checkbox>
-                    <a-checkbox value="杨浦"> 杨浦 </a-checkbox>
-                    <a-checkbox value="黄浦"> 黄浦 </a-checkbox>
-                    <a-checkbox value="虹口"> 虹口 </a-checkbox>
-                    <a-checkbox value="金山"> 金山 </a-checkbox>
-                    <a-checkbox value="崇明"> 崇明 </a-checkbox>
+                  <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="refresh">
                   </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="2" tab="板块">
-                  <a-input v-model="queryParam.plate" placeholder="请选择" />
+                  <a-checkbox-group v-model="queryParam.plate" :options="plateOptions" size="small" @change="refresh">
+                  </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="3" tab="环线">
                   <a-checkbox-group v-model="queryParam.loopSummary" @change="refresh">
@@ -66,26 +51,7 @@
                   </a-checkbox-group>
                 </a-tab-pane>
                 <a-tab-pane key="4" tab="地铁线">
-                  <a-checkbox-group v-model="queryParam.metroLine" @change="refresh">
-                    <a-checkbox value="1">1号线</a-checkbox>
-                    <a-checkbox value="2">2号线</a-checkbox>
-                    <a-checkbox value="3">3号线</a-checkbox>
-                    <a-checkbox value="4">4号线</a-checkbox>
-                    <a-checkbox value="5">5号线</a-checkbox>
-                    <a-checkbox value="6">6号线</a-checkbox>
-                    <a-checkbox value="7">7号线</a-checkbox>
-                    <a-checkbox value="8">8号线</a-checkbox>
-                    <a-checkbox value="9">9号线</a-checkbox>
-                    <a-checkbox value="10">10号线</a-checkbox>
-                    <a-checkbox value="11">11号线</a-checkbox>
-                    <a-checkbox value="12">12号线</a-checkbox>
-                    <a-checkbox value="13">13号线</a-checkbox>
-                    <a-checkbox value="14">14号线</a-checkbox>
-                    <a-checkbox value="15">15号线</a-checkbox>
-                    <a-checkbox value="16">16号线</a-checkbox>
-                    <a-checkbox value="17">17号线</a-checkbox>
-                    <a-checkbox value="18">18号线</a-checkbox>
-                    <a-checkbox value="19">磁悬浮</a-checkbox>
+                  <a-checkbox-group v-model="queryParam.metroLine" :options="metroLineOptions" @change="refresh">
                   </a-checkbox-group>
                   <!-- <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
                   <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
@@ -115,15 +81,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价">
-            <a-checkbox-group v-model="queryParam.averageLlistedPrice" @change="refresh">
-              <a-checkbox value="1"> 2万以下 </a-checkbox>
-              <a-checkbox value="2"> 2-2.5万 </a-checkbox>
-              <a-checkbox value="3"> 2.5-3万 </a-checkbox>
-              <a-checkbox value="4"> 3-3.5万 </a-checkbox>
-              <a-checkbox value="5"> 3.5-4万 </a-checkbox>
-              <a-checkbox value="6"> 4-5万 </a-checkbox>
-              <a-checkbox value="7"> 5-6万 </a-checkbox>
-              <a-checkbox value="8"> 6万以上 </a-checkbox>
+            <a-checkbox-group v-model="queryParam.averageLlistedPrice" :options="averageLlistedPriceOptions" @change="refresh">
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
@@ -136,15 +94,7 @@
             <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="总价">
-            <a-checkbox-group v-model="queryParam.totalPrice" @change="refresh">
-              <a-checkbox value="1"> 200万以下 </a-checkbox>
-              <a-checkbox value="2"> 200-300万 </a-checkbox>
-              <a-checkbox value="3"> 300-400万 </a-checkbox>
-              <a-checkbox value="4"> 400-500 </a-checkbox>
-              <a-checkbox value="5"> 500-800万 </a-checkbox>
-              <a-checkbox value="6"> 800-1000万 </a-checkbox>
-              <a-checkbox value="7"> 1000-2000万 </a-checkbox>
-              <a-checkbox value="8"> 2000万以上 </a-checkbox>
+            <a-checkbox-group v-model="queryParam.totalPrice" :options="totalPriceOptions" @change="refresh">
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
@@ -157,14 +107,7 @@
             <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="面积">
-            <a-checkbox-group v-model="queryParam.roomArea" @change="refresh">
-              <a-checkbox value="1"> 50平方以下 </a-checkbox>
-              <a-checkbox value="2"> 50-70平方 </a-checkbox>
-              <a-checkbox value="3"> 70-90平方 </a-checkbox>
-              <a-checkbox value="4"> 90-110平方 </a-checkbox>
-              <a-checkbox value="5"> 110-130平方 </a-checkbox>
-              <a-checkbox value="6"> 130-150平方 </a-checkbox>
-              <a-checkbox value="7"> 150平方以上 </a-checkbox>
+            <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" @change="refresh">
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
@@ -188,13 +131,7 @@
             </a-checkbox-group>
           </a-form-item> -->
           <a-form-item label="建筑年代">
-            <a-checkbox-group v-model="queryParam.constructionAge" @change="refresh">
-              <a-checkbox value="1"> 1900年以前 </a-checkbox>
-              <a-checkbox value="2"> 1990-1995 </a-checkbox>
-              <a-checkbox value="3"> 1995-2000 </a-checkbox>
-              <a-checkbox value="4"> 2000-2005 </a-checkbox>
-              <a-checkbox value="5"> 2005-2010 </a-checkbox>
-              <a-checkbox value="6"> 2010以后 </a-checkbox>
+            <a-checkbox-group v-model="queryParam.constructionAge" :options="constructionAgeOptions" @change="refresh">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="建筑类型">
@@ -212,10 +149,18 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="电梯">
-            <a-checkbox-group v-model="queryParam.isLift" @change="refresh">
+            <!-- <a-checkbox-group v-model="queryParam.isLift" @change="refresh">
               <a-checkbox value="true"> 有电梯 </a-checkbox>
               <a-checkbox value="false"> 无电梯 </a-checkbox>
-            </a-checkbox-group>
+            </a-checkbox-group> -->
+            <a-radio-group v-model="queryParam.isLift" @change="refresh">
+              <a-radio :value="true">
+                有电梯
+              </a-radio>
+              <a-radio :value="false">
+                无电梯
+              </a-radio>
+            </a-radio-group>
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -223,7 +168,7 @@
           <a-layout>
             <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '50px', display: 'flex' }">
               <div class="result">
-                共找到<span>{{ results['x-total-count'] }}</span>套 符合条件房源
+                共找到<span>{{ results['x-total-count']?results['x-total-count']:0 }}</span>套 符合条件房源
               </div>
               <a-button-group>
                 <a-button @click="sortfilter('id')">
@@ -490,71 +435,71 @@ import { STable, Ellipsis } from '@/components'
 import { getHouse } from '@/api/manage'
 import storage from 'store'
 import { AutoComplete } from 'ant-design-vue'
-const columns = [
-  {
-    title: '小区名称',
-    dataIndex: 'communityName',
-    width: '150px',
-    fixed: true,
-    scopedSlots: { customRender: 'communityName' }
-  },
-  { title: '区域', dataIndex: 'area', width: '50px' },
-  { title: '板块', dataIndex: 'plate', width: '80px' },
-  { title: '地区规划', dataIndex: 'districtPlanning', width: '100px' },
-  { title: '环线汇总', dataIndex: 'loopSummary', width: '90px' },
-  { title: '小区属性', dataIndex: 'cellAttributes', width: '80px' },
-  { title: '地铁线', dataIndex: 'metroLine', width: '60px' },
-  { title: '地铁站', dataIndex: 'subwayStation', width: '120px' },
-  { title: '距离', dataIndex: 'distance', width: '60px' },
-  { title: '交易权属', dataIndex: 'transactionOwnership', width: '80px' },
-  { title: '最大楼层', dataIndex: 'maxFloor', width: '80px' },
-  { title: '最小楼层', dataIndex: 'minFloor', width: '80px' },
-  { title: '近一年成交量', dataIndex: 'volume2019', width: '100px' },
-  { title: '1房面积段', dataIndex: 'roomArea1Max', width: '90px' },
-  { title: '2房面积段', dataIndex: 'roomArea2Max', width: '90px' },
-  { title: '3房面积段', dataIndex: 'roomArea3Max', width: '90px' },
-  { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '90px' },
-  { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '90px' },
-  { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '90px' },
-  { title: '电梯', dataIndex: 'isLift', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '100px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '100px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '会所', dataIndex: 'clubhouse', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '洋房', dataIndex: 'bungalow', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '双阳台', dataIndex: 'doubleBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '大阳台', dataIndex: 'largeBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '带花园', dataIndex: 'withGarden', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '大露台', dataIndex: 'largeTerrace', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '70px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '建筑类型', dataIndex: 'buildingType', width: '90px' },
-  { title: '物业属性', dataIndex: 'propertyAttributes', width: '90px' },
-  { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
-  { title: '栋数', dataIndex: 'buildingNumber', width: '60px' },
-  { title: '户数', dataIndex: 'householdsNumber', width: '60px' },
-  { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '300px' },
-  { title: '容积率', dataIndex: 'volumeRate', width: '60px' },
-  { title: '绿化率', dataIndex: 'greeningRate', width: '90px' },
-  { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '90px' },
-  { title: '在售', dataIndex: 'inStock', width: '60px' },
-  { title: '正租', dataIndex: 'positiveRent', width: '60px' },
-  { title: '建筑年代', dataIndex: 'constructionAge', width: '80px' },
-  { title: '开发商', dataIndex: 'developer', width: '250px' },
-  { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
-  { title: '小学', dataIndex: 'primarySchool', width: '100px' },
-  { title: '梯队表现', dataIndex: 'echelonPerformance', width: '90px' },
-  { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '中学', dataIndex: 'middleSchool', width: '120px' },
-  { title: '市梯队', dataIndex: 'cityEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '区梯队', dataIndex: 'districtEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '联排别墅', dataIndex: 'townhouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-  { title: '内部配套', dataIndex: 'internalSupporting', width: '150px' },
-  { title: '地址', dataIndex: 'address', width: '150px' },
-  { title: '产权年限', dataIndex: 'propertyRights', width: '350px' },
-  { title: '小区介绍', dataIndex: 'communityDesc', width: '500px' }
-]
+// const columns = [
+//   {
+//     title: '小区名称',
+//     dataIndex: 'communityName',
+//     width: '150px',
+//     fixed: true,
+//     scopedSlots: { customRender: 'communityName' }
+//   },
+//   { title: '区域', dataIndex: 'area', width: '50px' },
+//   { title: '板块', dataIndex: 'plate', width: '80px' },
+//   { title: '地区规划', dataIndex: 'districtPlanning', width: '100px' },
+//   { title: '环线汇总', dataIndex: 'loopSummary', width: '90px' },
+//   { title: '小区属性', dataIndex: 'cellAttributes', width: '80px' },
+//   { title: '地铁线', dataIndex: 'metroLine', width: '60px' },
+//   { title: '地铁站', dataIndex: 'subwayStation', width: '120px' },
+//   { title: '距离', dataIndex: 'distance', width: '60px' },
+//   { title: '交易权属', dataIndex: 'transactionOwnership', width: '80px' },
+//   { title: '最大楼层', dataIndex: 'maxFloor', width: '80px' },
+//   { title: '最小楼层', dataIndex: 'minFloor', width: '80px' },
+//   { title: '近一年成交量', dataIndex: 'volume2019', width: '100px' },
+//   { title: '1房面积段', dataIndex: 'roomArea1Max', width: '90px' },
+//   { title: '2房面积段', dataIndex: 'roomArea2Max', width: '90px' },
+//   { title: '3房面积段', dataIndex: 'roomArea3Max', width: '90px' },
+//   { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '90px' },
+//   { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '90px' },
+//   { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '90px' },
+//   { title: '电梯', dataIndex: 'isLift', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '100px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '100px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '会所', dataIndex: 'clubhouse', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '洋房', dataIndex: 'bungalow', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '双阳台', dataIndex: 'doubleBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '大阳台', dataIndex: 'largeBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '带花园', dataIndex: 'withGarden', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '大露台', dataIndex: 'largeTerrace', width: '60px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '70px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '建筑类型', dataIndex: 'buildingType', width: '90px' },
+//   { title: '物业属性', dataIndex: 'propertyAttributes', width: '90px' },
+//   { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
+//   { title: '栋数', dataIndex: 'buildingNumber', width: '60px' },
+//   { title: '户数', dataIndex: 'householdsNumber', width: '60px' },
+//   { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '300px' },
+//   { title: '容积率', dataIndex: 'volumeRate', width: '60px' },
+//   { title: '绿化率', dataIndex: 'greeningRate', width: '90px' },
+//   { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '90px' },
+//   { title: '在售', dataIndex: 'inStock', width: '60px' },
+//   { title: '正租', dataIndex: 'positiveRent', width: '60px' },
+//   { title: '建筑年代', dataIndex: 'constructionAge', width: '80px' },
+//   { title: '开发商', dataIndex: 'developer', width: '250px' },
+//   { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
+//   { title: '小学', dataIndex: 'primarySchool', width: '100px' },
+//   { title: '梯队表现', dataIndex: 'echelonPerformance', width: '90px' },
+//   { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '中学', dataIndex: 'middleSchool', width: '120px' },
+//   { title: '市梯队', dataIndex: 'cityEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '区梯队', dataIndex: 'districtEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '联排别墅', dataIndex: 'townhouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
+//   { title: '内部配套', dataIndex: 'internalSupporting', width: '150px' },
+//   { title: '地址', dataIndex: 'address', width: '150px' },
+//   { title: '产权年限', dataIndex: 'propertyRights', width: '350px' },
+//   { title: '小区介绍', dataIndex: 'communityDesc', width: '500px' }
+// ]
 
 const statusMap = {
   0: {
@@ -574,7 +519,274 @@ const statusMap = {
     text: '异常'
   }
 }
-
+const plateOptions = [{
+  label: '临港新城',
+  value: '临港新城'
+},
+{
+  label: '康桥',
+  value: '康桥'
+}]
+const areaOptions = [
+  {
+    label: '青浦',
+    value: '青浦'
+  },
+  {
+    label: '嘉定',
+    value: '嘉定'
+  },
+  {
+    label: '松江',
+    value: '松江'
+  },
+  {
+    label: '奉贤',
+    value: '奉贤'
+  },
+  {
+    label: '浦东',
+    value: '浦东'
+  },
+  {
+    label: '闵行',
+    value: '闵行'
+  },
+  {
+    label: '徐汇',
+    value: '徐汇'
+  },
+  {
+    label: '宝山',
+    value: '宝山'
+  },
+  {
+    label: '长宁',
+    value: '长宁'
+  },
+  {
+    label: '静安',
+    value: '静安'
+  },
+  {
+    label: '普陀',
+    value: '普陀'
+  },
+  {
+    label: '杨浦',
+    value: '杨浦'
+  },
+  {
+    label: '黄浦',
+    value: '黄浦'
+  },
+  {
+    label: '虹口',
+    value: '虹口'
+  },
+  {
+    label: '金山',
+    value: '金山'
+  },
+  {
+    label: '崇明',
+    value: '崇明'
+  }
+]
+const metroLineOptions = [
+  {
+    label: '1号线',
+    value: 1
+  },
+  {
+    label: '2号线',
+    value: 2
+  },
+  {
+    label: '3号线',
+    value: 3
+  },
+  {
+    label: '4号线',
+    value: 4
+  },
+  {
+    label: '5号线',
+    value: 5
+  },
+  {
+    label: '6号线',
+    value: 6
+  },
+  {
+    label: '7号线',
+    value: 7
+  },
+  {
+    label: '8号线',
+    value: 8
+  },
+  {
+    label: '9号线',
+    value: 9
+  },
+  {
+    label: '10号线',
+    value: 10
+  },
+  {
+    label: '11号线',
+    value: 11
+  },
+  {
+    label: '12号线',
+    value: 12
+  },
+  {
+    label: '13号线',
+    value: 13
+  },
+  {
+    label: '14号线',
+    value: 14
+  },
+  {
+    label: '15号线',
+    value: 15
+  },
+  {
+    label: '16号线',
+    value: 16
+  },
+  {
+    label: '17号线',
+    value: 17
+  },
+  {
+    label: '18号线',
+    value: 18
+  },
+  {
+    label: '磁悬浮',
+    value: 20
+  }
+]
+const averageLlistedPriceOptions = [{
+  label: '2万以下',
+  value: [0, 20000]
+},
+{
+  label: '2-2.5万',
+  value: [20000, 25000]
+},
+{
+  label: '2.5-3万',
+  value: [25000, 30000]
+},
+{
+  label: '3-3.5万',
+  value: [30000, 35000]
+},
+{
+  label: '3.5-4万',
+  value: [35000, 40000]
+},
+{
+  label: '4-5万',
+  value: [40000, 50000]
+},
+{
+  label: '5-6万',
+  value: [50000, 60000]
+},
+{
+  label: '6万以上',
+  value: [60000, 999999]
+}]
+const totalPriceOptions = [{
+  label: '200万以下',
+  value: [0, 200]
+},
+{
+  label: '200-300万',
+  value: [200, 300]
+},
+{
+  label: '300-400万',
+  value: [300, 400]
+},
+{
+  label: '400-500万',
+  value: [400, 500]
+},
+{
+  label: '500-800万',
+  value: [500, 800]
+},
+{
+  label: '800-1000万',
+  value: [800, 1000]
+},
+{
+  label: '1000-2000万',
+  value: [1000, 2000]
+},
+{
+  label: '2000万以上',
+  value: [2000, 999999]
+}]
+const roomAreaOptions = [{
+  label: '50平方以下',
+  value: [0, 50]
+},
+{
+  label: '50-70平方',
+  value: [50, 70]
+},
+{
+  label: '70-90平方',
+  value: [70, 90]
+},
+{
+  label: '90-110平方',
+  value: [90, 110]
+},
+{
+  label: '110-130平方',
+  value: [110, 130]
+},
+{
+  label: '130-150平方',
+  value: [130, 150]
+},
+{
+  label: '150平方以上',
+  value: [150, 999999]
+}]
+const constructionAgeOptions = [{
+  label: '1990年以前',
+  value: [0, 1990]
+},
+{
+  label: '1990-1995',
+  value: [1990, 1995]
+},
+{
+  label: '1995-2000',
+  value: [1995, 2000]
+},
+{
+  label: '2000-2005',
+  value: [2000, 2005]
+},
+{
+  label: '2005-2010',
+  value: [2005, 2010]
+},
+{
+  label: '2010年以后',
+  value: [2010, 2050]
+}]
 export default {
   name: 'HouseQuery',
   components: {
@@ -583,7 +795,7 @@ export default {
     AutoComplete
   },
   data () {
-    this.columns = columns
+    // this.columns = columns
     return {
       // create model
       visible: false,
@@ -635,7 +847,14 @@ export default {
       left: 'left',
       results: [],
       resultdata: {},
-      sort: 'id,asc'
+      sort: 'id,asc',
+      plateOptions,
+      areaOptions,
+      metroLineOptions,
+      averageLlistedPriceOptions,
+      totalPriceOptions,
+      roomAreaOptions,
+      constructionAgeOptions
     }
   },
   filters: {
