@@ -31,35 +31,25 @@
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', margin: '24px 16px 0', padding:'0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left">
-          <a-form-item label="位置">
-            <template>
-              <a-tabs default-active-key="1" type="card">
-                <a-tab-pane key="1" tab="区域">
-                  <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="refresh">
-                  </a-checkbox-group>
-                </a-tab-pane>
-                <a-tab-pane key="2" tab="板块">
-                  <a-checkbox-group v-model="queryParam.plate" :options="plateOptions" size="small" @change="refresh">
-                  </a-checkbox-group>
-                </a-tab-pane>
-                <a-tab-pane key="3" tab="环线">
-                  <a-checkbox-group v-model="queryParam.loopSummary" @change="refresh">
-                    <a-checkbox value="内环内"> 内环内 </a-checkbox>
-                    <a-checkbox value="内环至中环"> 内环至中环 </a-checkbox>
-                    <a-checkbox value="中环至外环"> 中环至外环 </a-checkbox>
-                    <a-checkbox value="外环外"> 外环外 </a-checkbox>
-                  </a-checkbox-group>
-                </a-tab-pane>
-                <a-tab-pane key="4" tab="地铁线">
-                  <a-checkbox-group v-model="queryParam.metroLine" :options="metroLineOptions" @change="refresh">
-                  </a-checkbox-group>
-                  <!-- <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
-                  <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-                    <a-input style="width: 100%" v-model="queryParam.distance" placeholder="地铁距离" />
-                  </a-form-item> -->
-                </a-tab-pane>
-              </a-tabs>
-            </template>
+          <a-form-item label="区域">
+            <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="refresh">
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="板块">
+            <a-checkbox-group v-model="queryParam.plate" :options="plateOptions" size="small" @change="refresh">
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="环线">
+            <a-checkbox-group v-model="queryParam.loopSummary" @change="refresh">
+              <a-checkbox value="内环内"> 内环内 </a-checkbox>
+              <a-checkbox value="内环至中环"> 内环至中环 </a-checkbox>
+              <a-checkbox value="中环至外环"> 中环至外环 </a-checkbox>
+              <a-checkbox value="外环外"> 外环外 </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="地铁线">
+            <a-checkbox-group v-model="queryParam.metroLine" :options="metroLineOptions" @change="refresh">
+            </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校">
             <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
