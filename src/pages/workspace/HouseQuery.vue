@@ -10,9 +10,10 @@
             :dropdown-style="{ width: '552px' }"
             size="large"
             style="width: 100%"
-            placeholder="请输入区域或楼盘名开始找房"
+            placeholder="请输入楼盘名开始找房"
             option-label-prop="value"
-            @search="search"
+            v-model="queryParam.communityName"
+            @change="search"
           >
             <template slot="dataSource">
               <!-- <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
@@ -24,18 +25,18 @@
               </a-select-option> -->
             </template>
             <a-input>
-              <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search"/>
+              <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search" />
             </a-input>
           </AutoComplete>
         </div>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff', margin: '24px 16px 0', padding:'0 128px' }">
+      <a-layout-content :style="{ background: '#ffffff', margin: '24px 16px 0', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left">
           <a-form-item label="区域">
-            <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="refresh">
+            <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="板块">
+          <a-form-item label="板块" v-if="plateOptions.length">
             <a-checkbox-group v-model="queryParam.plate" :options="plateOptions" size="small" @change="refresh">
             </a-checkbox-group>
           </a-form-item>
@@ -71,7 +72,11 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价">
-            <a-checkbox-group v-model="queryParam.averageLlistedPrice" :options="averageLlistedPriceOptions" @change="refresh">
+            <a-checkbox-group
+              v-model="queryParam.averageLlistedPrice"
+              :options="averageLlistedPriceOptions"
+              @change="refresh"
+            >
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
@@ -158,7 +163,8 @@
           <a-layout>
             <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '50px', display: 'flex' }">
               <div class="result">
-                共找到<span>{{ results['x-total-count']?results['x-total-count']:0 }}</span>套 符合条件房源
+                共找到<span>{{ results['x-total-count'] ? results['x-total-count'] : 0 }}</span
+                >套 符合条件房源
               </div>
               <a-button-group>
                 <a-button @click="sortfilter('id')">
@@ -176,30 +182,61 @@
               </a-button-group>
             </a-layout-header>
             <a-layout-content>
-              <a-card :bordered="false" :style="{ background: '#ffffff', padding: '25px 17px'}" class="house-list" v-for="community of results" v-bind:key="community.id">
-                <a-layout :style="{ background: '#ffffff'}">
+              <a-card
+                :bordered="false"
+                :style="{ background: '#ffffff', padding: '25px 17px' }"
+                class="house-list"
+                v-for="community of results"
+                :key="community.id"
+              >
+                <a-layout :style="{ background: '#ffffff' }">
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                    <img src="@/assets/house.png" >
+                    <img src="@/assets/house.png" />
                   </a-layout-sider>
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
-                    <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'left' }">
-                      <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#000000','font-size':'20px', height:'24px','line-height': '24px' }">
+                    <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left' }">
+                      <a-layout-header
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          color: '#000000',
+                          'font-size': '20px',
+                          height: '24px',
+                          'line-height': '24px'
+                        }"
+                      >
                         {{ community.communityName }}
                       </a-layout-header>
-                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','algin-item':'flex-end' }">
-                        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 8 }" :label-align="left" style="width:100%">
-                          <a-form-item label="地址" :style="{height:'30px'}">
+                      <a-layout-content
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          display: 'flex',
+                          'justify-content': 'center',
+                          'algin-item': 'flex-end'
+                        }"
+                      >
+                        <a-form
+                          :label-col="{ span: 2 }"
+                          :wrapper-col="{ span: 8 }"
+                          :label-align="left"
+                          style="width:100%"
+                        >
+                          <a-form-item label="地址" :style="{ height: '30px' }">
                             <span>{{ community.address }}</span>
                           </a-form-item>
-                          <a-form-item label="环线" :style="{height:'30px'}">
+                          <a-form-item label="环线" :style="{ height: '30px' }">
                             <span>{{ community.loopSummary }}</span>
                           </a-form-item>
-                          <a-form-item label="地铁" :style="{height:'30px'}" >
-                            <span>{{ community.metroLine?community.metroLine +'号线':'' }} {{ community.subwayStation }}</span>
+                          <a-form-item label="地铁" :style="{ height: '30px' }">
+                            <span
+                            >{{ community.metroLine ? community.metroLine + '号线' : '' }}
+                              {{ community.subwayStation }}</span
+                            >
                           </a-form-item>
                         </a-form>
                       </a-layout-content>
-                      <a-layout-footer :style="{ background: '#ffffff', display:'flex',padding:0}">
+                      <a-layout-footer :style="{ background: '#ffffff', display: 'flex', padding: 0 }">
                         <a-tag color="pink">
                           黄浦
                         </a-tag>
@@ -210,11 +247,23 @@
                     </a-layout>
                   </a-layout-content>
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
-                    <a-layout :style="{ background: '#ffffff', height: '100%','text-align':'center' }">
-                      <a-layout-header :style="{ background: '#ffffff', padding: 0, color: '#B71C2B','font-size':'16px' }" width="200">
-                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice }}</span>元/m²
+                    <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'center' }">
+                      <a-layout-header
+                        :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
+                        width="200"
+                      >
+                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice }}</span
+                        >元/m²
                       </a-layout-header>
-                      <a-layout-content :style="{ background: '#ffffff', padding: 0,display:'flex','justify-content':'center','align-items':'flex-end' }">
+                      <a-layout-content
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          display: 'flex',
+                          'justify-content': 'center',
+                          'align-items': 'flex-end'
+                        }"
+                      >
                         <a-button @click="showdetail(community)">查看详情</a-button>
                       </a-layout-content>
                     </a-layout>
@@ -257,11 +306,22 @@
         </s-table>
     </a-card> -->
     <a-drawer :visible="moreQuery" width="80vw" @close="onClose">
-      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px'}">
+      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }">
         <a-layout-header :style="{ padding: '0', height: '80px' }">
           <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
-            <a-layout-content :style="{ background: '#ffffff', padding: '0','line-height': '32px','font-size': '24px',color:'#000000'}">
-              <div>{{ resultdata.communityName }}<span style="font-size:16px;color: #B71C2B;">均价 {{ resultdata.averageLlistedPrice }}元/m²</span></div>
+            <a-layout-content
+              :style="{
+                background: '#ffffff',
+                padding: '0',
+                'line-height': '32px',
+                'font-size': '24px',
+                color: '#000000'
+              }"
+            >
+              <div>
+                {{ resultdata.communityName
+                }}<span style="font-size:16px;color: #B71C2B;">均价 {{ resultdata.averageLlistedPrice }}元/m²</span>
+              </div>
               <div>
                 <a-tag>会所</a-tag>
                 <a-tag>室外游泳池</a-tag>
@@ -269,7 +329,7 @@
                 <a-tag>篮球场</a-tag>
                 <a-tag>羽毛球场</a-tag>
                 <a-tag>老年文化中心</a-tag>
-                <a-tag closable >
+                <a-tag closable>
                   标签
                 </a-tag>
                 <a-tag style="background: #fff; borderStyle: dashed;" @click="showInput">
@@ -277,7 +337,7 @@
                 </a-tag>
               </div>
             </a-layout-content>
-            <a-layout-sider :style="{ background: '#ffffff', padding: '0'}">
+            <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
               <a-button>
                 编辑
               </a-button>
@@ -308,7 +368,7 @@
               {{ resultdata.districtPlanning }}
             </a-descriptions-item>
             <a-descriptions-item label="地铁线路">
-              {{ resultdata.metroLine?resultdata.metroLine +'号线':'' }}
+              {{ resultdata.metroLine ? resultdata.metroLine + '号线' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="地铁站名">
               {{ resultdata.subwayStation }}
@@ -331,51 +391,51 @@
               {{ resultdata.transactionOwnership }}
             </a-descriptions-item>
             <a-descriptions-item label="产权年限">
-              {{ resultdata.propertyRights?resultdata.propertyRights +'年':'' }}
+              {{ resultdata.propertyRights ? resultdata.propertyRights + '年' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="建筑时间">
-              {{ resultdata.constructionAge?resultdata.constructionAge +'年':'' }}
+              {{ resultdata.constructionAge ? resultdata.constructionAge + '年' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="小区栋数">
-              {{ resultdata.buildingNumber?resultdata.buildingNumber +'栋':'' }}
+              {{ resultdata.buildingNumber ? resultdata.buildingNumber + '栋' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="小区户数">
-              {{ resultdata.householdsNumber?resultdata.householdsNumber +'户':'' }}
+              {{ resultdata.householdsNumber ? resultdata.householdsNumber + '户' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="停车位数">
               {{ resultdata.parkingSpacesNumber }}
             </a-descriptions-item>
             <a-descriptions-item label="人车分流">
-              {{ resultdata.peopleAndVehicles?'是':'否' }}
+              {{ resultdata.peopleAndVehicles ? '是' : '否' }}
             </a-descriptions-item>
             <a-descriptions-item label="容积率">
-              {{ resultdata.volumeRate?resultdata.volumeRate +'%':'' }}
+              {{ resultdata.volumeRate ? resultdata.volumeRate + '%' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="绿化率">
-              {{ resultdata.greeningRate?resultdata.greeningRate +'%':'' }}
+              {{ resultdata.greeningRate ? resultdata.greeningRate + '%' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="建筑类型">
               {{ resultdata.buildingType }}
             </a-descriptions-item>
             <a-descriptions-item label="是否电梯">
-              {{ resultdata.isLift?'是':'否' }}
+              {{ resultdata.isLift ? '是' : '否' }}
             </a-descriptions-item>
             <a-descriptions-item label="最大层数">
-              {{ resultdata.maxFloor?resultdata.maxFloor +'层':'' }}
+              {{ resultdata.maxFloor ? resultdata.maxFloor + '层' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="最小层数">
-              {{ resultdata.minFloor?resultdata.minFloor +'层':'' }}
+              {{ resultdata.minFloor ? resultdata.minFloor + '层' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="物业属性">
               {{ resultdata.propertyAttributes }}
             </a-descriptions-item>
             <a-descriptions-item label="物业费">
-              {{ resultdata.propertyCosts?resultdata.propertyCosts +'元/m²*月':'' }}
+              {{ resultdata.propertyCosts ? resultdata.propertyCosts + '元/m²*月' : '' }}
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
             <a-descriptions-item label="是否一贯制" :span="4">
-              {{ resultdata.isConsistentSystem?'是':'否' }}
+              {{ resultdata.isConsistentSystem ? '是' : '否' }}
             </a-descriptions-item>
             <a-descriptions-item label="对口小学">
               {{ resultdata.primarySchool }}
@@ -392,25 +452,34 @@
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
             <a-descriptions-item label="1居">
-              {{ resultdata.roomArea1Min?resultdata.roomArea1Min +'-':'' }}{{ resultdata.roomArea1Max?resultdata.roomArea1Max +'m²':'' }}，{{ resultdata.roomPriceRange1Min?resultdata.roomPriceRange1Min +'-':'' }}{{ resultdata.roomPriceRange1Max?resultdata.roomPriceRange1Max +'万':'' }}
+              {{ resultdata.roomArea1Min ? resultdata.roomArea1Min + '-' : ''
+              }}{{ resultdata.roomArea1Max ? resultdata.roomArea1Max + 'm²' : '' }}，{{
+                resultdata.roomPriceRange1Min ? resultdata.roomPriceRange1Min + '-' : ''
+              }}{{ resultdata.roomPriceRange1Max ? resultdata.roomPriceRange1Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="2居">
-              {{ resultdata.roomArea2Min?resultdata.roomArea2Min +'-':'' }}{{ resultdata.roomArea2Max?resultdata.roomArea2Max +'m²':'' }}，{{ resultdata.roomPriceRange2Min?resultdata.roomPriceRange2Min +'-':'' }}{{ resultdata.roomPriceRange2Max?resultdata.roomPriceRange2Max +'万':'' }}
+              {{ resultdata.roomArea2Min ? resultdata.roomArea2Min + '-' : ''
+              }}{{ resultdata.roomArea2Max ? resultdata.roomArea2Max + 'm²' : '' }}，{{
+                resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
+              }}{{ resultdata.roomPriceRange2Max ? resultdata.roomPriceRange2Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="3居">
-              {{ resultdata.roomArea3Min?resultdata.roomArea3Min +'-':'' }}{{ resultdata.roomArea3Max?resultdata.roomArea3Max +'m²':'' }}，{{ resultdata.roomPriceRange3Min?resultdata.roomPriceRange3Min +'-':'' }}{{ resultdata.roomPriceRange3Max?resultdata.roomPriceRange3Max +'万':'' }}
+              {{ resultdata.roomArea3Min ? resultdata.roomArea3Min + '-' : ''
+              }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }}，{{
+                resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
+              }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="4居室">
               <!-- {{ resultdata. }}，{{ resultdata. }} -->
             </a-descriptions-item>
             <a-descriptions-item label="在售套数">
-              {{ resultdata.inStock?resultdata.inStock +'套':'' }}
+              {{ resultdata.inStock ? resultdata.inStock + '套' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="在租套数">
-              {{ resultdata.positiveRent?resultdata.positiveRent +'套':'' }}
+              {{ resultdata.positiveRent ? resultdata.positiveRent + '套' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="2019年成交">
-              {{ resultdata.volume2019?resultdata.volume2019 +'套':'' }}
+              {{ resultdata.volume2019 ? resultdata.volume2019 + '套' : '' }}
             </a-descriptions-item>
           </a-descriptions>
         </a-layout-content>
@@ -509,14 +578,156 @@ const statusMap = {
     text: '异常'
   }
 }
-const plateOptions = [{
-  label: '临港新城',
-  value: '临港新城'
-},
-{
-  label: '康桥',
-  value: '康桥'
-}]
+const plateOptions = []
+
+const areaPlate = {
+  青浦: ['白鹤', '华新', '金泽', '练塘', '夏阳', '香花桥', '徐泾', '盈浦', '赵巷', '重固', '朱家角'],
+  松江: [
+    '泗泾',
+    '松江老城',
+    '小昆山',
+    '九亭',
+    '佘山',
+    '车墩',
+    '新桥',
+    '松江大学城',
+    '松江新城',
+    '莘闵别墅',
+    '石湖荡',
+    '叶榭',
+    '泖港',
+    '新浜'
+  ],
+  嘉定: [
+    '江桥',
+    '菊园新区',
+    '嘉定新城',
+    '安亭',
+    '南翔',
+    '徐行',
+    '丰庄',
+    '外冈',
+    '马陆',
+    '华亭',
+    '嘉定老城',
+    '新成路',
+    '上大'
+  ],
+  奉贤: ['南桥', '海湾', '奉城', '青村', '四团', '奉贤金汇', '柘林', '西渡', '庄行'],
+  浦东: [
+    '临港新城',
+    '梅园',
+    '康桥',
+    '书院镇',
+    '曹路',
+    '万祥镇',
+    '唐镇',
+    '杨思前滩',
+    '北蔡',
+    '花木',
+    '御桥',
+    '外高桥',
+    '合庆',
+    '惠南',
+    '张江',
+    '洋泾',
+    '高行',
+    '川沙',
+    '泥城镇',
+    '周浦',
+    '祝桥',
+    '大团镇',
+    '杨东',
+    '金桥',
+    '老港镇',
+    '新场',
+    '世博',
+    '南码头',
+    '塘桥',
+    '三林',
+    '航头',
+    '宣桥',
+    '陆家嘴',
+    '源深',
+    '金杨',
+    '联洋',
+    '碧云',
+    '潍坊'
+  ],
+  宝山: [
+    '上大',
+    '罗泾',
+    '罗店',
+    '大场镇',
+    '杨行',
+    '顾村',
+    '淞宝',
+    '淞南',
+    '大华',
+    '共康',
+    '高境',
+    '月浦',
+    '通河',
+    '张庙',
+    '共富'
+  ],
+  闵行: [
+    '莘庄',
+    '颛桥',
+    '浦江',
+    '马桥',
+    '龙柏',
+    '华漕',
+    '老闵行',
+    '金汇',
+    '金虹桥',
+    '吴泾',
+    '春申',
+    '古美',
+    '梅陇',
+    '静安新城',
+    '七宝',
+    '航华'
+  ],
+  徐汇: [
+    '建国西路',
+    '徐汇滨江',
+    '田林',
+    '龙华',
+    '漕河泾',
+    '康健',
+    '衡山路',
+    '徐家汇',
+    '斜土路',
+    '华泾',
+    '华东理工',
+    '植物园',
+    '长桥',
+    '上海南站',
+    '万体馆'
+  ],
+  长宁: ['北新泾', '仙霞', '西郊', '天山', '新华路', '中山公园', '古北', '镇宁路', '虹桥'],
+  静安: ['大宁', '不夜城', '水和', '西藏北路', '彭浦', '江宁路', '闸北公园', '阳城', '南京西路', '曹家渡', '静安寺'],
+  普陀: ['长风', '光新', '长征', '真如', '武宁', '甘泉宜川', '真光', '万里', '桃浦', '中远两湾城', '曹杨', '长寿路'],
+  杨浦: ['东外滩', '周家嘴路', '控江路', '中原', '新江湾城', '五角场', '黄兴公园', '鞍山', '高境'],
+  黄埔: [
+    '豫园',
+    '蓬莱公园',
+    '老西门',
+    '南京东路',
+    '人民广场',
+    '董家渡',
+    '世博滨江',
+    '新天地',
+    '淮海中路',
+    '打浦桥',
+    '黄浦滨江',
+    '五里桥'
+  ],
+  虹口: ['江湾镇', '临平路', '北外滩', '凉城', '四川北路', '鲁迅公园', '曲阳'],
+  金山: ['张堰', '枫泾', '亭林', '山阳', '朱泾', '吕巷', '金山', '石化', '廊下', '漕泾'],
+  崇明: ['崇明新城', '陈家镇', '长兴岛', '堡镇', '横沙岛', '崇明其它']
+}
 const areaOptions = [
   {
     label: '青浦',
@@ -661,122 +872,130 @@ const metroLineOptions = [
     value: 20
   }
 ]
-const averageLlistedPriceOptions = [{
-  label: '2万以下',
-  value: [0, 20000]
-},
-{
-  label: '2-2.5万',
-  value: [20000, 25000]
-},
-{
-  label: '2.5-3万',
-  value: [25000, 30000]
-},
-{
-  label: '3-3.5万',
-  value: [30000, 35000]
-},
-{
-  label: '3.5-4万',
-  value: [35000, 40000]
-},
-{
-  label: '4-5万',
-  value: [40000, 50000]
-},
-{
-  label: '5-6万',
-  value: [50000, 60000]
-},
-{
-  label: '6万以上',
-  value: [60000, 999999]
-}]
-const totalPriceOptions = [{
-  label: '200万以下',
-  value: [0, 200]
-},
-{
-  label: '200-300万',
-  value: [200, 300]
-},
-{
-  label: '300-400万',
-  value: [300, 400]
-},
-{
-  label: '400-500万',
-  value: [400, 500]
-},
-{
-  label: '500-800万',
-  value: [500, 800]
-},
-{
-  label: '800-1000万',
-  value: [800, 1000]
-},
-{
-  label: '1000-2000万',
-  value: [1000, 2000]
-},
-{
-  label: '2000万以上',
-  value: [2000, 999999]
-}]
-const roomAreaOptions = [{
-  label: '50平方以下',
-  value: [0, 50]
-},
-{
-  label: '50-70平方',
-  value: [50, 70]
-},
-{
-  label: '70-90平方',
-  value: [70, 90]
-},
-{
-  label: '90-110平方',
-  value: [90, 110]
-},
-{
-  label: '110-130平方',
-  value: [110, 130]
-},
-{
-  label: '130-150平方',
-  value: [130, 150]
-},
-{
-  label: '150平方以上',
-  value: [150, 999999]
-}]
-const constructionAgeOptions = [{
-  label: '1990年以前',
-  value: [0, 1990]
-},
-{
-  label: '1990-1995',
-  value: [1990, 1995]
-},
-{
-  label: '1995-2000',
-  value: [1995, 2000]
-},
-{
-  label: '2000-2005',
-  value: [2000, 2005]
-},
-{
-  label: '2005-2010',
-  value: [2005, 2010]
-},
-{
-  label: '2010年以后',
-  value: [2010, 2050]
-}]
+const averageLlistedPriceOptions = [
+  {
+    label: '2万以下',
+    value: [0, 20000]
+  },
+  {
+    label: '2-2.5万',
+    value: [20000, 25000]
+  },
+  {
+    label: '2.5-3万',
+    value: [25000, 30000]
+  },
+  {
+    label: '3-3.5万',
+    value: [30000, 35000]
+  },
+  {
+    label: '3.5-4万',
+    value: [35000, 40000]
+  },
+  {
+    label: '4-5万',
+    value: [40000, 50000]
+  },
+  {
+    label: '5-6万',
+    value: [50000, 60000]
+  },
+  {
+    label: '6万以上',
+    value: [60000, 999999]
+  }
+]
+const totalPriceOptions = [
+  {
+    label: '200万以下',
+    value: [0, 200]
+  },
+  {
+    label: '200-300万',
+    value: [200, 300]
+  },
+  {
+    label: '300-400万',
+    value: [300, 400]
+  },
+  {
+    label: '400-500万',
+    value: [400, 500]
+  },
+  {
+    label: '500-800万',
+    value: [500, 800]
+  },
+  {
+    label: '800-1000万',
+    value: [800, 1000]
+  },
+  {
+    label: '1000-2000万',
+    value: [1000, 2000]
+  },
+  {
+    label: '2000万以上',
+    value: [2000, 999999]
+  }
+]
+const roomAreaOptions = [
+  {
+    label: '50平方以下',
+    value: [0, 50]
+  },
+  {
+    label: '50-70平方',
+    value: [50, 70]
+  },
+  {
+    label: '70-90平方',
+    value: [70, 90]
+  },
+  {
+    label: '90-110平方',
+    value: [90, 110]
+  },
+  {
+    label: '110-130平方',
+    value: [110, 130]
+  },
+  {
+    label: '130-150平方',
+    value: [130, 150]
+  },
+  {
+    label: '150平方以上',
+    value: [150, 999999]
+  }
+]
+const constructionAgeOptions = [
+  {
+    label: '1990年以前',
+    value: [0, 1990]
+  },
+  {
+    label: '1990-1995',
+    value: [1990, 1995]
+  },
+  {
+    label: '1995-2000',
+    value: [1995, 2000]
+  },
+  {
+    label: '2000-2005',
+    value: [2000, 2005]
+  },
+  {
+    label: '2005-2010',
+    value: [2005, 2010]
+  },
+  {
+    label: '2010年以后',
+    value: [2010, 2050]
+  }
+]
 export default {
   name: 'HouseQuery',
   components: {
@@ -927,23 +1146,31 @@ export default {
     },
 
     search (parameter) {
-        const requestParameters = Object.assign({ sort: this.sort }, parameter, this.queryParam)
-        if (this.queryParam.checkedList) {
-          this.queryParam.checkedList.forEach(e => {
-            requestParameters[e] = true
-          })
-          delete requestParameters.checkedList
-        }
-        console.log('loadData request parameters:', requestParameters)
-        getHouse(requestParameters).then(res => {
-          console.log(res)
-          this.results = res
+      const requestParameters = Object.assign({ sort: this.sort }, parameter, this.queryParam)
+      if (this.queryParam.checkedList) {
+        this.queryParam.checkedList.forEach(e => {
+          requestParameters[e] = true
         })
+        delete requestParameters.checkedList
+      }
+      console.log('loadData request parameters:', requestParameters)
+      getHouse(requestParameters).then(res => {
+        console.log(res)
+        this.results = res
+      })
     },
 
     refresh (a) {
       // this.$refs.table.refresh(true)
       // console.log(Array.from(a))
+      this.search()
+    },
+
+    areaRefresh (a) {
+      plateOptions.splice(0)
+      this.queryParam.area.forEach(e => {
+        plateOptions.push(...areaPlate[e])
+      })
       this.search()
     },
 
@@ -997,13 +1224,13 @@ export default {
 .ant-checkbox + span {
   padding-right: 0px;
 }
-img{
+img {
   width: 100%;
 }
-.house-list .ant-form-item{
+.house-list .ant-form-item {
   margin-bottom: 0;
 }
-.house-list .ant-card-body{
+.house-list .ant-card-body {
   padding: 0;
 }
 </style>
