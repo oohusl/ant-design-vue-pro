@@ -1076,6 +1076,7 @@ export default {
   },
   created () {
     this.tags = storage.get('tags') ? [].concat(JSON.parse(storage.get('tags'))) : []
+    this.search({})
   },
   computed: {
     rowSelection () {
