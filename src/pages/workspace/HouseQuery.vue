@@ -300,6 +300,9 @@
               <a-button @click="edithouse()">
                 编辑
               </a-button>
+              <a-button @click="newHouse()" type="danger">
+                新建
+              </a-button>
             </a-layout-sider>
           </a-layout>
         </a-layout-header>
@@ -1356,6 +1359,17 @@ export default {
         this.areaRefresh2()
         this.edit = !this.edit
       }
+    },
+
+    newHouse () {
+        this.houseData = {}
+        this.tags = []
+        this.houseData.peopleAndVehicles = false
+        this.houseData.isLift = true
+        this.houseData.isConsistentSystem = false
+        console.log(this.houseData)
+        this.areaRefresh2()
+        this.edit = !this.edit
     },
 
     handleClose (removedTag) {
