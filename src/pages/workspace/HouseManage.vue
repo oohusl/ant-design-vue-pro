@@ -158,11 +158,11 @@
           </a-form-item>
           <a-form-item label="3房面积段">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-              <a-input v-model="house.roomArea2Min" />
+              <a-input v-model="house.roomArea3Min" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-              <a-input style="width: 100%" v-model="house.roomArea2Max" />
+              <a-input style="width: 100%" v-model="house.roomArea3Max" />
             </a-form-item>
           </a-form-item>
           <a-form-item label="1房价格段">
@@ -189,7 +189,7 @@
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
-              <a-input style="width: 100%" v-model="house.roomPriceRange2Max" />
+              <a-input style="width: 100%" v-model="house.roomPriceRange3Max" />
             </a-form-item>
           </a-form-item>
           <a-form-item label="建筑类型">
