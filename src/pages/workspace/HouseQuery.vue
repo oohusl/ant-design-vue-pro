@@ -320,9 +320,9 @@
             <a-descriptions-item label="所属环线">
               {{ resultdata.loopSummary }}
             </a-descriptions-item>
-            <a-descriptions-item label="板块距离">
+            <!-- <a-descriptions-item label="板块距离">
               <!-- {{ resultdata.loopSummary }} -->
-            </a-descriptions-item>
+            </a-descriptions-item> -->
             <a-descriptions-item label="区域规划">
               {{ resultdata.districtPlanning }}
             </a-descriptions-item>
@@ -521,9 +521,8 @@
                 style="width: 150px"
               ></a-select>
             </a-descriptions-item>
-            <a-descriptions-item label="板块距离">
-              <!-- {{ resultdata.distance }} -->
-            </a-descriptions-item>
+            <!-- <a-descriptions-item label="板块距离">
+            </a-descriptions-item> -->
             <a-descriptions-item label="区域规划">
               <a-select v-model="houseData.districtPlanning" size="small" style="width: 150px">
                 <a-select-option value="城市副中心">城市副中心</a-select-option>
@@ -542,7 +541,7 @@
               <a-input v-model="houseData.subwayStation" size="small" />
             </a-descriptions-item>
             <a-descriptions-item label="地铁距离">
-              <a-input v-model="houseData.distance" size="small" />
+              <a-input v-model="houseData.distance" size="small" style="width: 55px" />米
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="楼盘概况" :column="4">
