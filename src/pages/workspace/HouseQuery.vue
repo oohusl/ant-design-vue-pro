@@ -569,7 +569,7 @@
               <a-input v-model="houseData.greeningRate" style="width: 50px" size="small"/> %
             </a-descriptions-item>
             <a-descriptions-item label="建筑类型">
-              <a-select v-model="houseData.buildingType" size="small">
+              <a-select v-model="houseData.buildingType" size="small" style="width: 100px">
                 <a-select-option value="塔楼"> 塔楼 </a-select-option>
                 <a-select-option value="板楼"> 板楼 </a-select-option>
                 <a-select-option value="塔板结合"> 塔板结合 </a-select-option>
@@ -586,8 +586,10 @@
             <a-descriptions-item label="最小层数">
               <a-input v-model="houseData.minFloor" style="width: 50px" size="small"/> 层
             </a-descriptions-item>
-            <a-descriptions-item label="物业属性">
-              {{ houseData.propertyAttributes }}
+            <a-descriptions-item label="物业属性" style="width: 100px">
+              <a-select v-model="houseData.propertyAttributes" size="small">
+                <a-select-option value="公寓住宅"> 公寓住宅 </a-select-option>
+              </a-select>
             </a-descriptions-item>
             <a-descriptions-item label="物业费">
               <a-input v-model="houseData.propertyCosts" style="width: 50px" size="small"/> 元/m²*月
