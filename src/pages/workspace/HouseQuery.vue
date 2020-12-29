@@ -41,11 +41,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="环线">
-            <a-checkbox-group v-model="queryParam.loopSummary" @change="refresh">
-              <a-checkbox value="内环内"> 内环内 </a-checkbox>
-              <a-checkbox value="内环至中环"> 内环至中环 </a-checkbox>
-              <a-checkbox value="中环至外环"> 中环至外环 </a-checkbox>
-              <a-checkbox value="外环外"> 外环外 </a-checkbox>
+            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions" @change="refresh">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁线">
@@ -275,38 +271,8 @@
         </a-card>
       </a-layout-content>
     </a-layout>
-    <!-- <a-card :bordered="false">
-        <div class="table-page-search-wrapper">
-          <a-form layout="inline">
-            <a-row :gutter="48">
-              <a-col :md="8" :sm="24">
-                <span class="table-page-search-submitButtons">
-                  <a-button style="margin-left: 8px" @click="() => (this.moreQuery = true)">查询</a-button>
-                </span>
-              </a-col>
-            </a-row>
-          </a-form>
-        </div>
-        <s-table
-          ref="table"
-          size="small"
-          rowKey="id"
-          :columns="columns"
-          :data="loadData"
-          :alert="false"
-          :scroll="{ x: 2000 }"
-          bordered
-          showPagination="auto"
-        >
-          <span slot="isXXX" slot-scope="text">
-            <template>
-              {{ text ? '是' : '' }}
-            </template>
-          </span>
-        </s-table>
-    </a-card> -->
     <a-drawer :visible="moreQuery" width="80vw" @close="onClose">
-      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }">
+      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-if="!edit">
         <a-layout-header :style="{ padding: '0', height: '80px' }">
           <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
             <a-layout-content
@@ -338,19 +304,19 @@
               </div>
             </a-layout-content>
             <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-              <a-button>
+              <a-button @click="edithouse()">
                 编辑
               </a-button>
             </a-layout-sider>
           </a-layout>
         </a-layout-header>
-        <a-layout-content>
+        <a-layout-content class="show-house">
           <a-descriptions title="基本信息" :column="4">
             <a-descriptions-item label="楼盘名称" :span="2">
               {{ resultdata.communityName }}
             </a-descriptions-item>
             <a-descriptions-item label="楼盘地址" :span="2">
-              {{ resultdata.communityName }}
+              {{ resultdata.address }}
             </a-descriptions-item>
             <a-descriptions-item label="所属区域">
               {{ resultdata.area }}
@@ -484,6 +450,201 @@
           </a-descriptions>
         </a-layout-content>
       </a-layout>
+      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-else>
+        <a-layout-header :style="{ padding: '0', height: '80px' }">
+          <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
+            <a-layout-content
+              :style="{
+                background: '#ffffff',
+                padding: '0',
+                'line-height': '32px',
+                'font-size': '24px',
+                color: '#000000'
+              }"
+            >
+              <div>
+                {{ houseData.communityName
+                }}<span style="font-size:16px;color: #B71C2B;">均价 {{ houseData.averageLlistedPrice }}元/m²</span>
+              </div>
+              <div>
+                <a-tag>会所</a-tag>
+                <a-tag>室外游泳池</a-tag>
+                <a-tag>儿童乐园</a-tag>
+                <a-tag>篮球场</a-tag>
+                <a-tag>羽毛球场</a-tag>
+                <a-tag>老年文化中心</a-tag>
+                <a-tag closable>
+                  标签
+                </a-tag>
+                <a-tag style="background: #fff; borderStyle: dashed;" @click="showInput">
+                  <a-icon type="plus" /> 标签
+                </a-tag>
+              </div>
+            </a-layout-content>
+            <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
+              <a-button @click="edithouse()">
+                保存
+              </a-button>
+            </a-layout-sider>
+          </a-layout>
+        </a-layout-header>
+        <a-layout-content class="edit-house">
+          <a-descriptions title="基本信息" :column="4">
+            <a-descriptions-item label="楼盘名称" :span="2">
+              <a-input v-model="houseData.communityName" size="small" style="width: 250px"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="楼盘地址" :span="2">
+              <a-input v-model="houseData.address" size="small" style="width: 350px"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="所属区域">
+              <a-select :options="areaOptions" v-model="houseData.area" size="small" style="width: 150px" @change="areaRefresh2()"></a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="所属板块">
+              <a-select :options="plateOptions2" v-model="houseData.plate" size="small" style="width: 150px"></a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="所属环线">
+              <a-select :options="loopSummaryOptions" v-model="houseData.loopSummary" size="small" style="width: 150px"></a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="板块距离">
+              <!-- {{ resultdata.distance }} -->
+            </a-descriptions-item>
+            <a-descriptions-item label="区域规划">
+              <a-select v-model="houseData.districtPlanning" size="small" style="width: 150px">
+                <a-select-option value="城市副中心">城市副中心</a-select-option>
+                <a-select-option value="城市中心">城市中心</a-select-option>
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="地铁线路">
+              <a-select :options="metroLineOptions" v-model="houseData.metroLine" size="small" style="width: 150px"></a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="地铁站名">
+              <a-input v-model="houseData.subwayStation" size="small"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="地铁距离">
+              <a-input v-model="houseData.distance" size="small"/>
+            </a-descriptions-item>
+          </a-descriptions>
+          <a-descriptions title="楼盘概况" :column="4">
+            <a-descriptions-item label="开发商" :span="2">
+              <a-input v-model="houseData.developer" size="small" style="width: 350px"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="物业公司" :span="2">
+              <a-input v-model="houseData.propertyCompany" size="small"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="小区属性">
+              <a-select v-model="houseData.cellAttributes">
+                <a-select-option value="住宅"> 住宅 </a-select-option>
+                <a-select-option value="别墅"> 别墅 </a-select-option>
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="交易权属">
+              <a-select v-model="houseData.transactionOwnership">
+                <a-select-option value="住宅"> 住宅 </a-select-option>
+                <a-select-option value="商户"> 商户 </a-select-option>
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="产权年限">
+              <a-input v-model="houseData.propertyRights" style="width: 50px" size="small"/> 年
+            </a-descriptions-item>
+            <a-descriptions-item label="建筑时间">
+              <a-input v-model="houseData.constructionAge" style="width: 50px" size="small"/> 年
+            </a-descriptions-item>
+            <a-descriptions-item label="小区栋数">
+              <a-input v-model="houseData.buildingNumber" style="width: 50px" size="small"/> 栋
+            </a-descriptions-item>
+            <a-descriptions-item label="小区户数">
+              <a-input v-model="houseData.householdsNumber" style="width: 50px" size="small"/> 户
+            </a-descriptions-item>
+            <a-descriptions-item label="停车位数">
+              <a-input v-model="houseData.parkingSpacesNumber" size="small"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="人车分流">
+              <a-select :options="booleanOptions" v-model="houseData.peopleAndVehicles" style="width: 100px" size="small">
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="容积率">
+              <a-input v-model="houseData.volumeRate" style="width: 50px" size="small"/> %
+            </a-descriptions-item>
+            <a-descriptions-item label="绿化率">
+              <a-input v-model="houseData.greeningRate" style="width: 50px" size="small"/> %
+            </a-descriptions-item>
+            <a-descriptions-item label="建筑类型">
+              <a-select v-model="houseData.buildingType" size="small">
+                <a-select-option value="塔楼"> 塔楼 </a-select-option>
+                <a-select-option value="板楼"> 板楼 </a-select-option>
+                <a-select-option value="塔板结合"> 塔板结合 </a-select-option>
+                <a-select-option value="其他"> 其他 </a-select-option>
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="是否电梯">
+              <a-select :options="booleanOptions" v-model="houseData.isLift" style="width: 100px" size="small">
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="最大层数">
+              <a-input v-model="houseData.maxFloor" style="width: 50px" size="small"/> 层
+            </a-descriptions-item>
+            <a-descriptions-item label="最小层数">
+              <a-input v-model="houseData.minFloor" style="width: 50px" size="small"/> 层
+            </a-descriptions-item>
+            <a-descriptions-item label="物业属性">
+              {{ houseData.propertyAttributes }}
+            </a-descriptions-item>
+            <a-descriptions-item label="物业费">
+              <a-input v-model="houseData.propertyCosts" style="width: 50px" size="small"/> 元/m²*月
+            </a-descriptions-item>
+          </a-descriptions>
+          <a-descriptions title="学区情况" :column="4">
+            <a-descriptions-item label="是否一贯制" :span="4">
+              <a-select :options="booleanOptions" v-model="houseData.isConsistentSystem" style="width: 100px" size="small">
+              </a-select>
+            </a-descriptions-item>
+            <a-descriptions-item label="对口小学">
+              <a-input v-model="houseData.primarySchool" size="small"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="小学梯队">
+              {{ houseData.echelonPerformance }}
+            </a-descriptions-item>
+            <a-descriptions-item label="对口中学">
+              <a-input v-model="houseData.middleSchool" size="small"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="中学梯队">
+              {{ houseData.cityEchelon }} {{ houseData.districtEchelon }}
+            </a-descriptions-item>
+          </a-descriptions>
+          <a-descriptions title="价格及交易" :column="4">
+            <a-descriptions-item label="1居">
+              <a-input v-model="houseData.roomArea1Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomArea1Max" style="width: 50px" size="small"/>m²,
+              <a-input v-model="houseData.roomPriceRange1Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomPriceRange1Max" style="width: 50px" size="small"/>万
+            </a-descriptions-item>
+            <a-descriptions-item label="2居">
+              <a-input v-model="houseData.roomArea2Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomArea2Max" style="width: 50px" size="small"/>m²,
+              <a-input v-model="houseData.roomPriceRange2Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomPriceRange2Max" style="width: 50px" size="small"/>万
+            </a-descriptions-item>
+            <a-descriptions-item label="3居">
+              <a-input v-model="houseData.roomArea3Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomArea3Max" style="width: 50px" size="small"/>m²,
+              <a-input v-model="houseData.roomPriceRange3Min" style="width: 50px" size="small"/>-
+              <a-input v-model="houseData.roomPriceRange3Max" style="width: 50px" size="small"/>万
+            </a-descriptions-item>
+            <a-descriptions-item label="4居室">
+              <!-- {{ resultdata. }}，{{ resultdata. }} -->
+            </a-descriptions-item>
+            <a-descriptions-item label="在售套数">
+              <a-input v-model="houseData.inStock" style="width: 50px" size="small"/> 套
+            </a-descriptions-item>
+            <a-descriptions-item label="在租套数">
+              <a-input v-model="houseData.positiveRent" style="width: 50px" size="small"/> 套
+            </a-descriptions-item>
+            <a-descriptions-item label="2019年成交">
+              <a-input v-model="houseData.volume2019" style="width: 50px" size="small"/> 套
+            </a-descriptions-item>
+          </a-descriptions>
+        </a-layout-content>
+      </a-layout>
     </a-drawer>
   </page-header-wrapper>
 </template>
@@ -494,71 +655,6 @@ import { STable, Ellipsis } from '@/components'
 import { getHouse } from '@/api/manage'
 import storage from 'store'
 import { AutoComplete } from 'ant-design-vue'
-// const columns = [
-//   {
-//     title: '小区名称',
-//     dataIndex: 'communityName',
-//     width: '150px',
-//     fixed: true,
-//     scopedSlots: { customRender: 'communityName' }
-//   },
-//   { title: '区域', dataIndex: 'area', width: '50px' },
-//   { title: '板块', dataIndex: 'plate', width: '80px' },
-//   { title: '地区规划', dataIndex: 'districtPlanning', width: '100px' },
-//   { title: '环线汇总', dataIndex: 'loopSummary', width: '90px' },
-//   { title: '小区属性', dataIndex: 'cellAttributes', width: '80px' },
-//   { title: '地铁线', dataIndex: 'metroLine', width: '60px' },
-//   { title: '地铁站', dataIndex: 'subwayStation', width: '120px' },
-//   { title: '距离', dataIndex: 'distance', width: '60px' },
-//   { title: '交易权属', dataIndex: 'transactionOwnership', width: '80px' },
-//   { title: '最大楼层', dataIndex: 'maxFloor', width: '80px' },
-//   { title: '最小楼层', dataIndex: 'minFloor', width: '80px' },
-//   { title: '近一年成交量', dataIndex: 'volume2019', width: '100px' },
-//   { title: '1房面积段', dataIndex: 'roomArea1Max', width: '90px' },
-//   { title: '2房面积段', dataIndex: 'roomArea2Max', width: '90px' },
-//   { title: '3房面积段', dataIndex: 'roomArea3Max', width: '90px' },
-//   { title: '1房价格段', dataIndex: 'roomPriceRange1Max', width: '90px' },
-//   { title: '2房价格段', dataIndex: 'roomPriceRange2Max', width: '90px' },
-//   { title: '3房价格段', dataIndex: 'roomPriceRange3Max', width: '90px' },
-//   { title: '电梯', dataIndex: 'isLift', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '室外游泳池', dataIndex: 'isOutdoorSwimmingRoom', width: '100px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '室内游泳池', dataIndex: 'isIndoorSwimmingPool', width: '100px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '会所', dataIndex: 'clubhouse', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '洋房', dataIndex: 'bungalow', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '双阳台', dataIndex: 'doubleBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '大阳台', dataIndex: 'largeBalcony', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '带花园', dataIndex: 'withGarden', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '大露台', dataIndex: 'largeTerrace', width: '60px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '人车分流', dataIndex: 'peopleAndVehicles', width: '70px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '建筑类型', dataIndex: 'buildingType', width: '90px' },
-//   { title: '物业属性', dataIndex: 'propertyAttributes', width: '90px' },
-//   { title: '物业费', dataIndex: 'propertyCosts', width: '90px' },
-//   { title: '栋数', dataIndex: 'buildingNumber', width: '60px' },
-//   { title: '户数', dataIndex: 'householdsNumber', width: '60px' },
-//   { title: '车位数', dataIndex: 'parkingSpacesNumber', width: '300px' },
-//   { title: '容积率', dataIndex: 'volumeRate', width: '60px' },
-//   { title: '绿化率', dataIndex: 'greeningRate', width: '90px' },
-//   { title: '挂牌均价', dataIndex: 'averageLlistedPrice', width: '90px' },
-//   { title: '在售', dataIndex: 'inStock', width: '60px' },
-//   { title: '正租', dataIndex: 'positiveRent', width: '60px' },
-//   { title: '建筑年代', dataIndex: 'constructionAge', width: '80px' },
-//   { title: '开发商', dataIndex: 'developer', width: '250px' },
-//   { title: '物业公司', dataIndex: 'propertyCompany', width: '280px' },
-//   { title: '小学', dataIndex: 'primarySchool', width: '100px' },
-//   { title: '梯队表现', dataIndex: 'echelonPerformance', width: '90px' },
-//   { title: '一贯制', dataIndex: 'isConsistentSystem', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '中学', dataIndex: 'middleSchool', width: '120px' },
-//   { title: '市梯队', dataIndex: 'cityEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '区梯队', dataIndex: 'districtEchelon', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '叠拼别墅', dataIndex: 'stackedVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '独栋别墅', dataIndex: 'singleFamilyVilla', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '联排别墅', dataIndex: 'townhouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '双拼别墅', dataIndex: 'semiDetachedHouse', width: '90px', scopedSlots: { customRender: 'isXXX' } },
-//   { title: '内部配套', dataIndex: 'internalSupporting', width: '150px' },
-//   { title: '地址', dataIndex: 'address', width: '150px' },
-//   { title: '产权年限', dataIndex: 'propertyRights', width: '350px' },
-//   { title: '小区介绍', dataIndex: 'communityDesc', width: '500px' }
-// ]
 
 const statusMap = {
   0: {
@@ -579,7 +675,7 @@ const statusMap = {
   }
 }
 const plateOptions = []
-
+const plateOptions2 = []
 const areaPlate = {
   青浦: ['白鹤', '华新', '金泽', '练塘', '夏阳', '香花桥', '徐泾', '盈浦', '赵巷', '重固', '朱家角'],
   松江: [
@@ -794,6 +890,24 @@ const areaOptions = [
     value: '崇明'
   }
 ]
+const loopSummaryOptions = [
+  {
+    label: '内环内',
+    value: '内环内'
+  },
+  {
+    label: '内环至中环',
+    value: '内环至中环'
+  },
+  {
+    label: '中环至外环',
+    value: '中环至外环'
+  },
+  {
+    label: '外环外',
+    value: '外环外'
+  }
+]
 const metroLineOptions = [
   {
     label: '1号线',
@@ -996,6 +1110,16 @@ const constructionAgeOptions = [
     value: [2010, 2050]
   }
 ]
+const booleanOptions = [
+  {
+    label: '是',
+    value: true
+  },
+  {
+    label: '否',
+    value: false
+  }
+]
 export default {
   name: 'HouseQuery',
   components: {
@@ -1058,12 +1182,17 @@ export default {
       resultdata: {},
       sort: 'id,asc',
       plateOptions,
+      plateOptions2,
       areaOptions,
       metroLineOptions,
       averageLlistedPriceOptions,
       totalPriceOptions,
       roomAreaOptions,
-      constructionAgeOptions
+      constructionAgeOptions,
+      loopSummaryOptions,
+      booleanOptions,
+      edit: false,
+      houseData: {}
     }
   },
   filters: {
@@ -1096,6 +1225,7 @@ export default {
     },
     onClose () {
       this.moreQuery = false
+      this.edit = false
       this.refresh()
     },
     onSelectChange (selectedRowKeys, selectedRows) {
@@ -1175,6 +1305,15 @@ export default {
       this.search()
     },
 
+    areaRefresh2 () {
+      if (this.houseData.area) {
+        this.plateOptions2.splice(0)
+        areaPlate[this.houseData.area].forEach(v => {
+          plateOptions2.push({ label: v, value: v })
+        })
+      }
+    },
+
     showdetail (community) {
       this.moreQuery = true
       this.resultdata = community
@@ -1185,6 +1324,23 @@ export default {
         this.sort = type + ',asc'
         this.search()
       }
+    },
+
+    edithouse () {
+      if (this.edit) {
+        // save
+        console.log('save:', this.houseData)
+        this.houseData = {}
+      } else {
+        // edit
+        this.houseData = this.resultdata
+        this.houseData.peopleAndVehicles = this.houseData.peopleAndVehicles || false
+        this.houseData.isLift = this.houseData.isLift || false
+        this.houseData.isConsistentSystem = this.houseData.isConsistentSystem || false
+        console.log(this.houseData)
+        this.areaRefresh2()
+      }
+      this.edit = !this.edit
     }
   }
 }
