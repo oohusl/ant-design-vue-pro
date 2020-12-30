@@ -13,7 +13,6 @@
             placeholder="请输入楼盘名开始找房"
             option-label-prop="value"
             v-model="queryParam.communityName"
-            @change="search"
           >
             <template slot="dataSource">
               <!-- <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
@@ -25,7 +24,17 @@
               </a-select-option> -->
             </template>
             <a-input>
-              <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search" />
+              <!-- <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search" /> -->
+              <a-button
+                slot="suffix"
+                style="margin-right: -12px"
+                class="search-btn"
+                size="large"
+                type="primary"
+                @click="search"
+              >
+                查询
+              </a-button>
             </a-input>
           </AutoComplete>
         </div>
@@ -110,17 +119,6 @@
             <span :style="{ display: 'inline-block', width: '44px', textAlign: 'center' }"> 平方 </span>
             <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
-          <!-- <a-form-item label="成交量">
-            <a-checkbox-group v-model="queryParam.prices">
-              <a-checkbox value="1"> 5套以下 </a-checkbox>
-              <a-checkbox value="2"> 5-10套 </a-checkbox>
-              <a-checkbox value="3"> 10-15套 </a-checkbox>
-              <a-checkbox value="4"> 15-20套 </a-checkbox>
-              <a-checkbox value="5"> 20-25套 </a-checkbox>
-              <a-checkbox value="6"> 25-30套 </a-checkbox>
-              <a-checkbox value="7"> 30套以上 </a-checkbox>
-            </a-checkbox-group>
-          </a-form-item> -->
           <a-form-item label="建筑年代">
             <a-checkbox-group v-model="queryParam.constructionAge" :options="constructionAgeOptions" @change="refresh">
             </a-checkbox-group>
@@ -137,6 +135,7 @@
             <a-checkbox-group v-model="queryParam.cellAttributes" @change="refresh">
               <a-checkbox value="住宅"> 住宅 </a-checkbox>
               <a-checkbox value="别墅"> 别墅 </a-checkbox>
+              <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="电梯">
