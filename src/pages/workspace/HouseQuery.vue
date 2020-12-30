@@ -1315,8 +1315,8 @@ export default {
     showdetail (community) {
       this.moreQuery = true
       this.resultdata = community
-      if (community.communityDesc) {
-        this.tags = community.communityDesc.split(',')
+      if (community.labels) {
+        this.tags = community.labels.split(',')
       } else {
         this.tags = []
       }
@@ -1333,7 +1333,7 @@ export default {
       if (this.edit) {
         // save
         console.log('save:', this.houseData)
-        this.houseData.communityDesc = this.tags.join(',')
+        this.houseData.labels = this.tags.join(',')
         saveHouse(this.houseData)
           .then(e => {
             this.edit = !this.edit

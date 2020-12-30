@@ -185,7 +185,7 @@
           </a-form-item>
           <a-form-item label="3房价格段">
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 10px)' }">
-              <a-input v-model="house.roomPriceRange2Min" />
+              <a-input v-model="house.roomPriceRange3Min" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
