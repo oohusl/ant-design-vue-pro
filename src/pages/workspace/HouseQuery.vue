@@ -1363,6 +1363,7 @@ export default {
 
     newHouse () {
         this.houseData = {}
+        this.resultdata = this.houseData
         this.tags = []
         this.houseData.peopleAndVehicles = false
         this.houseData.isLift = true
