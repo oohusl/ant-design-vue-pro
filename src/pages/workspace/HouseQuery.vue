@@ -1241,11 +1241,11 @@ const constructionAgeOptions = [
 const booleanOptions = [
   {
     label: '是',
-    value: true
+    value: 1
   },
   {
     label: '否',
-    value: false
+    value: 0
   }
 ]
 export default {
@@ -1448,9 +1448,9 @@ export default {
       } else {
         // edit
         this.houseData = this.resultdata
-        this.houseData.peopleAndVehicles = this.houseData.peopleAndVehicles || false
-        this.houseData.isLift = this.houseData.isLift || false
-        this.houseData.isConsistentSystem = this.houseData.isConsistentSystem || false
+        this.houseData.peopleAndVehicles = this.houseData.peopleAndVehicles || 0
+        this.houseData.isLift = this.houseData.isLift || 0
+        this.houseData.isConsistentSystem = this.houseData.isConsistentSystem || 0
         console.log(this.houseData)
         this.areaRefresh2()
         this.edit = !this.edit
@@ -1461,9 +1461,9 @@ export default {
         this.houseData = {}
         this.resultdata = this.houseData
         this.tags = []
-        this.houseData.peopleAndVehicles = false
-        this.houseData.isLift = true
-        this.houseData.isConsistentSystem = false
+        this.houseData.peopleAndVehicles = 0
+        this.houseData.isLift = 1
+        this.houseData.isConsistentSystem = 0
         console.log(this.houseData)
         this.areaRefresh2()
         this.edit = !this.edit
