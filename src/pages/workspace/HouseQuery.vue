@@ -437,10 +437,10 @@
                 resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
               }}{{ resultdata.roomPriceRange4Max ? resultdata.roomPriceRange4Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="在售套数">
+            <a-descriptions-item label="在售">
               {{ resultdata.inStock ? resultdata.inStock + '套' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="在租套数">
+            <a-descriptions-item label="在租">
               {{ resultdata.positiveRent ? resultdata.positiveRent + '套' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="2019年成交">
