@@ -66,7 +66,6 @@
             <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
               <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
             </a-form-item>
-            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="户型">
             <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
@@ -91,7 +90,6 @@
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
-            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="总价">
             <a-checkbox-group v-model="queryParam.totalPrice" :options="totalPriceOptions" @change="refresh">
@@ -104,7 +102,6 @@
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
-            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="面积">
             <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" @change="refresh">
@@ -117,7 +114,6 @@
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '44px', textAlign: 'center' }"> 平方 </span>
-            <a-button size="small" @click="refresh">确定</a-button>
           </a-form-item>
           <a-form-item label="建筑年代">
             <a-checkbox-group v-model="queryParam.constructionAge" :options="constructionAgeOptions" @change="refresh">
@@ -1447,9 +1443,9 @@ export default {
       } else {
         // edit
         this.houseData = this.resultdata
-        this.houseData.peopleAndVehicles = this.houseData.peopleAndVehicles || 0
-        this.houseData.isLift = this.houseData.isLift || 0
-        this.houseData.isConsistentSystem = this.houseData.isConsistentSystem || 0
+        this.houseData.peopleAndVehicles = Number(this.houseData.peopleAndVehicles)
+        this.houseData.isLift = Number(this.houseData.isLift)
+        this.houseData.isConsistentSystem = Number(this.houseData.isConsistentSystem)
         console.log(this.houseData)
         this.areaRefresh2()
         this.edit = !this.edit
