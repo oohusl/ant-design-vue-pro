@@ -1150,7 +1150,7 @@ const averageLlistedPriceOptions = [
 const totalPriceOptions = [
   {
     label: '200万以下',
-    value: [0, 200]
+    value: [200, 200]
   },
   {
     label: '200-300万',
@@ -1178,13 +1178,13 @@ const totalPriceOptions = [
   },
   {
     label: '2000万以上',
-    value: [2000, 999999]
+    value: [2000, 2000]
   }
 ]
 const roomAreaOptions = [
   {
     label: '50平方以下',
-    value: [0, 50]
+    value: [50, 50]
   },
   {
     label: '50-70平方',
@@ -1208,7 +1208,7 @@ const roomAreaOptions = [
   },
   {
     label: '150平方以上',
-    value: [150, 999999]
+    value: [150, 150]
   }
 ]
 const constructionAgeOptions = [
