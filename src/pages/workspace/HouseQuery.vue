@@ -391,19 +391,19 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
-            <a-descriptions-item label="九年一贯制" :span="4">
+            <a-descriptions-item label="一贯制" :span="4">
               {{ resultdata.isConsistentSystem ? '是' : '否' }}
             </a-descriptions-item>
             <a-descriptions-item label="小学">
               {{ resultdata.primarySchool }}
             </a-descriptions-item>
-            <a-descriptions-item label="小学梯队">
+            <a-descriptions-item label="梯队">
               {{ resultdata.echelonPerformance }}
             </a-descriptions-item>
             <a-descriptions-item label="中学">
               {{ resultdata.middleSchool }}
             </a-descriptions-item>
-            <a-descriptions-item label="中学梯队">
+            <a-descriptions-item label="梯队">
               {{ resultdata.cityEchelon }}
             </a-descriptions-item>
           </a-descriptions>
@@ -641,7 +641,7 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
-            <a-descriptions-item label="九年一贯制" :span="4">
+            <a-descriptions-item label="一贯制" :span="4">
               <a-select
                 :options="booleanOptions"
                 v-model="houseData.isConsistentSystem"
@@ -651,9 +651,9 @@
               </a-select>
             </a-descriptions-item>
             <a-descriptions-item label="小学">
-              <a-input v-model="houseData.primarySchool" size="small" />
+              <a-input v-model="houseData.primarySchool" size="small" style="width: 100px"/>
             </a-descriptions-item>
-            <a-descriptions-item label="小学梯队">
+            <a-descriptions-item label="梯队">
               <a-select
                 :options="echelonPerformanceOptions"
                 v-model="houseData.echelonPerformance"
@@ -662,9 +662,9 @@
               />
             </a-descriptions-item>
             <a-descriptions-item label="中学">
-              <a-input v-model="houseData.middleSchool" size="small" />
+              <a-input v-model="houseData.middleSchool" size="small" style="width: 100px"/>
             </a-descriptions-item>
-            <a-descriptions-item label="中学梯队">
+            <a-descriptions-item label="梯队">
               <a-select
                 :options="cityEchelonOptions"
                 v-model="houseData.cityEchelon"
