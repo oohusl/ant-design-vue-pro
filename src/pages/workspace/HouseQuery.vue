@@ -476,7 +476,17 @@
                     {{ tag }}
                   </a-tag>
                 </template>
-                <a-input
+                <a-auto-complete
+                  :data-source="labels"
+                  :value="inputValue"
+                  v-if="inputVisible"
+                  style="width: 200px"
+                  placeholder="input here"
+                  @change="handleInputChange"
+                  @blur="handleInputConfirm"
+                  @keyup.enter="handleInputConfirm"
+                />
+                <!-- <a-input
                   v-if="inputVisible"
                   ref="input"
                   type="text"
@@ -486,7 +496,7 @@
                   @change="handleInputChange"
                   @blur="handleInputConfirm"
                   @keyup.enter="handleInputConfirm"
-                />
+                /> -->
                 <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
                   <a-icon type="plus" /> New Tag
                 </a-tag>
@@ -1396,7 +1406,8 @@ export default {
       cityEchelonOptions,
       subwaystation,
       stationOptions: [],
-      echelonPerformanceOptions
+      echelonPerformanceOptions,
+      labels: ['Burns Bay Road', 'Downing Street', 'Wall Street']
     }
   },
   filters: {
@@ -1552,7 +1563,6 @@ export default {
     showInput () {
       this.inputVisible = true
       this.$nextTick(function () {
-        this.$refs.tagInput.focus()
       })
     },
 
