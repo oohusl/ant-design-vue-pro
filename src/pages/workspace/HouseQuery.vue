@@ -438,7 +438,7 @@
             <a-descriptions-item label="在租">
               {{ resultdata.positiveRent ? resultdata.positiveRent + '套' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="2019年成交">
+            <a-descriptions-item label="成交量">
               {{ resultdata.volume2019 ? resultdata.volume2019 + '套' : '' }}
             </a-descriptions-item>
           </a-descriptions>
@@ -476,17 +476,7 @@
                     {{ tag }}
                   </a-tag>
                 </template>
-                <a-auto-complete
-                  :data-source="labels"
-                  :value="inputValue"
-                  v-if="inputVisible"
-                  style="width: 200px"
-                  placeholder="input here"
-                  @change="handleInputChange"
-                  @blur="handleInputConfirm"
-                  @keyup.enter="handleInputConfirm"
-                />
-                <!-- <a-input
+                <a-input
                   v-if="inputVisible"
                   ref="input"
                   type="text"
@@ -496,7 +486,7 @@
                   @change="handleInputChange"
                   @blur="handleInputConfirm"
                   @keyup.enter="handleInputConfirm"
-                /> -->
+                />
                 <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
                   <a-icon type="plus" /> New Tag
                 </a-tag>
@@ -1132,20 +1122,12 @@ const averageLlistedPriceOptions = [
     value: [0, 20000]
   },
   {
-    label: '2-2.5万',
-    value: [20000, 25000]
+    label: '2-3万',
+    value: [20000, 30000]
   },
   {
-    label: '2.5-3万',
-    value: [25000, 30000]
-  },
-  {
-    label: '3-3.5万',
-    value: [30000, 35000]
-  },
-  {
-    label: '3.5-4万',
-    value: [35000, 40000]
+    label: '3-4万',
+    value: [30000, 40000]
   },
   {
     label: '4-5万',
@@ -1156,8 +1138,40 @@ const averageLlistedPriceOptions = [
     value: [50000, 60000]
   },
   {
-    label: '6万以上',
-    value: [60000, 999999]
+    label: '6-7万',
+    value: [60000, 70000]
+  },
+  {
+    label: '7-8万',
+    value: [70000, 80000]
+  },
+  {
+    label: '8-9万',
+    value: [80000, 90000]
+  },
+  {
+    label: '9-10万',
+    value: [90000, 100000]
+  },
+  {
+    label: '10-11万',
+    value: [100000, 110000]
+  },
+  {
+    label: '11-12万',
+    value: [110000, 120000]
+  },
+  {
+    label: '12-13万',
+    value: [120000, 130000]
+  },
+  {
+    label: '13-14万',
+    value: [130000, 140000]
+  },
+  {
+    label: '15万以上',
+    value: [150000, 999999]
   }
 ]
 const totalPriceOptions = [
@@ -1178,46 +1192,91 @@ const totalPriceOptions = [
     value: [400, 500]
   },
   {
-    label: '500-800万',
-    value: [500, 800]
+    label: '500-600万',
+    value: [500, 600]
   },
   {
-    label: '800-1000万',
-    value: [800, 1000]
+    label: '600-700万',
+    value: [600, 700]
   },
   {
-    label: '1000-2000万',
-    value: [1000, 2000]
+    label: '700-800万',
+    value: [700, 800]
   },
   {
-    label: '2000万以上',
-    value: [2000, 2000]
+    label: '800-900万',
+    value: [800, 900]
+  },
+  {
+    label: '900-1000万',
+    value: [900, 1000]
+  },
+  {
+    label: '1100-1200万',
+    value: [1100, 1200]
+  },
+  {
+    label: '1200-1300万',
+    value: [1200, 1300]
+  },
+  {
+    label: '1300-1400万',
+    value: [1300, 1400]
+  },
+  {
+    label: '1400-1500万',
+    value: [1400, 1500]
+  },
+  {
+    label: '1500万以上',
+    value: [1500, 1500]
   }
 ]
+
 const roomAreaOptions = [
   {
     label: '50平方以下',
     value: [50, 50]
   },
   {
-    label: '50-70平方',
-    value: [50, 70]
+    label: '50-60平方',
+    value: [50, 60]
   },
   {
-    label: '70-90平方',
-    value: [70, 90]
+    label: '60-70平方',
+    value: [60, 70]
   },
   {
-    label: '90-110平方',
-    value: [90, 110]
+    label: '70-80平方',
+    value: [70, 80]
   },
   {
-    label: '110-130平方',
-    value: [110, 130]
+    label: '80-90平方',
+    value: [80, 90]
   },
   {
-    label: '130-150平方',
-    value: [130, 150]
+    label: '90-100平方',
+    value: [90, 100]
+  },
+  {
+    label: '100-110平方',
+    value: [100, 110]
+  },
+  {
+    label: '110-120平方',
+    value: [110, 120]
+  },
+  {
+    label: '120-130平方',
+    value: [120, 130]
+  },
+  {
+    label: '130-140平方',
+    value: [130, 140]
+  },
+  {
+    label: '140-150平方',
+    value: [140, 150]
   },
   {
     label: '150平方以上',
@@ -1406,8 +1465,7 @@ export default {
       cityEchelonOptions,
       subwaystation,
       stationOptions: [],
-      echelonPerformanceOptions,
-      labels: ['Burns Bay Road', 'Downing Street', 'Wall Street']
+      echelonPerformanceOptions
     }
   },
   filters: {
@@ -1563,6 +1621,7 @@ export default {
     showInput () {
       this.inputVisible = true
       this.$nextTick(function () {
+        this.$refs.tagInput.focus()
       })
     },
 
