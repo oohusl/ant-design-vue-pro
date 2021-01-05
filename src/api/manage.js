@@ -9,7 +9,8 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   house: '/community-infos/query',
-  editHouse: '/community-infos'
+  editHouse: '/community-infos',
+  constants: '/set/constant-infos'
 }
 
 export default api
@@ -93,5 +94,13 @@ export function saveHouse (parameter) {
     url: api.editHouse,
     method: parameter.id ? 'put' : 'post',
     data: parameter
+  })
+}
+
+export function getLabels () {
+  return request({
+    url: `${api.constants}`,
+    method: 'post',
+    data: { 'constantType': 'bq' }
   })
 }
