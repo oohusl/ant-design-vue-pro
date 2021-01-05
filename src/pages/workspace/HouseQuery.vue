@@ -238,6 +238,16 @@
                         <a-tag color="red">
                           {{ community.plate }}
                         </a-tag>
+                        <a-tag color="orange">
+                          {{ community.cellAttributes }}
+                        </a-tag>
+                        <a-tag color="green">
+                          {{ community.constructionAge }}
+                        </a-tag>
+                        <a-tag color="cyan" v-if="community.isLift">电梯</a-tag>
+                        <a-tag color="blue">
+                          {{ community.buildingType }}
+                        </a-tag>
                       </a-layout-footer>
                     </a-layout>
                   </a-layout-content>
