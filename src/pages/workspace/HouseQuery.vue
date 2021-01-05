@@ -57,6 +57,10 @@
             <a-checkbox-group v-model="queryParam.metroLine" :options="metroLineOptions" @change="refresh">
             </a-checkbox-group>
           </a-form-item>
+          <a-form-item label="地铁站" v-if="queryParam.metroLine && queryParam.metroLine.length">
+            <a-checkbox-group v-model="queryParam.subwayStation" :options="getLineStation(queryParam.metroLine)">
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="学校">
             <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
               <a-checkbox value="小学">小学</a-checkbox>
@@ -1022,6 +1026,20 @@ export default {
           }
         })
       }
+    },
+
+    getLineStation (lines) {
+      const stationOptions = []
+      lines.forEach(line => {
+        this.subwaystation.forEach(v => {
+        if (v.line === line) {
+          v.station.forEach(val => {
+            stationOptions.push({ label: val, value: val })
+          })
+        }
+      })
+      })
+      return stationOptions
     },
 
     filterOption (input, option) {
