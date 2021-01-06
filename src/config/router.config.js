@@ -28,12 +28,6 @@ export const asyncRouterMap = [
             name: 'HouseQuery',
             component: () => import('@/pages/workspace/HouseQuery'),
             meta: { title: '房源查询', keepAlive: true }
-          },
-          {
-            path: '/house/manage',
-            name: 'HouseManage',
-            component: () => import('@/pages/workspace/HouseManage'),
-            meta: { title: '房源管理', keepAlive: true }
           }
         ]
       },

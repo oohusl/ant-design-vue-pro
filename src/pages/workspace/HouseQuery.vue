@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper>
     <a-layout>
-      <a-layout-header :style="{ background: '#f5f5f5', padding: 0 }">
+      <a-layout-header :style="{ padding: 0 }">
         <div class="house-query-search-holder">
           <AutoComplete
             class="house-query-search"
@@ -33,14 +33,14 @@
                 type="primary"
                 @click="search"
               >
-                查询
+                <a-icon type="search" />
               </a-button>
             </a-input>
           </AutoComplete>
         </div>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff', margin: '24px 16px 0', padding: '0 128px' }">
-        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left">
+      <a-layout-content :style="{ background: '#ffffff', margin: '0px 16px 0', padding: '0 128px' }">
+        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
           <a-form-item label="区域">
             <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
             </a-checkbox-group>
@@ -164,9 +164,6 @@
               <a-button-group>
                 <a-button @click="sortfilter('id')">
                   综合排序
-                </a-button>
-                <a-button @click="sortfilter('totalPrice')">
-                  房屋总价
                 </a-button>
                 <a-button @click="sortfilter('averageLlistedPrice')">
                   房屋单价
