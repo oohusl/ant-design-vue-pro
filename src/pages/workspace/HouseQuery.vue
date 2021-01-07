@@ -146,25 +146,21 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="类型">
-            <a-checkbox-group v-model="queryParam.cellAttributes" @change="refresh">
+            <a-checkbox-group v-model="queryParam.cellAttributes">
               <a-checkbox value="住宅"> 住宅 </a-checkbox>
               <a-checkbox value="别墅"> 别墅 </a-checkbox>
               <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="电梯">
-            <!-- <a-checkbox-group v-model="queryParam.isLift" @change="refresh">
-              <a-checkbox value="true"> 有电梯 </a-checkbox>
-              <a-checkbox value="false"> 无电梯 </a-checkbox>
-            </a-checkbox-group> -->
-            <a-radio-group v-model="queryParam.isLift" @change="refresh">
-              <a-radio :value="true">
+            <a-checkbox-group v-model="queryParam.isLift">
+              <a-checkbox :value="true">
                 有电梯
-              </a-radio>
-              <a-radio :value="false">
+              </a-checkbox>
+              <a-checkbox :value="false">
                 无电梯
-              </a-radio>
-            </a-radio-group>
+              </a-checkbox>
+            </a-checkbox-group>
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -176,14 +172,12 @@
                 >套 符合条件房源
               </div>
               <a-button-group>
-                <a-button @click="sortfilter('id')">
-                  综合排序
+                <a-button>
+                  排序
                 </a-button>
                 <a-button @click="sortfilter('averageLlistedPrice')">
                   房屋单价
-                </a-button>
-                <a-button @click="sortfilter('volume2019')">
-                  成交量
+                  <a-icon :type="sortType == 'asc' ? 'down' : 'up'" />
                 </a-button>
               </a-button-group>
             </a-layout-header>
@@ -268,7 +262,7 @@
                         :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                         width="200"
                       >
-                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice }}</span
+                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice }}</span
                         >元/m²
                       </a-layout-header>
                       <a-layout-content
@@ -832,7 +826,7 @@ export default {
       left: 'left',
       results: [],
       resultdata: {},
-      sort: 'id,asc',
+      sort: 'averageLlistedPrice,asc',
       edit: false,
       houseData: {},
       stationOptions: [],
@@ -851,7 +845,8 @@ export default {
       cityEchelonOptions,
       echelonPerformanceOptions,
       subwaystation,
-      statusMap
+      statusMap,
+      sortType: 'asc'
     }
   },
   filters: {
@@ -952,8 +947,13 @@ export default {
     sortfilter (type) {
       console.log(type)
       if (type) {
-        this.sort = type + ',asc'
+        this.sort = type + ',' + this.sortType
         this.search()
+      }
+      if (this.sortType === 'asc') {
+        this.sortType = 'desc'
+      } else {
+        this.sortType = 'asc'
       }
     },
 
