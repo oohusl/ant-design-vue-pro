@@ -14,17 +14,7 @@
             option-label-prop="value"
             v-model="queryParam.communityName"
           >
-            <template slot="dataSource">
-              <!-- <a-select-option v-for="item in dataSource" :key="item.category" :title="item.category">
-                Found {{ item.query }} on
-                <a :href="`https://s.taobao.com/search?q=${item.query}`" target="_blank" rel="noopener noreferrer">
-                  {{ item.category }}
-                </a>
-                <span className="global-search-item-count">{{ item.count }} results</span>
-              </a-select-option> -->
-            </template>
             <a-input>
-              <!-- <a-icon slot="suffix" type="search" class="certain-category-icon" :click="search" /> -->
               <a-button
                 slot="suffix"
                 style="margin-right: -12px"
@@ -96,8 +86,19 @@
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
           </a-form-item>
           <a-form-item label="总价">
-            <a-checkbox-group v-model="queryParam.totalPrice" :options="totalPriceOptions" @change="refresh">
-            </a-checkbox-group>
+            <a-select
+              v-model="queryParam.totalPrice"
+              mode="multiple"
+              size="small"
+              placeholder="请选择总价"
+              style="width: 340px"
+            >
+              <a-select-option v-for="i in totalPriceOptions" :key="i.value" :value="i.value" :label="i.label">
+                {{ i.label }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label=" " :colon="false">
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
@@ -108,8 +109,21 @@
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> 万 </span>
           </a-form-item>
           <a-form-item label="面积">
-            <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" @change="refresh">
-            </a-checkbox-group>
+            <!-- <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" @change="refresh">
+            </a-checkbox-group> -->
+            <a-select
+              v-model="queryParam.roomArea"
+              mode="multiple"
+              size="small"
+              placeholder="请选择面积段"
+              style="width: 340px"
+            >
+              <a-select-option v-for="i in roomAreaOptions" :key="i.value" :value="i.value" :label="i.label">
+                {{ i.label }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+          <a-form-item label=" " :colon="false">
             <a-form-item :style="{ display: 'inline-block', width: '63px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
             </a-form-item>
@@ -329,9 +343,6 @@
             <a-descriptions-item label="环线">
               {{ resultdata.loopSummary }}
             </a-descriptions-item>
-            <!-- <a-descriptions-item label="板块距离">
-              <!-- {{ resultdata.loopSummary }} -->
-            </a-descriptions-item> -->
             <a-descriptions-item label="区域规划">
               {{ resultdata.districtPlanning }}
             </a-descriptions-item>
@@ -550,8 +561,6 @@
                 style="width: 150px"
               ></a-select>
             </a-descriptions-item>
-            <!-- <a-descriptions-item label="板块距离">
-            </a-descriptions-item> -->
             <a-descriptions-item label="区域规划">
               <a-select v-model="houseData.districtPlanning" size="small" style="width: 150px">
                 <a-select-option value="城市副中心">城市副中心</a-select-option>
