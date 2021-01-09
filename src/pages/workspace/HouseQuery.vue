@@ -168,7 +168,7 @@
           <a-layout>
             <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '50px', display: 'flex' }">
               <div class="result">
-                共找到<span>{{ results['x-total-count']? results['x-total-count']: 0 }}</span
+                共找到<span>{{ results['x-total-count'] ? results['x-total-count'] : 0 }}</span
                 >套 符合条件房源
               </div>
               <a-button-group>
@@ -262,7 +262,9 @@
                         :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                         width="200"
                       >
-                        均价<span style="font-size:24px;font-weight:bold">{{ community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice }}</span
+                        均价<span style="font-size:24px;font-weight:bold">{{
+                          community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice
+                        }}</span
                         >元/m²
                       </a-layout-header>
                       <a-layout-content
@@ -300,7 +302,10 @@
             >
               <div>
                 {{ resultdata.communityName
-                }}<span style="font-size:16px;color: #B71C2B; margin-left: 12px">均价 {{ resultdata.averageLlistedPrice }}元/m²</span>
+                }}<span
+                  style="font-size:16px;color: #B71C2B; margin-left: 12px"
+                >均价 {{ resultdata.averageLlistedPrice }}元/m²</span
+                >
               </div>
               <div>
                 <template v-for="tag in tags">
@@ -350,7 +355,7 @@
               {{ resultdata.distance }}
             </a-descriptions-item>
           </a-descriptions>
-          <a-descriptions title="楼盘概况" :column="4" >
+          <a-descriptions title="楼盘概况" :column="4">
             <a-descriptions-item label="开发商" :span="2">
               {{ resultdata.developer }}
             </a-descriptions-item>
@@ -429,8 +434,7 @@
               }}{{ resultdata.roomArea1Max ? resultdata.roomArea1Max + 'm²' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="1居价格" :span="1">
-              {{
-                resultdata.roomPriceRange1Min ? resultdata.roomPriceRange1Min + '-' : ''
+              {{ resultdata.roomPriceRange1Min ? resultdata.roomPriceRange1Min + '-' : ''
               }}{{ resultdata.roomPriceRange1Max ? resultdata.roomPriceRange1Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="2居面积" :span="1">
@@ -446,14 +450,13 @@
               }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="3居价格" :span="2">
-              {{
-                resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
+              {{ resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
               }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="多居" :span="2">
               {{ resultdata.roomArea4Min ? resultdata.roomArea4Min + '-' : ''
-              }}{{ resultdata.roomArea4Max ? resultdata.roomArea4Max + 'm²' : '' }} {{
-                resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
+              }}{{ resultdata.roomArea4Max ? resultdata.roomArea4Max + 'm²' : '' }}
+              {{ resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
               }}{{ resultdata.roomPriceRange4Max ? resultdata.roomPriceRange4Max + '万' : '' }}
             </a-descriptions-item>
             <a-descriptions-item label="在售">
@@ -588,10 +591,10 @@
               ></a-select>
             </a-descriptions-item>
             <a-descriptions-item label="地铁距离">
-              <a-input v-model="houseData.distance" size="small" style="width: 90px" addon-after="米"/>
+              <a-input v-model="houseData.distance" size="small" style="width: 90px" addon-after="米" />
             </a-descriptions-item>
           </a-descriptions>
-          <a-descriptions title="楼盘概况" :column="4" >
+          <a-descriptions title="楼盘概况" :column="4">
             <a-descriptions-item label="开发商">
               <a-input v-model="houseData.developer" size="small" style="width: 150px" />
             </a-descriptions-item>
@@ -613,16 +616,16 @@
               </a-select>
             </a-descriptions-item>
             <a-descriptions-item label="年限">
-              <a-input v-model="houseData.propertyRights" style="width: 100px" size="small" addon-after="年"/>
+              <a-input v-model="houseData.propertyRights" style="width: 100px" size="small" addon-after="年" />
             </a-descriptions-item>
             <a-descriptions-item label="建筑时间">
-              <a-input v-model="houseData.constructionAge" style="width: 100px" size="small" addon-after="年"/>
+              <a-input v-model="houseData.constructionAge" style="width: 100px" size="small" addon-after="年" />
             </a-descriptions-item>
             <a-descriptions-item label="小区栋数">
-              <a-input v-model="houseData.buildingNumber" style="width: 100px" size="small" addon-after="栋"/>
+              <a-input v-model="houseData.buildingNumber" style="width: 100px" size="small" addon-after="栋" />
             </a-descriptions-item>
             <a-descriptions-item label="小区户数">
-              <a-input v-model="houseData.householdsNumber" style="width: 100px" size="small" addon-after="户"/>
+              <a-input v-model="houseData.householdsNumber" style="width: 100px" size="small" addon-after="户" />
             </a-descriptions-item>
             <a-descriptions-item label="停车位数">
               <a-input v-model="houseData.parkingSpacesNumber" style="width: 100px" size="small" />
@@ -637,10 +640,10 @@
               </a-select>
             </a-descriptions-item>
             <a-descriptions-item label="容积率">
-              <a-input v-model="houseData.volumeRate" style="width: 100px" size="small" addon-after="%"/>
+              <a-input v-model="houseData.volumeRate" style="width: 100px" size="small" addon-after="%" />
             </a-descriptions-item>
             <a-descriptions-item label="绿化率">
-              <a-input v-model="houseData.greeningRate" style="width: 100px" size="small" addon-after="%"/>
+              <a-input v-model="houseData.greeningRate" style="width: 100px" size="small" addon-after="%" />
             </a-descriptions-item>
             <a-descriptions-item label="建筑类型">
               <a-select v-model="houseData.buildingType" size="small" style="width: 100px">
@@ -685,7 +688,7 @@
               </a-select>
             </a-descriptions-item>
             <a-descriptions-item label="小学">
-              <a-input v-model="houseData.primarySchool" size="small" style="width: 100px"/>
+              <a-input v-model="houseData.primarySchool" size="small" style="width: 100px" />
             </a-descriptions-item>
             <a-descriptions-item label="梯队">
               <a-select
@@ -696,64 +699,84 @@
               />
             </a-descriptions-item>
             <a-descriptions-item label="中学">
-              <a-input v-model="houseData.middleSchool" size="small" style="width: 100px"/>
+              <a-input v-model="houseData.middleSchool" size="small" style="width: 100px" />
             </a-descriptions-item>
             <a-descriptions-item label="梯队">
-              <a-select
-                :options="cityEchelonOptions"
-                v-model="houseData.cityEchelon"
-                style="width: 100px"
-                size="small"
-              >
+              <a-select :options="cityEchelonOptions" v-model="houseData.cityEchelon" style="width: 100px" size="small">
               </a-select>
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
             <a-descriptions-item label="1居面积" :span="1">
-              <a-input v-model="houseData.roomArea1Min" style="width: 56px" size="small"/>-
-              <a-input v-model="houseData.roomArea1Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+              <a-input v-model="houseData.roomArea1Min" style="width: 56px" size="small" />-
+              <a-input
+                v-model="houseData.roomArea1Max"
+                style="width: 90px; margin-right:5px"
+                size="small"
+                addon-after="m²"
+              />
             </a-descriptions-item>
             <a-descriptions-item label="1居价格" :span="1">
-              <a-input v-model="houseData.roomPriceRange1Min" style="width: 65px" size="small"/>-
-              <a-input v-model="houseData.roomPriceRange1Max" style="width: 100px" size="small" addon-after="万"/>
+              <a-input v-model="houseData.roomPriceRange1Min" style="width: 65px" size="small" />-
+              <a-input v-model="houseData.roomPriceRange1Max" style="width: 100px" size="small" addon-after="万" />
             </a-descriptions-item>
             <a-descriptions-item label="2居面积" :span="1">
-              <a-input v-model="houseData.roomArea2Min" style="width: 56px" size="small"/>-
-              <a-input v-model="houseData.roomArea2Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+              <a-input v-model="houseData.roomArea2Min" style="width: 56px" size="small" />-
+              <a-input
+                v-model="houseData.roomArea2Max"
+                style="width: 90px; margin-right:5px"
+                size="small"
+                addon-after="m²"
+              />
             </a-descriptions-item>
             <a-descriptions-item label="2居价格" :span="1">
-              <a-input v-model="houseData.roomPriceRange2Min" style="width: 65px" size="small"/>-
-              <a-input v-model="houseData.roomPriceRange2Max" style="width: 100px" size="small" addon-after="万"/>
+              <a-input v-model="houseData.roomPriceRange2Min" style="width: 65px" size="small" />-
+              <a-input v-model="houseData.roomPriceRange2Max" style="width: 100px" size="small" addon-after="万" />
             </a-descriptions-item>
             <a-descriptions-item label="3居面积" :span="1">
-              <a-input v-model="houseData.roomArea3Min" style="width: 56px" size="small"/>-
-              <a-input v-model="houseData.roomArea3Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+              <a-input v-model="houseData.roomArea3Min" style="width: 56px" size="small" />-
+              <a-input
+                v-model="houseData.roomArea3Max"
+                style="width: 90px; margin-right:5px"
+                size="small"
+                addon-after="m²"
+              />
             </a-descriptions-item>
             <a-descriptions-item label="3居价格" :span="1">
-              <a-input v-model="houseData.roomPriceRange3Min" style="width: 65px" size="small"/>-
-              <a-input v-model="houseData.roomPriceRange3Max" style="width: 100px" size="small" addon-after="万"/>
+              <a-input v-model="houseData.roomPriceRange3Min" style="width: 65px" size="small" />-
+              <a-input v-model="houseData.roomPriceRange3Max" style="width: 100px" size="small" addon-after="万" />
             </a-descriptions-item>
             <a-descriptions-item label="多居面积" :span="1">
-              <a-input v-model="houseData.roomArea4Min" style="width: 56px" size="small"/>-
-              <a-input v-model="houseData.roomArea4Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+              <a-input v-model="houseData.roomArea4Min" style="width: 56px" size="small" />-
+              <a-input
+                v-model="houseData.roomArea4Max"
+                style="width: 90px; margin-right:5px"
+                size="small"
+                addon-after="m²"
+              />
             </a-descriptions-item>
             <a-descriptions-item label="多居价格" :span="1">
-              <a-input v-model="houseData.roomPriceRange4Min" style="width: 65px" size="small"/>-
-              <a-input v-model="houseData.roomPriceRange4Max" style="width: 100px" size="small" addon-after="万"/>
+              <a-input v-model="houseData.roomPriceRange4Min" style="width: 65px" size="small" />-
+              <a-input v-model="houseData.roomPriceRange4Max" style="width: 100px" size="small" addon-after="万" />
             </a-descriptions-item>
             <a-descriptions-item label="在售">
-              <a-input v-model="houseData.inStock" style="width: 90px" size="small" addon-after="套"/>
+              <a-input v-model="houseData.inStock" style="width: 90px" size="small" addon-after="套" />
             </a-descriptions-item>
             <a-descriptions-item label="在租">
-              <a-input v-model="houseData.positiveRent" style="width: 90px" size="small" addon-after="套"/>
+              <a-input v-model="houseData.positiveRent" style="width: 90px" size="small" addon-after="套" />
             </a-descriptions-item>
             <a-descriptions-item label="年成交">
-              <a-input v-model="houseData.volume2019" style="width: 90px" size="small" addon-after="套"/>
+              <a-input v-model="houseData.volume2019" style="width: 90px" size="small" addon-after="套" />
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="综合" :column="4">
             <a-descriptions-item label="概括介绍" :span="4">
-              <a-textarea v-model="houseData.communityDesc" style="width: 800px" size="small" :auto-size="{ minRows: 2, maxRows: 6 }"/>
+              <a-textarea
+                v-model="houseData.communityDesc"
+                style="width: 800px"
+                size="small"
+                :auto-size="{ minRows: 2, maxRows: 6 }"
+              />
             </a-descriptions-item>
           </a-descriptions>
         </a-layout-content>
@@ -766,20 +789,23 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse, saveHouse, getLabels } from '@/api/manage'
-import { plateOptions,
-      plateOptions2,
-      areaOptions,
-      metroLineOptions,
-      averageLlistedPriceOptions,
-      totalPriceOptions,
-      roomAreaOptions,
-      constructionAgeOptions,
-      loopSummaryOptions,
-      booleanOptions,
-      cityEchelonOptions,
-      echelonPerformanceOptions,
-      subwaystation,
-      areaPlate, statusMap } from '@/api/data'
+import {
+  plateOptions,
+  plateOptions2,
+  areaOptions,
+  metroLineOptions,
+  averageLlistedPriceOptions,
+  totalPriceOptions,
+  roomAreaOptions,
+  constructionAgeOptions,
+  loopSummaryOptions,
+  booleanOptions,
+  cityEchelonOptions,
+  echelonPerformanceOptions,
+  subwaystation,
+  areaPlate,
+  statusMap
+} from '@/api/data'
 import { AutoComplete } from 'ant-design-vue'
 
 export default {
@@ -912,6 +938,12 @@ export default {
 
     search (parameter) {
       const requestParameters = Object.assign({ sort: this.sort }, parameter, this.queryParam)
+      if (this.queryParam?.isLift?.length !== 1) {
+        delete requestParameters.isLift
+      } else {
+        requestParameters.isLift = requestParameters.isLift[0]
+      }
+
       if (this.queryParam.checkedList) {
         this.queryParam.checkedList.forEach(e => {
           requestParameters[e] = true
@@ -956,7 +988,7 @@ export default {
       } else {
         this.tags = []
       }
-      getLabels().then((data) => {
+      getLabels().then(data => {
         this.labels = data
       })
     },
@@ -1006,15 +1038,15 @@ export default {
     },
 
     newHouse () {
-        this.houseData = {}
-        this.resultdata = this.houseData
-        this.tags = []
-        this.houseData.peopleAndVehicles = 0
-        this.houseData.isLift = 1
-        this.houseData.isConsistentSystem = 0
-        console.log(this.houseData)
-        this.areaRefresh2()
-        this.edit = !this.edit
+      this.houseData = {}
+      this.resultdata = this.houseData
+      this.tags = []
+      this.houseData.peopleAndVehicles = 0
+      this.houseData.isLift = 1
+      this.houseData.isConsistentSystem = 0
+      console.log(this.houseData)
+      this.areaRefresh2()
+      this.edit = !this.edit
     },
 
     handleClose (removedTag) {
@@ -1025,8 +1057,7 @@ export default {
 
     showInput () {
       this.inputVisible = true
-      this.$nextTick(function () {
-      })
+      this.$nextTick(function () {})
     },
 
     handleInputChange (e) {
@@ -1064,20 +1095,18 @@ export default {
       const stationOptions = []
       lines.forEach(line => {
         this.subwaystation.forEach(v => {
-        if (v.line === line) {
-          v.station.forEach(val => {
-            stationOptions.push({ label: val, value: val })
-          })
-        }
-      })
+          if (v.line === line) {
+            v.station.forEach(val => {
+              stationOptions.push({ label: val, value: val })
+            })
+          }
+        })
       })
       return stationOptions
     },
 
     filterOption (input, option) {
-      return (
-        option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
-      )
+      return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
     }
   }
 }
