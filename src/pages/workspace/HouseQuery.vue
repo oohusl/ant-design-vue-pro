@@ -321,7 +321,7 @@
           </a-layout>
         </a-layout-header>
         <a-layout-content class="show-house">
-          <a-descriptions title="基本信息" :column="4" >
+          <a-descriptions title="基本信息" :column="4">
             <a-descriptions-item label="楼盘名称">
               {{ resultdata.communityName }}
             </a-descriptions-item>
@@ -424,21 +424,29 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
-            <a-descriptions-item label="1居" :span="2">
+            <a-descriptions-item label="1居面积" :span="1">
               {{ resultdata.roomArea1Min ? resultdata.roomArea1Min + '-' : ''
-              }}{{ resultdata.roomArea1Max ? resultdata.roomArea1Max + 'm²' : '' }} {{
+              }}{{ resultdata.roomArea1Max ? resultdata.roomArea1Max + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item label="1居价格" :span="1">
+              {{
                 resultdata.roomPriceRange1Min ? resultdata.roomPriceRange1Min + '-' : ''
               }}{{ resultdata.roomPriceRange1Max ? resultdata.roomPriceRange1Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="2居" :span="2">
+            <a-descriptions-item label="2居面积" :span="1">
               {{ resultdata.roomArea2Min ? resultdata.roomArea2Min + '-' : ''
-              }}{{ resultdata.roomArea2Max ? resultdata.roomArea2Max + 'm²' : '' }} {{
-                resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
+              }}{{ resultdata.roomArea2Max ? resultdata.roomArea2Max + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item label="2居价格" :span="1">
+              {{ resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
               }}{{ resultdata.roomPriceRange2Max ? resultdata.roomPriceRange2Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居" :span="2">
+            <a-descriptions-item label="3居面积" :span="2">
               {{ resultdata.roomArea3Min ? resultdata.roomArea3Min + '-' : ''
-              }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }} {{
+              }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item label="3居价格" :span="2">
+              {{
                 resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
               }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
@@ -701,27 +709,35 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
-            <a-descriptions-item label="1居" :span="2">
+            <a-descriptions-item label="1居面积" :span="1">
               <a-input v-model="houseData.roomArea1Min" style="width: 56px" size="small"/>-
               <a-input v-model="houseData.roomArea1Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="1居价格" :span="1">
               <a-input v-model="houseData.roomPriceRange1Min" style="width: 65px" size="small"/>-
               <a-input v-model="houseData.roomPriceRange1Max" style="width: 100px" size="small" addon-after="万"/>
             </a-descriptions-item>
-            <a-descriptions-item label="2居" :span="2">
+            <a-descriptions-item label="2居面积" :span="1">
               <a-input v-model="houseData.roomArea2Min" style="width: 56px" size="small"/>-
               <a-input v-model="houseData.roomArea2Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="2居价格" :span="1">
               <a-input v-model="houseData.roomPriceRange2Min" style="width: 65px" size="small"/>-
               <a-input v-model="houseData.roomPriceRange2Max" style="width: 100px" size="small" addon-after="万"/>
             </a-descriptions-item>
-            <a-descriptions-item label="3居" :span="2">
+            <a-descriptions-item label="3居面积" :span="1">
               <a-input v-model="houseData.roomArea3Min" style="width: 56px" size="small"/>-
               <a-input v-model="houseData.roomArea3Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="3居价格" :span="1">
               <a-input v-model="houseData.roomPriceRange3Min" style="width: 65px" size="small"/>-
               <a-input v-model="houseData.roomPriceRange3Max" style="width: 100px" size="small" addon-after="万"/>
             </a-descriptions-item>
-            <a-descriptions-item label="多居" :span="2">
+            <a-descriptions-item label="多居面积" :span="1">
               <a-input v-model="houseData.roomArea4Min" style="width: 56px" size="small"/>-
               <a-input v-model="houseData.roomArea4Max" style="width: 90px; margin-right:5px" size="small" addon-after="m²"/>
+            </a-descriptions-item>
+            <a-descriptions-item label="多居价格" :span="1">
               <a-input v-model="houseData.roomPriceRange4Min" style="width: 65px" size="small"/>-
               <a-input v-model="houseData.roomPriceRange4Max" style="width: 100px" size="small" addon-after="万"/>
             </a-descriptions-item>
