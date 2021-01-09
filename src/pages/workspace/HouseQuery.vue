@@ -300,7 +300,7 @@
             >
               <div>
                 {{ resultdata.communityName
-                }}<span style="font-size:16px;color: #B71C2B;">均价 {{ resultdata.averageLlistedPrice }}元/m²</span>
+                }}<span style="font-size:16px;color: #B71C2B; margin-left: 12px">均价 {{ resultdata.averageLlistedPrice }}元/m²</span>
               </div>
               <div>
                 <template v-for="tag in tags">
@@ -322,10 +322,10 @@
         </a-layout-header>
         <a-layout-content class="show-house">
           <a-descriptions title="基本信息" :column="4" >
-            <a-descriptions-item label="楼盘名称" :span="2">
+            <a-descriptions-item label="楼盘名称">
               {{ resultdata.communityName }}
             </a-descriptions-item>
-            <a-descriptions-item label="楼盘地址" :span="2">
+            <a-descriptions-item label="楼盘地址" :span="3">
               {{ resultdata.address }}
             </a-descriptions-item>
             <a-descriptions-item label="所属区域">
@@ -424,25 +424,25 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
-            <a-descriptions-item label="1居">
+            <a-descriptions-item label="1居" :span="2">
               {{ resultdata.roomArea1Min ? resultdata.roomArea1Min + '-' : ''
               }}{{ resultdata.roomArea1Max ? resultdata.roomArea1Max + 'm²' : '' }} {{
                 resultdata.roomPriceRange1Min ? resultdata.roomPriceRange1Min + '-' : ''
               }}{{ resultdata.roomPriceRange1Max ? resultdata.roomPriceRange1Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="2居">
+            <a-descriptions-item label="2居" :span="2">
               {{ resultdata.roomArea2Min ? resultdata.roomArea2Min + '-' : ''
               }}{{ resultdata.roomArea2Max ? resultdata.roomArea2Max + 'm²' : '' }} {{
                 resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
               }}{{ resultdata.roomPriceRange2Max ? resultdata.roomPriceRange2Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居">
+            <a-descriptions-item label="3居" :span="2">
               {{ resultdata.roomArea3Min ? resultdata.roomArea3Min + '-' : ''
               }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }} {{
                 resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
               }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="多居">
+            <a-descriptions-item label="多居" :span="2">
               {{ resultdata.roomArea4Min ? resultdata.roomArea4Min + '-' : ''
               }}{{ resultdata.roomArea4Max ? resultdata.roomArea4Max + 'm²' : '' }} {{
                 resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
@@ -480,7 +480,7 @@
               <div>
                 {{ houseData.communityName
                 }}<span
-                  style="font-size:16px;color: #B71C2B;"
+                  style="font-size:16px;color: #B71C2B; margin-left: 12px"
                 >均价
                   <a-input-number v-model="houseData.averageLlistedPrice" size="small" style="width: 100px" />
                   元/m²</span
