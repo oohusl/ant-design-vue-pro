@@ -28,24 +28,28 @@
             </a-input>
           </AutoComplete>
         </div>
-        <div class="house-query-search-button">
-          <a-button @click="resetSearchForm()">
-            重置
-          </a-button>
-          <a-button @click="newHouse()" :style="{ marginLeft: '10px' }">
-            新建
-          </a-button>
-        </div>
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
           <a-form-item label="区域">
-            <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
+            <a-checkbox-group v-model="queryParam.area" size="small">
+              <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="bottomLeft">
+                <template slot="content">
+                  <a-checkbox-group v-model="plates[options.value]" @change="refleshPlate(options.value)">
+                    <template v-for="(plateOption, i) in getPlate(options.value)">
+                      <a-checkbox :value="plateOption.value" :key="plateOption.value">{{
+                        plateOption.label
+                      }}</a-checkbox>
+                      <br v-if="i > 9 && i % 10 === 0" :key="plateOption.value" />
+                    </template>
+                  </a-checkbox-group>
+                </template>
+                <a-checkbox :value="options.value">{{ options.label }}</a-checkbox>
+              </a-popover>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="板块" v-if="plateOptions.length">
-            <a-checkbox-group v-model="queryParam.plate" :options="plateOptions" size="small" @change="refresh">
-            </a-checkbox-group>
+          <a-form-item label="板块" v-if="queryParam.plate">
+            <a-tag v-for="p in queryParam.plate" :key="p">{{ p }}</a-tag>
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions" @change="refresh">
@@ -179,9 +183,19 @@
                   <a-checkbox :value="true">
                     有电梯
                   </a-checkbox>
-                  <a-checkbox :value="false">
-                    无电梯
-                  </a-checkbox>
+                  <a-popover title="Title" trigger="hover">
+                    <template slot="content">
+                      <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
+                        <a-checkbox value="1"> 一房 </a-checkbox>
+                        <a-checkbox value="2"> 二房 </a-checkbox>
+                        <a-checkbox value="3"> 三房 </a-checkbox>
+                        <a-checkbox value="4"> 其他 </a-checkbox>
+                      </a-checkbox-group>
+                    </template>
+                    <a-checkbox :value="false">
+                      无电梯
+                    </a-checkbox>
+                  </a-popover>
                 </a-checkbox-group>
               </a-form-item>
             </a-col>
@@ -208,9 +222,20 @@
               </a-form-item>
             </a-col>
           </a-row>
-
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
-            <a @click="toggleAdvanced"> 显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" /> </a>
+            <a-button @click="refresh()" type="primary">
+              查询
+            </a-button>
+            <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }">
+              重置
+            </a-button>
+            <a-button @click="newHouse()" :style="{ marginLeft: '8px' }">
+              新建
+            </a-button>
+
+            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggleAdvanced">
+              {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
+            </a>
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -874,7 +899,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: {},
+      queryParam: { area: [] },
       moreQuery: false,
       inputVisible: false,
       tags: [],
@@ -939,7 +964,8 @@ export default {
       statusMap,
       sortType: 'asc',
       size: 20,
-      loading: false
+      loading: false,
+      plates: {}
     }
   },
   filters: {
@@ -995,6 +1021,7 @@ export default {
         date: moment(new Date()),
         area: []
       }
+      this.plates = {}
       this.areaRefresh()
     },
 
@@ -1040,6 +1067,36 @@ export default {
           plateOptions2.push({ label: v, value: v })
         })
       }
+    },
+
+    getPlate (area) {
+      const plates = []
+      areaPlate[area].forEach(v => {
+        plates.push({ label: v, value: v })
+      })
+      return plates
+    },
+
+    refleshPlate (area) {
+      if (this.plates[area].length > 0) {
+        if (this.queryParam.area.indexOf(area) < 0) {
+          this.queryParam.area.push(area)
+        }
+      } else {
+        if (this.queryParam.area.indexOf(area) >= 0) {
+          this.queryParam.area.forEach((item, index, arr) => {
+              if (item === area) {
+                arr.splice(index, 1)
+            }
+          })
+        }
+      }
+      this.queryParam.plate = []
+      Object.keys(this.plates).forEach(key => {
+        if (this.plates[key].length > 0) {
+          this.queryParam.plate.push(...this.plates[key])
+        }
+      })
     },
 
     showdetail (community) {
@@ -1178,7 +1235,10 @@ export default {
     },
 
     windowScroll () {
-      if (document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 < document.documentElement.scrollTop) {
+      if (
+        document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 <
+        document.documentElement.scrollTop
+      ) {
         if (!this.loading) {
           this.loading = true
           setTimeout(() => {
