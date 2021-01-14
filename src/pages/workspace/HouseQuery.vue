@@ -455,17 +455,19 @@
               {{ resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
               }}{{ resultdata.roomPriceRange2Max ? resultdata.roomPriceRange2Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居面积" :span="2">
+            <a-descriptions-item label="3居面积" :span="1">
               {{ resultdata.roomArea3Min ? resultdata.roomArea3Min + '-' : ''
               }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居价格" :span="2">
+            <a-descriptions-item label="3居价格" :span="1">
               {{ resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
               }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="多居" :span="2">
+            <a-descriptions-item label="多居面积" :span="1">
               {{ resultdata.roomArea4Min ? resultdata.roomArea4Min + '-' : ''
               }}{{ resultdata.roomArea4Max ? resultdata.roomArea4Max + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item label="多居价格" :span="1">
               {{ resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
               }}{{ resultdata.roomPriceRange4Max ? resultdata.roomPriceRange4Max + '万' : '' }}
             </a-descriptions-item>
@@ -911,6 +913,9 @@ export default {
   },
   created () {
     this.search({})
+    getLabels().then(data => {
+      this.labels = data
+    })
   },
   computed: {
     rowSelection () {
@@ -1000,9 +1005,6 @@ export default {
       } else {
         this.tags = []
       }
-      getLabels().then(data => {
-        this.labels = data
-      })
     },
     sortfilter (type) {
       console.log(type)
