@@ -37,7 +37,7 @@
           </a-button>
         </div>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff',padding: '0 128px' }">
+      <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
           <a-form-item label="区域">
             <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
@@ -172,10 +172,8 @@
               </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="" :style="{fontSize: '12px',textAlign: 'right' }" :wrapper-col="{ span: 22 }">
-            <a @click="toggleAdvanced">
-              显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" />
-            </a>
+          <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'right' }" :wrapper-col="{ span: 22 }">
+            <a @click="toggleAdvanced"> 显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" /> </a>
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -333,9 +331,6 @@
             <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
               <a-button @click="edithouse()">
                 编辑
-              </a-button>
-              <a-button @click="newHouse()" type="danger" :style="{ marginLeft: '10px' }">
-                新建
               </a-button>
             </a-layout-sider>
           </a-layout>
@@ -514,7 +509,7 @@
               </div>
               <div>
                 <template v-for="tag in tags">
-                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :style="iscustomTag(tag)">
+                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :color="isCustomTag(tag)">
                     {{ tag }}
                   </a-tag>
                 </template>
@@ -1126,12 +1121,12 @@ export default {
     filterOption (input, option) {
       return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
     },
-    iscustomTag (tag) {
+    isCustomTag (tag) {
       console.log(tag)
       if (this.labels.includes(tag)) {
-        return {}
+        return ''
       }
-      return { 'background-color': 'red' }
+      return 'red'
     }
   }
 }
@@ -1158,7 +1153,7 @@ export default {
   width: 552px;
   margin: 0 auto;
 }
-.house-query-search-button{
+.house-query-search-button {
   position: absolute;
   top: 26px;
   left: calc(50% + 300px);
