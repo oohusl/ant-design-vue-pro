@@ -938,7 +938,8 @@ export default {
       subwaystation,
       statusMap,
       sortType: 'asc',
-      size: 20
+      size: 20,
+      loading: false
     }
   },
   filters: {
@@ -1178,10 +1179,15 @@ export default {
 
     windowScroll () {
       if (document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 < document.documentElement.scrollTop) {
-        setTimeout(() => {
-          this.size += 20
-          this.search({ size: this.size })
-        }, 100)
+        if (!this.loading) {
+          this.loading = true
+          setTimeout(() => {
+            this.loading = false
+            this.size = this.results.length
+            this.size += 20
+            this.search({ size: this.size })
+          }, 100)
+        }
       }
     }
   }
