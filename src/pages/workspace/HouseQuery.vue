@@ -172,7 +172,7 @@
               </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="" :style="{fontSize: '12px',textAlign: 'right' }" :wrapper-col="{ span: 22 }">
+          <a-form-item label="" :style="{fontSize: '12px',textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a @click="toggleAdvanced">
               显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
@@ -917,6 +917,9 @@ export default {
   created () {
     this.search({})
   },
+  mounted () {
+    document.getElementById('app').addEventListener('scroll', this.Scroll)
+  },
   computed: {
     rowSelection () {
       return {
@@ -1132,6 +1135,9 @@ export default {
         return {}
       }
       return { 'background-color': 'red' }
+    },
+    scroll (event) {
+      console.log(event)
     }
   }
 }
