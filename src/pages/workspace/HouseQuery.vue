@@ -180,15 +180,10 @@
               </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-<<<<<<< HEAD
           <a-form-item label="" :style="{fontSize: '12px',textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a @click="toggleAdvanced">
               显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
-=======
-          <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'right' }" :wrapper-col="{ span: 22 }">
-            <a @click="toggleAdvanced"> 显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" /> </a>
->>>>>>> 241d3ffa02fcc65a0c0a568ff6f48a90402185c1
           </a-form-item>
         </a-form>
         <!-- 列表 -->
