@@ -900,7 +900,8 @@ export default {
       echelonPerformanceOptions,
       subwaystation,
       statusMap,
-      sortType: 'asc'
+      sortType: 'asc',
+      size: 20
     }
   },
   filters: {
@@ -918,7 +919,10 @@ export default {
     })
   },
   mounted () {
-    document.getElementById('app').addEventListener('scroll', this.Scroll)
+    window.addEventListener('scroll', this.windowScroll)
+  },
+  beforeDestroy () {
+    window.removeEventListener('scroll', this.windowScroll)
   },
   computed: {
     rowSelection () {
@@ -1126,12 +1130,22 @@ export default {
     filterOption (input, option) {
       return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
     },
+
     isCustomTag (tag) {
       console.log(tag)
       if (this.labels.includes(tag)) {
         return ''
       }
       return 'red'
+    },
+
+    windowScroll () {
+      if (document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 < document.documentElement.scrollTop) {
+        setTimeout(() => {
+          this.size += 20
+          this.search({ size: this.size })
+        }, 100)
+      }
     }
   }
 }
