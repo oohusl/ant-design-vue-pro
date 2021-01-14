@@ -52,11 +52,29 @@
             <a-tag v-for="p in queryParam.plate" :key="p">{{ p }}</a-tag>
           </a-form-item>
           <a-form-item label="环线">
-            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions" @change="refresh">
-            </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁线">
-            <a-checkbox-group v-model="queryParam.metroLine" :options="metroLineOptions" @change="refresh">
+            <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
+              <template v-for="i in metroLineOptions.length % 10">
+                <a-row :key="i" style="width: 100%">
+                  <a-col :span="2" v-for="j in 10" :key="j" v-if="(i - 1) * 10 + j - 1 < metroLineOptions.length - 1">
+                    <a-popover trigger="hover" placement="bottomLeft">
+                      <template slot="content">
+                        <a-checkbox-group v-model="subwayStations[metroLineOptions[(i - 1) * 10 + j - 1].value]" @change="refleshSubwayStations(options.value)">
+                          <template v-for="(subwayStation, k) in getSubwayStation(metroLineOptions[(i - 1) * 10 + j - 1].value)">
+                            <a-checkbox :value="subwayStation" :key="subwayStation">{{
+                              subwayStation
+                            }}</a-checkbox>
+                            <br v-if="k > 9 && k % 10 === 0" :key="subwayStation" />
+                          </template>
+                        </a-checkbox-group>
+                      </template>
+                      <a-checkbox :value="metroLineOptions[(i - 1) * 10 + j - 1].value">{{ metroLineOptions[(i - 1) * 10 + j - 1].label }}</a-checkbox>
+                    </a-popover>
+                  </a-col>
+                </a-row>
+              </template>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁站" v-if="queryParam.metroLine && queryParam.metroLine.length">
@@ -66,7 +84,7 @@
           <a-row :gutter="24">
             <a-col :span="12">
               <a-form-item label="学校" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
+                <a-checkbox-group v-model="queryParam.schoolType">
                   <a-checkbox value="小学">小学</a-checkbox>
                   <a-checkbox value="中学">中学</a-checkbox>
                   <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
@@ -78,7 +96,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-item label="户型" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
+                <a-checkbox-group v-model="queryParam.roomType">
                   <a-checkbox value="1"> 一房 </a-checkbox>
                   <a-checkbox value="2"> 二房 </a-checkbox>
                   <a-checkbox value="3"> 三房 </a-checkbox>
@@ -91,7 +109,7 @@
             <!-- <a-checkbox-group
               v-model="queryParam.averageLlistedPrice"
               :options="averageLlistedPriceOptions"
-              @change="refresh"
+
             >
             </a-checkbox-group> -->
             <a-select
@@ -134,7 +152,7 @@
             </a-form-item>
           </a-form-item>
           <a-form-item label="面积">
-            <!-- <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" @change="refresh">
+            <!-- <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" >
             </a-checkbox-group> -->
             <a-select
               v-model="queryParam.roomArea"
@@ -167,7 +185,7 @@
             </a-col>
             <a-col :span="12">
               <a-form-item label="建筑类型" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.buildingType" @change="refresh">
+                <a-checkbox-group v-model="queryParam.buildingType">
                   <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
                   <a-checkbox value="板楼"> 板楼 </a-checkbox>
                   <a-checkbox value="塔板结合"> 塔板结合 </a-checkbox>
@@ -185,7 +203,7 @@
                   </a-checkbox>
                   <a-popover title="Title" trigger="hover">
                     <template slot="content">
-                      <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
+                      <a-checkbox-group v-model="queryParam.roomType">
                         <a-checkbox value="1"> 一房 </a-checkbox>
                         <a-checkbox value="2"> 二房 </a-checkbox>
                         <a-checkbox value="3"> 三房 </a-checkbox>
@@ -204,7 +222,7 @@
                 <!-- <a-checkbox-group
                   v-model="queryParam.constructionAge"
                   :options="constructionAgeOptions"
-                  @change="refresh"
+
                 >
                 </a-checkbox-group> -->
 
@@ -965,7 +983,8 @@ export default {
       sortType: 'asc',
       size: 20,
       loading: false,
-      plates: {}
+      plates: {},
+      subwayStations: {}
     }
   },
   filters: {
@@ -1077,6 +1096,15 @@ export default {
       return plates
     },
 
+    getSubwayStation (i) {
+      subwaystation.forEach(v => {
+        if (v.line === i) {
+          return v.station
+        }
+      })
+      return []
+    },
+
     refleshPlate (area) {
       if (this.plates[area].length > 0) {
         if (this.queryParam.area.indexOf(area) < 0) {
@@ -1085,8 +1113,8 @@ export default {
       } else {
         if (this.queryParam.area.indexOf(area) >= 0) {
           this.queryParam.area.forEach((item, index, arr) => {
-              if (item === area) {
-                arr.splice(index, 1)
+            if (item === area) {
+              arr.splice(index, 1)
             }
           })
         }
@@ -1097,6 +1125,9 @@ export default {
           this.queryParam.plate.push(...this.plates[key])
         }
       })
+    },
+
+    refleshSubwayStations (line) {
     },
 
     showdetail (community) {
