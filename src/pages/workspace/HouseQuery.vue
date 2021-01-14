@@ -37,7 +37,7 @@
           </a-button>
         </div>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff',padding: '0 128px' }">
+      <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
           <a-form-item label="区域">
             <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
@@ -172,10 +172,15 @@
               </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
+<<<<<<< HEAD
           <a-form-item label="" :style="{fontSize: '12px',textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a @click="toggleAdvanced">
               显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
+=======
+          <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'right' }" :wrapper-col="{ span: 22 }">
+            <a @click="toggleAdvanced"> 显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" /> </a>
+>>>>>>> 241d3ffa02fcc65a0c0a568ff6f48a90402185c1
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -334,9 +339,6 @@
               <a-button @click="edithouse()">
                 编辑
               </a-button>
-              <a-button @click="newHouse()" type="danger" :style="{ marginLeft: '10px' }">
-                新建
-              </a-button>
             </a-layout-sider>
           </a-layout>
         </a-layout-header>
@@ -460,17 +462,19 @@
               {{ resultdata.roomPriceRange2Min ? resultdata.roomPriceRange2Min + '-' : ''
               }}{{ resultdata.roomPriceRange2Max ? resultdata.roomPriceRange2Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居面积" :span="2">
+            <a-descriptions-item label="3居面积" :span="1">
               {{ resultdata.roomArea3Min ? resultdata.roomArea3Min + '-' : ''
               }}{{ resultdata.roomArea3Max ? resultdata.roomArea3Max + 'm²' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="3居价格" :span="2">
+            <a-descriptions-item label="3居价格" :span="1">
               {{ resultdata.roomPriceRange3Min ? resultdata.roomPriceRange3Min + '-' : ''
               }}{{ resultdata.roomPriceRange3Max ? resultdata.roomPriceRange3Max + '万' : '' }}
             </a-descriptions-item>
-            <a-descriptions-item label="多居" :span="2">
+            <a-descriptions-item label="多居面积" :span="1">
               {{ resultdata.roomArea4Min ? resultdata.roomArea4Min + '-' : ''
               }}{{ resultdata.roomArea4Max ? resultdata.roomArea4Max + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item label="多居价格" :span="1">
               {{ resultdata.roomPriceRange4Min ? resultdata.roomPriceRange4Min + '-' : ''
               }}{{ resultdata.roomPriceRange4Max ? resultdata.roomPriceRange4Max + '万' : '' }}
             </a-descriptions-item>
@@ -514,7 +518,7 @@
               </div>
               <div>
                 <template v-for="tag in tags">
-                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :style="iscustomTag(tag)">
+                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :color="isCustomTag(tag)">
                     {{ tag }}
                   </a-tag>
                 </template>
@@ -916,6 +920,9 @@ export default {
   },
   created () {
     this.search({})
+    getLabels().then(data => {
+      this.labels = data
+    })
   },
   mounted () {
     document.getElementById('app').addEventListener('scroll', this.Scroll)
@@ -1008,9 +1015,6 @@ export default {
       } else {
         this.tags = []
       }
-      getLabels().then(data => {
-        this.labels = data
-      })
     },
     sortfilter (type) {
       console.log(type)
@@ -1129,15 +1133,12 @@ export default {
     filterOption (input, option) {
       return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
     },
-    iscustomTag (tag) {
+    isCustomTag (tag) {
       console.log(tag)
       if (this.labels.includes(tag)) {
-        return {}
+        return ''
       }
-      return { 'background-color': 'red' }
-    },
-    scroll (event) {
-      console.log(event)
+      return 'red'
     }
   }
 }
@@ -1164,7 +1165,7 @@ export default {
   width: 552px;
   margin: 0 auto;
 }
-.house-query-search-button{
+.house-query-search-button {
   position: absolute;
   top: 26px;
   left: calc(50% + 300px);
