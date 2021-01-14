@@ -28,8 +28,16 @@
             </a-input>
           </AutoComplete>
         </div>
+        <div class="house-query-search-button">
+          <a-button @click="resetSearchForm()">
+            重置
+          </a-button>
+          <a-button @click="newHouse()" :style="{ marginLeft: '10px' }">
+            新建
+          </a-button>
+        </div>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff', margin: '0px 16px 0', padding: '0 128px' }">
+      <a-layout-content :style="{ background: '#ffffff',padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
           <a-form-item label="区域">
             <a-checkbox-group v-model="queryParam.area" :options="areaOptions" size="small" @change="areaRefresh">
@@ -51,24 +59,30 @@
             <a-checkbox-group v-model="queryParam.subwayStation" :options="getLineStation(queryParam.metroLine)">
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="学校">
-            <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
-              <a-checkbox value="小学">小学</a-checkbox>
-              <a-checkbox value="中学">中学</a-checkbox>
-              <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
-            </a-checkbox-group>
-            <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
-              <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
-            </a-form-item>
-          </a-form-item>
-          <a-form-item label="户型">
-            <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
-              <a-checkbox value="1"> 一房 </a-checkbox>
-              <a-checkbox value="2"> 二房 </a-checkbox>
-              <a-checkbox value="3"> 三房 </a-checkbox>
-              <a-checkbox value="4"> 其他 </a-checkbox>
-            </a-checkbox-group>
-          </a-form-item>
+          <a-row :gutter="24">
+            <a-col :span="12">
+              <a-form-item label="学校" :label-col="{ span: 4 }">
+                <a-checkbox-group v-model="queryParam.schoolType" @change="refresh">
+                  <a-checkbox value="小学">小学</a-checkbox>
+                  <a-checkbox value="中学">中学</a-checkbox>
+                  <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
+                </a-checkbox-group>
+                <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
+                  <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
+                </a-form-item>
+              </a-form-item>
+            </a-col>
+            <a-col :span="12">
+              <a-form-item label="户型" :label-col="{ span: 4 }">
+                <a-checkbox-group v-model="queryParam.roomType" @change="refresh">
+                  <a-checkbox value="1"> 一房 </a-checkbox>
+                  <a-checkbox value="2"> 二房 </a-checkbox>
+                  <a-checkbox value="3"> 三房 </a-checkbox>
+                  <a-checkbox value="4"> 其他 </a-checkbox>
+                </a-checkbox-group>
+              </a-form-item>
+            </a-col>
+          </a-row>
           <a-form-item label="单价">
             <a-checkbox-group
               v-model="queryParam.averageLlistedPrice"
@@ -97,9 +111,7 @@
                 {{ i.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
-          <a-form-item label=" " :colon="false">
-            <a-form-item :style="{ display: 'inline-block', width: '63px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '63px', 'margin-left': '100px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
@@ -122,9 +134,7 @@
                 {{ i.label }}
               </a-select-option>
             </a-select>
-          </a-form-item>
-          <a-form-item label=" " :colon="false">
-            <a-form-item :style="{ display: 'inline-block', width: '63px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '63px', 'margin-left': '100px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
@@ -133,11 +143,11 @@
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '44px', textAlign: 'center' }"> 平方 </span>
           </a-form-item>
-          <a-form-item label="建筑年代">
+          <a-form-item label="建筑年代" v-if="advanced">
             <a-checkbox-group v-model="queryParam.constructionAge" :options="constructionAgeOptions" @change="refresh">
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="建筑类型">
+          <a-form-item label="建筑类型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.buildingType" @change="refresh">
               <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
               <a-checkbox value="板楼"> 板楼 </a-checkbox>
@@ -145,14 +155,14 @@
               <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="类型">
+          <a-form-item label="类型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.cellAttributes">
               <a-checkbox value="住宅"> 住宅 </a-checkbox>
               <a-checkbox value="别墅"> 别墅 </a-checkbox>
               <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="电梯">
+          <a-form-item label="电梯" v-if="advanced">
             <a-checkbox-group v-model="queryParam.isLift">
               <a-checkbox :value="true">
                 有电梯
@@ -161,6 +171,11 @@
                 无电梯
               </a-checkbox>
             </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="" :style="{fontSize: '12px',textAlign: 'right' }" :wrapper-col="{ span: 22 }">
+            <a @click="toggleAdvanced">
+              显示更多搜索 <a-icon :type="advanced ? 'up' : 'down'" />
+            </a>
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -319,7 +334,7 @@
               <a-button @click="edithouse()">
                 编辑
               </a-button>
-              <a-button @click="newHouse()" type="danger">
+              <a-button @click="newHouse()" type="danger" :style="{ marginLeft: '10px' }">
                 新建
               </a-button>
             </a-layout-sider>
@@ -499,7 +514,7 @@
               </div>
               <div>
                 <template v-for="tag in tags">
-                  <a-tag :key="tag" closable @close="() => handleClose(tag)">
+                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :style="iscustomTag(tag)">
                     {{ tag }}
                   </a-tag>
                 </template>
@@ -932,8 +947,10 @@ export default {
     },
     resetSearchForm () {
       this.queryParam = {
-        date: moment(new Date())
+        date: moment(new Date()),
+        area: []
       }
+      this.areaRefresh()
     },
 
     search (parameter) {
@@ -1038,6 +1055,7 @@ export default {
     },
 
     newHouse () {
+      this.moreQuery = true
       this.houseData = {}
       this.resultdata = this.houseData
       this.tags = []
@@ -1046,7 +1064,7 @@ export default {
       this.houseData.isConsistentSystem = 0
       console.log(this.houseData)
       this.areaRefresh2()
-      this.edit = !this.edit
+      this.edit = true
     },
 
     handleClose (removedTag) {
@@ -1107,6 +1125,13 @@ export default {
 
     filterOption (input, option) {
       return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
+    },
+    iscustomTag (tag) {
+      console.log(tag)
+      if (this.labels.includes(tag)) {
+        return {}
+      }
+      return { 'background-color': 'red' }
     }
   }
 }
@@ -1132,6 +1157,11 @@ export default {
 .house-query-search-holder {
   width: 552px;
   margin: 0 auto;
+}
+.house-query-search-button{
+  position: absolute;
+  top: 26px;
+  left: calc(50% + 300px);
 }
 .ant-checkbox-wrapper + .ant-checkbox-wrapper {
   margin-left: 0;
