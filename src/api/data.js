@@ -364,14 +364,6 @@ export const statusMap = {
       value: '13'
     },
     {
-      label: '14号线',
-      value: '14'
-    },
-    {
-      label: '15号线',
-      value: '15'
-    },
-    {
       label: '16号线',
       value: '16'
     },

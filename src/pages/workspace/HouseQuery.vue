@@ -56,30 +56,28 @@
           </a-form-item>
           <a-form-item label="地铁线">
             <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
-              <template v-for="i in metroLineOptions.length % 10">
+              <template v-for="i in Math.ceil(metroLineOptions.length / 8)">
                 <a-row :key="i" style="width: 100%">
-                  <a-col :span="2" v-for="j in 10" :key="j" v-if="(i - 1) * 10 + j - 1 < metroLineOptions.length - 1">
-                    <a-popover trigger="hover" placement="bottomLeft">
+                  <a-col :span="3" v-for="j in 8" :key="j">
+                    <a-popover trigger="hover" placement="topLeft" v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1">
                       <template slot="content">
-                        <a-checkbox-group v-model="subwayStations[metroLineOptions[(i - 1) * 10 + j - 1].value]" @change="refleshSubwayStations(options.value)">
-                          <template v-for="(subwayStation, k) in getSubwayStation(metroLineOptions[(i - 1) * 10 + j - 1].value)">
+                        <a-checkbox-group v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]" @change="refleshSubwayStations">
+                          <template v-for="subwayStation in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)">
                             <a-checkbox :value="subwayStation" :key="subwayStation">{{
                               subwayStation
                             }}</a-checkbox>
-                            <br v-if="k > 9 && k % 10 === 0" :key="subwayStation" />
                           </template>
                         </a-checkbox-group>
                       </template>
-                      <a-checkbox :value="metroLineOptions[(i - 1) * 10 + j - 1].value">{{ metroLineOptions[(i - 1) * 10 + j - 1].label }}</a-checkbox>
+                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{ metroLineOptions[(i - 1) * 8 + j - 1].label }}</a-checkbox>
                     </a-popover>
                   </a-col>
                 </a-row>
               </template>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="地铁站" v-if="queryParam.metroLine && queryParam.metroLine.length">
-            <a-checkbox-group v-model="queryParam.subwayStation" :options="getLineStation(queryParam.metroLine)">
-            </a-checkbox-group>
+          <a-form-item label="地铁站" v-if="queryParam.subwayStation && queryParam.subwayStation.length">
+            <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
           </a-form-item>
           <a-row :gutter="24">
             <a-col :span="12">
@@ -94,17 +92,15 @@
                 </a-form-item>
               </a-form-item>
             </a-col>
-            <a-col :span="12">
-              <a-form-item label="户型" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.roomType">
-                  <a-checkbox value="1"> 一房 </a-checkbox>
-                  <a-checkbox value="2"> 二房 </a-checkbox>
-                  <a-checkbox value="3"> 三房 </a-checkbox>
-                  <a-checkbox value="4"> 其他 </a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-            </a-col>
           </a-row>
+          <a-form-item label="户型">
+            <a-checkbox-group v-model="queryParam.roomType">
+              <a-checkbox value="1"> 一房 </a-checkbox>
+              <a-checkbox value="2"> 二房 </a-checkbox>
+              <a-checkbox value="3"> 三房 </a-checkbox>
+              <a-checkbox value="4"> 其他 </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="单价">
             <!-- <a-checkbox-group
               v-model="queryParam.averageLlistedPrice"
@@ -201,19 +197,9 @@
                   <a-checkbox :value="true">
                     有电梯
                   </a-checkbox>
-                  <a-popover title="Title" trigger="hover">
-                    <template slot="content">
-                      <a-checkbox-group v-model="queryParam.roomType">
-                        <a-checkbox value="1"> 一房 </a-checkbox>
-                        <a-checkbox value="2"> 二房 </a-checkbox>
-                        <a-checkbox value="3"> 三房 </a-checkbox>
-                        <a-checkbox value="4"> 其他 </a-checkbox>
-                      </a-checkbox-group>
-                    </template>
-                    <a-checkbox :value="false">
-                      无电梯
-                    </a-checkbox>
-                  </a-popover>
+                  <a-checkbox :value="false">
+                    无电梯
+                  </a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
             </a-col>
@@ -1097,12 +1083,13 @@ export default {
     },
 
     getSubwayStation (i) {
+      let s = []
       subwaystation.forEach(v => {
         if (v.line === i) {
-          return v.station
+          s = v.station
         }
       })
-      return []
+      return s
     },
 
     refleshPlate (area) {
@@ -1127,7 +1114,12 @@ export default {
       })
     },
 
-    refleshSubwayStations (line) {
+    refleshSubwayStations () {
+      this.queryParam.subwayStation = []
+      const that = this
+      Object.keys(this.subwayStations).forEach(e => {
+        that.queryParam.subwayStation.push(...that.subwayStations[e])
+      })
     },
 
     showdetail (community) {
@@ -1141,14 +1133,14 @@ export default {
     },
     sortfilter (type) {
       console.log(type)
-      if (type) {
-        this.sort = type + ',' + this.sortType
-        this.search()
-      }
       if (this.sortType === 'asc') {
         this.sortType = 'desc'
       } else {
         this.sortType = 'asc'
+      }
+      if (type) {
+        this.sort = type + ',' + this.sortType
+        this.search()
       }
     },
 
