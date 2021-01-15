@@ -296,8 +296,8 @@
                         }"
                       >
                         <a-form
-                          :label-col="{ span: 2 }"
-                          :wrapper-col="{ span: 8 }"
+                          :label-col="{ span: 3 }"
+                          :wrapper-col="{ span: 21 }"
                           :label-align="left"
                           style="width:100%"
                         >
