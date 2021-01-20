@@ -48,7 +48,7 @@
               </a-popover>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="板块" v-if="queryParam.plate">
+          <a-form-item label="板块" v-if="queryParam.plate && queryParam.plate.length > 0">
             <a-tag v-for="p in queryParam.plate" :key="p">{{ p }}</a-tag>
           </a-form-item>
           <a-form-item label="环线">
@@ -59,17 +59,26 @@
               <template v-for="i in Math.ceil(metroLineOptions.length / 8)">
                 <a-row :key="i" style="width: 100%">
                   <a-col :span="3" v-for="j in 8" :key="j">
-                    <a-popover trigger="hover" placement="topLeft" v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1">
+                    <a-popover
+                      trigger="hover"
+                      placement="topLeft"
+                      v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1"
+                    >
                       <template slot="content">
-                        <a-checkbox-group v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]" @change="refleshSubwayStations">
-                          <template v-for="subwayStation in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)">
-                            <a-checkbox :value="subwayStation" :key="subwayStation">{{
-                              subwayStation
-                            }}</a-checkbox>
+                        <a-checkbox-group
+                          v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
+                          @change="refleshSubwayStations"
+                        >
+                          <template
+                            v-for="subwayStation in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
+                          >
+                            <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
                           </template>
                         </a-checkbox-group>
                       </template>
-                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{ metroLineOptions[(i - 1) * 8 + j - 1].label }}</a-checkbox>
+                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{
+                        metroLineOptions[(i - 1) * 8 + j - 1].label
+                      }}</a-checkbox>
                     </a-popover>
                   </a-col>
                 </a-row>
@@ -111,6 +120,7 @@
             <a-select
               v-model="queryParam.averageLlistedPrice"
               mode="multiple"
+              showArrow="true"
               size="small"
               placeholder="请选择单价"
               style="width: 280px"
@@ -131,19 +141,27 @@
             <a-select
               v-model="queryParam.totalPrice"
               mode="multiple"
+              showArrow="true"
               size="small"
               placeholder="请选择总价"
               style="width: 280px"
+              @select="totalPriceSelect"
             >
+              <a-select-option value="edit">自定义区间</a-select-option>
               <a-select-option v-for="i in totalPriceOptions" :key="i.value" :value="i.value" :label="i.label">
                 {{ i.label }}
               </a-select-option>
             </a-select>
-            <a-form-item :style="{ display: 'inline-block', width: '63px', 'margin-left': '50px' }">
+            <a-form-item
+              :style="{ display: 'inline-block', width: '63px', 'margin-left': '50px' }"
+              v-if="queryParam.totalPrice && queryParam.totalPrice.indexOf('edit') >= 0"
+            >
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
-            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '100px' }">
+            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }" v-if="queryParam.totalPrice && queryParam.totalPrice.indexOf('edit') >= 0">
+              -
+            </span>
+            <a-form-item :style="{ display: 'inline-block', width: '100px' }" v-if="queryParam.totalPrice && queryParam.totalPrice.indexOf('edit') >= 0">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" addon-after="万" />
             </a-form-item>
           </a-form-item>
@@ -153,6 +171,7 @@
             <a-select
               v-model="queryParam.roomArea"
               mode="multiple"
+              showArrow="true"
               size="small"
               placeholder="请选择面积段"
               style="width: 280px"
@@ -200,6 +219,9 @@
                   <a-checkbox :value="false">
                     无电梯
                   </a-checkbox>
+                  <a-checkbox :value="1">
+                    其他
+                  </a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
             </a-col>
@@ -215,6 +237,7 @@
                 <a-select
                   v-model="queryParam.constructionAge"
                   mode="multiple"
+                  showArrow="true"
                   size="small"
                   placeholder="请选择建筑年代"
                   style="width: 280px"
@@ -383,7 +406,7 @@
                 {{ resultdata.communityName
                 }}<span
                   style="font-size:16px;color: #B71C2B; margin-left: 12px"
-                >均价 {{ resultdata.averageLlistedPrice }}元/m²</span
+                >均价 {{ resultdata.averageLlistedPrice == null ? '--' : resultdata.averageLlistedPrice }}元/m²</span
                 >
               </div>
               <div>
@@ -891,7 +914,11 @@ export default {
   components: {
     STable,
     Ellipsis,
-    AutoComplete
+    AutoComplete,
+    VNodes: {
+      functional: true,
+      render: (h, ctx) => ctx.props.vnodes
+    }
   },
   data () {
     // this.columns = columns
@@ -958,6 +985,7 @@ export default {
       metroLineOptions,
       averageLlistedPriceOptions,
       totalPriceOptions,
+      totalPriceEdit: false,
       roomAreaOptions,
       constructionAgeOptions,
       loopSummaryOptions,
@@ -1257,6 +1285,13 @@ export default {
       return 'red'
     },
 
+    totalPriceSelect (v) {
+      if (v === 'edit') {
+          this.queryParam.totalPrice = ['edit']
+      } else if (this.queryParam.totalPrice.indexOf('edit') >= 0) {
+        this.queryParam.totalPrice = [v]
+      }
+    },
     windowScroll () {
       if (
         document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 <

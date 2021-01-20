@@ -9,20 +9,13 @@
     :i18nRender="i18nRender"
     v-bind="settings"
   >
-    <!-- Ads begin
-      广告代码 真实项目中请移除
-      production remove this Ads
-    -->
-    <ads v-if="isProPreviewSite && !collapsed" />
-    <!-- Ads end -->
-
     <!-- 1.0.0+ 版本 pro-layout 提供 API，
           我们推荐使用这种方式进行 LOGO 和 title 自定义
     -->
     <template v-slot:menuHeaderRender>
       <div>
         <img src="../assets/logo.png" alt="985"></img>
-        <h1>{{ title }}</h1>
+        <h1>{{ title }} <span style="font-size: 8px; color: blue">(v1.0)</span></h1>
       </div>
     </template>
 
