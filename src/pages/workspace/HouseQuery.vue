@@ -700,7 +700,7 @@
                 <a-input v-model="line.distance" size="small" style="width: 90px" addon-after="米" />
               </a-descriptions-item>
               <a-descriptions-item label="" :key="line">
-                <a-button @click="addmetroLine()" v-if="i==0">
+                <a-button @click="addMetroLine()" v-if="i==0">
                   添加地铁信息
                 </a-button>
               </a-descriptions-item>
@@ -790,33 +790,40 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
-            <a-descriptions-item label="一贯制" :span="4">
-              <a-select
-                :options="booleanOptions"
-                v-model="houseData.isConsistentSystem"
-                style="width: 100px"
-                size="small"
-              >
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="小学">
-              <a-input v-model="houseData.primarySchool" size="small" style="width: 100px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              <a-select
-                :options="echelonPerformanceOptions"
-                v-model="houseData.echelonPerformance"
-                style="width: 100px"
-                size="small"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="中学">
-              <a-input v-model="houseData.middleSchool" size="small" style="width: 100px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              <a-select :options="cityEchelonOptions" v-model="houseData.cityEchelon" style="width: 100px" size="small">
-              </a-select>
-            </a-descriptions-item>
+            <template v-for="(school,i) in schoolsInfo">
+              <a-descriptions-item label="一贯制" :span="3" :key="school">
+                <a-select
+                  :options="booleanOptions"
+                  v-model="school.isConsistentSystem"
+                  style="width: 100px"
+                  size="small"
+                >
+                </a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="" :key="school">
+                <a-button @click="addSchoolsInfo()" v-if="i==0">
+                  添加学区信息
+                </a-button>
+              </a-descriptions-item>
+              <a-descriptions-item label="小学" :key="school">
+                <a-input v-model="school.primarySchool" size="small" style="width: 100px"/>
+              </a-descriptions-item>
+              <a-descriptions-item label="梯队" :key="school">
+                <a-select
+                  :options="echelonPerformanceOptions"
+                  v-model="school.echelonPerformance"
+                  style="width: 100px"
+                  size="small"
+                />
+              </a-descriptions-item>
+              <a-descriptions-item label="中学" :key="school">
+                <a-input v-model="school.middleSchool" size="small" style="width: 100px"/>
+              </a-descriptions-item>
+              <a-descriptions-item label="梯队" :key="school">
+                <a-select :options="cityEchelonOptions" v-model="school.cityEchelon" style="width: 100px" size="small">
+                </a-select>
+              </a-descriptions-item>
+            </template>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
             <a-descriptions-item label="1居面积" :span="1">
@@ -1010,7 +1017,8 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
-      metroLineInfo: []
+      metroLineInfo: [],
+      schoolsInfo: []
     }
   },
   filters: {
@@ -1217,6 +1225,13 @@ export default {
           subwayStation: this.houseData.subwayStation,
           distance: this.houseData.distance
         }]
+        this.schoolsInfo = [{
+          isConsistentSystem: this.houseData.isConsistentSystem,
+          primarySchool: this.houseData.primarySchool,
+          echelonPerformance: this.houseData.echelonPerformance,
+          middleSchool: this.houseData.middleSchool,
+          cityEchelon: this.houseData.cityEchelon
+        }]
         this.edit = !this.edit
       }
     },
@@ -1236,14 +1251,30 @@ export default {
         subwayStation: '人民广场',
         distance: 0
       }]
+      this.schoolsInfo = [{
+          isConsistentSystem: undefined,
+          primarySchool: undefined,
+          echelonPerformance: undefined,
+          middleSchool: undefined,
+          cityEchelon: undefined
+        }]
       this.edit = true
     },
-    addmetroLine () {
+    addMetroLine () {
       this.metroLineInfo.push({
         metroLine: '1号线',
         subwayStation: '人民广场',
         distance: 0
       })
+    },
+    addSchoolsInfo () {
+      this.schoolsInfo.push({
+          isConsistentSystem: undefined,
+          primarySchool: undefined,
+          echelonPerformance: undefined,
+          middleSchool: undefined,
+          cityEchelon: undefined
+        })
     },
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
