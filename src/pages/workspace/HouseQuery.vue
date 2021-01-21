@@ -63,17 +63,22 @@
                       trigger="hover"
                       placement="topLeft"
                       v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1"
+                      :overlayClassName="abc1"
                     >
-                      <template slot="content">
+                      <template slot="content" :overlayClassName="abc2">
                         <a-checkbox-group
                           v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
                           @change="refleshSubwayStations"
                         >
-                          <template
-                            v-for="subwayStation in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
-                          >
-                            <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
-                          </template>
+                          <a-row :span="30">
+                            <template
+                              v-for="(subwayStation) in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
+                            >
+                              <a-col :span="3" :key="subwayStation">
+                                <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
+                              </a-col>
+                            </template>
+                          </a-row>
                         </a-checkbox-group>
                       </template>
                       <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{
