@@ -63,9 +63,8 @@
                       trigger="hover"
                       placement="topLeft"
                       v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1"
-                      :overlayClassName="abc1"
                     >
-                      <template slot="content" :overlayClassName="abc2">
+                      <template slot="content">
                         <a-checkbox-group
                           v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
                           @change="refleshSubwayStations"
@@ -678,27 +677,34 @@
                 <a-select-option value="城市中心">城市中心</a-select-option>
               </a-select>
             </a-descriptions-item>
-            <a-descriptions-item label="地铁线路">
-              <a-select
-                :options="metroLineOptions"
-                v-model="houseData.metroLine"
-                size="small"
-                style="width: 150px"
-                @change="getstation('houseData')"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁站名">
-              <a-select
-                :options="stationOptions"
-                v-model="houseData.subwayStation"
-                size="small"
-                style="width: 150px"
-                @change="getstation('houseData')"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁距离">
-              <a-input v-model="houseData.distance" size="small" style="width: 90px" addon-after="米" />
-            </a-descriptions-item>
+            <template v-for="(line,i) in metroLineInfo">
+              <a-descriptions-item label="地铁线路" :key="line">
+                <a-select
+                  :options="metroLineOptions"
+                  v-model="line.metroLine"
+                  size="small"
+                  style="width: 150px"
+                  @change="getstation('houseData',line.metroLine)"
+                ></a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="地铁站名" :key="line">
+                <a-select
+                  :options="stationOptions"
+                  v-model="line.subwayStation"
+                  size="small"
+                  style="width: 150px"
+                  @change="getstation('houseData',line.metroLine)"
+                ></a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="地铁距离" :key="line">
+                <a-input v-model="line.distance" size="small" style="width: 90px" addon-after="米" />
+              </a-descriptions-item>
+              <a-descriptions-item label="" :key="line">
+                <a-button @click="addmetroLine()" v-if="i==0">
+                  添加地铁信息
+                </a-button>
+              </a-descriptions-item>
+            </template>
           </a-descriptions>
           <a-descriptions title="楼盘概况" :column="4">
             <a-descriptions-item label="开发商">
@@ -1003,7 +1009,8 @@ export default {
       size: 20,
       loading: false,
       plates: {},
-      subwayStations: {}
+      subwayStations: {},
+      metroLineInfo: []
     }
   },
   filters: {
@@ -1205,6 +1212,11 @@ export default {
         this.houseData.isConsistentSystem = Number(this.houseData.isConsistentSystem)
         this.areaRefresh2()
         this.getstation('houseData')
+        this.metroLineInfo = [{
+          metroLine: this.houseData.metroLine,
+          subwayStation: this.houseData.subwayStation,
+          distance: this.houseData.distance
+        }]
         this.edit = !this.edit
       }
     },
@@ -1219,9 +1231,20 @@ export default {
       this.houseData.isConsistentSystem = 0
       console.log(this.houseData)
       this.areaRefresh2()
+      this.metroLineInfo = [{
+        metroLine: '1号线',
+        subwayStation: '人民广场',
+        distance: 0
+      }]
       this.edit = true
     },
-
+    addmetroLine () {
+      this.metroLineInfo.push({
+        metroLine: '1号线',
+        subwayStation: '人民广场',
+        distance: 0
+      })
+    },
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
       console.log(tags)
@@ -1250,12 +1273,13 @@ export default {
       })
     },
 
-    getstation (type) {
+    getstation (type, metroLine) {
       const _this = this
-      if (type) {
+      if (type || metroLine) {
         this.stationOptions.splice(0)
         this.subwaystation.forEach(v => {
-          if (v.line === _this[type].metroLine) {
+          metroLine = metroLine || _this[type]?.metroLine
+          if (v.line === metroLine) {
             v.station.forEach(val => {
               _this.stationOptions.push({ label: val, value: val })
             })
