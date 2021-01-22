@@ -69,11 +69,15 @@
                           v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
                           @change="refleshSubwayStations"
                         >
-                          <template
-                            v-for="subwayStation in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
-                          >
-                            <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
-                          </template>
+                          <a-row :span="30">
+                            <template
+                              v-for="(subwayStation) in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
+                            >
+                              <a-col :span="3" :key="subwayStation">
+                                <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
+                              </a-col>
+                            </template>
+                          </a-row>
                         </a-checkbox-group>
                       </template>
                       <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{
@@ -673,27 +677,34 @@
                 <a-select-option value="城市中心">城市中心</a-select-option>
               </a-select>
             </a-descriptions-item>
-            <a-descriptions-item label="地铁线路">
-              <a-select
-                :options="metroLineOptions"
-                v-model="houseData.metroLine"
-                size="small"
-                style="width: 150px"
-                @change="getstation('houseData')"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁站名">
-              <a-select
-                :options="stationOptions"
-                v-model="houseData.subwayStation"
-                size="small"
-                style="width: 150px"
-                @change="getstation('houseData')"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁距离">
-              <a-input v-model="houseData.distance" size="small" style="width: 90px" addon-after="米" />
-            </a-descriptions-item>
+            <template v-for="(line,i) in metroLineInfo">
+              <a-descriptions-item label="地铁线路" :key="line">
+                <a-select
+                  :options="metroLineOptions"
+                  v-model="line.metroLine"
+                  size="small"
+                  style="width: 150px"
+                  @change="getstation('houseData',line.metroLine)"
+                ></a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="地铁站名" :key="line">
+                <a-select
+                  :options="stationOptions"
+                  v-model="line.subwayStation"
+                  size="small"
+                  style="width: 150px"
+                  @change="getstation('houseData',line.metroLine)"
+                ></a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="地铁距离" :key="line">
+                <a-input v-model="line.distance" size="small" style="width: 90px" addon-after="米" />
+              </a-descriptions-item>
+              <a-descriptions-item label="" :key="line">
+                <a-button @click="addMetroLine()" v-if="i==0">
+                  添加地铁信息
+                </a-button>
+              </a-descriptions-item>
+            </template>
           </a-descriptions>
           <a-descriptions title="楼盘概况" :column="4">
             <a-descriptions-item label="开发商">
@@ -779,33 +790,40 @@
             </a-descriptions-item>
           </a-descriptions>
           <a-descriptions title="学区情况" :column="4">
-            <a-descriptions-item label="一贯制" :span="4">
-              <a-select
-                :options="booleanOptions"
-                v-model="houseData.isConsistentSystem"
-                style="width: 100px"
-                size="small"
-              >
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="小学">
-              <a-input v-model="houseData.primarySchool" size="small" style="width: 100px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              <a-select
-                :options="echelonPerformanceOptions"
-                v-model="houseData.echelonPerformance"
-                style="width: 100px"
-                size="small"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="中学">
-              <a-input v-model="houseData.middleSchool" size="small" style="width: 100px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              <a-select :options="cityEchelonOptions" v-model="houseData.cityEchelon" style="width: 100px" size="small">
-              </a-select>
-            </a-descriptions-item>
+            <template v-for="(school,i) in schoolsInfo">
+              <a-descriptions-item label="一贯制" :span="3" :key="school">
+                <a-select
+                  :options="booleanOptions"
+                  v-model="school.isConsistentSystem"
+                  style="width: 100px"
+                  size="small"
+                >
+                </a-select>
+              </a-descriptions-item>
+              <a-descriptions-item label="" :key="school">
+                <a-button @click="addSchoolsInfo()" v-if="i==0">
+                  添加学区信息
+                </a-button>
+              </a-descriptions-item>
+              <a-descriptions-item label="小学" :key="school">
+                <a-input v-model="school.primarySchool" size="small" style="width: 100px"/>
+              </a-descriptions-item>
+              <a-descriptions-item label="梯队" :key="school">
+                <a-select
+                  :options="echelonPerformanceOptions"
+                  v-model="school.echelonPerformance"
+                  style="width: 100px"
+                  size="small"
+                />
+              </a-descriptions-item>
+              <a-descriptions-item label="中学" :key="school">
+                <a-input v-model="school.middleSchool" size="small" style="width: 100px"/>
+              </a-descriptions-item>
+              <a-descriptions-item label="梯队" :key="school">
+                <a-select :options="cityEchelonOptions" v-model="school.cityEchelon" style="width: 100px" size="small">
+                </a-select>
+              </a-descriptions-item>
+            </template>
           </a-descriptions>
           <a-descriptions title="价格及交易" :column="4">
             <a-descriptions-item label="1居面积" :span="1">
@@ -998,7 +1016,9 @@ export default {
       size: 20,
       loading: false,
       plates: {},
-      subwayStations: {}
+      subwayStations: {},
+      metroLineInfo: [],
+      schoolsInfo: []
     }
   },
   filters: {
@@ -1200,6 +1220,18 @@ export default {
         this.houseData.isConsistentSystem = Number(this.houseData.isConsistentSystem)
         this.areaRefresh2()
         this.getstation('houseData')
+        this.metroLineInfo = [{
+          metroLine: this.houseData.metroLine,
+          subwayStation: this.houseData.subwayStation,
+          distance: this.houseData.distance
+        }]
+        this.schoolsInfo = [{
+          isConsistentSystem: this.houseData.isConsistentSystem,
+          primarySchool: this.houseData.primarySchool,
+          echelonPerformance: this.houseData.echelonPerformance,
+          middleSchool: this.houseData.middleSchool,
+          cityEchelon: this.houseData.cityEchelon
+        }]
         this.edit = !this.edit
       }
     },
@@ -1214,9 +1246,36 @@ export default {
       this.houseData.isConsistentSystem = 0
       console.log(this.houseData)
       this.areaRefresh2()
+      this.metroLineInfo = [{
+        metroLine: '1号线',
+        subwayStation: '人民广场',
+        distance: 0
+      }]
+      this.schoolsInfo = [{
+          isConsistentSystem: undefined,
+          primarySchool: undefined,
+          echelonPerformance: undefined,
+          middleSchool: undefined,
+          cityEchelon: undefined
+        }]
       this.edit = true
     },
-
+    addMetroLine () {
+      this.metroLineInfo.push({
+        metroLine: '1号线',
+        subwayStation: '人民广场',
+        distance: 0
+      })
+    },
+    addSchoolsInfo () {
+      this.schoolsInfo.push({
+          isConsistentSystem: undefined,
+          primarySchool: undefined,
+          echelonPerformance: undefined,
+          middleSchool: undefined,
+          cityEchelon: undefined
+        })
+    },
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
       console.log(tags)
@@ -1245,12 +1304,13 @@ export default {
       })
     },
 
-    getstation (type) {
+    getstation (type, metroLine) {
       const _this = this
-      if (type) {
+      if (type || metroLine) {
         this.stationOptions.splice(0)
         this.subwaystation.forEach(v => {
-          if (v.line === _this[type].metroLine) {
+          metroLine = metroLine || _this[type]?.metroLine
+          if (v.line === metroLine) {
             v.station.forEach(val => {
               _this.stationOptions.push({ label: val, value: val })
             })
