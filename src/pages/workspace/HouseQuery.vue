@@ -649,7 +649,7 @@
               <a-input v-model="houseData.communityName" size="small" style="width: 150px" />
             </a-descriptions-item>
             <a-descriptions-item label="楼盘地址" :span="3">
-              <a-input v-model="houseData.address" size="small" style="width: 426px" />
+              <a-input v-model="houseData.address" size="small" style="width: 334px" />
             </a-descriptions-item>
             <a-descriptions-item label="所属区域">
               <a-select
@@ -677,7 +677,26 @@
                 <a-select-option value="城市中心">城市中心</a-select-option>
               </a-select>
             </a-descriptions-item>
-            <template v-for="(line,i) in metroLineInfo">
+            <a-descriptions-item label="地铁线路" :span="4">
+              <a-input-group compact>
+                <a-cascader
+                  :options="options3"
+                  :display-render="displayRender"
+                  expand-trigger="hover"
+                  size="small"
+                  placeholder="地铁">
+                </a-cascader>
+                <a-input v-model="houseData.distance" placeholder="距离" size="small" style="width: 120px" suffix="米">
+                </a-input>
+                <span style="color: red; line-height: 24px; padding-left: 6px"><a-icon type="minus-circle" /></span>
+              </a-input-group>
+            </a-descriptions-item>
+            <a-descriptions-item label="" :span="4">
+              <a-button type="dashed" style="width: 100px" size="small" @click="addMetroLine()">
+                <a-icon type="plus" /> 添加
+              </a-button>
+            </a-descriptions-item>
+            <!-- <template v-for="(line,i) in metroLineInfo">
               <a-descriptions-item label="地铁线路" :key="line">
                 <a-select
                   :options="metroLineOptions"
@@ -704,13 +723,13 @@
                   添加地铁信息
                 </a-button>
               </a-descriptions-item>
-            </template>
+            </template>-->
           </a-descriptions>
           <a-descriptions title="楼盘概况" :column="4">
-            <a-descriptions-item label="开发商">
+            <a-descriptions-item label="开发商" :span="2">
               <a-input v-model="houseData.developer" size="small" style="width: 150px" />
             </a-descriptions-item>
-            <a-descriptions-item label="物业公司" :span="3">
+            <a-descriptions-item label="物业公司" :span="2">
               <a-input v-model="houseData.propertyCompany" size="small" />
             </a-descriptions-item>
             <a-descriptions-item label="类型">
