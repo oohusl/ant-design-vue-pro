@@ -404,40 +404,29 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <template v-for="(school,i) in schoolsInfo">
-          <a-descriptions-item label="一贯制" :span="3" :key="school">
+        <template v-for="(school, i) in schoolsInfo">
+          <a-descriptions-item label="" :span="2" :key="school">
             <a-select
-              :options="booleanOptions"
-              v-model="school.isConsistentSystem"
-              style="width: 100px"
+              class="col2"
               size="small"
-            >
-            </a-select>
-          </a-descriptions-item>
-          <a-descriptions-item label="" :key="school">
-            <a-button @click="addSchoolsInfo()" v-if="i==0">
-              添加学区信息
-            </a-button>
-          </a-descriptions-item>
-          <a-descriptions-item label="小学" :key="school">
-            <a-input v-model="school.primarySchool" size="small" class="col1"/>
-          </a-descriptions-item>
-          <a-descriptions-item label="梯队" :key="school">
-            <a-select
-              :options="echelonPerformanceOptions"
-              v-model="school.echelonPerformance"
-              class="col1"
-              size="small"
+              placeholder="请选中配套学校"
+              :options="schools"
+              showSearch="true"
+              v-model="schoolsInfo[i]"
             />
           </a-descriptions-item>
-          <a-descriptions-item label="中学" :key="school">
-            <a-input v-model="school.middleSchool" size="small" class="col1"/>
+          <a-descriptions-item label="类型" :key="school">
+            {{ school.type }}
           </a-descriptions-item>
           <a-descriptions-item label="梯队" :key="school">
-            <a-select :options="cityEchelonOptions" v-model="school.cityEchelon" class="col1" size="small">
-            </a-select>
+            {{ school.echelonPerformance }}
           </a-descriptions-item>
         </template>
+        <a-descriptions-item label="" :span="4">
+          <a-button type="dashed" style="width: 100px" size="small" @click="addSchoolsInfo()">
+            <a-icon type="plus" /> 添加
+          </a-button>
+        </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="价格及交易" :column="4">
         <a-descriptions-item label="1居面积" :span="1">
@@ -628,7 +617,14 @@ export default {
       plates: {},
       subwayStations: {},
       metroLineInfo: [],
-      schoolsInfo: []
+      schoolsInfo: [],
+      schools: [{
+        label: '世界外国语小学（民办）', value: { name: '世界外国语小学（民办）', echelonPerformance: '第一梯队', type: '小学' }
+      }, {
+        label: '上海实验学校', value: { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' }
+      }, {
+        label: '进才中学', value: { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
+      }]
     }
   },
   created () {
@@ -804,13 +800,7 @@ export default {
     },
 
     addSchoolsInfo () {
-      this.schoolsInfo.push({
-          isConsistentSystem: undefined,
-          primarySchool: undefined,
-          echelonPerformance: undefined,
-          middleSchool: undefined,
-          cityEchelon: undefined
-        })
+      this.schoolsInfo.push({})
     },
 
     /* tag start */
