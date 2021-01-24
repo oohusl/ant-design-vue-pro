@@ -572,6 +572,7 @@ export const statusMap = {
       value: [2010, 2050]
     }
   ]
+
   export const booleanOptions = [
     {
       label: '是',

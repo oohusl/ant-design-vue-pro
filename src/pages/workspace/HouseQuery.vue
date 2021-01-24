@@ -31,25 +31,25 @@
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
-          <a-form-item label="区域">
-            <a-checkbox-group v-model="queryParam.area" size="small">
-              <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="bottomLeft">
+          <a-form-item label="区域板块">
+            <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
+              <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
                 <template slot="content">
-                  <a-checkbox-group v-model="plates[options.value]" @change="refleshPlate(options.value)">
-                    <template v-for="(plateOption, i) in getPlate(options.value)">
-                      <a-checkbox :value="plateOption.value" :key="plateOption.value">{{
+                  <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)" >
+                    <template v-for="(plateOption) in getPlate(options.value)">
+                      <a-checkbox :value="plateOption.value" :key="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
                         plateOption.label
                       }}</a-checkbox>
-                      <br v-if="i > 9 && i % 10 === 0" :key="plateOption.value" />
                     </template>
                   </a-checkbox-group>
                 </template>
-                <a-checkbox :value="options.value">{{ options.label }}</a-checkbox>
+                <a-checkbox :value="options.value" :indeterminate="(queryParam.area && queryParam.area.indexOf(options.value) < 0) && options.halfSelected" :checked="true">{{ options.label }}</a-checkbox>
               </a-popover>
             </a-checkbox-group>
-          </a-form-item>
-          <a-form-item label="板块" v-if="queryParam.plate && queryParam.plate.length > 0">
-            <a-tag v-for="p in queryParam.plate" :key="p">{{ p }}</a-tag>
+            <a-tag v-for="p in queryParam.area" :key="p" color="pink">{{ p }}</a-tag>
+            <template v-for="a in plates">
+              <a-tag v-for="p in a" :key="p">{{ p }}</a-tag>
+            </template>
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
@@ -67,7 +67,7 @@
                       <template slot="content">
                         <a-checkbox-group
                           v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
-                          @change="refleshSubwayStations"
+                          @change="subwayStationChange"
                         >
                           <a-row :span="30">
                             <template
@@ -149,7 +149,6 @@
               size="small"
               placeholder="请选择总价"
               style="width: 280px"
-              @select="totalPriceSelect"
             >
               <a-select-option value="edit">自定义区间</a-select-option>
               <a-select-option v-for="i in totalPriceOptions" :key="i.value" :value="i.value" :label="i.label">
@@ -281,7 +280,7 @@
                 <a-button>
                   排序
                 </a-button>
-                <a-button @click="sortfilter('averageLlistedPrice')">
+                <a-button @click="sortChange('averageLlistedPrice')">
                   房屋单价
                   <a-icon :type="sortType == 'asc' ? 'down' : 'up'" />
                 </a-button>
@@ -382,7 +381,7 @@
                           'align-items': 'flex-end'
                         }"
                       >
-                        <a-button @click="showdetail(community)">查看详情</a-button>
+                        <a-button @click="showDetail(community)">查看详情</a-button>
                       </a-layout-content>
                     </a-layout>
                   </a-layout-sider>
@@ -393,7 +392,7 @@
         </a-card>
       </a-layout-content>
     </a-layout>
-    <a-drawer :visible="moreQuery" width="80vw" @close="onClose">
+    <a-drawer :visible="moreQuery" width="80vw" @close="closeDetail">
       <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-if="!edit">
         <a-layout-header :style="{ padding: '0', height: '80px' }">
           <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
@@ -422,7 +421,7 @@
               </div>
             </a-layout-content>
             <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-              <a-button @click="edithouse()">
+              <a-button @click="editHouse()">
                 编辑
               </a-button>
             </a-layout-sider>
@@ -624,7 +623,7 @@
                   v-if="inputVisible"
                   style="width: 100px"
                   :data-source="labels"
-                  :filter-option="filterOption"
+                  :filter-option="tagOptionFilter"
                   size="small"
                   @select="handleInputConfirm"
                   @change="handleInputChange"
@@ -637,7 +636,7 @@
               </div>
             </a-layout-content>
             <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-              <a-button @click="edithouse()">
+              <a-button @click="saveHouse()">
                 保存
               </a-button>
             </a-layout-sider>
@@ -657,7 +656,7 @@
                 v-model="houseData.area"
                 size="small"
                 style="width: 150px"
-                @change="areaRefresh2()"
+                @change="editAreaChange()"
               ></a-select>
             </a-descriptions-item>
             <a-descriptions-item label="所属板块">
@@ -1069,32 +1068,23 @@ export default {
     }
   },
   methods: {
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
-    },
-    onClose () {
+    closeDetail () {
       this.moreQuery = false
       this.edit = false
       this.refresh()
     },
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
-    },
+
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
+
     resetSearchForm () {
       this.queryParam = {
         date: moment(new Date()),
         area: []
       }
       this.plates = {}
-      this.areaRefresh()
+      this.areaReset()
     },
 
     search (parameter) {
@@ -1118,13 +1108,7 @@ export default {
       })
     },
 
-    refresh (a) {
-      // this.$refs.table.refresh(true)
-      // console.log(Array.from(a))
-      this.search()
-    },
-
-    areaRefresh (a) {
+    areaReset () {
       plateOptions.splice(0)
       this.queryParam.area.forEach(e => {
         plateOptions.push(...areaPlate[e])
@@ -1132,7 +1116,7 @@ export default {
       this.search()
     },
 
-    areaRefresh2 () {
+    editAreaChange () {
       if (this.houseData.area) {
         this.plateOptions2.splice(0)
         areaPlate[this.houseData.area].forEach(v => {
@@ -1149,6 +1133,32 @@ export default {
       return plates
     },
 
+    areaChange () {
+      this.queryParam.area.forEach((e) => {
+         const areaPlates = []
+         this.getPlate(e).forEach((p) => areaPlates.push(p.value))
+         console.log(this.plates)
+         if (this.plates[e]) {
+         this.plates[e] = this.plates[e].filter(selectedP => {
+           console.log(selectedP)
+           return areaPlates.indexOf(selectedP) < 0
+         })
+         }
+      })
+    },
+
+    plateChange (areaOption) {
+      const area = areaOption.value
+      if (this.plates[area].length > 0) {
+        areaOption.halfSelected = true
+        const index = this.queryParam.area.indexOf(area)
+        if (index >= 0) this.queryParam.area.splice(index + 1, 1)
+      } else {
+        // 未选中板块
+        areaOption.halfSelected = false
+      }
+    },
+
     getSubwayStation (i) {
       let s = []
       subwaystation.forEach(v => {
@@ -1159,29 +1169,7 @@ export default {
       return s
     },
 
-    refleshPlate (area) {
-      if (this.plates[area].length > 0) {
-        if (this.queryParam.area.indexOf(area) < 0) {
-          this.queryParam.area.push(area)
-        }
-      } else {
-        if (this.queryParam.area.indexOf(area) >= 0) {
-          this.queryParam.area.forEach((item, index, arr) => {
-            if (item === area) {
-              arr.splice(index, 1)
-            }
-          })
-        }
-      }
-      this.queryParam.plate = []
-      Object.keys(this.plates).forEach(key => {
-        if (this.plates[key].length > 0) {
-          this.queryParam.plate.push(...this.plates[key])
-        }
-      })
-    },
-
-    refleshSubwayStations () {
+    subwayStationChange () {
       this.queryParam.subwayStation = []
       const that = this
       Object.keys(this.subwayStations).forEach(e => {
@@ -1189,7 +1177,7 @@ export default {
       })
     },
 
-    showdetail (community) {
+    showDetail (community) {
       this.moreQuery = true
       this.resultdata = community
       if (community.labels) {
@@ -1198,7 +1186,8 @@ export default {
         this.tags = []
       }
     },
-    sortfilter (type) {
+
+    sortChange (type) {
       console.log(type)
       if (this.sortType === 'asc') {
         this.sortType = 'desc'
@@ -1211,33 +1200,13 @@ export default {
       }
     },
 
-    edithouse () {
-      if (this.edit) {
-        // save
-        console.log('save:', this.houseData)
-        this.houseData.labels = this.tags.join(',')
-        saveHouse(this.houseData)
-          .then(e => {
-            this.edit = !this.edit
-            this.$notification.success({
-              message: '通知',
-              description: this.house.id ? '修改成功' : '保存成功'
-            })
-            this.refresh()
-          })
-          .catch(() => {
-            this.$notification.error({
-              message: '通知',
-              description: this.house.id ? '修改失败' : '保存失败'
-            })
-          })
-      } else {
+    editHouse () {
         // edit
         this.houseData = this.resultdata
         this.houseData.peopleAndVehicles = Number(this.houseData.peopleAndVehicles)
         this.houseData.isLift = Number(this.houseData.isLift)
         this.houseData.isConsistentSystem = Number(this.houseData.isConsistentSystem)
-        this.areaRefresh2()
+        this.editAreaChange()
         this.getstation('houseData')
         this.metroLineInfo = [{
           metroLine: this.houseData.metroLine,
@@ -1252,7 +1221,27 @@ export default {
           cityEchelon: this.houseData.cityEchelon
         }]
         this.edit = !this.edit
-      }
+    },
+
+    saveHouse () {
+      // save
+      console.log('save:', this.houseData)
+      this.houseData.labels = this.tags.join(',')
+      saveHouse(this.houseData)
+        .then(e => {
+          this.edit = !this.edit
+          this.$notification.success({
+            message: '通知',
+            description: this.house.id ? '修改成功' : '保存成功'
+          })
+          this.refresh()
+        })
+        .catch(() => {
+          this.$notification.error({
+            message: '通知',
+            description: this.house.id ? '修改失败' : '保存失败'
+          })
+        })
     },
 
     newHouse () {
@@ -1264,7 +1253,7 @@ export default {
       this.houseData.isLift = 1
       this.houseData.isConsistentSystem = 0
       console.log(this.houseData)
-      this.areaRefresh2()
+      this.editAreaChange()
       this.metroLineInfo = [{
         metroLine: '1号线',
         subwayStation: '人民广场',
@@ -1279,6 +1268,36 @@ export default {
         }]
       this.edit = true
     },
+
+    getstation (type, metroLine) {
+          const _this = this
+          if (type || metroLine) {
+            this.stationOptions.splice(0)
+            this.subwaystation.forEach(v => {
+              metroLine = metroLine || _this[type]?.metroLine
+              if (v.line === metroLine) {
+                v.station.forEach(val => {
+                  _this.stationOptions.push({ label: val, value: val })
+                })
+              }
+            })
+          }
+        },
+
+    getLineStation (lines) {
+      const stationOptions = []
+      lines.forEach(line => {
+        this.subwaystation.forEach(v => {
+          if (v.line === line) {
+            v.station.forEach(val => {
+              stationOptions.push({ label: val, value: val })
+            })
+          }
+        })
+      })
+      return stationOptions
+    },
+
     addMetroLine () {
       this.metroLineInfo.push({
         metroLine: '1号线',
@@ -1286,6 +1305,7 @@ export default {
         distance: 0
       })
     },
+
     addSchoolsInfo () {
       this.schoolsInfo.push({
           isConsistentSystem: undefined,
@@ -1295,6 +1315,8 @@ export default {
           cityEchelon: undefined
         })
     },
+
+    /* tag start */
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
       console.log(tags)
@@ -1323,36 +1345,7 @@ export default {
       })
     },
 
-    getstation (type, metroLine) {
-      const _this = this
-      if (type || metroLine) {
-        this.stationOptions.splice(0)
-        this.subwaystation.forEach(v => {
-          metroLine = metroLine || _this[type]?.metroLine
-          if (v.line === metroLine) {
-            v.station.forEach(val => {
-              _this.stationOptions.push({ label: val, value: val })
-            })
-          }
-        })
-      }
-    },
-
-    getLineStation (lines) {
-      const stationOptions = []
-      lines.forEach(line => {
-        this.subwaystation.forEach(v => {
-          if (v.line === line) {
-            v.station.forEach(val => {
-              stationOptions.push({ label: val, value: val })
-            })
-          }
-        })
-      })
-      return stationOptions
-    },
-
-    filterOption (input, option) {
+    tagOptionFilter (input, option) {
       return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
     },
 
@@ -1363,14 +1356,8 @@ export default {
       }
       return 'red'
     },
+     /* tag end */
 
-    totalPriceSelect (v) {
-      if (v === 'edit') {
-          this.queryParam.totalPrice = ['edit']
-      } else if (this.queryParam.totalPrice.indexOf('edit') >= 0) {
-        this.queryParam.totalPrice = [v]
-      }
-    },
     windowScroll () {
       if (
         document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 <
