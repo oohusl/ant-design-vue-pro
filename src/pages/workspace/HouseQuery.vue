@@ -120,16 +120,16 @@
             <a-popover trigger="hover" placement="topLeft">
               <template slot="content">
                 <a-checkbox-group v-model="queryParam.averageLlistedPrice" >
-                  <a-row v-for="xx in averageLlistedPriceOptions" :key="xx.label">
+                  <a-row v-for="option in averageLlistedPriceOptions" :key="option.label">
                     <a-col>
-                      <a-checkbox :value="xx">{{
-                        xx.label
+                      <a-checkbox :value="option">{{
+                        option.label
                       }}</a-checkbox>
                     </a-col>
                   </a-row>
                 </a-checkbox-group>
               </template>
-              <a-button type="dashed" icon="search" size="small">选择单价</a-button>
+              <a-button type="dashed" icon="search" size="small">选择单价区间</a-button>
             </a-popover>
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
@@ -137,37 +137,38 @@
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll()" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
-          <!--
           <a-form-item label="总价">
-            <a-select
-              v-model="queryParam.totalPrice"
-              mode="multiple"
-              showArrow="true"
-              size="small"
-              placeholder="请选择总价"
-              style="width: 280px"
-            >
-              <a-select-option v-for="i in totalPriceOptions" :key="i.value" :value="i.value" :label="i.label">
-                {{ i.label }}
-              </a-select-option>
-            </a-select>
-            <a-form-item
-              :style="{ display: 'inline-block', width: '63px', 'margin-left': '50px' }"
-            >
+            <a-popover trigger="hover" placement="topLeft">
+              <template slot="content">
+                <a-checkbox-group v-model="queryParam.totalPrice" >
+                  <a-row v-for="option in totalPriceOptions" :key="option.label">
+                    <a-col>
+                      <a-checkbox :value="option">{{
+                        option.label
+                      }}</a-checkbox>
+                    </a-col>
+                  </a-row>
+                </a-checkbox-group>
+              </template>
+              <a-button type="dashed" icon="search" size="small">选择总价区间</a-button>
+            </a-popover>
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
-            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }" v-if="queryParam.totalPrice && queryParam.totalPrice.indexOf('edit') >= 0">
-              -
-            </span>
-            <a-form-item :style="{ display: 'inline-block', width: '100px' }" v-if="queryParam.totalPrice && queryParam.totalPrice.indexOf('edit') >= 0">
-              <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" addon-after="万" />
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+              <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" suffix="万">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
+              </a-input>
             </a-form-item>
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
+          <!--
           <a-form-item label="面积">
             <a-select
               v-model="queryParam.roomArea"
@@ -425,7 +426,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], averageLlistedPrice: [], averagePriceInput: [] },
+      queryParam: { area: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -461,9 +462,6 @@ export default {
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.windowScroll)
-  },
-  computed: {
-
   },
   methods: {
     closeDetail () {
@@ -563,10 +561,6 @@ export default {
       })
     },
 
-    addAveragePrice (min, max) {
-      if (min && max) { this.queryParam.averagePriceInput.push({ label: `${min}-${max}万`, value: [min, max] }) }
-    },
-
     showDetail (community) {
       this.detailFlag = 1
       this.house = community
@@ -586,12 +580,22 @@ export default {
       }
     },
 
-    averagePriceAll: function () {
-      const averagePriceMap = new Map()
-      this.queryParam.averagePriceInput.concat(this.queryParam.averageLlistedPrice).forEach(e => {
-        averagePriceMap.set(e.label, e)
+    addAveragePrice (arr, min, max) {
+      if (min && max) { arr.push({ label: `${min}-${max}万`, value: [min, max] }) }
+    },
+
+    averagePriceAll (arr1, arr2) {
+      const rangsMap = new Map()
+      if (!arr1) {
+        arr1 = []
+      }
+      if (!arr2) {
+        arr2 = []
+      }
+      arr1.concat(arr2).forEach(e => {
+        rangsMap.set(e.label, e)
       })
-      return averagePriceMap.values()
+      return rangsMap.values()
     },
 
     newHouse () {
