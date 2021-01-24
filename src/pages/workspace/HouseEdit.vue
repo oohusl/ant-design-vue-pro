@@ -278,9 +278,7 @@
                 expand-trigger="hover"
                 size="small"
                 style="width: 220px"
-                change-on-select
                 placeholder="地铁"
-                :default-value="['1','人民广场']"
                 @change="selectMetroLine">
               </a-cascader>
               <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="米">
@@ -413,9 +411,9 @@
               class="col2"
               size="small"
               placeholder="请选中配套学校"
-              :options="schools"
+              :options="schoolsOptions"
               :showSearch="true"
-              v-model="schoolsInfo[s]"
+              @change="selectSchool($event,s)"
             />
           </a-descriptions-item>
           <a-descriptions-item label="类型" :key="s">
@@ -621,12 +619,17 @@ export default {
       subwayStations: {},
       metroLineInfo: [],
       schoolsInfo: [],
-      schools: [{
-        label: '世界外国语小学（民办）', value: { name: '世界外国语小学（民办）', echelonPerformance: '第一梯队', type: '小学' }
+      schools: {
+        '世界外国语小学（民办）': { name: '世界外国语小学（民办）', echelonPerformance: '第一梯队', type: '小学' },
+        '上海实验学校': { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' },
+        '进才中学': { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
+      },
+      schoolsOptions: [{
+        label: '世界外国语小学（民办）', value: '世界外国语小学（民办）'
       }, {
-        label: '上海实验学校', value: { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' }
+        label: '上海实验学校', value: '上海实验学校'
       }, {
-        label: '进才中学', value: { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
+        label: '进才中学', value: '进才中学'
       }],
       metrolineDistrictInfo: []
     }
@@ -727,7 +730,7 @@ export default {
           this.metroLineInfo = [{
                   metroLine: '',
                   subwayStation: '',
-                  distance: 0
+                  distance: undefined
                 }]
         }
         if (this.houseSelect.schoolDistrictInfo.length) {
@@ -770,12 +773,12 @@ export default {
       console.log(this.houseSelect)
       this.editAreaChange()
       this.metroLineInfo = [{
-        metroLine: '1号线',
-        subwayStation: '人民广场',
-        distance: 0
+        metroLine: '',
+        subwayStation: '',
+        distance: undefined
       }]
       this.schoolsInfo = [{
-          name: '世界外国语小学（民办）',
+          name: '',
           echelonPerformance: '',
           type: ''
         }]
@@ -830,9 +833,9 @@ export default {
 
     addMetroLine () {
       this.metroLineInfo.push({
-        metroLine: '1号线',
-        subwayStation: '人民广场',
-        distance: 0
+        metroLine: '',
+        subwayStation: '',
+        distance: undefined
       })
     },
     selectMetroLine (value) {
@@ -850,7 +853,14 @@ export default {
           type: ''
         })
     },
-
+    selectSchool (school, o) {
+      console.log(school, o)
+      const s = this.schools[school]
+      if (s) {
+        this.schoolsInfo.splice(o, 1, s)
+      }
+      console.log(this.schoolsInfo)
+    },
     /* tag start */
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
