@@ -35,10 +35,10 @@
     </a-layout-header>
     <a-layout-content class="show-house">
       <a-descriptions title="基本信息" :column="4">
-        <a-descriptions-item label="楼盘名称">
+        <a-descriptions-item label="楼盘名称" :span="2">
           {{ houseSelect.communityName }}
         </a-descriptions-item>
-        <a-descriptions-item label="楼盘地址" :span="3">
+        <a-descriptions-item label="楼盘地址" :span="2">
           {{ houseSelect.address }}
         </a-descriptions-item>
         <a-descriptions-item label="所属区域">
@@ -239,34 +239,34 @@
     </a-layout-header>
     <a-layout-content class="edit-house">
       <a-descriptions title="基本信息" :column="4">
-        <a-descriptions-item label="楼盘名称">
-          <a-input v-model="houseSelect.communityName" size="small" style="width: 150px" />
+        <a-descriptions-item label="楼盘名称" :span="2">
+          <a-input v-model="houseSelect.communityName" size="small" style="width: 364px" />
         </a-descriptions-item>
-        <a-descriptions-item label="楼盘地址" :span="3">
-          <a-input v-model="houseSelect.address" size="small" style="width: 334px" />
+        <a-descriptions-item label="楼盘地址" :span="2">
+          <a-input v-model="houseSelect.address" size="small" style="width: 364px" />
         </a-descriptions-item>
         <a-descriptions-item label="所属区域">
           <a-select
             :options="areaOptions"
             v-model="houseSelect.area"
             size="small"
-            style="width: 150px"
+            style="width: 120px"
             @change="editAreaChange()"
           ></a-select>
         </a-descriptions-item>
         <a-descriptions-item label="所属板块">
-          <a-select :options="editPlateOptions" v-model="houseSelect.plate" size="small" style="width: 150px"></a-select>
+          <a-select :options="editPlateOptions" v-model="houseSelect.plate" size="small" style="width: 120px"></a-select>
         </a-descriptions-item>
         <a-descriptions-item label="环线">
           <a-select
             :options="loopSummaryOptions"
             v-model="houseSelect.loopSummary"
             size="small"
-            style="width: 150px"
+            style="width: 120px"
           ></a-select>
         </a-descriptions-item>
         <a-descriptions-item label="区域规划">
-          <a-select v-model="houseSelect.districtPlanning" size="small" style="width: 150px">
+          <a-select v-model="houseSelect.districtPlanning" size="small" style="width: 120px">
             <a-select-option value="城市副中心">城市副中心</a-select-option>
             <a-select-option value="城市中心">城市中心</a-select-option>
           </a-select>
@@ -278,9 +278,10 @@
               :display-render="displayRender"
               expand-trigger="hover"
               size="small"
+              style="width: 220px"
               placeholder="地铁">
             </a-cascader>
-            <a-input v-model="houseSelect.distance" placeholder="距离" size="small" style="width: 120px" suffix="米">
+            <a-input v-model="houseSelect.distance" placeholder="距离" size="small" style="width: 145px" suffix="米">
             </a-input>
             <span style="color: red; line-height: 24px; padding-left: 6px"><a-icon type="minus-circle" /></span>
           </a-input-group>
@@ -321,19 +322,19 @@
       </a-descriptions>
       <a-descriptions title="楼盘概况" :column="4">
         <a-descriptions-item label="开发商" :span="2">
-          <a-input v-model="houseSelect.developer" size="small" style="width: 150px" />
+          <a-input v-model="houseSelect.developer" size="small" style="width: 364px" />
         </a-descriptions-item>
         <a-descriptions-item label="物业公司" :span="2">
-          <a-input v-model="houseSelect.propertyCompany" size="small" />
+          <a-input v-model="houseSelect.propertyCompany" size="small" style="width: 364px" />
         </a-descriptions-item>
         <a-descriptions-item label="类型">
-          <a-select v-model="houseSelect.cellAttributes" size="small" style="width: 100px">
+          <a-select v-model="houseSelect.cellAttributes" size="small" style="width: 120px">
             <a-select-option value="住宅"> 住宅 </a-select-option>
             <a-select-option value="别墅"> 别墅 </a-select-option>
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="权属">
-          <a-select v-model="houseSelect.transactionOwnership" size="small" style="width: 100px">
+          <a-select v-model="houseSelect.transactionOwnership" size="small" style="width: 120px">
             <a-select-option value="商品房"> 商品房 </a-select-option>
             <a-select-option value="毛坯房"> 毛坯房 </a-select-option>
             <a-select-option value="售后工房"> 售后工房 </a-select-option>
@@ -341,37 +342,37 @@
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="年限">
-          <a-input v-model="houseSelect.propertyRights" style="width: 100px" size="small" addon-after="年" />
+          <a-input v-model="houseSelect.propertyRights" style="width: 120px" size="small" addon-after="年" />
         </a-descriptions-item>
         <a-descriptions-item label="建筑时间">
-          <a-input v-model="houseSelect.constructionAge" style="width: 100px" size="small" addon-after="年" />
+          <a-input v-model="houseSelect.constructionAge" style="width: 120px" size="small" addon-after="年" />
         </a-descriptions-item>
         <a-descriptions-item label="小区栋数">
-          <a-input v-model="houseSelect.buildingNumber" style="width: 100px" size="small" addon-after="栋" />
+          <a-input v-model="houseSelect.buildingNumber" style="width: 120px" size="small" addon-after="栋" />
         </a-descriptions-item>
         <a-descriptions-item label="小区户数">
-          <a-input v-model="houseSelect.householdsNumber" style="width: 100px" size="small" addon-after="户" />
+          <a-input v-model="houseSelect.householdsNumber" style="width: 120px" size="small" addon-after="户" />
         </a-descriptions-item>
         <a-descriptions-item label="停车位数">
-          <a-input v-model="houseSelect.parkingSpacesNumber" style="width: 100px" size="small" />
+          <a-input v-model="houseSelect.parkingSpacesNumber" style="width: 120px" size="small" />
         </a-descriptions-item>
         <a-descriptions-item label="人车分流">
           <a-select
             :options="booleanOptions"
             v-model="houseSelect.peopleAndVehicles"
-            style="width: 100px"
+            style="width: 120px"
             size="small"
           >
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="容积率">
-          <a-input v-model="houseSelect.volumeRate" style="width: 100px" size="small" addon-after="%" />
+          <a-input v-model="houseSelect.volumeRate" style="width: 120px" size="small" addon-after="%" />
         </a-descriptions-item>
         <a-descriptions-item label="绿化率">
-          <a-input v-model="houseSelect.greeningRate" style="width: 100px" size="small" addon-after="%" />
+          <a-input v-model="houseSelect.greeningRate" style="width: 120px" size="small" addon-after="%" />
         </a-descriptions-item>
         <a-descriptions-item label="建筑类型">
-          <a-select v-model="houseSelect.buildingType" size="small" style="width: 100px">
+          <a-select v-model="houseSelect.buildingType" size="small" style="width: 120px">
             <a-select-option value="塔楼"> 塔楼 </a-select-option>
             <a-select-option value="板楼"> 板楼 </a-select-option>
             <a-select-option value="塔板结合"> 塔板结合 </a-select-option>
@@ -379,16 +380,16 @@
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="是否电梯">
-          <a-select :options="booleanOptions" v-model="houseSelect.isLift" style="width: 100px" size="small">
+          <a-select :options="booleanOptions" v-model="houseSelect.isLift" style="width: 120px" size="small">
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="最大层数">
-          <a-input v-model="houseSelect.maxFloor" style="width: 100px" size="small" addon-after="层" />
+          <a-input v-model="houseSelect.maxFloor" style="width: 120px" size="small" addon-after="层" />
         </a-descriptions-item>
         <a-descriptions-item label="最小层数">
-          <a-input v-model="houseSelect.minFloor" style="width: 100px" size="small" addon-after="层" />
+          <a-input v-model="houseSelect.minFloor" style="width: 120px" size="small" addon-after="层" />
         </a-descriptions-item>
-        <a-descriptions-item label="物业类型" style="width: 100px">
+        <a-descriptions-item label="物业类型" style="width: 120px">
           <a-select v-model="houseSelect.propertyAttributes" size="small">
             <a-select-option value="办公"> 办公 </a-select-option>
             <a-select-option value="别墅"> 别墅 </a-select-option>
@@ -399,7 +400,7 @@
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="物业费">
-          <a-input v-model="houseSelect.propertyCosts" style="width: 100px" size="small" addon-after="元/m²" />
+          <a-input v-model="houseSelect.propertyCosts" style="width: 120px" size="small" addon-after="元/m²" />
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
