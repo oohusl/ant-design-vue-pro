@@ -116,7 +116,7 @@
             </a-checkbox-group>
           </a-form-item>
 
-          <a-form-item label="单价">
+          <a-form-item label="单价" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
               <template slot="content">
                 <a-checkbox-group v-model="queryParam.averageLlistedPrice" >
@@ -140,30 +140,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
-          </a-form-item>
-
-          <a-form-item label="单价" v-if="advanced">
-            <a-select
-              v-model="queryParam.averageLlistedPrice"
-              :showArrow="true"
-              size="small"
-              placeholder="请选择单价"
-              style="width: 120px"
-            >
-              <a-select-option v-for="i in averageLlistedPriceOptions" :key="i.label" :value="i.label" :label="i.label">
-                {{ i.label }}
-              </a-select-option>
-            </a-select>
-            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
-            </a-form-item>
-            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
-              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true"/>
-              </a-input>
-            </a-form-item>
+            <a-tag v-for="avePrice in averagePriceAll()" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
           <!--
           <a-form-item label="总价">
@@ -448,7 +425,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], averageLlistedPrice: [] },
+      queryParam: { area: [], averageLlistedPrice: [], averagePriceInput: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -473,8 +450,7 @@ export default {
       subwaystation,
       loading: false,
       plates: {},
-      subwayStations: {},
-      averagePriceInput: []
+      subwayStations: {}
     }
   },
   created () {
@@ -487,13 +463,7 @@ export default {
     window.removeEventListener('scroll', this.windowScroll)
   },
   computed: {
-    averagePriceAll: function () {
-      const averagePriceMap = new Map()
-      this.averagePriceInput.concat(this.queryParam.averageLlistedPrice).forEach(e => {
-        averagePriceMap.set(e.label, e)
-      })
-      return averagePriceMap.values()
-    }
+
   },
   methods: {
     closeDetail () {
@@ -505,14 +475,15 @@ export default {
       this.queryParam = {
         date: moment(new Date()),
         area: [],
-        averageLlistedPrice: []
+        averageLlistedPrice: [],
+        averagePriceInput: []
       }
       this.plates = {}
       this.areaReset()
     },
 
-    search (parameter) {
-      const requestParameters = Object.assign({ sort: this.sort }, parameter, this.queryParam)
+    search () {
+      const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {
@@ -593,7 +564,7 @@ export default {
     },
 
     addAveragePrice (min, max) {
-      this.averagePriceInput.push({ label: `${min}-${max}万`, value: [min, max] })
+      if (min && max) { this.queryParam.averagePriceInput.push({ label: `${min}-${max}万`, value: [min, max] }) }
     },
 
     showDetail (community) {
@@ -613,6 +584,14 @@ export default {
         this.sort = type + ',' + this.sortType
         this.search()
       }
+    },
+
+    averagePriceAll: function () {
+      const averagePriceMap = new Map()
+      this.queryParam.averagePriceInput.concat(this.queryParam.averageLlistedPrice).forEach(e => {
+        averagePriceMap.set(e.label, e)
+      })
+      return averagePriceMap.values()
     },
 
     newHouse () {
