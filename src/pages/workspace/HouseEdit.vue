@@ -784,6 +784,9 @@ export default {
         }]
       this.edit = true
     },
+    showDetail () {
+      this.edit = false
+    },
     getMetrolineDistrictInfo () {
       this.metrolineDistrictInfo = []
       this.metrolineDistrictInfo = metroLineOptions
@@ -898,9 +901,6 @@ export default {
         return ''
       }
       return 'red'
-    },
-    test (wao) {
-      console.log(wao)
     }
   }
 }

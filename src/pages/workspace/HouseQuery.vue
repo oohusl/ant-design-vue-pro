@@ -408,7 +408,7 @@
       </a-layout-content>
     </a-layout>
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
-      <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search"></house-edit>
+      <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search" ref="houseeditref"></house-edit>
     </a-drawer>
   </page-header-wrapper>
 </template>
@@ -599,6 +599,7 @@ export default {
     showDetail (community) {
       this.detailFlag = 1
       this.house = community
+      this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
     },
 
     sortChange (type) {
@@ -617,9 +618,7 @@ export default {
     newHouse () {
       this.detailFlag = 2
       this.house = {}
-      this.house.peopleAndVehicles = 0
-      this.house.isLift = 1
-      this.house.isConsistentSystem = 0
+      this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
     },
 
     windowScroll () {
