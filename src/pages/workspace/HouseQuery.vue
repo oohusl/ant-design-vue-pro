@@ -37,7 +37,7 @@
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)" >
                     <a-row :span="32">
-                      <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption">
+                      <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption.value">
                         <a-checkbox :value="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
                           plateOption.label
                         }}</a-checkbox>
@@ -52,9 +52,6 @@
             <template v-for="a in plates">
               <a-tag v-for="p in a" :key="p">{{ p }}</a-tag>
             </template>
-          </a-form-item>
-          <a-form-item label="环线">
-            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁线">
             <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
@@ -94,17 +91,20 @@
           <a-form-item label="地铁站" v-if="queryParam.subwayStation && queryParam.subwayStation.length">
             <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
           </a-form-item>
-          <a-form-item label="学校">
+          <a-form-item label="环线">
+            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="学校" v-if="advanced">
             <a-checkbox-group v-model="queryParam.schoolType">
               <a-checkbox value="小学">小学</a-checkbox>
               <a-checkbox value="中学">中学</a-checkbox>
-              <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
+              <a-checkbox value="一贯制">一贯制学校</a-checkbox>
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
               <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
             </a-form-item>
           </a-form-item>
-          <a-form-item label="户型">
+          <a-form-item label="户型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.roomType">
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>
@@ -112,16 +112,16 @@
               <a-checkbox value="4"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <!-- <a-form-item label="单价">
+          <a-form-item label="单价" v-if="advanced">
             <a-select
               v-model="queryParam.averageLlistedPrice"
               mode="multiple"
-              showArrow="true"
+              :showArrow="true"
               size="small"
               placeholder="请选择单价"
               style="width: 280px"
             >
-              <a-select-option v-for="i in averageLlistedPriceOptions" :key="i.value" :value="i.value" :label="i.label">
+              <a-select-option v-for="i in averageLlistedPriceOptions" :key="i.label" :value="i.label" :label="i.label">
                 {{ i.label }}
               </a-select-option>
             </a-select>
@@ -133,6 +133,7 @@
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" addon-after="万" />
             </a-form-item>
           </a-form-item>
+          <!--
           <a-form-item label="总价">
             <a-select
               v-model="queryParam.totalPrice"
@@ -179,9 +180,9 @@
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" addon-after="平方" />
             </a-form-item>
           </a-form-item> -->
-          <a-row :gutter="24" v-if="advanced">
+          <a-row v-if="advanced">
             <a-col :span="12">
-              <a-form-item label="小区属性" :label-col="{ span: 4 }">
+              <a-form-item label="小区属性" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.cellAttributes">
                   <a-checkbox value="住宅"> 住宅 </a-checkbox>
                   <a-checkbox value="别墅"> 别墅 </a-checkbox>
@@ -190,7 +191,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="建筑类型" :label-col="{ span: 4 }">
+              <a-form-item label="建筑类型" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.buildingType">
                   <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
                   <a-checkbox value="板楼"> 板楼 </a-checkbox>
@@ -200,40 +201,34 @@
               </a-form-item>
             </a-col>
           </a-row>
-          <a-row :gutter="24" v-if="advanced">
+
+          <a-row v-if="advanced">
             <a-col :span="12">
-              <a-form-item label="是否电梯" :label-col="{ span: 4 }">
+              <a-form-item label="是否电梯" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.isLift">
-                  <a-checkbox :value="true">
+                  <a-checkbox :value="1">
                     有电梯
                   </a-checkbox>
-                  <a-checkbox :value="false">
+                  <a-checkbox :value="0">
                     无电梯
                   </a-checkbox>
-                  <a-checkbox :value="1">
+                  <a-checkbox :value="2">
                     其他
                   </a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="建筑年代" :label-col="{ span: 4 }">
-                <!-- <a-checkbox-group
-                  v-model="queryParam.constructionAge"
-                  :options="constructionAgeOptions"
-
-                >
-                </a-checkbox-group> -->
-
+              <a-form-item label="建筑年代" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-select
                   v-model="queryParam.constructionAge"
                   mode="multiple"
-                  showArrow="true"
+                  :showArrow="true"
                   size="small"
                   placeholder="请选择建筑年代"
                   style="width: 280px"
                 >
-                  <a-select-option v-for="i in constructionAgeOptions" :key="i.value" :value="i.value" :label="i.label">
+                  <a-select-option v-for="i in constructionAgeOptions" :key="i.label" :value="i.value" :label="i.label">
                     {{ i.label }}
                   </a-select-option>
                 </a-select>
