@@ -30,7 +30,7 @@
         </div>
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
-        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" :label-align="left" style="margin-top: 10px">
+        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" label-align="left" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
               <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
@@ -322,7 +322,7 @@
                         <a-form
                           :label-col="{ span: 3 }"
                           :wrapper-col="{ span: 21 }"
-                          :label-align="left"
+                          label-align="left"
                           style="width:100%"
                         >
                           <a-form-item label="地址" :style="{ height: '30px' }">
@@ -390,521 +390,8 @@
         </a-card>
       </a-layout-content>
     </a-layout>
-    <a-drawer :visible="detailVisible" width="80vw" @close="closeDetail">
-      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-if="!edit">
-        <a-layout-header :style="{ padding: '0', height: '80px' }">
-          <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
-            <a-layout-content
-              :style="{
-                background: '#ffffff',
-                padding: '0',
-                'line-height': '32px',
-                'font-size': '24px',
-                color: '#000000'
-              }"
-            >
-              <div>
-                {{ houseSelect.communityName
-                }}<span
-                  style="font-size:16px;color: #B71C2B; margin-left: 12px"
-                >均价 {{ houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice }}元/m²</span
-                >
-              </div>
-              <div>
-                <template v-for="tag in tags">
-                  <a-tag :key="tag">
-                    {{ tag }}
-                  </a-tag>
-                </template>
-              </div>
-            </a-layout-content>
-            <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-              <a-button @click="editHouse()">
-                编辑
-              </a-button>
-            </a-layout-sider>
-          </a-layout>
-        </a-layout-header>
-        <a-layout-content class="show-house">
-          <a-descriptions title="基本信息" :column="4">
-            <a-descriptions-item label="楼盘名称">
-              {{ houseSelect.communityName }}
-            </a-descriptions-item>
-            <a-descriptions-item label="楼盘地址" :span="3">
-              {{ houseSelect.address }}
-            </a-descriptions-item>
-            <a-descriptions-item label="所属区域">
-              {{ houseSelect.area }}
-            </a-descriptions-item>
-            <a-descriptions-item label="所属板块">
-              {{ houseSelect.plate }}
-            </a-descriptions-item>
-            <a-descriptions-item label="环线">
-              {{ houseSelect.loopSummary }}
-            </a-descriptions-item>
-            <a-descriptions-item label="区域规划">
-              {{ houseSelect.districtPlanning }}
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁线路">
-              {{ houseSelect.metroLine ? houseSelect.metroLine + '号线' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁站名">
-              {{ houseSelect.subwayStation }}
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁距离">
-              {{ houseSelect.distance }}
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="楼盘概况" :column="4">
-            <a-descriptions-item label="开发商" :span="2">
-              {{ houseSelect.developer }}
-            </a-descriptions-item>
-            <a-descriptions-item label="物业公司" :span="2">
-              {{ houseSelect.propertyCompany }}
-            </a-descriptions-item>
-            <a-descriptions-item label="类型">
-              {{ houseSelect.cellAttributes }}
-            </a-descriptions-item>
-            <a-descriptions-item label="权属">
-              {{ houseSelect.transactionOwnership }}
-            </a-descriptions-item>
-            <a-descriptions-item label="年限">
-              {{ houseSelect.propertyRights ? houseSelect.propertyRights + '年' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="建筑时间">
-              {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="小区栋数">
-              {{ houseSelect.buildingNumber ? houseSelect.buildingNumber + '栋' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="小区户数">
-              {{ houseSelect.householdsNumber ? houseSelect.householdsNumber + '户' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="停车位数">
-              {{ houseSelect.parkingSpacesNumber }}
-            </a-descriptions-item>
-            <a-descriptions-item label="人车分流">
-              {{ houseSelect.peopleAndVehicles ? '是' : '否' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="容积率">
-              {{ houseSelect.volumeRate ? houseSelect.volumeRate + '%' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="绿化率">
-              {{ houseSelect.greeningRate ? houseSelect.greeningRate + '%' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="建筑类型">
-              {{ houseSelect.buildingType }}
-            </a-descriptions-item>
-            <a-descriptions-item label="是否电梯">
-              {{ houseSelect.isLift ? '是' : '否' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="最大层数">
-              {{ houseSelect.maxFloor ? houseSelect.maxFloor + '层' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="最小层数">
-              {{ houseSelect.minFloor ? houseSelect.minFloor + '层' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="物业类型">
-              {{ houseSelect.propertyAttributes }}
-            </a-descriptions-item>
-            <a-descriptions-item label="物业费">
-              {{ houseSelect.propertyCosts ? houseSelect.propertyCosts + '元/m²' : '' }}
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="学区情况" :column="4">
-            <a-descriptions-item label="一贯制" :span="4">
-              {{ houseSelect.isConsistentSystem ? '是' : '否' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="小学">
-              {{ houseSelect.primarySchool }}
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              {{ houseSelect.echelonPerformance }}
-            </a-descriptions-item>
-            <a-descriptions-item label="中学">
-              {{ houseSelect.middleSchool }}
-            </a-descriptions-item>
-            <a-descriptions-item label="梯队">
-              {{ houseSelect.cityEchelon }}
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="价格及交易" :column="4">
-            <a-descriptions-item label="1居面积" :span="1">
-              {{ houseSelect.roomArea1Min ? houseSelect.roomArea1Min + '-' : ''
-              }}{{ houseSelect.roomArea1Max ? houseSelect.roomArea1Max + 'm²' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="1居价格" :span="1">
-              {{ houseSelect.roomPriceRange1Min ? houseSelect.roomPriceRange1Min + '-' : ''
-              }}{{ houseSelect.roomPriceRange1Max ? houseSelect.roomPriceRange1Max + '万' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="2居面积" :span="1">
-              {{ houseSelect.roomArea2Min ? houseSelect.roomArea2Min + '-' : ''
-              }}{{ houseSelect.roomArea2Max ? houseSelect.roomArea2Max + 'm²' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="2居价格" :span="1">
-              {{ houseSelect.roomPriceRange2Min ? houseSelect.roomPriceRange2Min + '-' : ''
-              }}{{ houseSelect.roomPriceRange2Max ? houseSelect.roomPriceRange2Max + '万' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="3居面积" :span="1">
-              {{ houseSelect.roomArea3Min ? houseSelect.roomArea3Min + '-' : ''
-              }}{{ houseSelect.roomArea3Max ? houseSelect.roomArea3Max + 'm²' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="3居价格" :span="1">
-              {{ houseSelect.roomPriceRange3Min ? houseSelect.roomPriceRange3Min + '-' : ''
-              }}{{ houseSelect.roomPriceRange3Max ? houseSelect.roomPriceRange3Max + '万' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="多居面积" :span="1">
-              {{ houseSelect.roomArea4Min ? houseSelect.roomArea4Min + '-' : ''
-              }}{{ houseSelect.roomArea4Max ? houseSelect.roomArea4Max + 'm²' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="多居价格" :span="1">
-              {{ houseSelect.roomPriceRange4Min ? houseSelect.roomPriceRange4Min + '-' : ''
-              }}{{ houseSelect.roomPriceRange4Max ? houseSelect.roomPriceRange4Max + '万' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="在售">
-              {{ houseSelect.inStock ? houseSelect.inStock + '套' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="在租">
-              {{ houseSelect.positiveRent ? houseSelect.positiveRent + '套' : '' }}
-            </a-descriptions-item>
-            <a-descriptions-item label="成交量">
-              {{ houseSelect.volume2019 ? houseSelect.volume2019 + '套' : '' }}
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="综合" :column="4">
-            <a-descriptions-item label="概括介绍" :span="4">
-              {{ houseEdit.communityDesc }}
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-layout-content>
-      </a-layout>
-      <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-else>
-        <a-layout-header :style="{ padding: '0', height: '80px' }">
-          <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
-            <a-layout-content
-              :style="{
-                background: '#ffffff',
-                padding: '0',
-                'line-height': '32px',
-                'font-size': '24px',
-                color: '#000000'
-              }"
-            >
-              <div>
-                {{ houseEdit.communityName
-                }}<span
-                  style="font-size:16px;color: #B71C2B; margin-left: 12px"
-                >均价
-                  <a-input-number v-model="houseEdit.averageLlistedPrice" size="small" style="width: 100px" />
-                  元/m²</span
-                >
-              </div>
-              <div>
-                <template v-for="tag in tags">
-                  <a-tag :key="tag" closable @close="() => handleClose(tag)" :color="isCustomTag(tag)">
-                    {{ tag }}
-                  </a-tag>
-                </template>
-                <AutoComplete
-                  :value="inputValue"
-                  v-if="tagInputVisible"
-                  style="width: 100px"
-                  :data-source="labels"
-                  :filter-option="tagOptionFilter"
-                  size="small"
-                  @select="handleInputConfirm"
-                  @change="handleInputChange"
-                  @blur="handleInputConfirm"
-                  @keyup.enter="handleInputConfirm"
-                />
-                <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
-                  <a-icon type="plus" /> New Tag
-                </a-tag>
-              </div>
-            </a-layout-content>
-            <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-              <a-button @click="saveHouse()">
-                保存
-              </a-button>
-            </a-layout-sider>
-          </a-layout>
-        </a-layout-header>
-        <a-layout-content class="edit-house">
-          <a-descriptions title="基本信息" :column="4">
-            <a-descriptions-item label="楼盘名称">
-              <a-input v-model="houseEdit.communityName" size="small" style="width: 150px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="楼盘地址" :span="3">
-              <a-input v-model="houseEdit.address" size="small" style="width: 334px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="所属区域">
-              <a-select
-                :options="areaOptions"
-                v-model="houseEdit.area"
-                size="small"
-                style="width: 150px"
-                @change="editAreaChange()"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="所属板块">
-              <a-select :options="editPlateOptions" v-model="houseEdit.plate" size="small" style="width: 150px"></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="环线">
-              <a-select
-                :options="loopSummaryOptions"
-                v-model="houseEdit.loopSummary"
-                size="small"
-                style="width: 150px"
-              ></a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="区域规划">
-              <a-select v-model="houseEdit.districtPlanning" size="small" style="width: 150px">
-                <a-select-option value="城市副中心">城市副中心</a-select-option>
-                <a-select-option value="城市中心">城市中心</a-select-option>
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="地铁线路" :span="4">
-              <a-input-group compact>
-                <a-cascader
-                  :options="options3"
-                  :display-render="displayRender"
-                  expand-trigger="hover"
-                  size="small"
-                  placeholder="地铁">
-                </a-cascader>
-                <a-input v-model="houseEdit.distance" placeholder="距离" size="small" style="width: 120px" suffix="米">
-                </a-input>
-                <span style="color: red; line-height: 24px; padding-left: 6px"><a-icon type="minus-circle" /></span>
-              </a-input-group>
-            </a-descriptions-item>
-            <a-descriptions-item label="" :span="4">
-              <a-button type="dashed" style="width: 100px" size="small" @click="addMetroLine()">
-                <a-icon type="plus" /> 添加
-              </a-button>
-            </a-descriptions-item>
-            <!-- <template v-for="(line,i) in metroLineInfo">
-              <a-descriptions-item label="地铁线路" :key="line">
-                <a-select
-                  :options="metroLineOptions"
-                  v-model="line.metroLine"
-                  size="small"
-                  style="width: 150px"
-                  @change="getstation('houseEdit',line.metroLine)"
-                ></a-select>
-              </a-descriptions-item>
-              <a-descriptions-item label="地铁站名" :key="line">
-                <a-select
-                  :options="stationOptions"
-                  v-model="line.subwayStation"
-                  size="small"
-                  style="width: 150px"
-                  @change="getstation('houseEdit',line.metroLine)"
-                ></a-select>
-              </a-descriptions-item>
-              <a-descriptions-item label="地铁距离" :key="line">
-                <a-input v-model="line.distance" size="small" style="width: 90px" addon-after="米" />
-              </a-descriptions-item>
-              <a-descriptions-item label="" :key="line">
-                <a-button @click="addMetroLine()" v-if="i==0">
-                  添加地铁信息
-                </a-button>
-              </a-descriptions-item>
-            </template>-->
-          </a-descriptions>
-          <a-descriptions title="楼盘概况" :column="4">
-            <a-descriptions-item label="开发商" :span="2">
-              <a-input v-model="houseEdit.developer" size="small" style="width: 150px" />
-            </a-descriptions-item>
-            <a-descriptions-item label="物业公司" :span="2">
-              <a-input v-model="houseEdit.propertyCompany" size="small" />
-            </a-descriptions-item>
-            <a-descriptions-item label="类型">
-              <a-select v-model="houseEdit.cellAttributes" size="small" style="width: 100px">
-                <a-select-option value="住宅"> 住宅 </a-select-option>
-                <a-select-option value="别墅"> 别墅 </a-select-option>
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="权属">
-              <a-select v-model="houseEdit.transactionOwnership" size="small" style="width: 100px">
-                <a-select-option value="商品房"> 商品房 </a-select-option>
-                <a-select-option value="毛坯房"> 毛坯房 </a-select-option>
-                <a-select-option value="售后工房"> 售后工房 </a-select-option>
-                <a-select-option value="其他"> 其他 </a-select-option>
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="年限">
-              <a-input v-model="houseEdit.propertyRights" style="width: 100px" size="small" addon-after="年" />
-            </a-descriptions-item>
-            <a-descriptions-item label="建筑时间">
-              <a-input v-model="houseEdit.constructionAge" style="width: 100px" size="small" addon-after="年" />
-            </a-descriptions-item>
-            <a-descriptions-item label="小区栋数">
-              <a-input v-model="houseEdit.buildingNumber" style="width: 100px" size="small" addon-after="栋" />
-            </a-descriptions-item>
-            <a-descriptions-item label="小区户数">
-              <a-input v-model="houseEdit.householdsNumber" style="width: 100px" size="small" addon-after="户" />
-            </a-descriptions-item>
-            <a-descriptions-item label="停车位数">
-              <a-input v-model="houseEdit.parkingSpacesNumber" style="width: 100px" size="small" />
-            </a-descriptions-item>
-            <a-descriptions-item label="人车分流">
-              <a-select
-                :options="booleanOptions"
-                v-model="houseEdit.peopleAndVehicles"
-                style="width: 100px"
-                size="small"
-              >
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="容积率">
-              <a-input v-model="houseEdit.volumeRate" style="width: 100px" size="small" addon-after="%" />
-            </a-descriptions-item>
-            <a-descriptions-item label="绿化率">
-              <a-input v-model="houseEdit.greeningRate" style="width: 100px" size="small" addon-after="%" />
-            </a-descriptions-item>
-            <a-descriptions-item label="建筑类型">
-              <a-select v-model="houseEdit.buildingType" size="small" style="width: 100px">
-                <a-select-option value="塔楼"> 塔楼 </a-select-option>
-                <a-select-option value="板楼"> 板楼 </a-select-option>
-                <a-select-option value="塔板结合"> 塔板结合 </a-select-option>
-                <a-select-option value="其他"> 其他 </a-select-option>
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="是否电梯">
-              <a-select :options="booleanOptions" v-model="houseEdit.isLift" style="width: 100px" size="small">
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="最大层数">
-              <a-input v-model="houseEdit.maxFloor" style="width: 100px" size="small" addon-after="层" />
-            </a-descriptions-item>
-            <a-descriptions-item label="最小层数">
-              <a-input v-model="houseEdit.minFloor" style="width: 100px" size="small" addon-after="层" />
-            </a-descriptions-item>
-            <a-descriptions-item label="物业类型" style="width: 100px">
-              <a-select v-model="houseEdit.propertyAttributes" size="small">
-                <a-select-option value="办公"> 办公 </a-select-option>
-                <a-select-option value="别墅"> 别墅 </a-select-option>
-                <a-select-option value="公寓住宅"> 公寓住宅 </a-select-option>
-                <a-select-option value="商业"> 商业 </a-select-option>
-                <a-select-option value="商住楼"> 商住楼 </a-select-option>
-                <a-select-option value="酒店"> 酒店 </a-select-option>
-              </a-select>
-            </a-descriptions-item>
-            <a-descriptions-item label="物业费">
-              <a-input v-model="houseEdit.propertyCosts" style="width: 100px" size="small" addon-after="元/m²" />
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="学区情况" :column="4">
-            <template v-for="(school,i) in schoolsInfo">
-              <a-descriptions-item label="一贯制" :span="3" :key="school">
-                <a-select
-                  :options="booleanOptions"
-                  v-model="school.isConsistentSystem"
-                  style="width: 100px"
-                  size="small"
-                >
-                </a-select>
-              </a-descriptions-item>
-              <a-descriptions-item label="" :key="school">
-                <a-button @click="addSchoolsInfo()" v-if="i==0">
-                  添加学区信息
-                </a-button>
-              </a-descriptions-item>
-              <a-descriptions-item label="小学" :key="school">
-                <a-input v-model="school.primarySchool" size="small" style="width: 100px"/>
-              </a-descriptions-item>
-              <a-descriptions-item label="梯队" :key="school">
-                <a-select
-                  :options="echelonPerformanceOptions"
-                  v-model="school.echelonPerformance"
-                  style="width: 100px"
-                  size="small"
-                />
-              </a-descriptions-item>
-              <a-descriptions-item label="中学" :key="school">
-                <a-input v-model="school.middleSchool" size="small" style="width: 100px"/>
-              </a-descriptions-item>
-              <a-descriptions-item label="梯队" :key="school">
-                <a-select :options="cityEchelonOptions" v-model="school.cityEchelon" style="width: 100px" size="small">
-                </a-select>
-              </a-descriptions-item>
-            </template>
-          </a-descriptions>
-          <a-descriptions title="价格及交易" :column="4">
-            <a-descriptions-item label="1居面积" :span="1">
-              <a-input v-model="houseEdit.roomArea1Min" style="width: 56px" size="small" />-
-              <a-input
-                v-model="houseEdit.roomArea1Max"
-                style="width: 90px; margin-right:5px"
-                size="small"
-                addon-after="m²"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="1居价格" :span="1">
-              <a-input v-model="houseEdit.roomPriceRange1Min" style="width: 65px" size="small" />-
-              <a-input v-model="houseEdit.roomPriceRange1Max" style="width: 100px" size="small" addon-after="万" />
-            </a-descriptions-item>
-            <a-descriptions-item label="2居面积" :span="1">
-              <a-input v-model="houseEdit.roomArea2Min" style="width: 56px" size="small" />-
-              <a-input
-                v-model="houseEdit.roomArea2Max"
-                style="width: 90px; margin-right:5px"
-                size="small"
-                addon-after="m²"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="2居价格" :span="1">
-              <a-input v-model="houseEdit.roomPriceRange2Min" style="width: 65px" size="small" />-
-              <a-input v-model="houseEdit.roomPriceRange2Max" style="width: 100px" size="small" addon-after="万" />
-            </a-descriptions-item>
-            <a-descriptions-item label="3居面积" :span="1">
-              <a-input v-model="houseEdit.roomArea3Min" style="width: 56px" size="small" />-
-              <a-input
-                v-model="houseEdit.roomArea3Max"
-                style="width: 90px; margin-right:5px"
-                size="small"
-                addon-after="m²"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="3居价格" :span="1">
-              <a-input v-model="houseEdit.roomPriceRange3Min" style="width: 65px" size="small" />-
-              <a-input v-model="houseEdit.roomPriceRange3Max" style="width: 100px" size="small" addon-after="万" />
-            </a-descriptions-item>
-            <a-descriptions-item label="多居面积" :span="1">
-              <a-input v-model="houseEdit.roomArea4Min" style="width: 56px" size="small" />-
-              <a-input
-                v-model="houseEdit.roomArea4Max"
-                style="width: 90px; margin-right:5px"
-                size="small"
-                addon-after="m²"
-              />
-            </a-descriptions-item>
-            <a-descriptions-item label="多居价格" :span="1">
-              <a-input v-model="houseEdit.roomPriceRange4Min" style="width: 65px" size="small" />-
-              <a-input v-model="houseEdit.roomPriceRange4Max" style="width: 100px" size="small" addon-after="万" />
-            </a-descriptions-item>
-            <a-descriptions-item label="在售">
-              <a-input v-model="houseEdit.inStock" style="width: 90px" size="small" addon-after="套" />
-            </a-descriptions-item>
-            <a-descriptions-item label="在租">
-              <a-input v-model="houseEdit.positiveRent" style="width: 90px" size="small" addon-after="套" />
-            </a-descriptions-item>
-            <a-descriptions-item label="年成交">
-              <a-input v-model="houseEdit.volume2019" style="width: 90px" size="small" addon-after="套" />
-            </a-descriptions-item>
-          </a-descriptions>
-          <a-descriptions title="综合" :column="4">
-            <a-descriptions-item label="概括介绍" :span="4">
-              <a-textarea
-                v-model="houseEdit.communityDesc"
-                style="width: 800px"
-                size="small"
-                :auto-size="{ minRows: 2, maxRows: 6 }"
-              />
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-layout-content>
-      </a-layout>
+    <a-drawer :visible="detailFlag" width="80vw" @close="closeDetail">
+      <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search"></house-edit>
     </a-drawer>
   </page-header-wrapper>
 </template>
@@ -913,6 +400,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse, saveHouse, getLabels } from '@/api/manage'
+import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
   metroLineOptions,
@@ -935,22 +423,21 @@ export default {
   components: {
     STable,
     Ellipsis,
-    AutoComplete
+    AutoComplete,
+    HouseEdit
   },
   data () {
-    // this.columns = columns
     return {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
       queryParam: { area: [] },
-      detailVisible: false,
+      detailFlag: 0, // 0 close 1 view 2 edit
       tagInputVisible: false,
       tags: [],
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
-      houseSelect: {},
-      houseEdit: {},
+      house: {},
       sort: 'averageLlistedPrice,asc',
       sortType: 'asc',
       size: 20,
@@ -975,17 +462,7 @@ export default {
       statusMap,
       loading: false,
       plates: {},
-      subwayStations: {},
-      metroLineInfo: [],
-      schoolsInfo: []
-    }
-  },
-  filters: {
-    statusFilter (type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter (type) {
-      return statusMap[type].status
+      subwayStations: {}
     }
   },
   created () {
@@ -1010,8 +487,7 @@ export default {
   },
   methods: {
     closeDetail () {
-      this.detailVisible = false
-      this.edit = false
+      this.detailFlag = 0
       this.refresh()
     },
 
@@ -1119,13 +595,14 @@ export default {
     },
 
     showDetail (community) {
-      this.detailVisible = true
-      this.houseSelect = community
-      if (community.labels) {
-        this.tags = community.labels.split(',')
-      } else {
-        this.tags = []
-      }
+      this.detailFlag = 1
+      // this.houseSelect = community
+      // if (community.labels) {
+      //   this.tags = community.labels.split(',')
+      // } else {
+      //   this.tags = []
+      // }
+      this.house = community
     },
 
     sortChange (type) {
@@ -1186,28 +663,11 @@ export default {
     },
 
     newHouse () {
-      this.detailVisible = true
-      this.houseEdit = {}
-      this.houseSelect = this.houseEdit
-      this.tags = []
-      this.houseEdit.peopleAndVehicles = 0
-      this.houseEdit.isLift = 1
-      this.houseEdit.isConsistentSystem = 0
-      console.log(this.houseEdit)
-      this.editAreaChange()
-      this.metroLineInfo = [{
-        metroLine: '1号线',
-        subwayStation: '人民广场',
-        distance: 0
-      }]
-      this.schoolsInfo = [{
-          isConsistentSystem: undefined,
-          primarySchool: undefined,
-          echelonPerformance: undefined,
-          middleSchool: undefined,
-          cityEchelon: undefined
-        }]
-      this.edit = true
+      this.detailFlag = 2
+      this.house = {}
+      this.house.peopleAndVehicles = 0
+      this.house.isLift = 1
+      this.house.isConsistentSystem = 0
     },
 
     getstation (type, metroLine) {
