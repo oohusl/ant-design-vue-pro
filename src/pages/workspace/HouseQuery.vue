@@ -167,8 +167,6 @@
             </a-form-item>
           </a-form-item>
           <a-form-item label="面积">
-            <!-- <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" >
-            </a-checkbox-group> -->
             <a-select
               v-model="queryParam.roomArea"
               mode="multiple"
@@ -261,7 +259,7 @@
               新建
             </a-button>
 
-            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggleAdvanced">
+            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
               {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
           </a-form-item>
@@ -399,7 +397,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getHouse, saveHouse, getLabels } from '@/api/manage'
+import { getHouse } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
@@ -413,8 +411,7 @@ import {
   cityEchelonOptions,
   echelonPerformanceOptions,
   subwaystation,
-  areaPlate,
-  statusMap
+  areaPlate
 } from '@/api/data'
 import { AutoComplete } from 'ant-design-vue'
 
@@ -433,33 +430,27 @@ export default {
       // 查询参数
       queryParam: { area: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
-      tagInputVisible: false,
-      tags: [],
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
       house: {},
       sort: 'averageLlistedPrice,asc',
       sortType: 'asc',
       size: 20,
-      edit: false,
       stationOptions: [],
-      labels: [],
       areaPlate,
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
       metroLineOptions,
       averageLlistedPriceOptions,
-      totalPriceOptions,
-      totalPriceEdit: false,
       roomAreaOptions,
       constructionAgeOptions,
       loopSummaryOptions,
       booleanOptions,
       cityEchelonOptions,
+      totalPriceOptions,
       echelonPerformanceOptions,
       subwaystation,
-      statusMap,
       loading: false,
       plates: {},
       subwayStations: {}
@@ -467,9 +458,6 @@ export default {
   },
   created () {
     this.search({})
-    getLabels().then(data => {
-      this.labels = data
-    })
   },
   mounted () {
     window.addEventListener('scroll', this.windowScroll)
@@ -489,10 +477,6 @@ export default {
     closeDetail () {
       this.detailFlag = 0
       this.refresh()
-    },
-
-    toggleAdvanced () {
-      this.advanced = !this.advanced
     },
 
     resetSearchForm () {
@@ -531,15 +515,6 @@ export default {
         this.plateOptions.push(...areaPlate[e])
       })
       this.search()
-    },
-
-    editAreaChange () {
-      if (this.houseEdit.area) {
-        this.editPlateOptions.splice(0)
-        areaPlate[this.houseEdit.area].forEach(v => {
-          this.editPlateOptions.push({ label: v, value: v })
-        })
-      }
     },
 
     getPlate (area) {
@@ -596,12 +571,6 @@ export default {
 
     showDetail (community) {
       this.detailFlag = 1
-      // this.houseSelect = community
-      // if (community.labels) {
-      //   this.tags = community.labels.split(',')
-      // } else {
-      //   this.tags = []
-      // }
       this.house = community
     },
 
@@ -618,50 +587,6 @@ export default {
       }
     },
 
-    editHouse () {
-        // edit
-        this.houseEdit = this.houseSelect
-        this.houseEdit.peopleAndVehicles = Number(this.houseEdit.peopleAndVehicles)
-        this.houseEdit.isLift = Number(this.houseEdit.isLift)
-        this.houseEdit.isConsistentSystem = Number(this.houseEdit.isConsistentSystem)
-        this.editAreaChange()
-        this.getstation('houseData')
-        this.metroLineInfo = [{
-          metroLine: this.houseEdit.metroLine,
-          subwayStation: this.houseEdit.subwayStation,
-          distance: this.houseEdit.distance
-        }]
-        this.schoolsInfo = [{
-          isConsistentSystem: this.houseEdit.isConsistentSystem,
-          primarySchool: this.houseEdit.primarySchool,
-          echelonPerformance: this.houseEdit.echelonPerformance,
-          middleSchool: this.houseEdit.middleSchool,
-          cityEchelon: this.houseEdit.cityEchelon
-        }]
-        this.edit = !this.edit
-    },
-
-    saveHouse () {
-      // save
-      console.log('save:', this.houseEdit)
-      this.houseEdit.labels = this.tags.join(',')
-      saveHouse(this.houseEdit)
-        .then(e => {
-          this.edit = !this.edit
-          this.$notification.success({
-            message: '通知',
-            description: this.house.id ? '修改成功' : '保存成功'
-          })
-          this.refresh()
-        })
-        .catch(() => {
-          this.$notification.error({
-            message: '通知',
-            description: this.house.id ? '修改失败' : '保存失败'
-          })
-        })
-    },
-
     newHouse () {
       this.detailFlag = 2
       this.house = {}
@@ -669,95 +594,6 @@ export default {
       this.house.isLift = 1
       this.house.isConsistentSystem = 0
     },
-
-    getstation (type, metroLine) {
-          const _this = this
-          if (type || metroLine) {
-            this.stationOptions.splice(0)
-            this.subwaystation.forEach(v => {
-              metroLine = metroLine || _this[type]?.metroLine
-              if (v.line === metroLine) {
-                v.station.forEach(val => {
-                  _this.stationOptions.push({ label: val, value: val })
-                })
-              }
-            })
-          }
-        },
-
-    getLineStation (lines) {
-      const stationOptions = []
-      lines.forEach(line => {
-        this.subwaystation.forEach(v => {
-          if (v.line === line) {
-            v.station.forEach(val => {
-              stationOptions.push({ label: val, value: val })
-            })
-          }
-        })
-      })
-      return stationOptions
-    },
-
-    addMetroLine () {
-      this.metroLineInfo.push({
-        metroLine: '1号线',
-        subwayStation: '人民广场',
-        distance: 0
-      })
-    },
-
-    addSchoolsInfo () {
-      this.schoolsInfo.push({
-          isConsistentSystem: undefined,
-          primarySchool: undefined,
-          echelonPerformance: undefined,
-          middleSchool: undefined,
-          cityEchelon: undefined
-        })
-    },
-
-    /* tag start */
-    handleClose (removedTag) {
-      const tags = this.tags.filter(tag => tag !== removedTag)
-      console.log(tags)
-      this.tags = tags
-    },
-
-    showInput () {
-      this.tagInputVisible = true
-      this.$nextTick(function () {})
-    },
-
-    handleInputChange (e) {
-      this.inputValue = e
-    },
-
-    handleInputConfirm () {
-      const inputValue = this.inputValue
-      let tags = this.tags
-      if (inputValue && !tags.find(e => e === inputValue)) {
-        tags = [...tags, inputValue]
-      }
-      Object.assign(this, {
-        tags,
-        tagInputVisible: false,
-        inputValue: ''
-      })
-    },
-
-    tagOptionFilter (input, option) {
-      return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
-    },
-
-    isCustomTag (tag) {
-      console.log(tag)
-      if (this.labels.includes(tag)) {
-        return ''
-      }
-      return 'red'
-    },
-     /* tag end */
 
     windowScroll () {
       if (
