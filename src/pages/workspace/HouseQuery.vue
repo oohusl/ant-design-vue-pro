@@ -1,8 +1,7 @@
 <template>
   <page-header-wrapper>
     <div>
-      <BackTop>
-      </BackTop>
+      <BackTop></BackTop>
     </div>
     <a-layout>
       <a-layout-header :style="{ padding: 0 }">
@@ -34,17 +33,19 @@
         </div>
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
-        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" label-align="left" style="margin-top: 10px">
+        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
               <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)" >
-                    <template v-for="(plateOption) in getPlate(options.value)">
-                      <a-checkbox :value="plateOption.value" :key="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
-                        plateOption.label
-                      }}</a-checkbox>
-                    </template>
+                    <a-row :span="32">
+                      <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption.value">
+                        <a-checkbox :value="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
+                          plateOption.label
+                        }}</a-checkbox>
+                      </a-col>
+                    </a-row>
                   </a-checkbox-group>
                 </template>
                 <a-checkbox :value="options.value" :indeterminate="(queryParam.area && queryParam.area.indexOf(options.value) < 0) && options.halfSelected" :checked="true">{{ options.label }}</a-checkbox>
@@ -54,9 +55,6 @@
             <template v-for="a in plates">
               <a-tag v-for="p in a" :key="p">{{ p }}</a-tag>
             </template>
-          </a-form-item>
-          <a-form-item label="环线">
-            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁线">
             <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
@@ -94,23 +92,22 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地铁站" v-if="queryParam.subwayStation && queryParam.subwayStation.length">
-            <a-tag v-for="(ss,s) in queryParam.subwayStation" :key="s">{{ ss }}</a-tag>
+            <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
           </a-form-item>
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item label="学校" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.schoolType">
-                  <a-checkbox value="小学">小学</a-checkbox>
-                  <a-checkbox value="中学">中学</a-checkbox>
-                  <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
-                </a-checkbox-group>
-                <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
-                  <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
-                </a-form-item>
-              </a-form-item>
-            </a-col>
-          </a-row>
-          <a-form-item label="户型">
+          <a-form-item label="环线">
+            <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="学校" v-if="advanced">
+            <a-checkbox-group v-model="queryParam.schoolType">
+              <a-checkbox value="小学">小学</a-checkbox>
+              <a-checkbox value="中学">中学</a-checkbox>
+              <a-checkbox value="一贯制">一贯制学校</a-checkbox>
+            </a-checkbox-group>
+            <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
+              <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
+            </a-form-item>
+          </a-form-item>
+          <a-form-item label="户型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.roomType">
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>
@@ -118,43 +115,67 @@
               <a-checkbox value="4"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="单价">
-            <!-- <a-checkbox-group
-              v-model="queryParam.averageLlistedPrice"
-              :options="averageLlistedPriceOptions"
 
-            >
-            </a-checkbox-group> -->
+          <a-form-item label="单价">
+            <a-popover trigger="hover" placement="topLeft">
+              <template slot="content">
+                <a-checkbox-group v-model="queryParam.averageLlistedPrice" >
+                  <a-row v-for="xx in averageLlistedPriceOptions" :key="xx.label">
+                    <a-col>
+                      <a-checkbox :value="xx">{{
+                        xx.label
+                      }}</a-checkbox>
+                    </a-col>
+                  </a-row>
+                </a-checkbox-group>
+              </template>
+              <a-button type="dashed" icon="search" size="small">选择单价</a-button>
+            </a-popover>
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
+              </a-input>
+            </a-form-item>
+            <a-tag v-for="avePrice in averagePriceAll" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+          </a-form-item>
+
+          <a-form-item label="单价" v-if="advanced">
             <a-select
               v-model="queryParam.averageLlistedPrice"
-              mode="multiple"
               :showArrow="true"
               size="small"
               placeholder="请选择单价"
-              style="width: 280px"
+              style="width: 120px"
             >
-              <a-select-option v-for="(i,j) in averageLlistedPriceOptions" :key="j" :value="i.value" :label="i.label">
+              <a-select-option v-for="i in averageLlistedPriceOptions" :key="i.label" :value="i.label" :label="i.label">
                 {{ i.label }}
               </a-select-option>
             </a-select>
-            <a-form-item :style="{ display: 'inline-block', width: '63px', 'margin-left': '50px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
             </a-form-item>
-            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '100px' }">
-              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" addon-after="万" />
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true"/>
+              </a-input>
             </a-form-item>
           </a-form-item>
+          <!--
           <a-form-item label="总价">
             <a-select
               v-model="queryParam.totalPrice"
               mode="multiple"
-              :showArrow="true"
+              showArrow="true"
               size="small"
               placeholder="请选择总价"
               style="width: 280px"
             >
-              <a-select-option v-for="(i,j) in totalPriceOptions" :key="j" :value="i.value" :label="i.label">
+              <a-select-option v-for="i in totalPriceOptions" :key="i.value" :value="i.value" :label="i.label">
                 {{ i.label }}
               </a-select-option>
             </a-select>
@@ -171,17 +192,15 @@
             </a-form-item>
           </a-form-item>
           <a-form-item label="面积">
-            <!-- <a-checkbox-group v-model="queryParam.roomArea" :options="roomAreaOptions" >
-            </a-checkbox-group> -->
             <a-select
               v-model="queryParam.roomArea"
               mode="multiple"
-              :showArrow="true"
+              showArrow="true"
               size="small"
               placeholder="请选择面积段"
               style="width: 280px"
             >
-              <a-select-option v-for="(i,j) in roomAreaOptions" :key="j" :value="i.value" :label="i.label">
+              <a-select-option v-for="i in roomAreaOptions" :key="i.value" :value="i.value" :label="i.label">
                 {{ i.label }}
               </a-select-option>
             </a-select>
@@ -192,10 +211,10 @@
             <a-form-item :style="{ display: 'inline-block', width: '114px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" addon-after="平方" />
             </a-form-item>
-          </a-form-item>
-          <a-row :gutter="24" v-if="advanced">
+          </a-form-item> -->
+          <a-row v-if="advanced">
             <a-col :span="12">
-              <a-form-item label="小区属性" :label-col="{ span: 4 }">
+              <a-form-item label="小区属性" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.cellAttributes">
                   <a-checkbox value="住宅"> 住宅 </a-checkbox>
                   <a-checkbox value="别墅"> 别墅 </a-checkbox>
@@ -204,7 +223,7 @@
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="建筑类型" :label-col="{ span: 4 }">
+              <a-form-item label="建筑类型" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.buildingType">
                   <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
                   <a-checkbox value="板楼"> 板楼 </a-checkbox>
@@ -214,31 +233,25 @@
               </a-form-item>
             </a-col>
           </a-row>
-          <a-row :gutter="24" v-if="advanced">
+
+          <a-row v-if="advanced">
             <a-col :span="12">
-              <a-form-item label="是否电梯" :label-col="{ span: 4 }">
+              <a-form-item label="是否电梯" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-checkbox-group v-model="queryParam.isLift">
-                  <a-checkbox :value="true">
+                  <a-checkbox :value="1">
                     有电梯
                   </a-checkbox>
-                  <a-checkbox :value="false">
+                  <a-checkbox :value="0">
                     无电梯
                   </a-checkbox>
-                  <a-checkbox :value="1">
+                  <a-checkbox :value="2">
                     其他
                   </a-checkbox>
                 </a-checkbox-group>
               </a-form-item>
             </a-col>
             <a-col :span="12">
-              <a-form-item label="建筑年代" :label-col="{ span: 4 }">
-                <!-- <a-checkbox-group
-                  v-model="queryParam.constructionAge"
-                  :options="constructionAgeOptions"
-
-                >
-                </a-checkbox-group> -->
-
+              <a-form-item label="建筑年代" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
                 <a-select
                   v-model="queryParam.constructionAge"
                   mode="multiple"
@@ -247,7 +260,7 @@
                   placeholder="请选择建筑年代"
                   style="width: 280px"
                 >
-                  <a-select-option v-for="(i,j) in constructionAgeOptions" :key="j" :value="i.value" :label="i.label">
+                  <a-select-option v-for="i in constructionAgeOptions" :key="i.label" :value="i.value" :label="i.label">
                     {{ i.label }}
                   </a-select-option>
                 </a-select>
@@ -265,7 +278,7 @@
               新建
             </a-button>
 
-            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="toggleAdvanced">
+            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
               {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
           </a-form-item>
@@ -394,8 +407,8 @@
         </a-card>
       </a-layout-content>
     </a-layout>
-    <a-drawer :visible="detailFlag>0" width="80vw" @close="closeDetail">
-      <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search" ref="houseeditref"></house-edit>
+    <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
+      <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search"></house-edit>
     </a-drawer>
   </page-header-wrapper>
 </template>
@@ -403,7 +416,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getHouse, saveHouse, getLabels } from '@/api/manage'
+import { getHouse } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
@@ -417,8 +430,7 @@ import {
   cityEchelonOptions,
   echelonPerformanceOptions,
   subwaystation,
-  areaPlate,
-  statusMap
+  areaPlate
 } from '@/api/data'
 import { AutoComplete, BackTop } from 'ant-design-vue'
 
@@ -436,45 +448,37 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [] },
+      queryParam: { area: [], averageLlistedPrice: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
-      tagInputVisible: false,
-      tags: [],
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
       house: {},
       sort: 'averageLlistedPrice,asc',
       sortType: 'asc',
       size: 20,
-      edit: false,
       stationOptions: [],
-      labels: [],
       areaPlate,
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
       metroLineOptions,
       averageLlistedPriceOptions,
-      totalPriceOptions,
-      totalPriceEdit: false,
       roomAreaOptions,
       constructionAgeOptions,
       loopSummaryOptions,
       booleanOptions,
       cityEchelonOptions,
+      totalPriceOptions,
       echelonPerformanceOptions,
       subwaystation,
-      statusMap,
       loading: false,
       plates: {},
-      subwayStations: {}
+      subwayStations: {},
+      averagePriceInput: []
     }
   },
   created () {
     this.search({})
-    getLabels().then(data => {
-      this.labels = data
-    })
   },
   mounted () {
     window.addEventListener('scroll', this.windowScroll)
@@ -483,11 +487,12 @@ export default {
     window.removeEventListener('scroll', this.windowScroll)
   },
   computed: {
-    rowSelection () {
-      return {
-        selectedRowKeys: this.selectedRowKeys,
-        onChange: this.onSelectChange
-      }
+    averagePriceAll: function () {
+      const averagePriceMap = new Map()
+      this.averagePriceInput.concat(this.queryParam.averageLlistedPrice).forEach(e => {
+        averagePriceMap.set(e.label, e)
+      })
+      return averagePriceMap.values()
     }
   },
   methods: {
@@ -496,14 +501,11 @@ export default {
       this.search()
     },
 
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
-
     resetSearchForm () {
       this.queryParam = {
         date: moment(new Date()),
-        area: []
+        area: [],
+        averageLlistedPrice: []
       }
       this.plates = {}
       this.areaReset()
@@ -526,9 +528,6 @@ export default {
       console.log('loadData request parameters:', requestParameters)
       getHouse(requestParameters).then(res => {
         console.log(res)
-        for (const h of res) {
-          console.log(h.schoolDistrictInfo.length)
-        }
         this.results = res
       })
     },
@@ -539,15 +538,6 @@ export default {
         this.plateOptions.push(...areaPlate[e])
       })
       this.search()
-    },
-
-    editAreaChange () {
-      if (this.houseEdit.area) {
-        this.editPlateOptions.splice(0)
-        areaPlate[this.houseEdit.area].forEach(v => {
-          this.editPlateOptions.push({ label: v, value: v })
-        })
-      }
     },
 
     getPlate (area) {
@@ -577,7 +567,7 @@ export default {
       if (this.plates[area].length > 0) {
         areaOption.halfSelected = true
         const index = this.queryParam.area.indexOf(area)
-        if (index >= 0) this.queryParam.area.splice(index + 1, 1)
+        if (index >= 0) this.queryParam.area.splice(index, 1)
       } else {
         // 未选中板块
         areaOption.halfSelected = false
@@ -602,15 +592,12 @@ export default {
       })
     },
 
+    addAveragePrice (min, max) {
+      this.averagePriceInput.push({ label: `${min}-${max}万`, value: [min, max] })
+    },
+
     showDetail (community) {
       this.detailFlag = 1
-      // this.houseSelect = community
-      // if (community.labels) {
-      //   this.tags = community.labels.split(',')
-      // } else {
-      //   this.tags = []
-      // }
-      this.$refs.houseeditref && this.$refs.houseeditref.test('哇哦！')
       this.house = community
     },
 
@@ -627,143 +614,13 @@ export default {
       }
     },
 
-    editHouse () {
-        // edit
-        this.houseEdit = this.houseSelect
-        this.houseEdit.peopleAndVehicles = Number(this.houseEdit.peopleAndVehicles)
-        this.houseEdit.isLift = Number(this.houseEdit.isLift)
-        this.houseEdit.isConsistentSystem = Number(this.houseEdit.isConsistentSystem)
-        this.editAreaChange()
-        this.getstation('houseData')
-        this.metroLineInfo = [{
-          metroLine: this.houseEdit.metroLine,
-          subwayStation: this.houseEdit.subwayStation,
-          distance: this.houseEdit.distance
-        }]
-        this.schoolsInfo = [{
-          isConsistentSystem: this.houseEdit.isConsistentSystem,
-          primarySchool: this.houseEdit.primarySchool,
-          echelonPerformance: this.houseEdit.echelonPerformance,
-          middleSchool: this.houseEdit.middleSchool,
-          cityEchelon: this.houseEdit.cityEchelon
-        }]
-        this.edit = !this.edit
-    },
-
-    saveHouse () {
-      // save
-      console.log('save:', this.houseEdit)
-      this.houseEdit.labels = this.tags.join(',')
-      saveHouse(this.houseEdit)
-        .then(e => {
-          this.edit = !this.edit
-          this.$notification.success({
-            message: '通知',
-            description: this.house.id ? '修改成功' : '保存成功'
-          })
-          this.search()
-        })
-        .catch(() => {
-          this.$notification.error({
-            message: '通知',
-            description: this.house.id ? '修改失败' : '保存失败'
-          })
-        })
-    },
-
     newHouse () {
       this.detailFlag = 2
       this.house = {}
+      this.house.peopleAndVehicles = 0
+      this.house.isLift = 1
+      this.house.isConsistentSystem = 0
     },
-
-    getstation (type, metroLine) {
-          const _this = this
-          if (type || metroLine) {
-            this.stationOptions.splice(0)
-            this.subwaystation.forEach(v => {
-              metroLine = metroLine || _this[type]?.metroLine
-              if (v.line === metroLine) {
-                v.station.forEach(val => {
-                  _this.stationOptions.push({ label: val, value: val })
-                })
-              }
-            })
-          }
-        },
-
-    getLineStation (lines) {
-      const stationOptions = []
-      lines.forEach(line => {
-        this.subwaystation.forEach(v => {
-          if (v.line === line) {
-            v.station.forEach(val => {
-              stationOptions.push({ label: val, value: val })
-            })
-          }
-        })
-      })
-      return stationOptions
-    },
-
-    addMetroLine () {
-      this.metroLineInfo.push({
-        metroLine: '1号线',
-        subwayStation: '人民广场',
-        distance: 0
-      })
-    },
-
-    addSchoolsInfo () {
-      this.schoolsInfo.push({
-          isConsistentSystem: undefined,
-          primarySchool: undefined,
-          echelonPerformance: undefined,
-          middleSchool: undefined,
-          cityEchelon: undefined
-        })
-    },
-
-    /* tag start */
-    handleClose (removedTag) {
-      const tags = this.tags.filter(tag => tag !== removedTag)
-      console.log(tags)
-      this.tags = tags
-    },
-
-    showInput () {
-      this.tagInputVisible = true
-      this.$nextTick(function () {})
-    },
-
-    handleInputChange (e) {
-      this.inputValue = e
-    },
-
-    handleInputConfirm () {
-      const inputValue = this.inputValue
-      let tags = this.tags
-      if (inputValue && !tags.find(e => e === inputValue)) {
-        tags = [...tags, inputValue]
-      }
-      Object.assign(this, {
-        tags,
-        tagInputVisible: false,
-        inputValue: ''
-      })
-    },
-
-    tagOptionFilter (input, option) {
-      return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
-    },
-
-    isCustomTag (tag) {
-      console.log(tag)
-      if (this.labels.includes(tag)) {
-        return ''
-      }
-      return 'red'
-    },
-     /* tag end */
 
     windowScroll () {
       if (
@@ -833,5 +690,14 @@ img {
 }
 .house-list .ant-card-body {
   padding: 0;
+}
+.ant-checkbox + span{
+  padding-left: 6px;
+}
+</style>
+
+<style>
+.ant-checkbox + span{
+  padding-left: 6px;
 }
 </style>
