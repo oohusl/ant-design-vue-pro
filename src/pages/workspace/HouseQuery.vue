@@ -30,17 +30,19 @@
         </div>
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
-        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 20 }" label-align="left" style="margin-top: 10px">
+        <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
               <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)" >
-                    <template v-for="(plateOption) in getPlate(options.value)">
-                      <a-checkbox :value="plateOption.value" :key="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
-                        plateOption.label
-                      }}</a-checkbox>
-                    </template>
+                    <a-row :span="32">
+                      <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption">
+                        <a-checkbox :value="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
+                          plateOption.label
+                        }}</a-checkbox>
+                      </a-col>
+                    </a-row>
                   </a-checkbox-group>
                 </template>
                 <a-checkbox :value="options.value" :indeterminate="(queryParam.area && queryParam.area.indexOf(options.value) < 0) && options.halfSelected" :checked="true">{{ options.label }}</a-checkbox>
@@ -92,20 +94,16 @@
           <a-form-item label="地铁站" v-if="queryParam.subwayStation && queryParam.subwayStation.length">
             <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
           </a-form-item>
-          <a-row :gutter="24">
-            <a-col :span="12">
-              <a-form-item label="学校" :label-col="{ span: 4 }">
-                <a-checkbox-group v-model="queryParam.schoolType">
-                  <a-checkbox value="小学">小学</a-checkbox>
-                  <a-checkbox value="中学">中学</a-checkbox>
-                  <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
-                </a-checkbox-group>
-                <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
-                  <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
-                </a-form-item>
-              </a-form-item>
-            </a-col>
-          </a-row>
+          <a-form-item label="学校">
+            <a-checkbox-group v-model="queryParam.schoolType">
+              <a-checkbox value="小学">小学</a-checkbox>
+              <a-checkbox value="中学">中学</a-checkbox>
+              <a-checkbox value="一贯制学校">一贯制学校</a-checkbox>
+            </a-checkbox-group>
+            <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
+              <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
+            </a-form-item>
+          </a-form-item>
           <a-form-item label="户型">
             <a-checkbox-group v-model="queryParam.roomType">
               <a-checkbox value="1"> 一房 </a-checkbox>
@@ -114,13 +112,7 @@
               <a-checkbox value="4"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="单价">
-            <!-- <a-checkbox-group
-              v-model="queryParam.averageLlistedPrice"
-              :options="averageLlistedPriceOptions"
-
-            >
-            </a-checkbox-group> -->
+          <!-- <a-form-item label="单价">
             <a-select
               v-model="queryParam.averageLlistedPrice"
               mode="multiple"
@@ -186,7 +178,7 @@
             <a-form-item :style="{ display: 'inline-block', width: '114px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" addon-after="平方" />
             </a-form-item>
-          </a-form-item>
+          </a-form-item> -->
           <a-row :gutter="24" v-if="advanced">
             <a-col :span="12">
               <a-form-item label="小区属性" :label-col="{ span: 4 }">
@@ -249,7 +241,7 @@
             </a-col>
           </a-row>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
-            <a-button @click="refresh()" type="primary">
+            <a-button @click="search()" type="primary">
               查询
             </a-button>
             <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }">
@@ -388,7 +380,7 @@
         </a-card>
       </a-layout-content>
     </a-layout>
-    <a-drawer :visible="detailFlag" width="80vw" @close="closeDetail">
+    <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search"></house-edit>
     </a-drawer>
   </page-header-wrapper>
@@ -476,7 +468,7 @@ export default {
   methods: {
     closeDetail () {
       this.detailFlag = 0
-      this.refresh()
+      this.search()
     },
 
     resetSearchForm () {
@@ -544,7 +536,7 @@ export default {
       if (this.plates[area].length > 0) {
         areaOption.halfSelected = true
         const index = this.queryParam.area.indexOf(area)
-        if (index >= 0) this.queryParam.area.splice(index + 1, 1)
+        if (index >= 0) this.queryParam.area.splice(index, 1)
       } else {
         // 未选中板块
         areaOption.halfSelected = false
@@ -663,5 +655,14 @@ img {
 }
 .house-list .ant-card-body {
   padding: 0;
+}
+.ant-checkbox + span{
+  padding-left: 6px;
+}
+</style>
+
+<style>
+.ant-checkbox + span{
+  padding-left: 6px;
 }
 </style>
