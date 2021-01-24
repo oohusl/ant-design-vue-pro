@@ -53,15 +53,17 @@
         <a-descriptions-item label="区域规划">
           {{ houseSelect.districtPlanning }}
         </a-descriptions-item>
-        <a-descriptions-item label="地铁线路">
-          {{ houseSelect.metroLine ? houseSelect.metroLine + '号线' : '' }}
-        </a-descriptions-item>
-        <a-descriptions-item label="地铁站名">
-          {{ houseSelect.subwayStation }}
-        </a-descriptions-item>
-        <a-descriptions-item label="地铁距离">
-          {{ houseSelect.distance }}
-        </a-descriptions-item>
+        <template v-for="(line,i) in metroLineInfo">
+          <a-descriptions-item label="地铁线路" :key="i">
+            {{ line.metroLine ? line.metroLine + '号线' : '' }}
+          </a-descriptions-item>
+          <a-descriptions-item label="地铁站名" :key="i">
+            {{ line.subwayStation }}
+          </a-descriptions-item>
+          <a-descriptions-item label="地铁距离" :key="i">
+            {{ line.distance }}
+          </a-descriptions-item>
+        </template>
       </a-descriptions>
       <a-descriptions title="楼盘概况" :column="4">
         <a-descriptions-item label="开发商" :span="2">
@@ -120,21 +122,18 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <a-descriptions-item label="一贯制" :span="4">
-          {{ houseSelect.isConsistentSystem ? '是' : '否' }}
-        </a-descriptions-item>
-        <a-descriptions-item label="小学">
-          {{ houseSelect.primarySchool }}
-        </a-descriptions-item>
-        <a-descriptions-item label="梯队">
-          {{ houseSelect.echelonPerformance }}
-        </a-descriptions-item>
-        <a-descriptions-item label="中学">
-          {{ houseSelect.middleSchool }}
-        </a-descriptions-item>
-        <a-descriptions-item label="梯队">
-          {{ houseSelect.cityEchelon }}
-        </a-descriptions-item>
+        <template v-for="(school,s) in schoolsInfo">
+          <a-descriptions-item label="学校" :span="2" :key="s">
+            {{ school.name }}
+          </a-descriptions-item>
+          <a-descriptions-item label="类型" :key="s">
+            {{ school.type }}
+          </a-descriptions-item>
+          <a-descriptions-item label="梯队" :key="s">
+            {{ school.echelonPerformance }}
+          </a-descriptions-item>
+        </template>
+
       </a-descriptions>
       <a-descriptions title="价格及交易" :column="4">
         <a-descriptions-item label="1居面积" :span="1">
@@ -271,21 +270,25 @@
             <a-select-option value="城市中心">城市中心</a-select-option>
           </a-select>
         </a-descriptions-item>
-        <a-descriptions-item label="地铁线路" :span="4">
-          <a-input-group compact>
-            <a-cascader
-              :options="options3"
-              :display-render="displayRender"
-              expand-trigger="hover"
-              size="small"
-              style="width: 220px"
-              placeholder="地铁">
-            </a-cascader>
-            <a-input v-model="houseSelect.distance" placeholder="距离" size="small" style="width: 145px" suffix="米">
-            </a-input>
-            <span style="color: red; line-height: 24px; padding-left: 6px"><a-icon type="minus-circle" /></span>
-          </a-input-group>
-        </a-descriptions-item>
+        <template v-for="(line,i) in metroLineInfo">
+          <a-descriptions-item :label="i===0?'地铁线路':''" :span="4" :key="i">
+            <a-input-group compact>
+              <a-cascader
+                :options="metrolineDistrictInfo"
+                expand-trigger="hover"
+                size="small"
+                style="width: 220px"
+                change-on-select
+                placeholder="地铁"
+                :default-value="['1','人民广场']"
+                @change="selectMetroLine">
+              </a-cascader>
+              <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="米">
+              </a-input>
+              <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" v-if="metroLineInfo.length>1" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
+            </a-input-group>
+          </a-descriptions-item>
+        </template>
         <a-descriptions-item label="" :span="4">
           <a-button type="dashed" style="width: 100px" size="small" @click="addMetroLine()">
             <a-icon type="plus" /> 添加
@@ -404,21 +407,21 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <template v-for="(school, i) in schoolsInfo">
-          <a-descriptions-item label="" :span="2" :key="school">
+        <template v-for="(school,s) in schoolsInfo">
+          <a-descriptions-item label="" :span="2" :key="s">
             <a-select
               class="col2"
               size="small"
               placeholder="请选中配套学校"
               :options="schools"
-              showSearch="true"
-              v-model="schoolsInfo[i]"
+              :showSearch="true"
+              v-model="schoolsInfo[s]"
             />
           </a-descriptions-item>
-          <a-descriptions-item label="类型" :key="school">
+          <a-descriptions-item label="类型" :key="s">
             {{ school.type }}
           </a-descriptions-item>
-          <a-descriptions-item label="梯队" :key="school">
+          <a-descriptions-item label="梯队" :key="s">
             {{ school.echelonPerformance }}
           </a-descriptions-item>
         </template>
@@ -624,13 +627,30 @@ export default {
         label: '上海实验学校', value: { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' }
       }, {
         label: '进才中学', value: { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
-      }]
+      }],
+      metrolineDistrictInfo: []
     }
   },
   created () {
     getLabels().then(data => {
       this.labels = data
     })
+    this.getMetrolineDistrictInfo()
+  },
+  beforeMount () {
+    console.log(this.edit)
+    if (this.edit) {
+      this.newHouse()
+    }
+  },
+  updated () {
+    console.log('updated', this.toCreate)
+    // if (this.toCreate) {
+    //   this.newHouse()
+    // } else {
+    //   this.edit = false
+    // }
+    console.log(this.edit)
   },
   methods: {
     editAreaChange () {
@@ -696,26 +716,31 @@ export default {
 
     editHouse () {
         // edit
+        console.log('editHouse')
         this.houseSelect.peopleAndVehicles = Number(this.houseSelect.peopleAndVehicles)
         this.houseSelect.isLift = Number(this.houseSelect.isLift)
-        this.houseSelect.isConsistentSystem = Number(this.houseSelect.isConsistentSystem)
         this.editAreaChange()
         this.getstation('houseData')
-        this.metroLineInfo = [{
-          metroLine: this.houseSelect.metroLine,
-          subwayStation: this.houseSelect.subwayStation,
-          distance: this.houseSelect.distance
-        }]
-        this.schoolsInfo = [{
-          isConsistentSystem: this.houseSelect.isConsistentSystem,
-          primarySchool: this.houseSelect.primarySchool,
-          echelonPerformance: this.houseSelect.echelonPerformance,
-          middleSchool: this.houseSelect.middleSchool,
-          cityEchelon: this.houseSelect.cityEchelon
-        }]
+        if (this.houseSelect.metroInfo.length) {
+          this.metroLineInfo = this.houseSelect.metroInfo
+        } else {
+          this.metroLineInfo = [{
+                  metroLine: '',
+                  subwayStation: '',
+                  distance: 0
+                }]
+        }
+        if (this.houseSelect.schoolDistrictInfo.length) {
+          this.schoolsInfo = this.houseSelect.schoolDistrictInfo
+        } else {
+          this.schoolsInfo = [{
+              name: '',
+              echelonPerformance: '',
+              type: ''
+            }]
+        }
         this.edit = !this.edit
     },
-
     saveHouse () {
       // save
       console.log('save:', this.houseSelect)
@@ -739,12 +764,9 @@ export default {
 
     newHouse () {
       this.detailVisible = true
-      this.houseSelect = {}
-      this.houseSelect = this.houseSelect
       this.tags = []
       this.houseSelect.peopleAndVehicles = 0
       this.houseSelect.isLift = 1
-      this.houseSelect.isConsistentSystem = 0
       console.log(this.houseSelect)
       this.editAreaChange()
       this.metroLineInfo = [{
@@ -753,15 +775,31 @@ export default {
         distance: 0
       }]
       this.schoolsInfo = [{
-          isConsistentSystem: undefined,
-          primarySchool: undefined,
-          echelonPerformance: undefined,
-          middleSchool: undefined,
-          cityEchelon: undefined
+          name: '世界外国语小学（民办）',
+          echelonPerformance: '',
+          type: ''
         }]
       this.edit = true
     },
-
+    getMetrolineDistrictInfo () {
+      this.metrolineDistrictInfo = []
+      this.metrolineDistrictInfo = metroLineOptions
+      const stationMap = new Map()
+      subwaystation.forEach(v => {
+        stationMap.set(v.line, v.station)
+      })
+      this.metrolineDistrictInfo.forEach(v => {
+        const station = stationMap.get(v.value)
+        const stationoption = []
+        if (station) {
+          station.forEach(v => {
+            stationoption.push({ label: v, value: v })
+          })
+          v.children = stationoption
+        }
+      })
+      console.log(this.metrolineDistrictInfo)
+    },
     getstation (type, metroLine) {
           const _this = this
           if (type || metroLine) {
@@ -776,7 +814,6 @@ export default {
             })
           }
     },
-
     getLineStation (lines) {
       const stationOptions = []
       lines.forEach(line => {
@@ -798,9 +835,20 @@ export default {
         distance: 0
       })
     },
-
+    selectMetroLine (value) {
+      console.log(value)
+    },
+    removeMetro (index) {
+      if (this.metroLineInfo.length >= index) {
+        this.metroLineInfo.splice(index, 1)
+      }
+    },
     addSchoolsInfo () {
-      this.schoolsInfo.push({})
+      this.schoolsInfo.push({
+          name: '世界外国语小学（民办）',
+          echelonPerformance: '',
+          type: ''
+        })
     },
 
     /* tag start */
@@ -840,6 +888,9 @@ export default {
         return ''
       }
       return 'red'
+    },
+    test (wao) {
+      console.log(wao)
     }
   }
 }
