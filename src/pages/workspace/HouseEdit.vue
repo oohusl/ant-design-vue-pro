@@ -116,9 +116,9 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <template v-for="(school) in schools">
-          <a-descriptions-item label="学校" :key="school.name" :span="2">{{ school.name }}</a-descriptions-item>
-          <a-descriptions-item label="类型" :key="school.name" :span="2">{{ school.type }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}</a-descriptions-item>
+        <template v-for="(school) in houseSelect.schoolDistrictInfo">
+          <a-descriptions-item label="学校" :key="school.schoolName" :span="2">{{ school.schoolName }}</a-descriptions-item>
+          <a-descriptions-item label="类型" :key="school.schoolName" :span="2">{{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}</a-descriptions-item>
         </template>
       </a-descriptions>
       <a-descriptions title="价格及交易" :column="4">
@@ -376,7 +376,7 @@
             <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
           </a-descriptions-item>
           <a-descriptions-item label="类型" :span="2" :key="s">
-            {{ school.type }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}
+            {{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}
           </a-descriptions-item>
         </template>
         <a-descriptions-item label="" :span="4">
@@ -576,9 +576,9 @@ export default {
       metroLineInfo: [],
       schoolsInfo: [],
       schools: {
-        '世界外国语小学（民办）': { name: '世界外国语小学（民办）', echelonPerformance: '第一梯队', type: '小学' },
-        '上海实验学校': { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' },
-        '进才中学': { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
+        '世界外国语小学（民办）': { schoolName: '世界外国语小学（民办）', echelonPerformance: '第一梯队', schoolType: '小学' },
+        '上海实验学校': { schoolName: '上海实验学校', echelonPerformance: '第一梯队', schoolType: '小学' },
+        '进才中学': { schoolName: '进才中学', echelonPerformance: '第一梯队', schoolType: '中学' }
       },
       schoolsOptions: [
         { label: '世界外国语小学（民办）', value: '世界外国语小学（民办）' },
@@ -701,6 +701,7 @@ export default {
       // save
       console.log('save:', this.houseSelect)
       this.houseSelect.labels = this.tags.join(',')
+      this.houseSelect.schoolDistrictInfo = this.schoolsInfo
       saveHouse(this.houseSelect)
         .then(e => {
           this.edit = !this.edit
@@ -731,9 +732,9 @@ export default {
         distance: undefined
       }]
       this.schoolsInfo = [{
-          name: '',
+          schoolName: '',
           echelonPerformance: '',
-          type: ''
+          schoolType: ''
         }]
       this.edit = true
     },
@@ -809,9 +810,9 @@ export default {
     },
     addSchoolsInfo () {
       this.schoolsInfo.push({
-          name: '世界外国语小学（民办）',
+          schoolName: '',
           echelonPerformance: '',
-          type: ''
+          schoolType: ''
         })
 },
     selectSchool (school, o) {
