@@ -54,8 +54,8 @@
           {{ houseSelect.districtPlanning }}
         </a-descriptions-item>
         <template v-for="(line,i) in metroLineInfo">
-          <a-descriptions-item label="地铁线路" :key="i">
-            {{ line.metroLine ? line.metroLine + '号线 / ' : '' }} {{ line.subwayStation }} {{ line.distance }}
+          <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
+            {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance}km` }}
           </a-descriptions-item>
         </template>
       </a-descriptions>
@@ -116,18 +116,10 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <template v-for="(school,s) in schoolsInfo">
-          <a-descriptions-item label="" :span="2" :key="s">
-            {{ school.name }}
-          </a-descriptions-item>
-          <a-descriptions-item label="类型" :key="s">
-            {{ school.type }}
-          </a-descriptions-item>
-          <a-descriptions-item label="梯队" :key="s">
-            {{ school.echelonPerformance }}
-          </a-descriptions-item>
+        <template v-for="(school) in schools">
+          <a-descriptions-item label="学校" :key="school.name" :span="2">{{ school.name }}</a-descriptions-item>
+          <a-descriptions-item label="类型" :key="school.name" :span="2">{{ school.type }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}</a-descriptions-item>
         </template>
-
       </a-descriptions>
       <a-descriptions title="价格及交易" :column="4">
         <a-descriptions-item label="1居面积" :span="1">
@@ -277,7 +269,7 @@
               </a-cascader>
               <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="km">
               </a-input>
-              <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" v-if="metroLineInfo.length>1" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
+              <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
             </a-input-group>
           </a-descriptions-item>
         </template>
@@ -383,11 +375,8 @@
             />
             <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
           </a-descriptions-item>
-          <a-descriptions-item label="类型" :key="s">
-            {{ school.type }}
-          </a-descriptions-item>
-          <a-descriptions-item label="梯队" :key="s">
-            {{ school.echelonPerformance }}
+          <a-descriptions-item label="类型" :span="2" :key="s">
+            {{ school.type }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}
           </a-descriptions-item>
         </template>
         <a-descriptions-item label="" :span="4">
@@ -591,13 +580,10 @@ export default {
         '上海实验学校': { name: '上海实验学校', echelonPerformance: '第一梯队', type: '小学' },
         '进才中学': { name: '进才中学', echelonPerformance: '第一梯队', type: '中学' }
       },
-      schoolsOptions: [{
-        label: '世界外国语小学（民办）', value: '世界外国语小学（民办）'
-      }, {
-        label: '上海实验学校', value: '上海实验学校'
-      }, {
-        label: '进才中学', value: '进才中学'
-      }],
+      schoolsOptions: [
+        { label: '世界外国语小学（民办）', value: '世界外国语小学（民办）' },
+        { label: '上海实验学校', value: '上海实验学校' },
+        { label: '进才中学', value: '进才中学' }],
       metrolineDistrictInfo: []
     }
   },
@@ -827,9 +813,8 @@ export default {
           echelonPerformance: '',
           type: ''
         })
-    },
+},
     selectSchool (school, o) {
-      console.log(school, o)
       const s = this.schools[school]
       if (s) {
         this.schoolsInfo.splice(o, 1, s)
