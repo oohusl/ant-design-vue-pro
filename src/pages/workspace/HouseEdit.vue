@@ -415,6 +415,7 @@
               :showSearch="true"
               @change="selectSchool($event,s)"
             />
+            <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
           </a-descriptions-item>
           <a-descriptions-item label="类型" :key="s">
             {{ school.type }}
@@ -847,6 +848,11 @@ export default {
     removeMetro (index) {
       if (this.metroLineInfo.length >= index) {
         this.metroLineInfo.splice(index, 1)
+      }
+    },
+    removeSchool (index) {
+      if (this.schoolsInfo.length >= index) {
+        this.schoolsInfo.splice(index, 1)
       }
     },
     addSchoolsInfo () {
