@@ -53,7 +53,7 @@
         <a-descriptions-item label="区域规划">
           {{ houseSelect.districtPlanning }}
         </a-descriptions-item>
-        <template v-for="(line,i) in metroLineInfo">
+        <template v-for="(line,i) in houseSelect.metroInfo">
           <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
             {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance}km` }}
           </a-descriptions-item>
@@ -256,7 +256,7 @@
             <a-select-option value="城市中心">城市中心</a-select-option>
           </a-select>
         </a-descriptions-item>
-        <template v-for="(line,i) in metroLineInfo">
+        <template v-for="(metro,i) in houseSelect.metroInfo">
           <a-descriptions-item :label="i===0?'地铁线路':''" :span="4" :key="i">
             <a-input-group compact>
               <a-cascader
@@ -265,9 +265,10 @@
                 size="small"
                 style="width: 220px"
                 placeholder="地铁"
-                @change="selectMetroLine">
+                :value="[metro.metroLine, metro.subwayStation]"
+                @change="selectMetroLine($event, i)">
               </a-cascader>
-              <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="km">
+              <a-input v-model="metro.distance" placeholder="距离" size="small" style="width: 145px" suffix="km">
               </a-input>
               <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
             </a-input-group>
@@ -363,7 +364,6 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        {{ houseSelect.schoolDistrictInfo }}
         <template v-for="(school,s) in houseSelect.schoolDistrictInfo">
           <a-descriptions-item label="" :span="2" :key="s">
             {{ school.shcoolName }}
@@ -527,8 +527,6 @@ import {
   constructionAgeOptions,
   loopSummaryOptions,
   booleanOptions,
-  cityEchelonOptions,
-  echelonPerformanceOptions,
   subwaystation,
   areaPlate,
   statusMap
@@ -569,8 +567,6 @@ export default {
       constructionAgeOptions,
       loopSummaryOptions,
       booleanOptions,
-      cityEchelonOptions,
-      echelonPerformanceOptions,
       subwaystation,
       statusMap,
       loading: false,
@@ -711,13 +707,13 @@ export default {
           this.$emit('change')
           this.$notification.success({
             message: '通知',
-            description: this.house.id ? '修改成功' : '保存成功'
+            description: this.houseSelect.id ? '修改成功' : '保存成功'
           })
         })
         .catch(() => {
           this.$notification.error({
             message: '通知',
-            description: this.house.id ? '修改失败' : '保存失败'
+            description: this.houseSelect.id ? '修改失败' : '保存失败'
           })
         })
     },
@@ -792,18 +788,20 @@ export default {
     },
 
     addMetroLine () {
-      this.metroLineInfo.push({
+      this.houseSelect.metroInfo.push({
         metroLine: '',
         subwayStation: '',
         distance: undefined
       })
     },
-    selectMetroLine (value) {
+    selectMetroLine (value, o) {
+      this.houseSelect.metroInfo[o].metroLine = value[0]
+      this.houseSelect.metroInfo[o].subwayStation = value[1]
       console.log(value)
     },
     removeMetro (index) {
-      if (this.metroLineInfo.length >= index) {
-        this.metroLineInfo.splice(index, 1)
+      if (this.houseSelect.metroInfo.length >= index) {
+        this.houseSelect.metroInfo.splice(index, 1)
       }
     },
     removeSchool (index) {

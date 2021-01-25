@@ -16,66 +16,74 @@ export const statusMap = {
     text: '异常'
   }
 }
-export const cityEchelonOptions = [
+export const shoolType = [
   {
-    'label': '市一梯队',
-    'value': '市一梯队'
+    type: '小学',
+    echelon: [{
+      'label': '一梯队',
+      'value': '一梯队'
+    },
+    {
+      'label': '二梯队',
+      'value': '二梯队'
+    },
+    {
+      'label': '三梯队',
+      'value': '三梯队'
+    },
+    {
+      'label': '菜小',
+      'value': '菜小'
+    },
+    {
+      'label': '其他',
+      'value': '其他'
+    }]
   },
   {
-    'label': '市二梯队',
-    'value': '市二梯队'
-  },
-  {
-    'label': '市三梯队',
-    'value': '市三梯队'
-  },
-  {
-    'label': '市四梯队',
-    'value': '市四梯队'
-  },
-  {
-    'label': '区一梯队',
-    'value': '区一梯队'
-  },
-  {
-    'label': '区二梯队',
-    'value': '区二梯队'
-  },
-  {
-    'label': '区三梯队',
-    'value': '区三梯队'
-  },
-  {
-    'label': '区四梯队',
-    'value': '区四梯队'
-  },
-  {
-    'label': '其他',
-    'value': '其他'
-  }
-]
-export const echelonPerformanceOptions = [
-  {
-    'label': '一梯队',
-    'value': '一梯队'
-  },
-  {
-    'label': '二梯队',
-    'value': '二梯队'
-  },
-  {
-    'label': '三梯队',
-    'value': '三梯队'
-  },
-  {
-    'label': '菜小',
-    'value': '菜小'
-  },
-  {
-    'label': '其他',
-    'value': '其他'
-  }
-]
+    type: '中学',
+    echelon: [
+      {
+        'label': '市一梯队',
+        'value': '市一梯队'
+      },
+      {
+        'label': '市二梯队',
+        'value': '市二梯队'
+      },
+      {
+        'label': '市三梯队',
+        'value': '市三梯队'
+      },
+      {
+        'label': '市四梯队',
+        'value': '市四梯队'
+      },
+      {
+        'label': '区一梯队',
+        'value': '区一梯队'
+      },
+      {
+        'label': '区二梯队',
+        'value': '区二梯队'
+      },
+      {
+        'label': '区三梯队',
+        'value': '区三梯队'
+      },
+      {
+        'label': '区四梯队',
+        'value': '区四梯队'
+      },
+      {
+        'label': '其他',
+        'value': '其他'
+      }
+    ]
+  }, {
+    type: '一贯制'
+  }]
+
 export const areaPlate = {
   青浦: ['白鹤', '华新', '金泽', '练塘', '夏阳', '香花桥', '徐泾', '盈浦', '赵巷', '重固', '朱家角'],
   松江: [

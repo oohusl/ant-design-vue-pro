@@ -99,9 +99,26 @@
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
             <a-checkbox-group v-model="queryParam.schoolType">
-              <a-checkbox value="小学">小学</a-checkbox>
+              <template v-for="options in shoolType">
+                <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
+                  <template slot="content">
+                    <a-checkbox-group>
+                      <a-row>
+                        <a-col v-for="e in options.echelon" :key="e.value">
+                          <a-checkbox :value="e.value">{{
+                            e.label
+                          }}</a-checkbox>
+                        </a-col>
+                      </a-row>
+                    </a-checkbox-group>
+                  </template>
+                  <a-checkbox :value="options.type">{{ options.type }}</a-checkbox>
+                </a-popover>
+                <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
+              </template>
+              <!-- <a-checkbox value="小学">小学</a-checkbox>
               <a-checkbox value="中学">中学</a-checkbox>
-              <a-checkbox value="一贯制">一贯制</a-checkbox>
+              <a-checkbox value="一贯制">一贯制</a-checkbox> -->
             </a-checkbox-group>
             <a-form-item :style="{ display: 'inline-block', width: '200px', 'margin-left': '50px' }">
               <a-select
@@ -110,6 +127,7 @@
                 placeholder="请选中配套学校"
                 :options="schools"
                 :showSearch="true"
+                :allowClear="true"
               />
             </a-form-item>
           </a-form-item>
@@ -425,11 +443,10 @@ import {
   constructionAgeOptions,
   loopSummaryOptions,
   booleanOptions,
-  cityEchelonOptions,
-  echelonPerformanceOptions,
   subwaystation,
   areaPlate,
-  schools
+  schools,
+  shoolType
 } from '@/api/data'
 import { AutoComplete, BackTop } from 'ant-design-vue'
 
@@ -466,14 +483,13 @@ export default {
       constructionAgeOptions,
       loopSummaryOptions,
       booleanOptions,
-      cityEchelonOptions,
       totalPriceOptions,
-      echelonPerformanceOptions,
       subwaystation,
       loading: false,
       plates: {},
       subwayStations: {},
-      schools
+      schools,
+      shoolType
     }
   },
   created () {
