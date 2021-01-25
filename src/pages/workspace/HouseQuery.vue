@@ -141,7 +141,7 @@
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
@@ -167,7 +167,7 @@
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" suffix="万">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
               </a-input>
@@ -193,7 +193,7 @@
               <a-input style="width: 100%" v-model="queryParam.areaMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.areaMax" size="small" suffix="m²">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.area, queryParam.areaMin, queryParam.areaMax)"/>
               </a-input>
@@ -219,7 +219,7 @@
               <a-input style="width: 100%" v-model="queryParam.yearMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.yearMax" size="small" suffix="年">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.year, queryParam.yearMin, queryParam.yearMax)"/>
               </a-input>
