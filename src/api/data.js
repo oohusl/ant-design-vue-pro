@@ -652,3 +652,12 @@ export const subwaystation = [
     'station': ['沈杜公路', '三鲁公路', '闵瑞路', '浦航路', '东城一路', '汇臻路']
   }
 ]
+
+export const schools =
+  [{
+    label: '世界外国语小学（民办）', value: '世界外国语小学（民办）'
+  }, {
+    label: '上海实验学校', value: '上海实验学校'
+  }, {
+    label: '进才中学', value: '进才中学'
+  }]

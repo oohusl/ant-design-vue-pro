@@ -101,10 +101,16 @@
             <a-checkbox-group v-model="queryParam.schoolType">
               <a-checkbox value="小学">小学</a-checkbox>
               <a-checkbox value="中学">中学</a-checkbox>
-              <a-checkbox value="一贯制">一贯制学校</a-checkbox>
+              <a-checkbox value="一贯制">一贯制</a-checkbox>
             </a-checkbox-group>
-            <a-form-item :style="{ display: 'inline-block', width: '100px', 'margin-right': '10px' }">
-              <a-input style="width: 100%" v-model="queryParam.schoolName" size="small" />
+            <a-form-item :style="{ display: 'inline-block', width: '200px', 'margin-left': '50px' }">
+              <a-select
+                v-model="queryParam.schoolName"
+                size="small"
+                placeholder="请选中配套学校"
+                :options="schools"
+                :showSearch="true"
+              />
             </a-form-item>
           </a-form-item>
           <a-form-item label="户型" v-if="advanced">
@@ -422,7 +428,8 @@ import {
   cityEchelonOptions,
   echelonPerformanceOptions,
   subwaystation,
-  areaPlate
+  areaPlate,
+  schools
 } from '@/api/data'
 import { AutoComplete, BackTop } from 'ant-design-vue'
 
@@ -465,7 +472,8 @@ export default {
       subwaystation,
       loading: false,
       plates: {},
-      subwayStations: {}
+      subwayStations: {},
+      schools
     }
   },
   created () {
