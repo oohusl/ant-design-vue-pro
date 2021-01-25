@@ -55,13 +55,7 @@
         </a-descriptions-item>
         <template v-for="(line,i) in metroLineInfo">
           <a-descriptions-item label="地铁线路" :key="i">
-            {{ line.metroLine ? line.metroLine + '号线' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="地铁站名" :key="i">
-            {{ line.subwayStation }}
-          </a-descriptions-item>
-          <a-descriptions-item label="地铁距离" :key="i">
-            {{ line.distance }}
+            {{ line.metroLine ? line.metroLine + '号线 / ' : '' }} {{ line.subwayStation }} {{ line.distance }}
           </a-descriptions-item>
         </template>
       </a-descriptions>
@@ -123,7 +117,7 @@
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
         <template v-for="(school,s) in schoolsInfo">
-          <a-descriptions-item label="学校" :span="2" :key="s">
+          <a-descriptions-item label="" :span="2" :key="s">
             {{ school.name }}
           </a-descriptions-item>
           <a-descriptions-item label="类型" :key="s">
@@ -281,7 +275,7 @@
                 placeholder="地铁"
                 @change="selectMetroLine">
               </a-cascader>
-              <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="米">
+              <a-input v-model="line.distance" placeholder="距离" size="small" style="width: 145px" suffix="km">
               </a-input>
               <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" v-if="metroLineInfo.length>1" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
             </a-input-group>
@@ -292,34 +286,6 @@
             <a-icon type="plus" /> 添加
           </a-button>
         </a-descriptions-item>
-        <!-- <template v-for="(line,i) in metroLineInfo">
-              <a-descriptions-item label="地铁线路" :key="line">
-                <a-select
-                  :options="metroLineOptions"
-                  v-model="line.metroLine"
-                  size="small"
-                  style="width: 150px"
-                  @change="getstation('houseSelect',line.metroLine)"
-                ></a-select>
-              </a-descriptions-item>
-              <a-descriptions-item label="地铁站名" :key="line">
-                <a-select
-                  :options="stationOptions"
-                  v-model="line.subwayStation"
-                  size="small"
-                  style="width: 150px"
-                  @change="getstation('houseSelect',line.metroLine)"
-                ></a-select>
-              </a-descriptions-item>
-              <a-descriptions-item label="地铁距离" :key="line">
-                <a-input v-model="line.distance" size="small" style="width: 90px" addon-after="米" />
-              </a-descriptions-item>
-              <a-descriptions-item label="" :key="line">
-                <a-button @click="addMetroLine()" v-if="i==0">
-                  添加地铁信息
-                </a-button>
-              </a-descriptions-item>
-            </template>-->
       </a-descriptions>
       <a-descriptions title="楼盘概况" :column="4">
         <a-descriptions-item label="开发商" :span="2">
