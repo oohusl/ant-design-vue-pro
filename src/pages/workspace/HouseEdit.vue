@@ -363,14 +363,17 @@
         </a-descriptions-item>
       </a-descriptions>
       <a-descriptions title="学区情况" :column="4">
-        <template v-for="(school,s) in schoolsInfo">
+        {{ houseSelect.schoolDistrictInfo }}
+        <template v-for="(school,s) in houseSelect.schoolDistrictInfo">
           <a-descriptions-item label="" :span="2" :key="s">
+            {{ school.shcoolName }}
             <a-select
               class="col2"
               size="small"
               placeholder="请选中配套学校"
               :options="schoolsOptions"
               :showSearch="true"
+              :value="school.schoolName"
               @change="selectSchool($event,s)"
             />
             <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
@@ -804,12 +807,12 @@ export default {
       }
     },
     removeSchool (index) {
-      if (this.schoolsInfo.length >= index) {
-        this.schoolsInfo.splice(index, 1)
+      if (this.houseSelect.schoolDistrictInfo.length >= index) {
+        this.houseSelect.schoolDistrictInfo.splice(index, 1)
       }
     },
     addSchoolsInfo () {
-      this.schoolsInfo.push({
+      this.houseSelect.schoolDistrictInfo.push({
           schoolName: '',
           echelonPerformance: '',
           schoolType: ''
@@ -818,9 +821,9 @@ export default {
     selectSchool (school, o) {
       const s = this.schools[school]
       if (s) {
-        this.schoolsInfo.splice(o, 1, s)
+        this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
       }
-      console.log(this.schoolsInfo)
+      console.log(this.houseSelect.schoolDistrictInfo)
     },
     /* tag start */
     handleClose (removedTag) {
