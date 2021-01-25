@@ -142,7 +142,7 @@
             </a-form-item>
             <a-tag v-for="avePrice in averagePriceAll(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
-          <a-form-item label="总价">
+          <a-form-item label="总价" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
               <template slot="content">
                 <a-checkbox-group v-model="queryParam.totalPrice" >
@@ -168,28 +168,58 @@
             </a-form-item>
             <a-tag v-for="avePrice in averagePriceAll(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
-          <!--
-          <a-form-item label="面积">
-            <a-select
-              v-model="queryParam.roomArea"
-              mode="multiple"
-              showArrow="true"
-              size="small"
-              placeholder="请选择面积段"
-              style="width: 280px"
-            >
-              <a-select-option v-for="i in roomAreaOptions" :key="i.value" :value="i.value" :label="i.label">
-                {{ i.label }}
-              </a-select-option>
-            </a-select>
-            <a-form-item :style="{ display: 'inline-block', width: '63px', 'margin-left': '50px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
+          <a-form-item label="面积" v-if="advanced">
+            <a-popover trigger="hover" placement="topLeft">
+              <template slot="content">
+                <a-checkbox-group v-model="queryParam.roomArea" >
+                  <a-row v-for="option in roomAreaOptions" :key="option.label">
+                    <a-col>
+                      <a-checkbox :value="option">{{
+                        option.label
+                      }}</a-checkbox>
+                    </a-col>
+                  </a-row>
+                </a-checkbox-group>
+              </template>
+              <a-button type="dashed" icon="search" size="small">选择面积区间</a-button>
+            </a-popover>
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.areaMin" size="small" />
             </a-form-item>
-            <span :style="{ display: 'inline-block', width: '22px', textAlign: 'center' }"> - </span>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px' }">
-              <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" addon-after="平方" />
+              <a-input style="width: 100%" v-model="queryParam.areaMax" size="small" suffix="m²">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.area, queryParam.areaMin, queryParam.areaMax)"/>
+              </a-input>
             </a-form-item>
-          </a-form-item> -->
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.roomArea, queryParam.ranges.area)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+          </a-form-item>
+          <a-form-item label="建筑年代" v-if="advanced">
+            <a-popover trigger="hover" placement="topLeft">
+              <template slot="content">
+                <a-checkbox-group v-model="queryParam.constructionAge" >
+                  <a-row v-for="option in constructionAgeOptions" :key="option.label">
+                    <a-col>
+                      <a-checkbox :value="option">{{
+                        option.label
+                      }}</a-checkbox>
+                    </a-col>
+                  </a-row>
+                </a-checkbox-group>
+              </template>
+              <a-button type="dashed" icon="search" size="small">选择建筑年代</a-button>
+            </a-popover>
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.yearMin" size="small" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px' }">
+              <a-input style="width: 100%" v-model="queryParam.yearMax" size="small" suffix="年">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.year, queryParam.yearMin, queryParam.yearMax)"/>
+              </a-input>
+            </a-form-item>
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.constructionAge, queryParam.ranges.year)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+          </a-form-item>
           <a-row v-if="advanced">
             <a-col :span="12">
               <a-form-item label="小区属性" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
@@ -226,22 +256,6 @@
                     其他
                   </a-checkbox>
                 </a-checkbox-group>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="建筑年代" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-                <a-select
-                  v-model="queryParam.constructionAge"
-                  mode="multiple"
-                  :showArrow="true"
-                  size="small"
-                  placeholder="请选择建筑年代"
-                  style="width: 280px"
-                >
-                  <a-select-option v-for="i in constructionAgeOptions" :key="i.label" :value="i.value" :label="i.label">
-                    {{ i.label }}
-                  </a-select-option>
-                </a-select>
               </a-form-item>
             </a-col>
           </a-row>
