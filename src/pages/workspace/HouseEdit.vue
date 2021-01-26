@@ -572,8 +572,6 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
-      metroLineInfo: [],
-      schoolsInfo: [],
       schools: {
         '世界外国语小学（民办）': { schoolName: '世界外国语小学（民办）', echelonPerformance: '第一梯队', schoolType: '小学' },
         '上海实验学校': { schoolName: '上海实验学校', echelonPerformance: '第一梯队', schoolType: '小学' },
@@ -675,32 +673,16 @@ export default {
         this.houseSelect.peopleAndVehicles = Number(this.houseSelect.peopleAndVehicles)
         this.houseSelect.isLift = Number(this.houseSelect.isLift)
         this.editAreaChange()
+        this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
         this.getstation('houseData')
-        if (this.houseSelect.metroInfo.length) {
-          this.metroLineInfo = this.houseSelect.metroInfo
-        } else {
-          this.metroLineInfo = [{
-                  metroLine: '',
-                  subwayStation: '',
-                  distance: undefined
-                }]
-        }
-        if (this.houseSelect.schoolDistrictInfo.length) {
-          this.schoolsInfo = this.houseSelect.schoolDistrictInfo
-        } else {
-          this.schoolsInfo = [{
-              name: '',
-              echelonPerformance: '',
-              type: ''
-            }]
-        }
+        this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
         this.edit = !this.edit
     },
     saveHouse () {
       // save
       console.log('save:', this.houseSelect)
       this.houseSelect.labels = this.tags.join(',')
-      this.houseSelect.schoolDistrictInfo = this.schoolsInfo
+      // this.houseSelect.schoolDistrictInfo = this.schoolsInfo
       saveHouse(this.houseSelect)
         .then(e => {
           this.edit = !this.edit
@@ -721,20 +703,6 @@ export default {
     newHouse () {
       this.detailVisible = true
       this.tags = []
-      this.houseSelect.peopleAndVehicles = 0
-      this.houseSelect.isLift = 1
-      console.log(this.houseSelect)
-      this.editAreaChange()
-      this.metroLineInfo = [{
-        metroLine: '',
-        subwayStation: '',
-        distance: undefined
-      }]
-      this.schoolsInfo = [{
-          schoolName: '',
-          echelonPerformance: '',
-          schoolType: ''
-        }]
       this.edit = true
     },
     showDetail () {
@@ -757,7 +725,6 @@ export default {
           v.children = stationoption
         }
       })
-      console.log(this.metrolineDistrictInfo)
     },
     getstation (type, metroLine) {
           const _this = this
@@ -793,21 +760,24 @@ export default {
         subwayStation: '',
         distance: undefined
       })
+      this.$forceUpdate()
     },
     selectMetroLine (value, o) {
       this.houseSelect.metroInfo[o].metroLine = value[0]
       this.houseSelect.metroInfo[o].subwayStation = value[1]
-      console.log(value)
+      this.$forceUpdate()
     },
     removeMetro (index) {
       if (this.houseSelect.metroInfo.length >= index) {
         this.houseSelect.metroInfo.splice(index, 1)
       }
+      this.$forceUpdate()
     },
     removeSchool (index) {
       if (this.houseSelect.schoolDistrictInfo.length >= index) {
         this.houseSelect.schoolDistrictInfo.splice(index, 1)
       }
+      this.$forceUpdate()
     },
     addSchoolsInfo () {
       this.houseSelect.schoolDistrictInfo.push({
@@ -815,18 +785,18 @@ export default {
           echelonPerformance: '',
           schoolType: ''
         })
-},
+        this.$forceUpdate()
+    },
     selectSchool (school, o) {
       const s = this.schools[school]
       if (s) {
         this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
       }
-      console.log(this.houseSelect.schoolDistrictInfo)
+      this.$forceUpdate()
     },
     /* tag start */
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
-      console.log(tags)
       this.tags = tags
     },
 

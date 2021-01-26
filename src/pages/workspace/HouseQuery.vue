@@ -3,7 +3,7 @@
     <div>
       <BackTop></BackTop>
     </div>
-    <a-layout>
+    <a-layout class="house-query">
       <a-layout-header :style="{ padding: 0 }">
         <div class="house-query-search-holder">
           <AutoComplete
@@ -639,6 +639,10 @@ export default {
     newHouse () {
       this.detailFlag = 2
       this.house = {}
+      this.house.peopleAndVehicles = 0
+      this.house.isLift = 1
+      this.house.metroInfo = []
+      this.house.schoolDistrictInfo = []
       this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
     },
 
