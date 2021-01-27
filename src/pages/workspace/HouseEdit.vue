@@ -627,7 +627,6 @@ export default {
       this.queryParam.area.forEach((e) => {
          const areaPlates = []
          this.getPlate(e).forEach((p) => areaPlates.push(p.value))
-         console.log(this.plates)
          if (this.plates[e]) {
          this.plates[e] = this.plates[e].filter(selectedP => {
            console.log(selectedP)
@@ -674,7 +673,7 @@ export default {
         this.houseSelect.isLift = Number(this.houseSelect.isLift)
         this.editAreaChange()
         this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
-        this.getstation('houseData')
+        // this.getstation('houseData')
         this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
         this.edit = !this.edit
     },
@@ -719,40 +718,40 @@ export default {
         const station = stationMap.get(v.value)
         const stationoption = []
         if (station) {
-          station.forEach(v => {
-            stationoption.push({ label: v, value: v })
+          station.forEach(s => {
+            stationoption.push({ label: s, value: s })
           })
           v.children = stationoption
         }
       })
     },
-    getstation (type, metroLine) {
-          const _this = this
-          if (type || metroLine) {
-            this.stationOptions.splice(0)
-            this.subwaystation.forEach(v => {
-              metroLine = metroLine || _this[type]?.metroLine
-              if (v.line === metroLine) {
-                v.station.forEach(val => {
-                  _this.stationOptions.push({ label: val, value: val })
-                })
-              }
-            })
-          }
-    },
-    getLineStation (lines) {
-      const stationOptions = []
-      lines.forEach(line => {
-        this.subwaystation.forEach(v => {
-          if (v.line === line) {
-            v.station.forEach(val => {
-              stationOptions.push({ label: val, value: val })
-            })
-          }
-        })
-      })
-      return stationOptions
-    },
+    // getstation (type, metroLine) {
+    //       const _this = this
+    //       if (type || metroLine) {
+    //         this.stationOptions.splice(0)
+    //         this.subwaystation.forEach(v => {
+    //           metroLine = metroLine || _this[type]?.metroLine
+    //           if (v.line === metroLine) {
+    //             v.station.forEach(val => {
+    //               _this.stationOptions.push({ label: val, value: val })
+    //             })
+    //           }
+    //         })
+    //       }
+    // },
+    // getLineStation (lines) {
+    //   const stationOptions = []
+    //   lines.forEach(line => {
+    //     this.subwaystation.forEach(v => {
+    //       if (v.line === line) {
+    //         v.station.forEach(val => {
+    //           stationOptions.push({ label: val, value: val })
+    //         })
+    //       }
+    //     })
+    //   })
+    //   return stationOptions
+    // },
 
     addMetroLine () {
       this.houseSelect.metroInfo.push({
@@ -765,13 +764,30 @@ export default {
     selectMetroLine (value, o) {
       this.houseSelect.metroInfo[o].metroLine = value[0]
       this.houseSelect.metroInfo[o].subwayStation = value[1]
+      this.updateMetrolineDistrictInfo(value, true)
       this.$forceUpdate()
     },
     removeMetro (index) {
       if (this.houseSelect.metroInfo.length >= index) {
-        this.houseSelect.metroInfo.splice(index, 1)
+        const metroinfo = this.houseSelect.metroInfo.splice(index, 1)
+        this.updateMetrolineDistrictInfo([metroinfo[0].metroLine, metroinfo[0].subwayStation], false)
       }
       this.$forceUpdate()
+    },
+    updateMetrolineDistrictInfo (value, disabled) {
+      const [line, station] = value
+      try {
+        this.metrolineDistrictInfo.forEach(lineoption => {
+          if (lineoption.value === line) {
+            lineoption.children.forEach(option => {
+              if (option.value === station) {
+                  option.disabled = disabled
+              }
+            })
+          }
+        })
+      } catch (error) {
+      }
     },
     removeSchool (index) {
       if (this.houseSelect.schoolDistrictInfo.length >= index) {
