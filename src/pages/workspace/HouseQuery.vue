@@ -98,29 +98,26 @@
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
-            <a-checkbox-group v-model="queryParam.schoolType">
+            <a-checkbox-group v-model="queryParam.schoolType" @change="schoolTypeChange">
               <template v-for="options in shoolType">
                 <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
                   <template slot="content">
-                    <a-checkbox-group>
+                    <a-checkbox-group v-model="echelons[options.type]" @change="echelonChange(options.type)">
                       <a-row>
                         <a-col v-for="e in options.echelon" :key="e.value">
-                          <a-checkbox :value="e.value">{{
+                          <a-checkbox :value="e.value" :indeterminate="queryParam.schoolType && queryParam.schoolType.indexOf(options.type) >= 0">{{
                             e.label
                           }}</a-checkbox>
                         </a-col>
                       </a-row>
                     </a-checkbox-group>
                   </template>
-                  <a-checkbox :value="options.type">{{ options.type }}</a-checkbox>
+                  <a-checkbox :value="options.type" :indeterminate="echelons[options.type] && echelons[options.type].length > 0">{{ options.type }}</a-checkbox>
                 </a-popover>
                 <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
               </template>
-              <!-- <a-checkbox value="小学">小学</a-checkbox>
-              <a-checkbox value="中学">中学</a-checkbox>
-              <a-checkbox value="一贯制">一贯制</a-checkbox> -->
             </a-checkbox-group>
-            <a-form-item :style="{ display: 'inline-block', width: '200px', 'margin-left': '50px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '200px', 'margin-left': '30px' }">
               <a-select
                 v-model="queryParam.schoolName"
                 size="small"
@@ -130,6 +127,12 @@
                 :allowClear="true"
               />
             </a-form-item>
+            <div>
+              <a-tag v-for="p in queryParam.schoolType" :key="p">{{ p }}</a-tag>
+              <template v-for="echelon in echelons">
+                <a-tag v-for="p in echelon" :key="p">{{ p }}</a-tag>
+              </template>
+            </div>
           </a-form-item>
           <a-form-item label="户型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.roomType">
@@ -139,7 +142,6 @@
               <a-checkbox value="4"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
-
           <a-form-item label="单价" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
               <template slot="content">
@@ -464,7 +466,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
+      queryParam: { area: [], schoolType: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -489,7 +491,8 @@ export default {
       plates: {},
       subwayStations: {},
       schools,
-      shoolType
+      shoolType,
+      echelons: {}
     }
   },
   created () {
@@ -520,6 +523,7 @@ export default {
 
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
+      this.queryParam.echelonPerformance = this.echelons.flat()
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {
@@ -567,6 +571,19 @@ export default {
          })
          }
       })
+    },
+
+    schoolTypeChange () {
+      this.queryParam.schoolType.forEach((e) => {
+        this.echelons[e] = []
+      })
+    },
+
+    echelonChange (type) {
+      const index = this.queryParam.schoolType.indexOf(type)
+      if (this.echelons[type].length > 0 && index >= 0) {
+        this.queryParam.schoolType.splice(index, 1)
+      }
     },
 
     plateChange (areaOption) {
