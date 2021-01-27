@@ -518,7 +518,8 @@ export default {
         date: moment(new Date()),
         area: [],
         averageLlistedPrice: [],
-        averagePriceInput: []
+        averagePriceInput: [],
+        ranges: { price: [], total: [], area: [], year: [] }
       }
       this.plates = {}
       this.areaReset()
@@ -527,6 +528,15 @@ export default {
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
       // this.queryParam.echelonPerformance = this.echelons.flat()
+      this.queryParam.echelonPerformance = ((echelons) => {
+        const s = []
+        for (const key of Object.keys(echelons)) {
+          if (echelons[key] instanceof Array) {
+            s.push(...echelons[key])
+          }
+        }
+        return s
+      })(this.echelons)
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {
