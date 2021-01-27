@@ -591,19 +591,11 @@ export default {
     this.getMetrolineDistrictInfo()
   },
   beforeMount () {
-    console.log(this.edit)
     if (this.edit) {
       this.newHouse()
     }
   },
   updated () {
-    console.log('updated', this.toCreate)
-    // if (this.toCreate) {
-    //   this.newHouse()
-    // } else {
-    //   this.edit = false
-    // }
-    console.log(this.edit)
   },
   methods: {
     editAreaChange () {
@@ -673,8 +665,13 @@ export default {
         this.houseSelect.isLift = Number(this.houseSelect.isLift)
         this.editAreaChange()
         this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
-        // this.getstation('houseData')
         this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
+        this.houseSelect.metroInfo.forEach(station => {
+          this.updateMetrolineDistrictInfo([station.metroLine, station.subwayStation], true)
+        })
+        this.houseSelect.schoolDistrictInfo.forEach(school => {
+          this.updateSchoolsOptions(school.schoolName, true)
+        })
         this.edit = !this.edit
     },
     saveHouse () {
@@ -706,6 +703,7 @@ export default {
     },
     showDetail () {
       this.edit = false
+      console.log(this.houseSelect)
     },
     getMetrolineDistrictInfo () {
       this.metrolineDistrictInfo = []
@@ -770,7 +768,9 @@ export default {
     removeMetro (index) {
       if (this.houseSelect.metroInfo.length >= index) {
         const metroinfo = this.houseSelect.metroInfo.splice(index, 1)
-        this.updateMetrolineDistrictInfo([metroinfo[0].metroLine, metroinfo[0].subwayStation], false)
+        if (metroinfo[0].metroLine) {
+            this.updateMetrolineDistrictInfo([metroinfo[0].metroLine, metroinfo[0].subwayStation], false)
+        }
       }
       this.$forceUpdate()
     },
@@ -791,7 +791,10 @@ export default {
     },
     removeSchool (index) {
       if (this.houseSelect.schoolDistrictInfo.length >= index) {
-        this.houseSelect.schoolDistrictInfo.splice(index, 1)
+        const s = this.houseSelect.schoolDistrictInfo.splice(index, 1)
+        if (s[0].schoolName) {
+          this.updateSchoolsOptions(s[0].schoolName, false)
+        }
       }
       this.$forceUpdate()
     },
@@ -808,6 +811,15 @@ export default {
       if (s) {
         this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
       }
+      this.updateSchoolsOptions(school, true)
+      this.$forceUpdate()
+    },
+    updateSchoolsOptions (school, disabled) {
+      this.schoolsOptions.forEach(s => {
+        if (s.value === school) {
+          s.disabled = disabled
+        }
+      })
       this.$forceUpdate()
     },
     /* tag start */
@@ -841,7 +853,6 @@ export default {
     },
 
     isCustomTag (tag) {
-      console.log(tag)
       if (this.labels.includes(tag)) {
         return ''
       }
