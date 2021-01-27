@@ -56,7 +56,7 @@
               <a-tag v-for="p in a" :key="p">{{ p }}</a-tag>
             </template>
           </a-form-item>
-          <a-form-item label="地铁线">
+          <a-form-item label="地铁线路">
             <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
               <template v-for="i in Math.ceil(metroLineOptions.length / 8)">
                 <a-row :key="i" style="width: 100%">
@@ -90,14 +90,26 @@
                 </a-row>
               </template>
             </a-checkbox-group>
-          </a-form-item>
-          <a-form-item label="地铁站" v-if="queryParam.subwayStation && queryParam.subwayStation.length">
+            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink">{{ ss }}号线</a-tag>
             <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
+            <a-form-item :style="{ display: 'inline-block', width: '160px', 'margin-right': '20px' }">
+              <a-select
+                v-model="queryParam.schoolName"
+                size="small"
+                placeholder="请选中配套学校"
+                :options="schools"
+                :showSearch="true"
+                :allowClear="true"
+                :maxTagCount="0"
+                mode="multiple"
+                showArrow="true"
+              />
+            </a-form-item>
             <a-checkbox-group v-model="queryParam.schoolType" @change="schoolTypeChange">
               <template v-for="options in shoolType">
                 <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
@@ -117,17 +129,8 @@
                 <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
               </template>
             </a-checkbox-group>
-            <a-form-item :style="{ display: 'inline-block', width: '200px', 'margin-left': '30px' }">
-              <a-select
-                v-model="queryParam.schoolName"
-                size="small"
-                placeholder="请选中配套学校"
-                :options="schools"
-                :showSearch="true"
-                :allowClear="true"
-              />
-            </a-form-item>
             <div>
+              <a-tag v-for="p in queryParam.schoolName" :key="p">{{ p }}</a-tag>
               <a-tag v-for="p in queryParam.schoolType" :key="p">{{ p }}</a-tag>
               <template v-for="echelon in echelons">
                 <a-tag v-for="p in echelon" :key="p">{{ p }}</a-tag>
@@ -246,45 +249,34 @@
             </a-form-item>
             <a-tag v-for="avePrice in averagePriceAll(queryParam.constructionAge, queryParam.ranges.year)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
           </a-form-item>
-          <a-row v-if="advanced">
-            <a-col :span="12">
-              <a-form-item label="小区属性" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-                <a-checkbox-group v-model="queryParam.cellAttributes">
-                  <a-checkbox value="住宅"> 住宅 </a-checkbox>
-                  <a-checkbox value="别墅"> 别墅 </a-checkbox>
-                  <a-checkbox value="其他"> 其他 </a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-            </a-col>
-            <a-col :span="12">
-              <a-form-item label="建筑类型" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-                <a-checkbox-group v-model="queryParam.buildingType">
-                  <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
-                  <a-checkbox value="板楼"> 板楼 </a-checkbox>
-                  <a-checkbox value="塔板结合"> 塔板结合 </a-checkbox>
-                  <a-checkbox value="其他"> 其他 </a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-            </a-col>
-          </a-row>
-
-          <a-row v-if="advanced">
-            <a-col :span="12">
-              <a-form-item label="是否电梯" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
-                <a-checkbox-group v-model="queryParam.isLift">
-                  <a-checkbox :value="1">
-                    有电梯
-                  </a-checkbox>
-                  <a-checkbox :value="0">
-                    无电梯
-                  </a-checkbox>
-                  <a-checkbox :value="2">
-                    其他
-                  </a-checkbox>
-                </a-checkbox-group>
-              </a-form-item>
-            </a-col>
-          </a-row>
+          <a-form-item v-if="advanced" label="小区属性">
+            <a-checkbox-group v-model="queryParam.cellAttributes">
+              <a-checkbox value="住宅"> 住宅 </a-checkbox>
+              <a-checkbox value="别墅"> 别墅 </a-checkbox>
+              <a-checkbox value="其他"> 其他 </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="建筑类型">
+            <a-checkbox-group v-model="queryParam.buildingType">
+              <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
+              <a-checkbox value="板楼"> 板楼 </a-checkbox>
+              <a-checkbox value="塔板结合"> 塔板结合 </a-checkbox>
+              <a-checkbox value="其他"> 其他 </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="是否电梯">
+            <a-checkbox-group v-model="queryParam.isLift">
+              <a-checkbox :value="1">
+                有电梯
+              </a-checkbox>
+              <a-checkbox :value="0">
+                无电梯
+              </a-checkbox>
+              <a-checkbox :value="2">
+                其他
+              </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a-button @click="search()" type="primary">
               查询
@@ -292,9 +284,20 @@
             <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }">
               重置
             </a-button>
-            <a-button @click="newHouse()" :style="{ marginLeft: '8px' }">
-              新建
-            </a-button>
+            <a-dropdown :style="{ marginLeft: '8px' }">
+              <a-menu slot="overlay">
+                <a-menu-item key="1" @click="newHouse()">
+                  新建
+                </a-menu-item>
+                <a-menu-item key="2">
+                  导入
+                </a-menu-item>
+                <a-menu-item key="3">
+                  导出
+                </a-menu-item>
+              </a-menu>
+              <a-button> 操作 <a-icon type="down" /> </a-button>
+            </a-dropdown>
 
             <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
               {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
@@ -523,7 +526,7 @@ export default {
 
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
-      this.queryParam.echelonPerformance = this.echelons.flat()
+      // this.queryParam.echelonPerformance = this.echelons.flat()
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {
