@@ -69,20 +69,20 @@
                       <template slot="content">
                         <a-checkbox-group
                           v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
-                          @change="subwayStationChange"
+                          @change="subwayStationChange(metroLineOptions[(i - 1) * 8 + j - 1].value)"
                         >
                           <a-row :span="30">
                             <template
                               v-for="(subwayStation) in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
                             >
                               <a-col :span="3" :key="subwayStation">
-                                <a-checkbox :value="subwayStation" :key="subwayStation">{{ subwayStation }}</a-checkbox>
+                                <a-checkbox :value="subwayStation" :key="subwayStation" :indeterminate="queryParam.metroLine.indexOf(metroLineOptions[(i - 1) * 8 + j - 1].value) >= 0">{{ subwayStation }}</a-checkbox>
                               </a-col>
                             </template>
                           </a-row>
                         </a-checkbox-group>
                       </template>
-                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value">{{
+                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value" @change="metroLineChange" :indeterminate="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value] != null && subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value].length > 0">{{
                         metroLineOptions[(i - 1) * 8 + j - 1].label
                       }}</a-checkbox>
                     </a-popover>
@@ -469,7 +469,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], schoolType: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
+      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -621,12 +621,21 @@ export default {
       return s
     },
 
-    subwayStationChange () {
+    metroLineChange (e) {
+      console.log(e)
+      this.subwayStations[e['target'].value] = []
+    },
+
+    subwayStationChange (line) {
       this.queryParam.subwayStation = []
       const that = this
       Object.keys(this.subwayStations).forEach(e => {
         that.queryParam.subwayStation.push(...that.subwayStations[e])
       })
+      const index = this.queryParam.metroLine.indexOf(line)
+      if (index >= 0 && this.subwayStations[line].length > 0) {
+        this.queryParam.metroLine.splice(index, 1)
+      }
     },
 
     showDetail (community) {
