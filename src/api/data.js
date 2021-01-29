@@ -386,64 +386,7 @@ export const metroLineOptions = [
     value: '20'
   }
 ]
-export const averageLlistedPriceOptions1 = [
-  {
-    label: '2万以下',
-    value: [0, 2]
-  },
-  {
-    label: '2-3万',
-    value: [2, 3]
-  },
-  {
-    label: '3-4万',
-    value: [30000, 40000]
-  },
-  {
-    label: '4-5万',
-    value: [40000, 50000]
-  },
-  {
-    label: '5-6万',
-    value: [50000, 60000]
-  },
-  {
-    label: '6-7万',
-    value: [60000, 70000]
-  },
-  {
-    label: '7-8万',
-    value: [70000, 80000]
-  },
-  {
-    label: '8-9万',
-    value: [80000, 90000]
-  },
-  {
-    label: '9-10万',
-    value: [90000, 100000]
-  },
-  {
-    label: '10-11万',
-    value: [100000, 110000]
-  },
-  {
-    label: '11-12万',
-    value: [110000, 120000]
-  },
-  {
-    label: '12-13万',
-    value: [120000, 130000]
-  },
-  {
-    label: '13-14万',
-    value: [130000, 140000]
-  },
-  {
-    label: '15万以上',
-    value: [150000, 999999]
-  }
-]
+
 export const averageLlistedPriceOptions = [
   {
     'label': '2万以下',
@@ -504,136 +447,191 @@ export const averageLlistedPriceOptions = [
 ]
 export const totalPriceOptions = [
   {
-    label: '200万以下',
-    value: [200, 200]
+    'label': '200万以下',
+    'value': '0-200'
   },
   {
-    label: '200-300万',
-    value: [200, 300]
+    'label': '200-300万',
+    'value': '200-300'
   },
   {
-    label: '300-400万',
-    value: [300, 400]
+    'label': '300-400万',
+    'value': '300-400'
   },
   {
-    label: '400-500万',
-    value: [400, 500]
+    'label': '400-500万',
+    'value': '400-500'
   },
   {
-    label: '500-600万',
-    value: [500, 600]
+    'label': '500-600万',
+    'value': '500-600'
   },
   {
-    label: '600-700万',
-    value: [600, 700]
+    'label': '600-700万',
+    'value': '600-700'
   },
   {
-    label: '700-800万',
-    value: [700, 800]
+    'label': '700-800万',
+    'value': '700-800'
   },
   {
-    label: '800-900万',
-    value: [800, 900]
+    'label': '800-900万',
+    'value': '800-900'
   },
   {
-    label: '900-1000万',
-    value: [900, 1000]
+    'label': '900-1000万',
+    'value': '900-1000'
   },
   {
-    label: '1100-1200万',
-    value: [1100, 1200]
+    'label': '1100-1200万',
+    'value': '1100-1200'
   },
   {
-    label: '1200-1300万',
-    value: [1200, 1300]
+    'label': '1200-1300万',
+    'value': '1200-1300'
   },
   {
-    label: '1300-1400万',
-    value: [1300, 1400]
+    'label': '1300-1400万',
+    'value': '1300-1400'
   },
   {
-    label: '1400-1500万',
-    value: [1400, 1500]
+    'label': '1400-1500万',
+    'value': '1400-1500'
   },
   {
-    label: '1500万以上',
-    value: [1500, 1500]
+    'label': '1500万以上',
+    'value': '1500-100000000'
   }
 ]
 export const roomAreaOptions = [
   {
-    label: '50平方以下',
-    value: [50, 0]
+    'label': '50平方以下',
+    'value': [
+      0,
+      50
+    ]
   },
   {
-    label: '50-60平方',
-    value: [50, 60]
+    'label': '50-60平方',
+    'value': [
+      50,
+      60
+    ]
   },
   {
-    label: '60-70平方',
-    value: [60, 70]
+    'label': '60-70平方',
+    'value': [
+      60,
+      70
+    ]
   },
   {
-    label: '70-80平方',
-    value: [70, 80]
+    'label': '70-80平方',
+    'value': [
+      70,
+      80
+    ]
   },
   {
-    label: '80-90平方',
-    value: [80, 90]
+    'label': '80-90平方',
+    'value': [
+      80,
+      90
+    ]
   },
   {
-    label: '90-100平方',
-    value: [90, 100]
+    'label': '90-100平方',
+    'value': [
+      90,
+      100
+    ]
   },
   {
-    label: '100-110平方',
-    value: [100, 110]
+    'label': '100-110平方',
+    'value': [
+      100,
+      110
+    ]
   },
   {
-    label: '110-120平方',
-    value: [110, 120]
+    'label': '110-120平方',
+    'value': [
+      110,
+      120
+    ]
   },
   {
-    label: '120-130平方',
-    value: [120, 130]
+    'label': '120-130平方',
+    'value': [
+      120,
+      130
+    ]
   },
   {
-    label: '130-140平方',
-    value: [130, 140]
+    'label': '130-140平方',
+    'value': [
+      130,
+      140
+    ]
   },
   {
-    label: '140-150平方',
-    value: [140, 150]
+    'label': '140-150平方',
+    'value': [
+      140,
+      150
+    ]
   },
   {
-    label: '150平方以上',
-    value: [150, 150]
+    'label': '150平方以上',
+    'value': [
+      150,
+      100000000
+    ]
   }
 ]
+
 export const constructionAgeOptions = [
   {
-    label: '1990年以前',
-    value: [0, 1990]
+    'label': '1990年以前',
+    'value': [
+      0,
+      1990
+    ]
   },
   {
-    label: '1990-1995',
-    value: [1990, 1995]
+    'label': '1990-1995',
+    'value': [
+      1990,
+      1995
+    ]
   },
   {
-    label: '1995-2000',
-    value: [1995, 2000]
+    'label': '1995-2000',
+    'value': [
+      1995,
+      2000
+    ]
   },
   {
-    label: '2000-2005',
-    value: [2000, 2005]
+    'label': '2000-2005',
+    'value': [
+      2000,
+      2005
+    ]
   },
   {
-    label: '2005-2010',
-    value: [2005, 2010]
+    'label': '2005-2010',
+    'value': [
+      2005,
+      2010
+    ]
   },
   {
-    label: '2010年以后',
-    value: [2010, 2050]
+    'label': '2010年以后',
+    'value': [
+      2010,
+      100000000
+    ]
   }
 ]
 

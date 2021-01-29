@@ -169,31 +169,30 @@
             </a-form-item>
             <a-tag v-for="avePrice in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.averageLlistedPrice, queryParam.ranges.price, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
           </a-form-item>
+
           <a-form-item label="总价" v-if="advanced">
-            <a-popover trigger="hover" placement="topLeft">
-              <template slot="content">
-                <a-checkbox-group v-model="queryParam.totalPrice" >
-                  <a-row v-for="option in totalPriceOptions" :key="option.label">
-                    <a-col>
-                      <a-checkbox :value="option">{{
-                        option.label
-                      }}</a-checkbox>
-                    </a-col>
-                  </a-row>
-                </a-checkbox-group>
-              </template>
-              <a-button type="dashed" icon="search" size="small">选择总价区间</a-button>
-            </a-popover>
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.totalPrice"
+              size="small"
+              placeholder="选择总价区间"
+              :options="totalPriceOptions"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" suffix="万">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice.label" color="pink">{{ translateRang(avePrice.label, '万') }}</a-tag>
+            <a-tag v-for="avePrice in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.totalPrice, queryParam.ranges.total, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
@@ -467,7 +466,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
+      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -524,9 +523,15 @@ export default {
         const two = x.split('-')
         return [two[0] * 1, two[1] * 1]
       })
+      requestParameters.totalPrice = Array.from(this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)).map(x => {
+        const two = x.split('-')
+        return [two[0] * 1, two[1] * 1]
+      })
       delete requestParameters.ranges
       delete requestParameters.averageLlistedPriceMin
       delete requestParameters.averageLlistedPriceMax
+      delete requestParameters.totalPriceMin
+      delete requestParameters.totalPriceMax
 
       // this.queryParam.echelonPerformance = this.echelons.flat()
       this.queryParam.echelonPerformance = ((echelons) => {
