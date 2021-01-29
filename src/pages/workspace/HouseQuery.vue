@@ -48,12 +48,12 @@
                     </a-row>
                   </a-checkbox-group>
                 </template>
-                <a-checkbox :value="options.value" :indeterminate="(queryParam.area && queryParam.area.indexOf(options.value) < 0) && options.halfSelected" :checked="true">{{ options.label }}</a-checkbox>
+                <a-checkbox :value="options.value" :indeterminate="plates[options.value] && plates[options.value].length > 0" :checked="true">{{ options.label }}</a-checkbox>
               </a-popover>
             </a-checkbox-group>
             <a-tag v-for="p in queryParam.area" :key="p" color="pink">{{ p }}</a-tag>
-            <template v-for="a in plates">
-              <a-tag v-for="p in a" :key="p">{{ p }}</a-tag>
+            <template v-for="(value, key) in plates">
+              <a-tag v-for="p in value" :key="p">{{ key + '-' + p }}</a-tag>
             </template>
           </a-form-item>
           <a-form-item label="地铁线路">
@@ -532,6 +532,8 @@ export default {
         return [two[0] * 1, two[1] * 1]
       })
 
+      requestParameters.plate = Object.values(this.plates).flat()
+
       delete requestParameters.ranges
       delete requestParameters.averageLlistedPriceMin
       delete requestParameters.averageLlistedPriceMax
@@ -617,12 +619,8 @@ export default {
     plateChange (areaOption) {
       const area = areaOption.value
       if (this.plates[area].length > 0) {
-        areaOption.halfSelected = true
         const index = this.queryParam.area.indexOf(area)
         if (index >= 0) this.queryParam.area.splice(index, 1)
-      } else {
-        // 未选中板块
-        areaOption.halfSelected = false
       }
     },
 
