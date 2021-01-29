@@ -57,38 +57,37 @@
             </template>
           </a-form-item>
           <a-form-item label="地铁线路">
-            <a-checkbox-group v-model="queryParam.metroLine" style="width: 100%">
-              <template v-for="i in Math.ceil(metroLineOptions.length / 8)">
-                <a-row :key="i" style="width: 100%">
-                  <a-col :span="3" v-for="j in 8" :key="j">
-                    <a-popover
-                      trigger="hover"
-                      placement="topLeft"
-                      v-if="(i - 1) * 8 + j - 1 < metroLineOptions.length - 1"
-                    >
-                      <template slot="content">
-                        <a-checkbox-group
-                          v-model="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value]"
-                          @change="subwayStationChange(metroLineOptions[(i - 1) * 8 + j - 1].value)"
-                        >
-                          <a-row :span="30">
-                            <template
-                              v-for="(subwayStation) in getSubwayStation(metroLineOptions[(i - 1) * 8 + j - 1].value)"
-                            >
-                              <a-col :span="3" :key="subwayStation">
-                                <a-checkbox :value="subwayStation" :key="subwayStation" :indeterminate="queryParam.metroLine.indexOf(metroLineOptions[(i - 1) * 8 + j - 1].value) >= 0">{{ subwayStation }}</a-checkbox>
-                              </a-col>
-                            </template>
-                          </a-row>
-                        </a-checkbox-group>
-                      </template>
-                      <a-checkbox :value="metroLineOptions[(i - 1) * 8 + j - 1].value" @change="metroLineChange" :indeterminate="subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value] != null && subwayStations[metroLineOptions[(i - 1) * 8 + j - 1].value].length > 0">{{
-                        metroLineOptions[(i - 1) * 8 + j - 1].label
-                      }}</a-checkbox>
-                    </a-popover>
-                  </a-col>
-                </a-row>
-              </template>
+            <a-checkbox-group v-model="queryParam.metroLine" @change="metroLineChange" style="width: 100%">
+              <a-row>
+                <a-col>
+                  <a-popover
+                    trigger="hover"
+                    placement="topLeft"
+                    v-for="metroLine in metroLineOptions"
+                    :key="metroLine.value"
+                  >
+                    <template slot="content">
+                      <a-checkbox-group
+                        v-model="subwayStations[metroLine.value]"
+                        @change="subwayStationChange(metroLine.value)"
+                      >
+                        <a-row :span="24">
+                          <template
+                            v-for="(subwayName) in getSubwayStation(metroLine.value)"
+                          >
+                            <a-col :span="getSubwayStation(metroLine.value).length < 9 ? 4 : 3" :key="subwayName">
+                              <a-checkbox :value="subwayName" :key="subwayName">{{ subwayName }}</a-checkbox>
+                            </a-col>
+                          </template>
+                        </a-row>
+                      </a-checkbox-group>
+                    </template>
+                    <a-checkbox :value="metroLine.value">{{
+                      metroLine.label
+                    }}</a-checkbox>
+                  </a-popover>
+                </a-col>
+              </a-row>
             </a-checkbox-group>
             <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink">{{ ss }}号线</a-tag>
             <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
@@ -441,7 +440,7 @@ import {
   constructionAgeOptions,
   loopSummaryOptions,
   booleanOptions,
-  subwaystation,
+  subwayOptions,
   areaPlate,
   schools,
   shoolType
@@ -482,7 +481,6 @@ export default {
       loopSummaryOptions,
       booleanOptions,
       totalPriceOptions,
-      subwaystation,
       loading: false,
       plates: {},
       subwayStations: {},
@@ -626,7 +624,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwaystation.forEach(v => {
+      subwayOptions.forEach(v => {
         if (v.line === i) {
           s = v.station
         }
@@ -636,18 +634,19 @@ export default {
 
     metroLineChange (e) {
       console.log(e)
-      this.subwayStations[e['target'].value] = []
+      e.forEach(line => {
+        this.subwayStations[line] = []
+      })
     },
 
     subwayStationChange (line) {
-      this.queryParam.subwayStation = []
-      const that = this
-      Object.keys(this.subwayStations).forEach(e => {
-        that.queryParam.subwayStation.push(...that.subwayStations[e])
-      })
-      const index = this.queryParam.metroLine.indexOf(line)
-      if (index >= 0 && this.subwayStations[line].length > 0) {
-        this.queryParam.metroLine.splice(index, 1)
+      console.log(line)
+      // 选中地铁站，清空地铁线
+      if (this.subwayStations[line].length > 0) {
+        const index = this.queryParam.metroLine.indexOf(line)
+        if (index >= 0) {
+          this.queryParam.metroLine.splice(index, 1)
+        }
       }
     },
 
