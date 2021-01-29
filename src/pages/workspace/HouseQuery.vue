@@ -195,56 +195,52 @@
             <a-tag v-for="avePrice in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.totalPrice, queryParam.ranges.total, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
-            <a-popover trigger="hover" placement="topLeft">
-              <template slot="content">
-                <a-checkbox-group v-model="queryParam.roomArea" >
-                  <a-row v-for="option in roomAreaOptions" :key="option.label">
-                    <a-col>
-                      <a-checkbox :value="option">{{
-                        option.label
-                      }}</a-checkbox>
-                    </a-col>
-                  </a-row>
-                </a-checkbox-group>
-              </template>
-              <a-button type="dashed" icon="search" size="small">选择面积区间</a-button>
-            </a-popover>
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.roomArea"
+              size="small"
+              placeholder="选择面积区间"
+              :options="roomAreaOptions"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.areaMin" size="small" />
+              <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.areaMax" size="small" suffix="m²">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.area, queryParam.areaMin, queryParam.areaMax)"/>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
+              <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" suffix="m²">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.roomArea, queryParam.ranges.area)" :key="avePrice.label" color="pink">{{ translateRang(avePrice.label, '万') }}</a-tag>
+            <a-tag v-for="avePrice in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.roomArea, queryParam.ranges.roomArea, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="建筑年代" v-if="advanced">
-            <a-popover trigger="hover" placement="topLeft">
-              <template slot="content">
-                <a-checkbox-group v-model="queryParam.constructionAge" >
-                  <a-row v-for="option in constructionAgeOptions" :key="option.label">
-                    <a-col>
-                      <a-checkbox :value="option">{{
-                        option.label
-                      }}</a-checkbox>
-                    </a-col>
-                  </a-row>
-                </a-checkbox-group>
-              </template>
-              <a-button type="dashed" icon="search" size="small">选择建筑年代</a-button>
-            </a-popover>
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.constructionAge"
+              size="small"
+              placeholder="选择建筑年代"
+              :options="constructionAgeOptions"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.yearMin" size="small" />
+              <a-input style="width: 100%" v-model="queryParam.constructionAgeMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.yearMax" size="small" suffix="年">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.year, queryParam.yearMin, queryParam.yearMax)"/>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
+              <a-input style="width: 100%" v-model="queryParam.constructionAgeMax" size="small" suffix="年">
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.constructionAge, queryParam.constructionAgeMin, queryParam.constructionAgeMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.constructionAge, queryParam.ranges.year)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+            <a-tag v-for="avePrice in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.constructionAge, queryParam.ranges.constructionAge, avePrice)" color="pink">{{ translateYearRang(avePrice, '年') }}</a-tag>
           </a-form-item>
           <a-form-item v-if="advanced" label="小区属性">
             <a-checkbox-group v-model="queryParam.cellAttributes">
@@ -466,7 +462,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], ranges: { price: [], total: [], area: [], year: [] } },
+      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], ranges: { price: [], total: [], roomArea: [], constructionAge: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -527,11 +523,24 @@ export default {
         const two = x.split('-')
         return [two[0] * 1, two[1] * 1]
       })
+      requestParameters.roomArea = Array.from(this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)).map(x => {
+        const two = x.split('-')
+        return [two[0] * 1, two[1] * 1]
+      })
+      requestParameters.constructionAge = Array.from(this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)).map(x => {
+        const two = x.split('-')
+        return [two[0] * 1, two[1] * 1]
+      })
+
       delete requestParameters.ranges
       delete requestParameters.averageLlistedPriceMin
       delete requestParameters.averageLlistedPriceMax
       delete requestParameters.totalPriceMin
       delete requestParameters.totalPriceMax
+      delete requestParameters.roomAreaMin
+      delete requestParameters.roomAreaMax
+      delete requestParameters.constructionAgeMin
+      delete requestParameters.constructionAgeMax
 
       // this.queryParam.echelonPerformance = this.echelons.flat()
       this.queryParam.echelonPerformance = ((echelons) => {
@@ -677,6 +686,16 @@ export default {
         return `${arr[1]}${unit}以下`
       } else if (arr[1] === '100000000') {
         return `${arr[0]}${unit}以上`
+      }
+      return `${rang}${unit}`
+    },
+
+    translateYearRang (rang, unit) {
+      const arr = rang.split('-')
+      if (arr[0] === '0') {
+        return `${arr[1]}${unit}以前`
+      } else if (arr[1] === '100000000') {
+        return `${arr[0]}${unit}以后`
       }
       return `${rang}${unit}`
     },
