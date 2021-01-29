@@ -107,7 +107,7 @@
                 :allowClear="true"
                 :maxTagCount="0"
                 mode="multiple"
-                showArrow="true"
+                :showArrow="true"
               />
             </a-form-item>
             <a-checkbox-group v-model="queryParam.schoolType" @change="schoolTypeChange">
@@ -146,20 +146,18 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价" v-if="advanced">
-            <a-popover trigger="hover" placement="topLeft">
-              <template slot="content">
-                <a-checkbox-group v-model="queryParam.averageLlistedPrice" >
-                  <a-row v-for="option in averageLlistedPriceOptions" :key="option.label">
-                    <a-col>
-                      <a-checkbox :value="option">{{
-                        option.label
-                      }}</a-checkbox>
-                    </a-col>
-                  </a-row>
-                </a-checkbox-group>
-              </template>
-              <a-button type="dashed" icon="search" size="small">选择单价区间</a-button>
-            </a-popover>
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.averageLlistedPrice"
+              size="small"
+              placeholder="选择单价区间"
+              :options="averageLlistedPriceOptions"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
             </a-form-item>
@@ -169,7 +167,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+            <a-tag v-for="avePrice in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.averageLlistedPrice, queryParam.ranges.price, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="总价" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
@@ -195,7 +193,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice.label" color="pink">{{ translateRang(avePrice.label, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
@@ -221,7 +219,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.area, queryParam.areaMin, queryParam.areaMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in averagePriceAll(queryParam.roomArea, queryParam.ranges.area)" :key="avePrice.label" color="pink">{{ avePrice.label }}</a-tag>
+            <a-tag v-for="avePrice in averagePriceAll(queryParam.roomArea, queryParam.ranges.area)" :key="avePrice.label" color="pink">{{ translateRang(avePrice.label, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="建筑年代" v-if="advanced">
             <a-popover trigger="hover" placement="topLeft">
@@ -514,19 +512,22 @@ export default {
     },
 
     resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date()),
-        area: [],
-        averageLlistedPrice: [],
-        averagePriceInput: [],
-        ranges: { price: [], total: [], area: [], year: [] }
-      }
+      this.queryParam = { date: moment(new Date()), area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } }
       this.plates = {}
       this.areaReset()
     },
 
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
+
+      requestParameters.averageLlistedPrice = Array.from(this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)).map(x => {
+        const two = x.split('-')
+        return [two[0] * 1, two[1] * 1]
+      })
+      delete requestParameters.ranges
+      delete requestParameters.averageLlistedPriceMin
+      delete requestParameters.averageLlistedPriceMax
+
       // this.queryParam.echelonPerformance = this.echelons.flat()
       this.queryParam.echelonPerformance = ((echelons) => {
         const s = []
@@ -658,7 +659,33 @@ export default {
     },
 
     addAveragePrice (arr, min, max) {
-      if (min && max) { arr.push({ label: `${min}-${max}万`, value: [min, max] }) }
+      if (min && max) { arr.push(`${min}-${max}`) }
+    },
+
+    gatherSelect (arr, set) {
+      return new Set(arr.concat(set))
+    },
+
+    translateRang (rang, unit) {
+      const arr = rang.split('-')
+      if (arr[0] === '0') {
+        return `${arr[1]}${unit}以下`
+      } else if (arr[1] === '100000000') {
+        return `${arr[0]}${unit}以上`
+      }
+      return `${rang}${unit}`
+    },
+
+    handleTagClose (arr1, arr2, tag) {
+      this.removeEle(arr1, tag)
+      this.removeEle(arr2, tag)
+    },
+
+    removeEle (arr1, tag) {
+      const i = arr1.indexOf(tag)
+      if (i >= 0) {
+        arr1.splice(i, 1)
+      }
     },
 
     averagePriceAll (arr1, arr2) {

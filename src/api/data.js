@@ -386,14 +386,14 @@ export const metroLineOptions = [
     value: '20'
   }
 ]
-export const averageLlistedPriceOptions = [
+export const averageLlistedPriceOptions1 = [
   {
     label: '2万以下',
-    value: [0, 20000]
+    value: [0, 2]
   },
   {
     label: '2-3万',
-    value: [20000, 30000]
+    value: [2, 3]
   },
   {
     label: '3-4万',
@@ -442,6 +442,64 @@ export const averageLlistedPriceOptions = [
   {
     label: '15万以上',
     value: [150000, 999999]
+  }
+]
+export const averageLlistedPriceOptions = [
+  {
+    'label': '2万以下',
+    'value': '0-2'
+  },
+  {
+    'label': '2-3万',
+    'value': '2-3'
+  },
+  {
+    'label': '3-4万',
+    'value': '3-4'
+  },
+  {
+    'label': '4-5万',
+    'value': '4-5'
+  },
+  {
+    'label': '5-6万',
+    'value': '5-6'
+  },
+  {
+    'label': '6-7万',
+    'value': '6-7'
+  },
+  {
+    'label': '7-8万',
+    'value': '7-8'
+  },
+  {
+    'label': '8-9万',
+    'value': '8-9'
+  },
+  {
+    'label': '9-10万',
+    'value': '9-10'
+  },
+  {
+    'label': '10-11万',
+    'value': '10-11'
+  },
+  {
+    'label': '11-12万',
+    'value': '11-12'
+  },
+  {
+    'label': '12-13万',
+    'value': '12-13'
+  },
+  {
+    'label': '13-14万',
+    'value': '13-14'
+  },
+  {
+    'label': '15万以上',
+    'value': '15-100000000'
   }
 ]
 export const totalPriceOptions = [
@@ -505,7 +563,7 @@ export const totalPriceOptions = [
 export const roomAreaOptions = [
   {
     label: '50平方以下',
-    value: [50, 50]
+    value: [50, 0]
   },
   {
     label: '50-60平方',
