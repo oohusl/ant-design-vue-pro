@@ -268,13 +268,18 @@
                 :value="[metro.metroLine, metro.subwayStation]"
                 @change="selectMetroLine($event, i)">
               </a-cascader>
-              <a-input v-model="metro.distance" placeholder="距离" size="small" style="width: 145px" suffix="km">
+              <a-input
+                v-model="metro.distance"
+                placeholder="距离"
+                size="small"
+                style="width: 145px"
+                suffix="km">
               </a-input>
               <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
             </a-input-group>
           </a-descriptions-item>
         </template>
-        <a-descriptions-item label="" :span="4">
+        <a-descriptions-item :label="houseSelect.metroInfo.length === 0?'地铁线路':''" :span="4">
           <a-button type="dashed" style="width: 100px" size="small" @click="addMetroLine()">
             <a-icon type="plus" /> 添加
           </a-button>
@@ -755,7 +760,7 @@ export default {
       this.houseSelect.metroInfo.push({
         metroLine: '',
         subwayStation: '',
-        distance: undefined
+        distance: 1
       })
       this.$forceUpdate()
     },
