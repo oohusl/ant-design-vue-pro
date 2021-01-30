@@ -118,7 +118,7 @@
                     <a-checkbox-group v-model="echelons[options.type]" @change="echelonChange(options.type)">
                       <a-row>
                         <a-col v-for="e in options.echelon" :key="e.value">
-                          <a-checkbox :value="e.value" :indeterminate="queryParam.schoolType && queryParam.schoolType.indexOf(options.type) >= 0">{{
+                          <a-checkbox :value="e.value" :indeterminate="queryParam.schoolType.indexOf(options.type) >= 0">{{
                             e.label
                           }}</a-checkbox>
                         </a-col>
@@ -131,10 +131,10 @@
               </template>
             </a-checkbox-group>
             <div>
-              <a-tag v-for="p in queryParam.schoolName" :key="p">{{ p }}</a-tag>
-              <a-tag v-for="p in queryParam.schoolType" :key="p">{{ p }}</a-tag>
-              <template v-for="echelon in echelons">
-                <a-tag v-for="p in echelon" :key="p">{{ p }}</a-tag>
+              <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]">{{ p }}</a-tag>
+              <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]">{{ p }}</a-tag>
+              <template v-for="(value, key) in echelons">
+                <a-tag v-for="v in value" :key="v">{{ key }} - {{ v }}</a-tag>
               </template>
             </div>
           </a-form-item>
@@ -645,9 +645,9 @@ export default {
       return this.subwayStations[line] && this.subwayStations[line].length > 0
     },
 
-    schoolTypeChange () {
-      this.queryParam.schoolType.forEach((e) => {
-        this.echelons[e] = []
+    schoolTypeChange (e) {
+      e.forEach((e) => {
+        this.echelons[e].splice(0)
       })
     },
 
