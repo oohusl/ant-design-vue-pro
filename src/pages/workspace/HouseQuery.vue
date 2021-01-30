@@ -38,17 +38,24 @@
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
               <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
                 <template slot="content">
-                  <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)" >
+                  <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)">
                     <a-row :span="32">
                       <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption.value">
-                        <a-checkbox :value="plateOption.value" :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0">{{
-                          plateOption.label
-                        }}</a-checkbox>
+                        <a-checkbox
+                          :value="plateOption.value"
+                          :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0"
+                        >{{ plateOption.label }}</a-checkbox
+                        >
                       </a-col>
                     </a-row>
                   </a-checkbox-group>
                 </template>
-                <a-checkbox :value="options.value" :indeterminate="plates[options.value] && plates[options.value].length > 0" :checked="true">{{ options.label }}</a-checkbox>
+                <a-checkbox
+                  :value="options.value"
+                  :indeterminate="plates[options.value] && plates[options.value].length > 0"
+                  :checked="true"
+                >{{ options.label }}</a-checkbox
+                >
               </a-popover>
             </a-checkbox-group>
             <a-tag v-for="p in queryParam.area" :key="p" color="pink">{{ p }}</a-tag>
@@ -72,11 +79,14 @@
                         @change="subwayStationChange(metroLine.value)"
                       >
                         <a-row :span="24">
-                          <template
-                            v-for="(subwayName) in getSubwayStation(metroLine.value)"
-                          >
+                          <template v-for="subwayName in getSubwayStation(metroLine.value)">
                             <a-col :span="getSubwayStation(metroLine.value).length < 9 ? 4 : 3" :key="subwayName">
-                              <a-checkbox :value="subwayName" :key="subwayName" :indeterminate="hasMetroLineSelected(metroLine.value)">{{ subwayName }}</a-checkbox>
+                              <a-checkbox
+                                :value="subwayName"
+                                :key="subwayName"
+                                :indeterminate="hasMetroLineSelected(metroLine.value)"
+                              >{{ subwayName }}</a-checkbox
+                              >
                             </a-col>
                           </template>
                         </a-row>
@@ -115,26 +125,56 @@
               <template v-for="options in shoolType">
                 <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
                   <template slot="content">
-                    <a-checkbox-group v-model="queryParam.echelonPerformance[options.type]" @change="echelonChange(options.type)">
+                    <a-checkbox-group
+                      v-model="queryParam.echelonPerformance[options.type]"
+                      @change="echelonChange(options.type)"
+                    >
                       <a-row>
                         <a-col v-for="e in options.echelon" :key="e.value">
-                          <a-checkbox :value="e.value" :indeterminate="queryParam.schoolType.indexOf(options.type) >= 0">{{
-                            e.label
-                          }}</a-checkbox>
+                          <a-checkbox
+                            :value="e.value"
+                            :indeterminate="queryParam.schoolType.indexOf(options.type) >= 0"
+                          >{{ e.label }}</a-checkbox
+                          >
                         </a-col>
                       </a-row>
                     </a-checkbox-group>
                   </template>
-                  <a-checkbox :value="options.type" :indeterminate="queryParam.echelonPerformance[options.type] && queryParam.echelonPerformance[options.type].length > 0">{{ options.type }}</a-checkbox>
+                  <a-checkbox
+                    :value="options.type"
+                    :indeterminate="
+                      queryParam.echelonPerformance[options.type] &&
+                        queryParam.echelonPerformance[options.type].length > 0
+                    "
+                  >{{ options.type }}</a-checkbox
+                  >
                 </a-popover>
                 <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
               </template>
             </a-checkbox-group>
             <div>
-              <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]" :closable="true" @close="handleTagClose(rangTag, queryParam.schoolName)">{{ p }}</a-tag>
-              <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]" @close="handleTagClose(rangTag, queryParam.schoolType)">{{ p }}</a-tag>
+              <a-tag
+                v-for="p in queryParam.schoolName"
+                :key="p"
+                :color="colors[0]"
+                :closable="true"
+                @close="handleTagClose(rangTag, queryParam.schoolName)"
+              >{{ p }}</a-tag
+              >
+              <a-tag
+                v-for="p in queryParam.schoolType"
+                :key="p"
+                :color="colors[1]"
+                @close="handleTagClose(rangTag, queryParam.schoolType)"
+              >{{ p }}</a-tag
+              >
               <template v-for="(value, key) in queryParam.echelonPerformance">
-                <a-tag v-for="v in value" :key="v" @close="handleTagClose(rangTag, queryParam.echelonPerformance)">{{ key }} - {{ v.replaceAll("中学-","").replaceAll("小学-","") }}</a-tag>
+                <a-tag
+                  v-for="v in value"
+                  :key="v"
+                  @close="handleTagClose(rangTag, queryParam.echelonPerformance)"
+                >{{ key }} - {{ v.replaceAll('中学-', '').replaceAll('小学-', '') }}</a-tag
+                >
               </template>
             </div>
           </a-form-item>
@@ -163,12 +203,36 @@
               <a-input type="number" style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
-              <a-input type="number" style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
+              <a-input
+                type="number"
+                style="width: 100%"
+                v-model="queryParam.averageLlistedPriceMax"
+                size="small"
+                suffix="万"
+              >
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="
+                    addToRang(
+                      queryParam.ranges.price,
+                      queryParam.averageLlistedPriceMin,
+                      queryParam.averageLlistedPriceMax
+                    )
+                  "
+                />
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.averageLlistedPrice, queryParam.ranges.price)" color="pink">{{ translateRang(rangTag, '万', averageLlistedPriceOptions) }}</a-tag>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.averageLlistedPrice, queryParam.ranges.price)"
+              color="pink"
+            >{{ translateRang(rangTag, '万', averageLlistedPriceOptions) }}</a-tag
+            >
           </a-form-item>
 
           <a-form-item label="总价" v-if="advanced">
@@ -188,12 +252,24 @@
               <a-input style="width: 100%" v-model="queryParam.totalPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="addToRang(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"
+                />
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.totalPrice, queryParam.ranges.total)" color="pink">{{ translateRang(rangTag, '万', totalPriceOptions) }}</a-tag>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.totalPrice, queryParam.ranges.total)"
+              color="pink"
+            >{{ translateRang(rangTag, '万', totalPriceOptions) }}</a-tag
+            >
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
             <a-select
@@ -212,12 +288,24 @@
               <a-input style="width: 100%" v-model="queryParam.roomAreaMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" suffix="m²">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"/>
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="addToRang(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"
+                />
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.roomArea, queryParam.ranges.roomArea)" color="pink">{{ translateRang(rangTag, '平方', roomAreaOptions) }}</a-tag>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.roomArea, queryParam.ranges.roomArea)"
+              color="pink"
+            >{{ translateRang(rangTag, '平方', roomAreaOptions) }}</a-tag
+            >
           </a-form-item>
           <a-form-item label="建筑年代" v-if="advanced">
             <a-select
@@ -236,12 +324,30 @@
               <a-input style="width: 100%" v-model="queryParam.constructionAgeMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
-            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
               <a-input style="width: 100%" v-model="queryParam.constructionAgeMax" size="small" suffix="年">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.constructionAge, queryParam.constructionAgeMin, queryParam.constructionAgeMax)"/>
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="
+                    addToRang(
+                      queryParam.ranges.constructionAge,
+                      queryParam.constructionAgeMin,
+                      queryParam.constructionAgeMax
+                    )
+                  "
+                />
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.constructionAge, queryParam.ranges.constructionAge)" color="pink">{{ translateYearRang(rangTag, '年') }}</a-tag>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.constructionAge, queryParam.ranges.constructionAge)"
+              color="pink"
+            >{{ translateYearRang(rangTag, '年') }}</a-tag
+            >
           </a-form-item>
           <a-form-item v-if="advanced" label="小区属性">
             <a-checkbox-group v-model="queryParam.cellAttributes">
@@ -260,35 +366,19 @@
           </a-form-item>
           <a-form-item v-if="advanced" label="是否电梯">
             <a-checkbox-group v-model="queryParam.isLift">
-              <a-checkbox :value="1">
-                有电梯
-              </a-checkbox>
-              <a-checkbox :value="0">
-                无电梯
-              </a-checkbox>
-              <a-checkbox :value="2">
-                其他
-              </a-checkbox>
+              <a-checkbox :value="1"> 有电梯 </a-checkbox>
+              <a-checkbox :value="0"> 无电梯 </a-checkbox>
+              <a-checkbox :value="2"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
-            <a-button @click="search()" type="primary">
-              查询
-            </a-button>
-            <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }">
-              重置
-            </a-button>
+            <a-button @click="search()" type="primary"> 查询 </a-button>
+            <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }"> 重置 </a-button>
             <a-dropdown :style="{ marginLeft: '8px' }">
               <a-menu slot="overlay">
-                <a-menu-item key="1" @click="newHouse()">
-                  新建
-                </a-menu-item>
-                <a-menu-item key="2">
-                  导入
-                </a-menu-item>
-                <a-menu-item key="3">
-                  导出
-                </a-menu-item>
+                <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
+                <a-menu-item key="2"> 导入 </a-menu-item>
+                <a-menu-item key="3"> 导出 </a-menu-item>
               </a-menu>
               <a-button> 操作 <a-icon type="down" /> </a-button>
             </a-dropdown>
@@ -307,9 +397,7 @@
                 >套 符合条件房源
               </div>
               <a-button-group>
-                <a-button>
-                  排序
-                </a-button>
+                <a-button> 排序 </a-button>
                 <a-button @click="sortChange('averageLlistedPrice')">
                   房屋单价
                   <a-icon :type="sortType == 'asc' ? 'down' : 'up'" />
@@ -337,7 +425,7 @@
                           color: '#000000',
                           'font-size': '20px',
                           height: '24px',
-                          'line-height': '24px'
+                          'line-height': '24px',
                         }"
                       >
                         {{ community.communityName }}
@@ -348,14 +436,14 @@
                           padding: 0,
                           display: 'flex',
                           'justify-content': 'center',
-                          'algin-item': 'flex-end'
+                          'algin-item': 'flex-end',
                         }"
                       >
                         <a-form
                           :label-col="{ span: 3 }"
                           :wrapper-col="{ span: 21 }"
                           label-align="left"
-                          style="width:100%"
+                          style="width: 100%"
                         >
                           <a-form-item label="地址" :style="{ height: '30px' }">
                             <span>{{ community.address }}</span>
@@ -365,8 +453,7 @@
                           </a-form-item>
                           <a-form-item label="地铁" :style="{ height: '30px' }">
                             <span
-                            >{{ community.metroLine ? community.metroLine : '' }}
-                              {{ community.subwayStation }}</span
+                            >{{ community.metroLine ? community.metroLine : '' }} {{ community.subwayStation }}</span
                             >
                           </a-form-item>
                         </a-form>
@@ -397,7 +484,7 @@
                         :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                         width="200"
                       >
-                        均价<span style="font-size:24px;font-weight:bold">{{
+                        均价<span style="font-size: 24px; font-weight: bold">{{
                           community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice
                         }}</span
                         >元/m²
@@ -408,7 +495,7 @@
                           padding: 0,
                           display: 'flex',
                           'justify-content': 'center',
-                          'align-items': 'flex-end'
+                          'align-items': 'flex-end',
                         }"
                       >
                         <a-button @click="showDetail(community)">查看详情</a-button>
@@ -463,7 +550,17 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], echelonPerformance: {}, ranges: { price: [], total: [], roomArea: [], constructionAge: [] } },
+      queryParam: {
+        area: [],
+        schoolType: [],
+        metroLine: [],
+        averageLlistedPrice: [],
+        totalPrice: [],
+        roomArea: [],
+        constructionAge: [],
+        echelonPerformance: {},
+        ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
+      },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -506,7 +603,18 @@ export default {
     },
 
     resetSearchForm () {
-      this.queryParam = { date: moment(new Date()), area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], echelonPerformance: {}, ranges: { price: [], total: [], roomArea: [], constructionAge: [] } }
+      this.queryParam = {
+        date: moment(new Date()),
+        area: [],
+        schoolType: [],
+        metroLine: [],
+        averageLlistedPrice: [],
+        totalPrice: [],
+        roomArea: [],
+        constructionAge: [],
+        echelonPerformance: {},
+        ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
+      }
       this.plates = {}
       this.areaReset()
     },
@@ -514,21 +622,45 @@ export default {
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
 
-      requestParameters.averageLlistedPrice = Array.from(this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)).map(x => {
+      requestParameters.averageLlistedPrice = Array.from(
+        this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)
+      ).map((x) => {
         const two = x.split('-')
-        return [two[0] * 10000, two[1] * 10000]
+        two[0] = two[0] * 10000
+        if (two.length > 1) {
+          two[1] = two[1] * 10000
+        }
+        return two
       })
-      requestParameters.totalPrice = Array.from(this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)).map(x => {
+      requestParameters.totalPrice = Array.from(
+        this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)
+      ).map((x) => {
         const two = x.split('-')
-        return [two[0], two[1]]
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
       })
-      requestParameters.roomArea = Array.from(this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)).map(x => {
+      requestParameters.roomArea = Array.from(
+        this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)
+      ).map((x) => {
         const two = x.split('-')
-        return [two[0] * 1, two[1] * 1]
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
       })
-      requestParameters.constructionAge = Array.from(this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)).map(x => {
+      requestParameters.constructionAge = Array.from(
+        this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
+      ).map((x) => {
         const two = x.split('-')
-        return [two[0] * 1, two[1] * 1]
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
       })
 
       requestParameters.plate = Object.values(this.plates).flat()
@@ -552,13 +684,13 @@ export default {
       }
 
       if (this.queryParam.checkedList) {
-        this.queryParam.checkedList.forEach(e => {
+        this.queryParam.checkedList.forEach((e) => {
           requestParameters[e] = true
         })
         delete requestParameters.checkedList
       }
       console.log('loadData request parameters:', requestParameters)
-      getHouse(requestParameters).then(res => {
+      getHouse(requestParameters).then((res) => {
         console.log(res)
         this.results = res
       })
@@ -566,7 +698,7 @@ export default {
 
     areaReset () {
       this.plateOptions.splice(0)
-      this.queryParam.area.forEach(e => {
+      this.queryParam.area.forEach((e) => {
         this.plateOptions.push(...areaPlate[e])
       })
       this.search()
@@ -574,7 +706,7 @@ export default {
 
     getPlate (area) {
       const plates = []
-      areaPlate[area].forEach(v => {
+      areaPlate[area].forEach((v) => {
         plates.push({ label: v, value: v })
       })
       return plates
@@ -582,13 +714,13 @@ export default {
 
     areaChange () {
       this.queryParam.area.forEach((e) => {
-         const areaPlates = []
-         this.getPlate(e).forEach((p) => areaPlates.push(p.value))
-            if (this.plates[e]) {
-              this.plates[e] = this.plates[e].filter(selectedP => {
-                return areaPlates.indexOf(selectedP) < 0
-            })
-         }
+        const areaPlates = []
+        this.getPlate(e).forEach((p) => areaPlates.push(p.value))
+        if (this.plates[e]) {
+          this.plates[e] = this.plates[e].filter((selectedP) => {
+            return areaPlates.indexOf(selectedP) < 0
+          })
+        }
       })
     },
 
@@ -602,7 +734,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwayOptions.forEach(v => {
+      subwayOptions.forEach((v) => {
         if (v.line === i) {
           s = v.station
         }
@@ -612,7 +744,7 @@ export default {
 
     metroLineChange (e) {
       console.log(e)
-      e.forEach(line => {
+      e.forEach((line) => {
         if (this.subwayStations[line]) this.subwayStations[line].splice(0)
       })
     },
@@ -669,7 +801,9 @@ export default {
     },
 
     addToRang (arr, min, max) {
-      if (min && max) { arr.push(`${min}-${max}`) }
+      if (min && max) {
+        arr.push(`${min}-${max}`)
+      }
     },
 
     gatherSelect (arr, set) {
@@ -677,7 +811,9 @@ export default {
     },
 
     translateRang (rang, unit, options) {
-      const r = options.filter(e => { return e.value === rang })
+      const r = options.filter((e) => {
+        return e.value === rang
+      })
       if (r.length > 0) {
         return r[0].label
       }
@@ -695,7 +831,9 @@ export default {
     },
 
     handleTagClose (tag, ...arr1) {
-      arr1.forEach(e => { this.removeEle(e, tag) })
+      arr1.forEach((e) => {
+        this.removeEle(e, tag)
+      })
     },
 
     removeEle (arr1, tag) {
@@ -713,7 +851,7 @@ export default {
       if (!arr2) {
         arr2 = []
       }
-      arr1.concat(arr2).forEach(e => {
+      arr1.concat(arr2).forEach((e) => {
         rangsMap.set(e.label, e)
       })
       return rangsMap.values()
@@ -798,13 +936,13 @@ img {
 .house-list .ant-card-body {
   padding: 0;
 }
-.ant-checkbox + span{
+.ant-checkbox + span {
   padding-left: 6px;
 }
 </style>
 
 <style>
-.ant-checkbox + span{
+.ant-checkbox + span {
   padding-left: 6px;
 }
 </style>
