@@ -376,7 +376,7 @@
               class="col2"
               size="small"
               placeholder="请选中配套学校"
-              :options="schoolsOptions"
+              :options="schools"
               :showSearch="true"
               :value="school.schoolName"
               @change="selectSchool($event,s)"
@@ -536,6 +536,8 @@ import {
   subwayOptions,
   areaPlate,
   getLabel,
+  schoolOptions,
+  schoolDetail,
   statusMap
 } from '@/api/data'
 
@@ -581,15 +583,7 @@ export default {
       plates: {},
       subwayStations: {},
       getLabel: getLabel,
-      schools: {
-        '世界外国语小学（民办）': { schoolName: '世界外国语小学（民办）', echelonPerformance: '第一梯队', schoolType: '小学' },
-        '上海实验学校': { schoolName: '上海实验学校', echelonPerformance: '第一梯队', schoolType: '小学' },
-        '进才中学': { schoolName: '进才中学', echelonPerformance: '第一梯队', schoolType: '中学' }
-      },
-      schoolsOptions: [
-        { label: '世界外国语小学（民办）', value: '世界外国语小学（民办）' },
-        { label: '上海实验学校', value: '上海实验学校' },
-        { label: '进才中学', value: '进才中学' }],
+      schools: schoolOptions(),
       metrolineDistrictInfo: []
     }
   },
@@ -816,7 +810,7 @@ export default {
         this.$forceUpdate()
     },
     selectSchool (school, o) {
-      const s = this.schools[school]
+      const s = schoolDetail[school]
       if (s) {
         this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
       }
@@ -824,7 +818,7 @@ export default {
       this.$forceUpdate()
     },
     updateSchoolsOptions (school, disabled) {
-      this.schoolsOptions.forEach(s => {
+      this.schools.forEach(s => {
         if (s.value === school) {
           s.disabled = disabled
         }

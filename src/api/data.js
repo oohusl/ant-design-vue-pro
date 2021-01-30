@@ -611,14 +611,1942 @@ export function getMetroLineOptions () {
   return subwayOptions.map(e => { return { label: e.line, value: e.line } })
 }
 
-export const schools =
-  [{
-    label: '世界外国语小学（民办）', value: '世界外国语小学（民办）'
-  }, {
-    label: '上海实验学校', value: '上海实验学校'
-  }, {
-    label: '进才中学', value: '进才中学'
-  }]
+export function schoolOptions () {
+  return Object.keys(schoolDetail).map(e => { return { label: e, value: e } })
+}
+
+export const schoolDetail = {
+  '海桐小学': {
+    'schoolName': '海桐小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '福山唐城外国语': {
+    'schoolName': '福山唐城外国语',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '二中心小学（申江校区）': {
+    'schoolName': '二中心小学（申江校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '田林四小': {
+    'schoolName': '田林四小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '浦师附小（锦绣校区）': {
+    'schoolName': '浦师附小（锦绣校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '东安路第二小学': {
+    'schoolName': '东安路第二小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '黄浦一中心': {
+    'schoolName': '黄浦一中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上师大附属闵行第三小学': {
+    'schoolName': '上师大附属闵行第三小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '闵行区中心小学': {
+    'schoolName': '闵行区中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海中医药大学附属蔷薇小学晶城校区': {
+    'schoolName': '上海中医药大学附属蔷薇小学晶城校区',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '江川路小学（北校区）': {
+    'schoolName': '江川路小学（北校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '武宁路小学': {
+    'schoolName': '武宁路小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '复旦科技园小学（过渡）': {
+    'schoolName': '复旦科技园小学（过渡）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上大附属经纬实验学校': {
+    'schoolName': '上大附属经纬实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '实验小学北水湾分校': {
+    'schoolName': '实验小学北水湾分校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '实验小学': {
+    'schoolName': '实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '大宁国际小学': {
+    'schoolName': '大宁国际小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '真如文英中心小学': {
+    'schoolName': '真如文英中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海音乐学院实验学校（过渡）': {
+    'schoolName': '上海音乐学院实验学校（过渡）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '上海音乐学院实验学校': {
+    'schoolName': '上海音乐学院实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '徽宁路三小': {
+    'schoolName': '徽宁路三小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '闸北区第一中心小学': {
+    'schoolName': '闸北区第一中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '竹园小学（龙阳校区）': {
+    'schoolName': '竹园小学（龙阳校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '朝春中心小学': {
+    'schoolName': '朝春中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '平阳小学': {
+    'schoolName': '平阳小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '尚博实验小学（昌里校区）': {
+    'schoolName': '尚博实验小学（昌里校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '水丰路小学': {
+    'schoolName': '水丰路小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '齐齐哈尔路第一小学': {
+    'schoolName': '齐齐哈尔路第一小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '杨泰实验学校': {
+    'schoolName': '杨泰实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '闸北区第二中心小学': {
+    'schoolName': '闸北区第二中心小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '七宝实验小学': {
+    'schoolName': '七宝实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海中医药大学附属蔷薇小学': {
+    'schoolName': '上海中医药大学附属蔷薇小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '建平实验小学（金业校区）': {
+    'schoolName': '建平实验小学（金业校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '理工大附小': {
+    'schoolName': '理工大附小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '田园外语实验小学（金都校区）': {
+    'schoolName': '田园外语实验小学（金都校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '昌邑小学（大华校区）': {
+    'schoolName': '昌邑小学（大华校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '二中心小学（巨野校区）': {
+    'schoolName': '二中心小学（巨野校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '江宁学校': {
+    'schoolName': '江宁学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '莘庄镇小': {
+    'schoolName': '莘庄镇小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海师范大学第三附属实验学校': {
+    'schoolName': '上海师范大学第三附属实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '虹口实验学校': {
+    'schoolName': '虹口实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '上师大附属卢湾实验小学': {
+    'schoolName': '上师大附属卢湾实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '二中心小学（张江校区）': {
+    'schoolName': '二中心小学（张江校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '建平实验小学（枣庄校区）': {
+    'schoolName': '建平实验小学（枣庄校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '新世界小学': {
+    'schoolName': '新世界小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '晋元附校': {
+    'schoolName': '晋元附校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '复旦科技园小学': {
+    'schoolName': '复旦科技园小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '红旗小学': {
+    'schoolName': '红旗小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '闸北区第三中心小学': {
+    'schoolName': '闸北区第三中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '进才实验小学': {
+    'schoolName': '进才实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '新普陀小学': {
+    'schoolName': '新普陀小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海小学': {
+    'schoolName': '上海小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '求知小学': {
+    'schoolName': '求知小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '适存小学': {
+    'schoolName': '适存小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '建青实验学校': {
+    'schoolName': '建青实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '长青小学': {
+    'schoolName': '长青小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '平南小学（平吉校区）': {
+    'schoolName': '平南小学（平吉校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '田园外语实验小学': {
+    'schoolName': '田园外语实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '鹤北小学': {
+    'schoolName': '鹤北小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '竹园小学（沪东校区）': {
+    'schoolName': '竹园小学（沪东校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '浦师附小（潍坊校区）': {
+    'schoolName': '浦师附小（潍坊校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '齐齐哈尔路第一小学分校': {
+    'schoolName': '齐齐哈尔路第一小学分校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '天山第一小学': {
+    'schoolName': '天山第一小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '平南小学': {
+    'schoolName': '平南小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '莘庄镇小南区': {
+    'schoolName': '莘庄镇小南区',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '市实验东校': {
+    'schoolName': '市实验东校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '虎林路小学': {
+    'schoolName': '虎林路小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '曹光彪小学': {
+    'schoolName': '曹光彪小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '万航渡路小学': {
+    'schoolName': '万航渡路小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '浦师附小（东城校区）': {
+    'schoolName': '浦师附小（东城校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '长征中心小学': {
+    'schoolName': '长征中心小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '长宁实验小学': {
+    'schoolName': '长宁实验小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '宝山三中心': {
+    'schoolName': '宝山三中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '航华一小': {
+    'schoolName': '航华一小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '中山北路一小': {
+    'schoolName': '中山北路一小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '园南小学': {
+    'schoolName': '园南小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '绿苑小学': {
+    'schoolName': '绿苑小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上海大学附属中学实验学校': {
+    'schoolName': '上海大学附属中学实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '师专附小': {
+    'schoolName': '师专附小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '田林第三小学': {
+    'schoolName': '田林第三小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '广育小学': {
+    'schoolName': '广育小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上师大康城实验学校': {
+    'schoolName': '上师大康城实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '华坪小学': {
+    'schoolName': '华坪小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '竹园小学（张杨校区）': {
+    'schoolName': '竹园小学（张杨校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '江川路小学': {
+    'schoolName': '江川路小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '昌邑小学（陆家嘴校区）': {
+    'schoolName': '昌邑小学（陆家嘴校区）',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '中远实验学校': {
+    'schoolName': '中远实验学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '上师大一附小': {
+    'schoolName': '上师大一附小',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '徐汇第一中心': {
+    'schoolName': '徐汇第一中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '复兴东路三小': {
+    'schoolName': '复兴东路三小',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '水丰路小学分校': {
+    'schoolName': '水丰路小学分校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '静安三中心': {
+    'schoolName': '静安三中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '和衷小学': {
+    'schoolName': '和衷小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '彭浦新村第一小学': {
+    'schoolName': '彭浦新村第一小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '康健外国语小学': {
+    'schoolName': '康健外国语小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '卢湾一中心': {
+    'schoolName': '卢湾一中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '红星小学': {
+    'schoolName': '红星小学',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '虹口一中心': {
+    'schoolName': '虹口一中心',
+    'echelonPerformance': '二梯队',
+    'schoolType': '小学'
+  },
+  '北郊学校': {
+    'schoolName': '北郊学校',
+    'echelonPerformance': '二梯队',
+    'schoolType': '一贯制'
+  },
+  '上实附小': {
+    'schoolName': '上实附小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '杨行中心校': {
+    'schoolName': '杨行中心校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '御桥小学（高青校区）': {
+    'schoolName': '御桥小学（高青校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '外高桥实验小学': {
+    'schoolName': '外高桥实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '惠南小学': {
+    'schoolName': '惠南小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '华师大四附中': {
+    'schoolName': '华师大四附中',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '文来实验小学': {
+    'schoolName': '文来实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '观澜小学（新川校区）': {
+    'schoolName': '观澜小学（新川校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '北蔡中心小学': {
+    'schoolName': '北蔡中心小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '曹杨附校': {
+    'schoolName': '曹杨附校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '华师大附属外国语学校': {
+    'schoolName': '华师大附属外国语学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '内江路二小': {
+    'schoolName': '内江路二小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '威宁小学': {
+    'schoolName': '威宁小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '同济大学附属实验学校': {
+    'schoolName': '同济大学附属实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '静安区第四中心小学': {
+    'schoolName': '静安区第四中心小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '虹桥中心小学': {
+    'schoolName': '虹桥中心小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '张江高科实验小学（香楠校区）': {
+    'schoolName': '张江高科实验小学（香楠校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '浦东南路小学': {
+    'schoolName': '浦东南路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '龙柏第一小学': {
+    'schoolName': '龙柏第一小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '协和双语小学': {
+    'schoolName': '协和双语小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '龚路小学': {
+    'schoolName': '龚路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '西郊学校': {
+    'schoolName': '西郊学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '复旦小学': {
+    'schoolName': '复旦小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '高境二小（高境科创实验小学）': {
+    'schoolName': '高境二小（高境科创实验小学）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '疁城实验学校': {
+    'schoolName': '疁城实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '苏民学校': {
+    'schoolName': '苏民学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '华师大附属紫竹小区': {
+    'schoolName': '华师大附属紫竹小区',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '御桥小学（御山校区）': {
+    'schoolName': '御桥小学（御山校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '澧溪小学': {
+    'schoolName': '澧溪小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '张江高科实验小学（藿香校区）': {
+    'schoolName': '张江高科实验小学（藿香校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '洋泾菊园（统筹）': {
+    'schoolName': '洋泾菊园（统筹）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '洋泾菊园': {
+    'schoolName': '洋泾菊园',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '华理附小': {
+    'schoolName': '华理附小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '政立路二小': {
+    'schoolName': '政立路二小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '玉屏南路小学': {
+    'schoolName': '玉屏南路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '江桥小学': {
+    'schoolName': '江桥小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '明星学校': {
+    'schoolName': '明星学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '华漕学校': {
+    'schoolName': '华漕学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '交大附小': {
+    'schoolName': '交大附小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '静安小学': {
+    'schoolName': '静安小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '三林实验小学': {
+    'schoolName': '三林实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '徐汇实验小学': {
+    'schoolName': '徐汇实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '虹口六中心': {
+    'schoolName': '虹口六中心',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '田家炳小学（东部校区）': {
+    'schoolName': '田家炳小学（东部校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '中山北路小学': {
+    'schoolName': '中山北路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '尚博实验小学（湾流域校区）': {
+    'schoolName': '尚博实验小学（湾流域校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '华东师范大学宝山实验学校': {
+    'schoolName': '华东师范大学宝山实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '福山实验学校': {
+    'schoolName': '福山实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '莘城学校': {
+    'schoolName': '莘城学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '莘松小学': {
+    'schoolName': '莘松小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '园西小学（新德校区）': {
+    'schoolName': '园西小学（新德校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '曹村六小': {
+    'schoolName': '曹村六小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '许昌路第五小学': {
+    'schoolName': '许昌路第五小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '虹外一小': {
+    'schoolName': '虹外一小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '园西小学（南桥校区）': {
+    'schoolName': '园西小学（南桥校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '上外尚阳外国语': {
+    'schoolName': '上外尚阳外国语',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '万里城实验学校': {
+    'schoolName': '万里城实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '徐教院附小': {
+    'schoolName': '徐教院附小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '杨浦小学': {
+    'schoolName': '杨浦小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '怀德路第一小学': {
+    'schoolName': '怀德路第一小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '新虹桥小学': {
+    'schoolName': '新虹桥小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '宝山二中心小学': {
+    'schoolName': '宝山二中心小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '二联小学': {
+    'schoolName': '二联小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '江湾中心校': {
+    'schoolName': '江湾中心校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '凉城三小': {
+    'schoolName': '凉城三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '裘锦秋实验学校': {
+    'schoolName': '裘锦秋实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '日新实验小学': {
+    'schoolName': '日新实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '同济小学': {
+    'schoolName': '同济小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '杨浦小学分校': {
+    'schoolName': '杨浦小学分校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '开元小学': {
+    'schoolName': '开元小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '虎林路三小': {
+    'schoolName': '虎林路三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '安亭小学': {
+    'schoolName': '安亭小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '静安二中心': {
+    'schoolName': '静安二中心',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '交大附属实验小学': {
+    'schoolName': '交大附属实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '启新小学': {
+    'schoolName': '启新小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '开元学校（小学部）': {
+    'schoolName': '开元学校（小学部）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '法华镇三小': {
+    'schoolName': '法华镇三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '华附实小': {
+    'schoolName': '华附实小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '黄教院附属中山学校': {
+    'schoolName': '黄教院附属中山学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '静安实验小学': {
+    'schoolName': '静安实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '新梅小学': {
+    'schoolName': '新梅小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '回民小学': {
+    'schoolName': '回民小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '教育学院实验小学': {
+    'schoolName': '教育学院实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '四川北路小学': {
+    'schoolName': '四川北路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '莲溪小学': {
+    'schoolName': '莲溪小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '东方小学（蓝村校区）': {
+    'schoolName': '东方小学（蓝村校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '曹杨二中附校': {
+    'schoolName': '曹杨二中附校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '政立路小学（部分）': {
+    'schoolName': '政立路小学（部分）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '五角场小学': {
+    'schoolName': '五角场小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '凤城新村小学': {
+    'schoolName': '凤城新村小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '宝山区教育学校实验学校': {
+    'schoolName': '宝山区教育学校实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '威海路三小': {
+    'schoolName': '威海路三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '上南实小（昌里校区）': {
+    'schoolName': '上南实小（昌里校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '区教院附校': {
+    'schoolName': '区教院附校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '中原路小学': {
+    'schoolName': '中原路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '田家炳小学（西部校区）': {
+    'schoolName': '田家炳小学（西部校区）',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '上南二村小学': {
+    'schoolName': '上南二村小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '行知小学': {
+    'schoolName': '行知小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '南翔小学': {
+    'schoolName': '南翔小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '陈鹤琴小学': {
+    'schoolName': '陈鹤琴小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '市西小学': {
+    'schoolName': '市西小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '市东实验学校': {
+    'schoolName': '市东实验学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '一贯制'
+  },
+  '康宁科技实验小学': {
+    'schoolName': '康宁科技实验小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '六一小学': {
+    'schoolName': '六一小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '西康路三小': {
+    'schoolName': '西康路三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '沪太一小': {
+    'schoolName': '沪太一小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '嘉华小学': {
+    'schoolName': '嘉华小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '大华小学': {
+    'schoolName': '大华小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '子长学校': {
+    'schoolName': '子长学校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '平凉路三小': {
+    'schoolName': '平凉路三小',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '浔阳路小学': {
+    'schoolName': '浔阳路小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '中原路小学分校': {
+    'schoolName': '中原路小学分校',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '南码头小学': {
+    'schoolName': '南码头小学',
+    'echelonPerformance': '三梯队',
+    'schoolType': '小学'
+  },
+  '闸北实验小学': {
+    'schoolName': '闸北实验小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '前滩华二': {
+    'schoolName': '前滩华二',
+    'echelonPerformance': '一梯队',
+    'schoolType': '一贯制'
+  },
+  '黄浦上外': {
+    'schoolName': '黄浦上外',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '上海实验学校': {
+    'schoolName': '上海实验学校',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '高安路第一小学': {
+    'schoolName': '高安路第一小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '六师附小（芳菲校区）': {
+    'schoolName': '六师附小（芳菲校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '闵行区实验小学（景城校区）': {
+    'schoolName': '闵行区实验小学（景城校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '华师大附属小学': {
+    'schoolName': '华师大附属小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '控江二村小学分校': {
+    'schoolName': '控江二村小学分校',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '明强小学西校区': {
+    'schoolName': '明强小学西校区',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '明强小学': {
+    'schoolName': '明强小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '明珠小学（C区）': {
+    'schoolName': '明珠小学（C区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '打虎山路第一小学': {
+    'schoolName': '打虎山路第一小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '建襄小学': {
+    'schoolName': '建襄小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '闸北实验小学（明德校区）': {
+    'schoolName': '闸北实验小学（明德校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '闵行区实验小学（春城校区）': {
+    'schoolName': '闵行区实验小学（春城校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '福山证大外国语小学': {
+    'schoolName': '福山证大外国语小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '六师附小（羽山校区）': {
+    'schoolName': '六师附小（羽山校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '福山花园外国语小学': {
+    'schoolName': '福山花园外国语小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '愚园路第一小学': {
+    'schoolName': '愚园路第一小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '静安一中心': {
+    'schoolName': '静安一中心',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '一师附小': {
+    'schoolName': '一师附小',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '闵行区实验小学（畹町校区）': {
+    'schoolName': '闵行区实验小学（畹町校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '闵行区实验小学': {
+    'schoolName': '闵行区实验小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '汇师小学（南丹小区）': {
+    'schoolName': '汇师小学（南丹小区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '虹口三中心': {
+    'schoolName': '虹口三中心',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '静教院': {
+    'schoolName': '静教院',
+    'echelonPerformance': '一梯队',
+    'schoolType': '一贯制'
+  },
+  '愚园路第一小学（向红分校）': {
+    'schoolName': '愚园路第一小学（向红分校）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '明珠小学（A区）': {
+    'schoolName': '明珠小学（A区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '控江二村小学': {
+    'schoolName': '控江二村小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '第二师范学校附属小学': {
+    'schoolName': '第二师范学校附属小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（华阳路校区）': {
+    'schoolName': '江苏路第五小学（华阳路校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '蓬莱二小': {
+    'schoolName': '蓬莱二小',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '向阳小学': {
+    'schoolName': '向阳小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）163-171（除164号）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）163-171（除164号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '虹口四中心': {
+    'schoolName': '虹口四中心',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '福山外国语小学': {
+    'schoolName': '福山外国语小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '宝山一中心': {
+    'schoolName': '宝山一中心',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（长宁路校区）': {
+    'schoolName': '江苏路第五小学（长宁路校区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '广灵路小学': {
+    'schoolName': '广灵路小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '普通小学': {
+    'schoolName': '普通小学',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）（2、4楼）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）（2、4楼）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（华阳路校区）（1、2号）': {
+    'schoolName': '江苏路第五小学（华阳路校区）（1、2号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）（1-7号）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）（1-7号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（华阳路校区）（1-13号）': {
+    'schoolName': '江苏路第五小学（华阳路校区）（1-13号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）（9、11楼）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）（9、11楼）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '明珠小学（B区）': {
+    'schoolName': '明珠小学（B区）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（华阳路校区）（2号）': {
+    'schoolName': '江苏路第五小学（华阳路校区）（2号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '江苏路第五小学（昭化东路校区）（除6号）': {
+    'schoolName': '江苏路第五小学（昭化东路校区）（除6号）',
+    'echelonPerformance': '一梯队',
+    'schoolType': '小学'
+  },
+  '上海宝山实验学校': {
+    'schoolName': '上海宝山实验学校',
+    'echelonPerformance': '一梯队',
+    'schoolType': '一贯制'
+  },
+  '庙行实验小学': {
+    'schoolName': '庙行实验小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '复旦大学第二附属学校': {
+    'schoolName': '复旦大学第二附属学校',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '古猗小学': {
+    'schoolName': '古猗小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '明强第二小学': {
+    'schoolName': '明强第二小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '宝虹小学': {
+    'schoolName': '宝虹小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '育鹰学校': {
+    'schoolName': '育鹰学校',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '杭州路第一小学': {
+    'schoolName': '杭州路第一小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '昆明学校': {
+    'schoolName': '昆明学校',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '工农新村小学': {
+    'schoolName': '工农新村小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '内江路小学': {
+    'schoolName': '内江路小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '市光学校': {
+    'schoolName': '市光学校',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '世界小学': {
+    'schoolName': '世界小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '黄兴学校': {
+    'schoolName': '黄兴学校',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '上师大附属南陈路': {
+    'schoolName': '上师大附属南陈路',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '翔殷路小学': {
+    'schoolName': '翔殷路小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '长白山二村小学': {
+    'schoolName': '长白山二村小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '平凉路第四小学': {
+    'schoolName': '平凉路第四小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '国和小学': {
+    'schoolName': '国和小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '民星路小学': {
+    'schoolName': '民星路小学',
+    'echelonPerformance': '小学-其他',
+    'schoolType': '小学'
+  },
+  '孙桥中学（菜中）': {
+    'schoolName': '孙桥中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '田林三中（电脑派位）': {
+    'schoolName': '田林三中（电脑派位）',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '建平香梅（菜中）': {
+    'schoolName': '建平香梅（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市四中学（电脑配位）': {
+    'schoolName': '市四中学（电脑配位）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '上师大附属闵行第三中学': {
+    'schoolName': '上师大附属闵行第三中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '交大附属第二中学': {
+    'schoolName': '交大附属第二中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '同济大学二附中': {
+    'schoolName': '同济大学二附中',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '苏河湾': {
+    'schoolName': '苏河湾',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '华林中学（菜中）': {
+    'schoolName': '华林中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '浦兴中学（菜中）': {
+    'schoolName': '浦兴中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '颛桥中学': {
+    'schoolName': '颛桥中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '上南北校（菜中）': {
+    'schoolName': '上南北校（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '进才北校': {
+    'schoolName': '进才北校',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '鹤北初级中学': {
+    'schoolName': '鹤北初级中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '竹园中学（益江校区）（菜中）': {
+    'schoolName': '竹园中学（益江校区）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '建平实验中学（枣庄校区）': {
+    'schoolName': '建平实验中学（枣庄校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '杨思中学（菜中）': {
+    'schoolName': '杨思中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '进才中学': {
+    'schoolName': '进才中学',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '梅陇中学': {
+    'schoolName': '梅陇中学',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '徐教院附属中学（对口入学）': {
+    'schoolName': '徐教院附属中学（对口入学）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '娄山中学、天山初中、西延安中学、延安实验初中（摇号）': {
+    'schoolName': '娄山中学、天山初中、西延安中学、延安实验初中（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '闵行第三中学': {
+    'schoolName': '闵行第三中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '长岛中学（菜中）': {
+    'schoolName': '长岛中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '上南东校（菜中）': {
+    'schoolName': '上南东校（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '洋泾东校（菜中）': {
+    'schoolName': '洋泾东校（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '娄山中学、泸定中学、姚连生中学、延安初中（摇号）': {
+    'schoolName': '娄山中学、泸定中学、姚连生中学、延安初中（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '实验学校西校': {
+    'schoolName': '实验学校西校',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '格致初级': {
+    'schoolName': '格致初级',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '娄山中学、天山初中、西延安中学、仙霞高中（摇号）': {
+    'schoolName': '娄山中学、天山初中、西延安中学、仙霞高中（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '建平西校(大唐校区)': {
+    'schoolName': '建平西校(大唐校区)',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '园南中学（对口入学）': {
+    'schoolName': '园南中学（对口入学）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '娄山中学、天山初中、西延安中学、新泾中学（摇号）': {
+    'schoolName': '娄山中学、天山初中、西延安中学、新泾中学（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '东昌东校（菜中）': {
+    'schoolName': '东昌东校（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '中国中学': {
+    'schoolName': '中国中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '育才初级中学': {
+    'schoolName': '育才初级中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '清流中学': {
+    'schoolName': '清流中学',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '东昌南校（潍坊校区）（菜中）': {
+    'schoolName': '东昌南校（潍坊校区）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '泾南中学（菜中）': {
+    'schoolName': '泾南中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '康健外国语实验中学（对口入学）': {
+    'schoolName': '康健外国语实验中学（对口入学）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '吴迅中学（初中部）（菜中）': {
+    'schoolName': '吴迅中学（初中部）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '川中南校（南校区）': {
+    'schoolName': '川中南校（南校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '张江实验中学（菜中）': {
+    'schoolName': '张江实验中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '娄山中学、天山初中、西延安中学、西郊学校（摇号）': {
+    'schoolName': '娄山中学、天山初中、西延安中学、西郊学校（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市三女初、华政附中、延安初中、开元中学、复旦中学（摇号）': {
+    'schoolName': '市三女初、华政附中、延安初中、开元中学、复旦中学（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '建平实验中学（地杰校区）': {
+    'schoolName': '建平实验中学（地杰校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '张江集团中学': {
+    'schoolName': '张江集团中学',
+    'echelonPerformance': '市一梯队',
+    'schoolType': '中学'
+  },
+  '娄山中学、天山初中、姚连生中学、西延安中学（摇号）': {
+    'schoolName': '娄山中学、天山初中、姚连生中学、西延安中学（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '上海市第一中学': {
+    'schoolName': '上海市第一中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '田家炳中学': {
+    'schoolName': '田家炳中学',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '市北初级中学': {
+    'schoolName': '市北初级中学',
+    'echelonPerformance': '市一梯队',
+    'schoolType': '中学'
+  },
+  '莘光学校': {
+    'schoolName': '莘光学校',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '新复兴': {
+    'schoolName': '新复兴',
+    'echelonPerformance': '市二梯队',
+    'schoolType': '中学'
+  },
+  '长桥中学（菜中）（对口入学）': {
+    'schoolName': '长桥中学（菜中）（对口入学）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市实验学校南校': {
+    'schoolName': '市实验学校南校',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '华东理工大学附属中学（对口入学）': {
+    'schoolName': '华东理工大学附属中学（对口入学）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '铁岭中学': {
+    'schoolName': '铁岭中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '五四中学': {
+    'schoolName': '五四中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '洋泾南校（龙阳路校区）（菜中）': {
+    'schoolName': '洋泾南校（龙阳路校区）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '二中附校': {
+    'schoolName': '二中附校',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '民立中学': {
+    'schoolName': '民立中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '市西初级中学': {
+    'schoolName': '市西初级中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '中国中学(对口入学）': {
+    'schoolName': '中国中学(对口入学）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '陆行南校（菜中）': {
+    'schoolName': '陆行南校（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '大同初级': {
+    'schoolName': '大同初级',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '立信会计金融学院附属学校（高行校区）（菜中）': {
+    'schoolName': '立信会计金融学院附属学校（高行校区）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '莘松中学（春申校区）': {
+    'schoolName': '莘松中学（春申校区）',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '华东师大四附中': {
+    'schoolName': '华东师大四附中',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '七宝第二中学': {
+    'schoolName': '七宝第二中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '立信会计金融学院附属学校（证大校区）（菜中）': {
+    'schoolName': '立信会计金融学院附属学校（证大校区）（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '东林中学（菜中）': {
+    'schoolName': '东林中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市三女初、华政附中、延安初中、开元中学（摇号）': {
+    'schoolName': '市三女初、华政附中、延安初中、开元中学（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '莘松中学（莘松校区）': {
+    'schoolName': '莘松中学（莘松校区）',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '市三女初、华政附中、延安初中、复旦中学（摇号）': {
+    'schoolName': '市三女初、华政附中、延安初中、复旦中学（摇号）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '建平西校（华城校区）': {
+    'schoolName': '建平西校（华城校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '东昌中学南校(菜中）': {
+    'schoolName': '东昌中学南校(菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '罗山中学（菜中）': {
+    'schoolName': '罗山中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '宝山实验中学': {
+    'schoolName': '宝山实验中学',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '康健外国语实验中学': {
+    'schoolName': '康健外国语实验中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '友爱实验中学': {
+    'schoolName': '友爱实验中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '马桥强恕学校（暂时安置）': {
+    'schoolName': '马桥强恕学校（暂时安置）',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '浦江第一中学': {
+    'schoolName': '浦江第一中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '南汇二中（东校区）': {
+    'schoolName': '南汇二中（东校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '南汇一中': {
+    'schoolName': '南汇一中',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '竹园中学（高行校区）': {
+    'schoolName': '竹园中学（高行校区）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '南汇四中（南校区）': {
+    'schoolName': '南汇四中（南校区）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '五三中学': {
+    'schoolName': '五三中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '复旦二附中': {
+    'schoolName': '复旦二附中',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '育鹰中学': {
+    'schoolName': '育鹰中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '华夏西校（华夏二路校区）': {
+    'schoolName': '华夏西校（华夏二路校区）',
+    'echelonPerformance': '市三梯队',
+    'schoolType': '中学'
+  },
+  '马桥强恕学校': {
+    'schoolName': '马桥强恕学校',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '南汇二中（总校）': {
+    'schoolName': '南汇二中（总校）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '致远中学': {
+    'schoolName': '致远中学',
+    'echelonPerformance': '市四梯队',
+    'schoolType': '中学'
+  },
+  '求真中学': {
+    'schoolName': '求真中学',
+    'echelonPerformance': '市五梯队',
+    'schoolType': '中学'
+  },
+  '田林三中': {
+    'schoolName': '田林三中',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '同济附属七一': {
+    'schoolName': '同济附属七一',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '位育初级中学': {
+    'schoolName': '位育初级中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市二中学（电脑派位）': {
+    'schoolName': '市二中学（电脑派位）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '华东理工大学附属中学': {
+    'schoolName': '华东理工大学附属中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '梅园中学（菜中）': {
+    'schoolName': '梅园中学（菜中）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '南洋初': {
+    'schoolName': '南洋初',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '徐汇中学（总校）（电脑派位）': {
+    'schoolName': '徐汇中学（总校）（电脑派位）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '园南中学': {
+    'schoolName': '园南中学',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '徐汇中学（总校）': {
+    'schoolName': '徐汇中学（总校）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  },
+  '市四中学（电脑派位）': {
+    'schoolName': '市四中学（电脑派位）',
+    'echelonPerformance': '中学-其他',
+    'schoolType': '中学'
+  }
+}
 
 export function getLabel (value, options) {
   const e = options.find(element => {

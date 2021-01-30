@@ -531,7 +531,7 @@ import {
   booleanOptions,
   subwayOptions,
   areaPlate,
-  schools,
+  schoolOptions,
   shoolType
 } from '@/api/data'
 import { AutoComplete, BackTop } from 'ant-design-vue'
@@ -583,7 +583,7 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
-      schools,
+      schools: schoolOptions(),
       shoolType
     }
   },
