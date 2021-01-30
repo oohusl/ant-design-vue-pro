@@ -372,7 +372,7 @@ export const averageLlistedPriceOptions = [
   },
   {
     'label': '15万以上',
-    'value': '15-15'
+    'value': '15-0'
   }
 ]
 export const totalPriceOptions = [
@@ -430,7 +430,7 @@ export const totalPriceOptions = [
   },
   {
     'label': '1500万以上',
-    'value': '1500-1500'
+    'value': '1500-0'
   }
 ]
 export const roomAreaOptions = [
@@ -480,7 +480,7 @@ export const roomAreaOptions = [
   },
   {
     'label': '150平方以上',
-    'value': '150-150'
+    'value': '150-0'
   }
 ]
 
@@ -507,7 +507,7 @@ export const constructionAgeOptions = [
   },
   {
     'label': '2010年以后',
-    'value': '2010-2010'
+    'value': '2010-0'
   }
 ]
 
