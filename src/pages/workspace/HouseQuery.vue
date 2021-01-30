@@ -115,7 +115,7 @@
               <template v-for="options in shoolType">
                 <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
                   <template slot="content">
-                    <a-checkbox-group v-model="echelons[options.type]" @change="echelonChange(options.type)">
+                    <a-checkbox-group v-model="queryParam.echelonPerformance[options.type]" @change="echelonChange(options.type)">
                       <a-row>
                         <a-col v-for="e in options.echelon" :key="e.value">
                           <a-checkbox :value="e.value" :indeterminate="queryParam.schoolType.indexOf(options.type) >= 0">{{
@@ -125,7 +125,7 @@
                       </a-row>
                     </a-checkbox-group>
                   </template>
-                  <a-checkbox :value="options.type" :indeterminate="echelons[options.type] && echelons[options.type].length > 0">{{ options.type }}</a-checkbox>
+                  <a-checkbox :value="options.type" :indeterminate="queryParam.echelonPerformance[options.type] && queryParam.echelonPerformance[options.type].length > 0">{{ options.type }}</a-checkbox>
                 </a-popover>
                 <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
               </template>
@@ -133,7 +133,7 @@
             <div>
               <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]">{{ p }}</a-tag>
               <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]">{{ p }}</a-tag>
-              <template v-for="(value, key) in echelons">
+              <template v-for="(value, key) in queryParam.echelonPerformance">
                 <a-tag v-for="v in value" :key="v">{{ key }} - {{ v.replaceAll("中学-","").replaceAll("小学-","") }}</a-tag>
               </template>
             </div>
@@ -463,7 +463,7 @@ export default {
       // 高级搜索 展开/关闭
       advanced: false,
       // 查询参数
-      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], ranges: { price: [], total: [], roomArea: [], constructionAge: [] } },
+      queryParam: { area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], echelonPerformance: {}, ranges: { price: [], total: [], roomArea: [], constructionAge: [] } },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -487,8 +487,7 @@ export default {
       plates: {},
       subwayStations: {},
       schools,
-      shoolType,
-      echelons: {}
+      shoolType
     }
   },
   created () {
@@ -507,7 +506,7 @@ export default {
     },
 
     resetSearchForm () {
-      this.queryParam = { date: moment(new Date()), area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], ranges: { price: [], total: [], area: [], year: [] } }
+      this.queryParam = { date: moment(new Date()), area: [], schoolType: [], metroLine: [], averageLlistedPrice: [], totalPrice: [], roomArea: [], constructionAge: [], echelonPerformance: {}, ranges: { price: [], total: [], roomArea: [], constructionAge: [] } }
       this.plates = {}
       this.areaReset()
     },
@@ -545,15 +544,7 @@ export default {
       delete requestParameters.constructionAgeMax
 
       // this.queryParam.echelonPerformance = this.echelons.flat()
-      this.queryParam.echelonPerformance = ((echelons) => {
-        const s = []
-        for (const key of Object.keys(echelons)) {
-          if (echelons[key] instanceof Array) {
-            s.push(...echelons[key])
-          }
-        }
-        return s
-      })(this.echelons)
+      requestParameters.echelonPerformance = Object.values(this.queryParam.echelonPerformance).flat()
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {
@@ -647,13 +638,13 @@ export default {
 
     schoolTypeChange (e) {
       e.forEach((e) => {
-        this.echelons[e].splice(0)
+        if (this.queryParam.echelonPerformance[e]) this.queryParam.echelonPerformance[e].splice(0)
       })
     },
 
     echelonChange (type) {
       const index = this.queryParam.schoolType.indexOf(type)
-      if (this.echelons[type].length > 0 && index >= 0) {
+      if (this.queryParam.echelonPerformance[type].length > 0 && index >= 0) {
         this.queryParam.schoolType.splice(index, 1)
       }
     },
