@@ -401,7 +401,7 @@
               style=" width: 14px; border-left: 0; border-right: 0; pointer-events: none; padding: 2px"
               size="small"
               placeholder="—"
-              readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomArea1Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -413,7 +413,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomPriceRange1Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -425,7 +425,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomArea2Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -437,7 +437,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomPriceRange2Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -449,7 +449,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomArea3Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -461,7 +461,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomPriceRange3Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -473,7 +473,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input v-model="houseSelect.roomArea4Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
           </a-input-group>
@@ -485,7 +485,7 @@
               class="compactCenter"
               size="small"
               placeholder="—"
-              aria-readonly="true"
+              :disabled="true"
             />
             <a-input
               v-model="houseSelect.roomPriceRange4Max"

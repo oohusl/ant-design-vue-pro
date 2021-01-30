@@ -134,7 +134,7 @@
               <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]">{{ p }}</a-tag>
               <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]">{{ p }}</a-tag>
               <template v-for="(value, key) in echelons">
-                <a-tag v-for="v in value" :key="v">{{ key }} - {{ v }}</a-tag>
+                <a-tag v-for="v in value" :key="v">{{ key }} - {{ v.replaceAll("中学-","").replaceAll("小学-","") }}</a-tag>
               </template>
             </div>
           </a-form-item>
@@ -517,11 +517,11 @@ export default {
 
       requestParameters.averageLlistedPrice = Array.from(this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)).map(x => {
         const two = x.split('-')
-        return [two[0] * 1, two[1] * 1]
+        return [two[0] * 10000, two[1] * 10000]
       })
       requestParameters.totalPrice = Array.from(this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)).map(x => {
         const two = x.split('-')
-        return [two[0] * 1, two[1] * 1]
+        return [two[0] * 10000, two[1] * 10000]
       })
       requestParameters.roomArea = Array.from(this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)).map(x => {
         const two = x.split('-')
