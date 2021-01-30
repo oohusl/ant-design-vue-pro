@@ -453,7 +453,7 @@
                           </a-form-item>
                           <a-form-item label="地铁" :style="{ height: '30px' }">
                             <span
-                            >{{ community.metroLine ? community.metroLine : '' }} {{ community.subwayStation }}</span
+                            >{{ displayMetro(community.metroInfo) }}</span
                             >
                           </a-form-item>
                         </a-form>
@@ -866,7 +866,15 @@ export default {
       this.house.schoolDistrictInfo = []
       this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
     },
-
+    displayMetro (metroinfo) {
+      let display = ''
+      if (metroinfo instanceof Array) {
+        metroinfo.forEach(m => {
+            display = display + `${m.metroLine} - ${m.subwayStation}`
+        })
+      }
+      return display
+    },
     windowScroll () {
       if (
         document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 <
