@@ -100,7 +100,7 @@
           {{ houseSelect.buildingType }}
         </a-descriptions-item>
         <a-descriptions-item label="是否电梯">
-          {{ houseSelect.isLift ? '是' : '否' }}
+          {{ getLabel(houseSelect.isLift, liftOptions) }}
         </a-descriptions-item>
         <a-descriptions-item label="最大层数">
           {{ houseSelect.maxFloor ? houseSelect.maxFloor + '层' : '' }}
@@ -345,7 +345,7 @@
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="是否电梯">
-          <a-select :options="booleanOptions" v-model="houseSelect.isLift" class="col1" size="small">
+          <a-select :options="liftOptions" v-model="houseSelect.isLift" class="col1" size="small">
           </a-select>
         </a-descriptions-item>
         <a-descriptions-item label="最大层数">
@@ -532,8 +532,10 @@ import {
   constructionAgeOptions,
   loopSummaryOptions,
   booleanOptions,
+  liftOptions,
   subwayOptions,
   areaPlate,
+  getLabel,
   statusMap
 } from '@/api/data'
 
@@ -564,6 +566,7 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
+      liftOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       totalPriceOptions,
@@ -577,6 +580,7 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
+      getLabel: getLabel,
       schools: {
         '世界外国语小学（民办）': { schoolName: '世界外国语小学（民办）', echelonPerformance: '第一梯队', schoolType: '小学' },
         '上海实验学校': { schoolName: '上海实验学校', echelonPerformance: '第一梯队', schoolType: '小学' },
@@ -667,7 +671,7 @@ export default {
         // edit
         console.log('editHouse')
         this.houseSelect.peopleAndVehicles = Number(this.houseSelect.peopleAndVehicles)
-        this.houseSelect.isLift = Number(this.houseSelect.isLift)
+        this.houseSelect.isLift = this.houseSelect.isLift
         this.editAreaChange()
         this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
         this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []

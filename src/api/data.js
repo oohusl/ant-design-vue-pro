@@ -320,7 +320,7 @@ export const loopSummaryOptions = [
 export const averageLlistedPriceOptions = [
   {
     'label': '2万以下',
-    'value': '0-2'
+    'value': '2-2'
   },
   {
     'label': '2-3万',
@@ -372,13 +372,13 @@ export const averageLlistedPriceOptions = [
   },
   {
     'label': '15万以上',
-    'value': '15-100000000'
+    'value': '15-15'
   }
 ]
 export const totalPriceOptions = [
   {
     'label': '200万以下',
-    'value': '0-200'
+    'value': '200-200'
   },
   {
     'label': '200-300万',
@@ -430,13 +430,13 @@ export const totalPriceOptions = [
   },
   {
     'label': '1500万以上',
-    'value': '1500-100000000'
+    'value': '1500-1500'
   }
 ]
 export const roomAreaOptions = [
   {
     'label': '50平方以下',
-    'value': '0-50'
+    'value': '50-50'
   },
   {
     'label': '50-60平方',
@@ -480,14 +480,14 @@ export const roomAreaOptions = [
   },
   {
     'label': '150平方以上',
-    'value': '150-100000000'
+    'value': '150-150'
   }
 ]
 
 export const constructionAgeOptions = [
   {
     'label': '1990年以前',
-    'value': '0-1990'
+    'value': '1990-1990'
   },
   {
     'label': '1990-1995',
@@ -507,7 +507,7 @@ export const constructionAgeOptions = [
   },
   {
     'label': '2010年以后',
-    'value': '2010-100000000'
+    'value': '2010-2010'
   }
 ]
 
@@ -519,6 +519,20 @@ export const booleanOptions = [
   {
     label: '否',
     value: 0
+  }
+]
+
+export const liftOptions = [
+  {
+    label: '有电梯',
+    value: '1'
+  },
+  {
+    label: '无电梯',
+    value: '0'
+  }, {
+    label: '其他',
+    value: '2'
   }
 ]
 
@@ -605,3 +619,13 @@ export const schools =
   }, {
     label: '进才中学', value: '进才中学'
   }]
+
+export function getLabel (value, options) {
+  const e = options.find(element => {
+    return element.value === value
+  })
+  if (e) {
+    return e.label
+  }
+  return value
+}

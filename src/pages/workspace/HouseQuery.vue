@@ -131,10 +131,10 @@
               </template>
             </a-checkbox-group>
             <div>
-              <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]">{{ p }}</a-tag>
-              <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]">{{ p }}</a-tag>
+              <a-tag v-for="p in queryParam.schoolName" :key="p" :color="colors[0]" :closable="true" @close="handleTagClose(rangTag, queryParam.schoolName)">{{ p }}</a-tag>
+              <a-tag v-for="p in queryParam.schoolType" :key="p" :color="colors[1]" @close="handleTagClose(rangTag, queryParam.schoolType)">{{ p }}</a-tag>
               <template v-for="(value, key) in queryParam.echelonPerformance">
-                <a-tag v-for="v in value" :key="v">{{ key }} - {{ v.replaceAll("中学-","").replaceAll("小学-","") }}</a-tag>
+                <a-tag v-for="v in value" :key="v" @close="handleTagClose(rangTag, queryParam.echelonPerformance)">{{ key }} - {{ v.replaceAll("中学-","").replaceAll("小学-","") }}</a-tag>
               </template>
             </div>
           </a-form-item>
@@ -160,15 +160,15 @@
               :showArrow="true"
             />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
+              <a-input type="number" style="width: 100%" v-model="queryParam.averageLlistedPriceMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
-              <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
+              <a-input type="number" style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.averageLlistedPrice, queryParam.ranges.price, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.averageLlistedPrice, queryParam.ranges.price)" color="pink">{{ translateRang(rangTag, '万', averageLlistedPriceOptions) }}</a-tag>
           </a-form-item>
 
           <a-form-item label="总价" v-if="advanced">
@@ -193,7 +193,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.totalPrice, queryParam.ranges.total, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.totalPrice, queryParam.ranges.total)" color="pink">{{ translateRang(rangTag, '万', totalPriceOptions) }}</a-tag>
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
             <a-select
@@ -217,7 +217,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.roomArea, queryParam.ranges.roomArea, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.roomArea, queryParam.ranges.roomArea)" color="pink">{{ translateRang(rangTag, '平方', roomAreaOptions) }}</a-tag>
           </a-form-item>
           <a-form-item label="建筑年代" v-if="advanced">
             <a-select
@@ -241,7 +241,7 @@
                 <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.constructionAge, queryParam.constructionAgeMin, queryParam.constructionAgeMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="rangTag in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.constructionAge, queryParam.ranges.constructionAge, rangTag)" color="pink">{{ translateYearRang(rangTag, '年') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="rangTag" :closable="true" @close="handleTagClose(rangTag, queryParam.constructionAge, queryParam.ranges.constructionAge)" color="pink">{{ translateYearRang(rangTag, '年') }}</a-tag>
           </a-form-item>
           <a-form-item v-if="advanced" label="小区属性">
             <a-checkbox-group v-model="queryParam.cellAttributes">
@@ -520,7 +520,7 @@ export default {
       })
       requestParameters.totalPrice = Array.from(this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)).map(x => {
         const two = x.split('-')
-        return [two[0] * 10000, two[1] * 10000]
+        return [two[0], two[1]]
       })
       requestParameters.roomArea = Array.from(this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)).map(x => {
         const two = x.split('-')
@@ -676,12 +676,10 @@ export default {
       return new Set(arr.concat(set))
     },
 
-    translateRang (rang, unit) {
-      const arr = rang.split('-')
-      if (arr[0] === '0') {
-        return `${arr[1]}${unit}以下`
-      } else if (arr[1] === '100000000') {
-        return `${arr[0]}${unit}以上`
+    translateRang (rang, unit, options) {
+      const r = options.filter(e => { return e.value === rang })
+      if (r.length > 0) {
+        return r[0].label
       }
       return `${rang}${unit}`
     },
@@ -696,9 +694,8 @@ export default {
       return `${rang}${unit}`
     },
 
-    handleTagClose (arr1, arr2, tag) {
-      this.removeEle(arr1, tag)
-      this.removeEle(arr2, tag)
+    handleTagClose (tag, ...arr1) {
+      arr1.forEach(e => { this.removeEle(e, tag) })
     },
 
     removeEle (arr1, tag) {
