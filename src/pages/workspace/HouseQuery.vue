@@ -76,21 +76,23 @@
                             v-for="(subwayName) in getSubwayStation(metroLine.value)"
                           >
                             <a-col :span="getSubwayStation(metroLine.value).length < 9 ? 4 : 3" :key="subwayName">
-                              <a-checkbox :value="subwayName" :key="subwayName">{{ subwayName }}</a-checkbox>
+                              <a-checkbox :value="subwayName" :key="subwayName" :indeterminate="hasMetroLineSelected(metroLine.value)">{{ subwayName }}</a-checkbox>
                             </a-col>
                           </template>
                         </a-row>
                       </a-checkbox-group>
                     </template>
-                    <a-checkbox :value="metroLine.value">{{
+                    <a-checkbox :value="metroLine.value" :indeterminate="hasSubwaySelected(metroLine.value)">{{
                       metroLine.label
                     }}</a-checkbox>
                   </a-popover>
                 </a-col>
               </a-row>
             </a-checkbox-group>
-            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink">{{ ss }}号线</a-tag>
-            <a-tag v-for="ss in queryParam.subwayStation" :key="ss">{{ ss }}</a-tag>
+            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink">{{ ss }}</a-tag>
+            <template v-for="(value, key) in subwayStations">
+              <a-tag v-for="p in value" :key="p">{{ key + '-' + p }}</a-tag>
+            </template>
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
@@ -163,10 +165,10 @@
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.averageLlistedPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.price, queryParam.averageLlistedPriceMin, queryParam.averageLlistedPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.averageLlistedPrice, queryParam.ranges.price, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.averageLlistedPrice, queryParam.ranges.price)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.averageLlistedPrice, queryParam.ranges.price, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
           </a-form-item>
 
           <a-form-item label="总价" v-if="advanced">
@@ -188,10 +190,10 @@
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.totalPriceMax" size="small" suffix="万">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.total, queryParam.totalPriceMin, queryParam.totalPriceMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.totalPrice, queryParam.ranges.total, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.totalPrice, queryParam.ranges.total)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.totalPrice, queryParam.ranges.total, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="面积" v-if="advanced">
             <a-select
@@ -212,10 +214,10 @@
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.roomAreaMax" size="small" suffix="m²">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"/>
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.roomArea, queryParam.roomAreaMin, queryParam.roomAreaMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.roomArea, queryParam.ranges.roomArea, avePrice)" color="pink">{{ translateRang(avePrice, '万') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.roomArea, queryParam.ranges.roomArea)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.roomArea, queryParam.ranges.roomArea, rangTag)" color="pink">{{ translateRang(rangTag, '万') }}</a-tag>
           </a-form-item>
           <a-form-item label="建筑年代" v-if="advanced">
             <a-select
@@ -236,10 +238,10 @@
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px'}">
               <a-input style="width: 100%" v-model="queryParam.constructionAgeMax" size="small" suffix="年">
-                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addAveragePrice(queryParam.ranges.constructionAge, queryParam.constructionAgeMin, queryParam.constructionAgeMax)"/>
+                <a-icon slot="addonAfter" type="plus" aria-disabled="true" @click="addToRang(queryParam.ranges.constructionAge, queryParam.constructionAgeMin, queryParam.constructionAgeMax)"/>
               </a-input>
             </a-form-item>
-            <a-tag v-for="avePrice in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="avePrice" :closable="true" @close="handleTagClose(queryParam.constructionAge, queryParam.ranges.constructionAge, avePrice)" color="pink">{{ translateYearRang(avePrice, '年') }}</a-tag>
+            <a-tag v-for="rangTag in gatherSelect(queryParam.constructionAge, queryParam.ranges.constructionAge)" :key="rangTag" :closable="true" @close="handleTagClose(queryParam.constructionAge, queryParam.ranges.constructionAge, rangTag)" color="pink">{{ translateYearRang(rangTag, '年') }}</a-tag>
           </a-form-item>
           <a-form-item v-if="advanced" label="小区属性">
             <a-checkbox-group v-model="queryParam.cellAttributes">
@@ -363,7 +365,7 @@
                           </a-form-item>
                           <a-form-item label="地铁" :style="{ height: '30px' }">
                             <span
-                            >{{ community.metroLine ? community.metroLine + '号线' : '' }}
+                            >{{ community.metroLine ? community.metroLine : '' }}
                               {{ community.subwayStation }}</span
                             >
                           </a-form-item>
@@ -433,7 +435,7 @@ import { getHouse } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
-  metroLineOptions,
+  getMetroLineOptions,
   averageLlistedPriceOptions,
   totalPriceOptions,
   roomAreaOptions,
@@ -474,7 +476,7 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
-      metroLineOptions,
+      metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       roomAreaOptions,
       constructionAgeOptions,
@@ -591,27 +593,12 @@ export default {
       this.queryParam.area.forEach((e) => {
          const areaPlates = []
          this.getPlate(e).forEach((p) => areaPlates.push(p.value))
-         console.log(this.plates)
-         if (this.plates[e]) {
-         this.plates[e] = this.plates[e].filter(selectedP => {
-           console.log(selectedP)
-           return areaPlates.indexOf(selectedP) < 0
-         })
+            if (this.plates[e]) {
+              this.plates[e] = this.plates[e].filter(selectedP => {
+                return areaPlates.indexOf(selectedP) < 0
+            })
          }
       })
-    },
-
-    schoolTypeChange () {
-      this.queryParam.schoolType.forEach((e) => {
-        this.echelons[e] = []
-      })
-    },
-
-    echelonChange (type) {
-      const index = this.queryParam.schoolType.indexOf(type)
-      if (this.echelons[type].length > 0 && index >= 0) {
-        this.queryParam.schoolType.splice(index, 1)
-      }
     },
 
     plateChange (areaOption) {
@@ -635,18 +622,39 @@ export default {
     metroLineChange (e) {
       console.log(e)
       e.forEach(line => {
-        this.subwayStations[line] = []
+        if (this.subwayStations[line]) this.subwayStations[line].splice(0)
       })
     },
 
     subwayStationChange (line) {
       console.log(line)
       // 选中地铁站，清空地铁线
-      if (this.subwayStations[line].length > 0) {
+      if (this.hasSubwaySelected(line) > 0) {
         const index = this.queryParam.metroLine.indexOf(line)
         if (index >= 0) {
           this.queryParam.metroLine.splice(index, 1)
         }
+      }
+    },
+
+    hasMetroLineSelected (line) {
+      return this.queryParam.metroLine.indexOf(line) >= 0
+    },
+
+    hasSubwaySelected (line) {
+      return this.subwayStations[line] && this.subwayStations[line].length > 0
+    },
+
+    schoolTypeChange () {
+      this.queryParam.schoolType.forEach((e) => {
+        this.echelons[e] = []
+      })
+    },
+
+    echelonChange (type) {
+      const index = this.queryParam.schoolType.indexOf(type)
+      if (this.echelons[type].length > 0 && index >= 0) {
+        this.queryParam.schoolType.splice(index, 1)
       }
     },
 
@@ -669,7 +677,7 @@ export default {
       }
     },
 
-    addAveragePrice (arr, min, max) {
+    addToRang (arr, min, max) {
       if (min && max) { arr.push(`${min}-${max}`) }
     },
 

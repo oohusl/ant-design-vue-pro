@@ -525,14 +525,14 @@ import { AutoComplete } from 'ant-design-vue'
 import { saveHouse, getLabels } from '@/api/manage'
 import {
   areaOptions,
-  metroLineOptions,
+  getMetroLineOptions,
   averageLlistedPriceOptions,
   totalPriceOptions,
   roomAreaOptions,
   constructionAgeOptions,
   loopSummaryOptions,
   booleanOptions,
-  subwaystation,
+  subwayOptions,
   areaPlate,
   statusMap
 } from '@/api/data'
@@ -564,7 +564,7 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
-      metroLineOptions,
+      metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       totalPriceOptions,
       totalPriceEdit: false,
@@ -572,7 +572,7 @@ export default {
       constructionAgeOptions,
       loopSummaryOptions,
       booleanOptions,
-      subwaystation,
+      subwayOptions,
       statusMap,
       loading: false,
       plates: {},
@@ -647,7 +647,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwaystation.forEach(v => {
+      subwayOptions.forEach(v => {
         if (v.line === i) {
           s = v.station
         }
@@ -712,9 +712,9 @@ export default {
     },
     getMetrolineDistrictInfo () {
       this.metrolineDistrictInfo = []
-      this.metrolineDistrictInfo = metroLineOptions
+      this.metrolineDistrictInfo = this.metroLineOptions
       const stationMap = new Map()
-      subwaystation.forEach(v => {
+      subwayOptions.forEach(v => {
         stationMap.set(v.line, v.station)
       })
       this.metrolineDistrictInfo.forEach(v => {
