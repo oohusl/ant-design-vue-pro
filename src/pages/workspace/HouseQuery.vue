@@ -414,7 +414,7 @@
               >
                 <a-layout :style="{ background: '#ffffff' }">
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                    <img src="@/assets/house.png" />
+                    <img src="@/assets/house/1.webp" />
                   </a-layout-sider>
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                     <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left' }">
@@ -453,26 +453,26 @@
                           </a-form-item>
                           <a-form-item label="地铁" :style="{ height: '30px' }">
                             <span
-                            >{{ community.metroLine ? community.metroLine : '' }} {{ community.subwayStation }}</span
+                            >{{ community.metroInfo && community.metroInfo.length > 0 ? community.metroInfo[0].metroLine + ' ' + community.metroInfo[0].subwayStation : '' }}</span
                             >
                           </a-form-item>
                         </a-form>
                       </a-layout-content>
                       <a-layout-footer :style="{ background: '#ffffff', display: 'flex', padding: 0 }">
-                        <a-tag color="pink">
+                        <a-tag color="pink" v-if="community.area">
                           {{ community.area }}
                         </a-tag>
-                        <a-tag color="red">
+                        <a-tag color="red" v-if="community.plate">
                           {{ community.plate }}
                         </a-tag>
-                        <a-tag color="orange">
+                        <a-tag color="orange" v-if="community.cellAttributes">
                           {{ community.cellAttributes }}
                         </a-tag>
-                        <a-tag color="green">
+                        <a-tag color="green" v-if="community.constructionAge">
                           {{ community.constructionAge }}
                         </a-tag>
-                        <a-tag color="cyan" v-if="community.isLift">电梯</a-tag>
-                        <a-tag color="blue">
+                        <a-tag color="cyan" v-if="community.isLift === '1'">电梯</a-tag>
+                        <a-tag color="blue" v-if="community.buildingType">
                           {{ community.buildingType }}
                         </a-tag>
                       </a-layout-footer>
