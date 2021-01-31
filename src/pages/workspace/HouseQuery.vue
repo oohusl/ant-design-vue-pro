@@ -620,7 +620,7 @@ export default {
     },
 
     search () {
-      const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
+      const requestParameters = Object.assign({ sort: this.sort, size: this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
 
       requestParameters.averageLlistedPrice = Array.from(
