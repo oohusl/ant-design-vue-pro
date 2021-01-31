@@ -376,11 +376,14 @@
               class="col2"
               size="small"
               placeholder="请选中配套学校"
-              :options="schools"
               :showSearch="true"
               :value="school.schoolName"
               @change="selectSchool($event,s)"
-            />
+            >
+              <a-select-option v-for="ss in schools" :key="ss.value" :value="ss.value" :disabled="ss.disabled">
+                {{ ss.label }}
+              </a-select-option>
+            </a-select>
             <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
           </a-descriptions-item>
           <a-descriptions-item label="类型" :span="2" :key="s">
@@ -726,34 +729,6 @@ export default {
         }
       })
     },
-    // getstation (type, metroLine) {
-    //       const _this = this
-    //       if (type || metroLine) {
-    //         this.stationOptions.splice(0)
-    //         this.subwaystation.forEach(v => {
-    //           metroLine = metroLine || _this[type]?.metroLine
-    //           if (v.line === metroLine) {
-    //             v.station.forEach(val => {
-    //               _this.stationOptions.push({ label: val, value: val })
-    //             })
-    //           }
-    //         })
-    //       }
-    // },
-    // getLineStation (lines) {
-    //   const stationOptions = []
-    //   lines.forEach(line => {
-    //     this.subwaystation.forEach(v => {
-    //       if (v.line === line) {
-    //         v.station.forEach(val => {
-    //           stationOptions.push({ label: val, value: val })
-    //         })
-    //       }
-    //     })
-    //   })
-    //   return stationOptions
-    // },
-
     addMetroLine () {
       this.houseSelect.metroInfo.push({
         metroLine: '',
