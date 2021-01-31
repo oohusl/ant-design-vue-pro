@@ -451,9 +451,9 @@
                           <a-form-item label="环线" :style="{ height: '30px' }">
                             <span>{{ community.loopSummary }}</span>
                           </a-form-item>
-                          <a-form-item label="地铁" :style="{ height: '30px' }">
+                          <a-form-item v-for="(m, i) in community.metroInfo" :key="m" :colon="i == 0" :label="i == 0 ? '地铁' : ' '" :style="{ height: '30px' }">
                             <span
-                            >{{ community.metroInfo && community.metroInfo.length > 0 ? community.metroInfo[0].metroLine + ' ' + community.metroInfo[0].subwayStation : '' }}</span
+                            >{{ m.metroLine + ' ' + m.subwayStation }}</span
                             >
                           </a-form-item>
                         </a-form>
@@ -621,6 +621,7 @@ export default {
 
     search () {
       const requestParameters = Object.assign({ sort: this.sort }, this.queryParam)
+      requestParameters.subwayStation = Object.values(this.subwayStations).flat()
 
       requestParameters.averageLlistedPrice = Array.from(
         this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)
