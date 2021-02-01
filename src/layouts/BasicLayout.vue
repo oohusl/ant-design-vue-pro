@@ -15,7 +15,7 @@
     <template v-slot:menuHeaderRender>
       <div>
         <img src="../assets/logo.png" alt="985" />
-        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.1</span></h1>
+        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.2</span></h1>
       </div>
     </template>
 
