@@ -112,7 +112,7 @@
               <a-select
                 v-model="queryParam.schoolName"
                 size="small"
-                placeholder="请选中配套学校"
+                placeholder="请选择配套学校"
                 :options="schools"
                 :showSearch="true"
                 :allowClear="true"
@@ -158,7 +158,7 @@
                 :key="p"
                 :color="colors[0]"
                 :closable="true"
-                @close="handleTagClose(rangTag, queryParam.schoolName)"
+                @close="handleTagClose(p, queryParam.schoolName)"
               >{{ p }}</a-tag
               >
               <a-tag
