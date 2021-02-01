@@ -39,8 +39,8 @@
               <a-popover v-for="(options,i) in areaOptions" :key="options.value" trigger="hover" :placement=" i > 8 ? 'bottomLeft' : 'topLeft'">
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)">
-                    <a-row :span="32">
-                      <a-col v-for="plateOption in getPlate(options.value)" :span="4" :key="plateOption.value">
+                    <a-row>
+                      <a-col v-for="plateOption in getPlate(options.value)" :span="3" :key="plateOption.value">
                         <a-checkbox
                           :value="plateOption.value"
                           :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0"
@@ -78,9 +78,9 @@
                         v-model="subwayStations[metroLine.value]"
                         @change="subwayStationChange(metroLine.value)"
                       >
-                        <a-row :span="24">
+                        <a-row>
                           <template v-for="subwayName in getSubwayStation(metroLine.value)">
-                            <a-col :span="getSubwayStation(metroLine.value).length < 9 ? 4 : 3" :key="subwayName">
+                            <a-col :span="getSubwayStation(metroLine.value).length < 7 ? 4 : 3" :key="subwayName">
                               <a-checkbox
                                 :value="subwayName"
                                 :key="subwayName"
