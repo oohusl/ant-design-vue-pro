@@ -58,9 +58,9 @@
                 >
               </a-popover>
             </a-checkbox-group>
-            <a-tag v-for="p in queryParam.area" :key="p" color="pink">{{ p }}</a-tag>
+            <a-tag v-for="p in queryParam.area" :key="p" color="pink" :closable="true" @close="handleTagClose(p, queryParam.area)">{{ p }}</a-tag>
             <template v-for="(value, key) in plates">
-              <a-tag v-for="p in value" :key="p">{{ key + '-' + p }}</a-tag>
+              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, plates[key])">{{ key + '-' + p }}</a-tag>
             </template>
           </a-form-item>
           <a-form-item label="地铁线路">
@@ -99,9 +99,9 @@
                 </a-col>
               </a-row>
             </a-checkbox-group>
-            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink">{{ ss }}</a-tag>
+            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink" :closable="true" @close="handleTagClose(ss, queryParam.metroLine)">{{ ss }}</a-tag>
             <template v-for="(value, key) in subwayStations">
-              <a-tag v-for="p in value" :key="p">{{ key + '-' + p }}</a-tag>
+              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, subwayStations[key])">{{ key + '-' + p }}</a-tag>
             </template>
           </a-form-item>
           <a-form-item label="环线">
