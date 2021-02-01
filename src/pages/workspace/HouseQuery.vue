@@ -36,7 +36,7 @@
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
-              <a-popover v-for="options in areaOptions" :key="options.value" trigger="hover" placement="topLeft">
+              <a-popover v-for="(options,i) in areaOptions" :key="options.value" trigger="hover" :placement=" i > 8 ? 'bottomLeft' : 'topLeft'">
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)">
                     <a-row :span="32">
@@ -69,9 +69,9 @@
                 <a-col>
                   <a-popover
                     trigger="hover"
-                    placement="topLeft"
-                    v-for="metroLine in metroLineOptions"
+                    v-for="(metroLine,i) in metroLineOptions"
                     :key="metroLine.value"
+                    :placement=" i > 8 ? 'bottomLeft' : 'topLeft'"
                   >
                     <template slot="content">
                       <a-checkbox-group
