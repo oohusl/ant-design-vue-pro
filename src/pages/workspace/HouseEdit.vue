@@ -667,8 +667,6 @@ export default {
     editHouse () {
         // edit
         console.log('editHouse')
-        this.houseSelect.peopleAndVehicles = Number(this.houseSelect.peopleAndVehicles)
-        this.houseSelect.isLift = this.houseSelect.isLift
         this.editAreaChange()
         this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
         this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
