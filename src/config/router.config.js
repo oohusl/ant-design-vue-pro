@@ -32,6 +32,7 @@ export const asyncRouterMap = [
           {
             path: '/house/query/overview',
             name: 'HouseOverview',
+            hidden: true,
             component: () => import('@/pages/workspace/HouseOverview'),
             meta: { title: '房屋概览' }
           }
