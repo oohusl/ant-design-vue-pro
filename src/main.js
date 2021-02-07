@@ -10,7 +10,7 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-
+import { Carousel } from 'ant-design-vue'
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 
@@ -28,6 +28,7 @@ Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-container', PageHeaderWrapper)
 Vue.component('page-header-wrapper', PageHeaderWrapper)
+Vue.component('a-carousel', Carousel)
 
 window.umi_plugin_ant_themeVar = themePluginConfig.theme
 
@@ -37,5 +38,6 @@ new Vue({
   i18n,
   // init localstorage, vuex
   created: bootstrap,
-  render: h => h(App)
+  render: h => h(App),
+  components: { Carousel }
 }).$mount('#app')

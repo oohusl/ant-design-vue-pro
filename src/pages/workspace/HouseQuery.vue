@@ -427,6 +427,7 @@
                           height: '24px',
                           'line-height': '24px',
                         }"
+                        @click="showOverview(community)"
                       >
                         {{ community.communityName }}
                       </a-layout-header>
@@ -865,7 +866,10 @@ export default {
       this.house.schoolDistrictInfo = []
       this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
     },
-
+    showOverview (overview) {
+      console.log(overview)
+      this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
+    },
     windowScroll () {
       if (
         document.getElementById('app').children[0].offsetHeight - document.body.offsetHeight - 1 <
