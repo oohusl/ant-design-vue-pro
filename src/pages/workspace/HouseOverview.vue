@@ -11,13 +11,14 @@
               <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="500">
                 <a-layout>
                   <a-layout-header :style="{ height: '350px', padding:'0'}">
-                    <a-carousel autoplay class="house-album">
-                      <div><img :src="`/house/1.webp`"></div>
-                      <div><img :src="`/house/2.webp`"></div>
-                      <div><img :src="`/house/3.webp`"></div>
-                      <div><img :src="`/house/4.webp`"></div>
-                      <div><img :src="`/house/5.webp`"></div>
-                      <div><img :src="`/house/6.webp`"></div>
+                    <a-carousel autoplay class="house-picture">
+                      <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
+                        <img :src="p.imgsrc">
+                        <span>{{ i+1 +'/'+ pictureList.length }}</span>
+                        <a-button @click="saveHouse()" size="small">
+                          <a-icon type="picture" />查看相册
+                        </a-button>
+                      </div>
                     </a-carousel>
                   </a-layout-header>
                   <a-layout-content :style="{ padding:'8px 0', background: '#ffffff' }">
@@ -27,10 +28,10 @@
                       </div>
                       <div class="album-view-content">
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
-                          <a-list-item slot="renderItem" slot-scope="item, index">
-                            <div class="album-list-item">
-                              <img src="/house/6.webp" >
-                              <span>Content {{ item.title }} {{ index }}</span>
+                          <a-list-item slot="renderItem" slot-scope="item">
+                            <div class="album-list-item" :class="item.active ? 'active':null">
+                              <img :src="item.imgsrc" >
+                              <span>{{ item.title }}</span>
                             </div>
                           </a-list-item>
                         </a-list>
@@ -98,7 +99,7 @@
                     </template>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
-                    <a > 查看更多楼盘详情 > </a>
+                    <a @click="showDetail"> 查看更多楼盘详情 > </a>
                   </a-descriptions-item>
                 </a-descriptions>
               </a-layout-content>
@@ -108,11 +109,15 @@
       </a-layout-header>
       <a-layout-content></a-layout-content>
     </a-layout>
+    <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
+      <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
+    </a-drawer>
   </page-header-wrapper>
 </template>
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
+import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -133,7 +138,8 @@ import {
 export default {
   name: 'HouseOverview',
   components: {
-    AutoComplete
+    AutoComplete,
+    HouseEdit
   },
   computed: {
   },
@@ -166,7 +172,19 @@ export default {
       metrolineDistrictInfo: [],
       houseSelect: {},
       current: 0,
-      albumList: [{ title: 1 }, { title: 1 }, { title: 1 }, { title: 1 }]
+      detailFlag: 0,
+      albumList: [
+      { title: '1sasd', imgsrc: '/house/6.webp', active: true },
+      { title: 'zxkhx', imgsrc: '/house/2.webp', active: false },
+      { title: 'sdjds', imgsrc: '/house/4.webp', active: false },
+      { title: '4sdsa', imgsrc: '/house/1.webp', active: false }
+      ],
+      pictureList: [
+      { title: '1sasd', imgsrc: '/house/6.webp' },
+      { title: 'zxkhx', imgsrc: '/house/2.webp' },
+      { title: 'sdjds', imgsrc: '/house/4.webp' },
+      { title: '4sdsa', imgsrc: '/house/1.webp' }
+      ]
     }
   },
   created () {
@@ -176,11 +194,18 @@ export default {
     this.houseSelect = this.$route.params.houseSelect
   },
   methods: {
+    closeDetail () {
+      this.detailFlag = 0
+    },
+    showDetail () {
+      this.detailFlag = 1
+      this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
+    }
   }
 }
 </script>
 <style scoped>
-.house-album >>> .slick-slide {
+.house-picture >>> .slick-slide {
   text-align: center;
   height: 350px;
   line-height: 350px;
@@ -199,7 +224,7 @@ export default {
 
 }
 .house-album-list >>> .ant-list-item {
-  padding: 0 10px;
+  padding: 0 5px;
   height: 72px;
   width: 116px;
   border-bottom: unset;
@@ -214,6 +239,7 @@ export default {
   border-radius: 2px 0px 0px 2px;
   color: #ffffff;
   text-align: center;
+  cursor: pointer;
 }
 .album-view-content {
   flex: 1;
@@ -223,6 +249,10 @@ export default {
 .album-list-item {
   height: 100%;
   position: relative;
+  cursor: pointer;
+}
+.album-list-item.active span{
+  background: rgba(183, 28, 43, 0.8);
 }
 .album-list-item img{
   width: 100%;
@@ -237,5 +267,21 @@ export default {
   background: rgba(0, 0, 0, 0.6);
   width: 100%;
   text-align: center;
+}
+.picture-list{
+  position: relative;
+}
+.picture-list span{
+  position:absolute;
+  left: 10px;
+  top: 318px;
+  height: 24px;
+  width: 40px;
+  background: rgba(0, 0, 0, 0.6);
+}
+.picture-list button{
+  position:absolute;
+  right: 10px;
+  top: 318px;
 }
 </style>
