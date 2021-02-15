@@ -427,6 +427,7 @@
                           height: '24px',
                           'line-height': '24px',
                         }"
+                        @click="showOverview(community)"
                       >
                         {{ community.communityName }}
                       </a-layout-header>
