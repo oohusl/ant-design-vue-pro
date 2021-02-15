@@ -427,7 +427,6 @@
                           height: '24px',
                           'line-height': '24px',
                         }"
-                        @click="showOverview(community)"
                       >
                         {{ community.communityName }}
                       </a-layout-header>
@@ -531,10 +530,12 @@ import {
   loopSummaryOptions,
   booleanOptions,
   subwayOptions,
-  areaPlate,
+  areaPlate
+} from '@/api/data'
+import {
   schoolOptions,
   shoolType
-} from '@/api/data'
+} from '@/api/school'
 import { AutoComplete, BackTop } from 'ant-design-vue'
 
 export default {
