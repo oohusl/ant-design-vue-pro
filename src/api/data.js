@@ -1,3 +1,21 @@
+export const statusMap = {
+  0: {
+    status: 'default',
+    text: '关闭'
+  },
+  1: {
+    status: 'processing',
+    text: '运行中'
+  },
+  2: {
+    status: 'success',
+    text: '已上线'
+  },
+  3: {
+    status: 'error',
+    text: '异常'
+  }
+}
 export const areaPlate = {
   青浦: ['白鹤', '华新', '金泽', '练塘', '夏阳', '香花桥', '徐泾', '盈浦', '赵巷', '重固', '朱家角'],
   松江: [

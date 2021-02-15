@@ -131,7 +131,6 @@ import {
   subwayOptions,
   areaPlate,
   getLabel,
-  schoolOptions,
   statusMap
 } from '@/api/data'
 
@@ -168,7 +167,6 @@ export default {
       plates: {},
       subwayStations: {},
       getLabel: getLabel,
-      schools: schoolOptions(),
       metrolineDistrictInfo: [],
       houseSelect: {},
       current: 0,
