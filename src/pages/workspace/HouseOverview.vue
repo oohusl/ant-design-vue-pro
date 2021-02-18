@@ -230,6 +230,7 @@ export default {
 }
 .house-album-view {
   display: flex;
+  user-select: none;
 }
 .album-view-left, .album-view-right {
   width: 20px;
