@@ -40,7 +40,7 @@
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)">
                     <a-row>
-                      <a-col v-for="plateOption in getPlate(options.value)" :span="3" :key="plateOption.value">
+                      <a-col v-for="plateOption in getPlate(options.value)" :span="getPlate(options.value).length < 7 ? 4 : 3" :key="plateOption.value">
                         <a-checkbox
                           :value="plateOption.value"
                           :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0"
