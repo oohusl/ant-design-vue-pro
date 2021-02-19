@@ -8,9 +8,9 @@
           </a-layout-header>
           <a-layout-content :style="{ width:'100%'}">
             <a-layout :style="{ padding: '0', background: '#ffffff' }">
-              <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="500">
+              <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
                 <a-layout>
-                  <a-layout-header :style="{ height: '350px', padding:'0'}">
+                  <a-layout-header :style="{ height: '336px', padding:'0'}">
                     <a-carousel autoplay class="house-picture">
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
                         <img :src="p.imgsrc">
@@ -181,6 +181,7 @@ export default {
       { title: '1sasd', imgsrc: '/house/6.webp' },
       { title: 'zxkhx', imgsrc: '/house/2.webp' },
       { title: 'sdjds', imgsrc: '/house/4.webp' },
+      { title: 'sdjds', imgsrc: '/house/4.webp' },
       { title: '4sdsa', imgsrc: '/house/1.webp' }
       ]
     }
@@ -205,8 +206,8 @@ export default {
 <style scoped>
 .house-picture >>> .slick-slide {
   text-align: center;
-  height: 350px;
-  line-height: 350px;
+  height: 336px;
+  line-height: 336px;
   background: #364d79;
   overflow: hidden;
 }
@@ -222,7 +223,7 @@ export default {
 
 }
 .house-album-list >>> .ant-list-item {
-  padding: 0 5px;
+  padding: 0 8px 0 0;
   height: 72px;
   width: 116px;
   border-bottom: unset;
@@ -273,14 +274,18 @@ export default {
 .picture-list span{
   position:absolute;
   left: 10px;
-  top: 318px;
+  top: 304px;
   height: 24px;
   width: 40px;
   background: rgba(0, 0, 0, 0.6);
+  line-height: 24px;
+  font-weight: 400;
+  color: #FFFFFF;
+  font-size: 12px;
 }
 .picture-list button{
   position:absolute;
   right: 10px;
-  top: 318px;
+  top: 304px;
 }
 </style>
