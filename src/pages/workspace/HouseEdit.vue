@@ -543,7 +543,7 @@
         </a-form-item>
         <a-form-item>
           <a-upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            customRequest="imageUpload"
             list-type="picture-card"
             :file-list="fileList"
             @preview="handlePreview"
@@ -923,6 +923,18 @@ export default {
       }
       return 'red'
     },
+    imageUpload (file) {
+      console.log(file)
+      return new Promise(function (resolve, reject) {
+                  // 做一些异步操作
+                  setTimeout(function () {
+                      console.log('执行完成')
+                      resolve('随便什么数据')
+                  }, 2000)
+      }
+              )
+    },
+
     async handlePreview (file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
