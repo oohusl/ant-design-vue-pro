@@ -382,9 +382,11 @@
                 placeholder="请选中配套学校"
                 :showSearch="true"
                 :value="school.schoolName"
+                @blur="handleOnBlur"
+                @search="handleOnSearch"
                 @change="selectSchool($event,s)"
               >
-                <a-select-option v-for="ss in schools" :key="ss.value" :value="ss.value" :disabled="ss.disabled">
+                <a-select-option v-for="ss in schools_" :key="ss.value" :value="ss.value" :disabled="ss.disabled">
                   {{ ss.label }}
                 </a-select-option>
               </a-select>
@@ -526,12 +528,10 @@
     </a-layout>
     <a-modal v-model="imageEditVisible" title="楼盘相册" @ok="editImageOK" width="800px">
       <a-form
-        :form="form"
-        @submit="handleSubmit"
       >
         <a-form-item
           label="楼盘名称">
-          <a-input value="复地雅园" :readonly="true"/>
+          <a-input value="复地雅园" :readnly="true"/>
         </a-form-item>
         <a-form-item label="相册类目">
           <a-select>
@@ -639,6 +639,7 @@ export default {
       subwayStations: {},
       getLabel: getLabel,
       schools: schoolOptions(),
+      schools_: [],
       metrolineDistrictInfo: [],
       fileList: [
         {
@@ -678,6 +679,7 @@ export default {
       this.labels = data
     })
     this.getMetrolineDistrictInfo()
+    this.schools_ = this.schools.slice(0, 50)
   },
   beforeMount () {
     if (this.edit) {
@@ -944,6 +946,29 @@ export default {
     },
     handleChange ({ fileList }) {
       this.fileList = fileList
+    },
+    handleOnBlur () {
+      this.schools_ = this.schools.slice(0, 50)
+    },
+    searchValue (value) {
+      const datas = []
+      console.log(this.schools, value)
+      this.schools.forEach(item => {
+        if (item.label.indexOf(value) > -1) {
+          datas.push(item)
+        }
+      })
+      this.schools_ = datas.slice(0, 50)
+      console.log(this.schools_)
+    },
+    handleOnSearch (value) {
+      const that = this
+      if (!this.timer) {
+        this.timer = setTimeout(function () {
+          that.searchValue(value)
+          that.timer = null
+        }, 0)
+      }
     }
   }
 }

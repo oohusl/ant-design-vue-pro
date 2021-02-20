@@ -113,13 +113,18 @@
                 v-model="queryParam.schoolName"
                 size="small"
                 placeholder="请选择配套学校"
-                :options="schools"
                 :showSearch="true"
                 :allowClear="true"
                 :maxTagCount="0"
                 mode="multiple"
                 :showArrow="true"
-              />
+                @blur="handleOnBlur"
+                @search="handleOnSearch"
+              >
+                <a-select-option v-for="ss in schools_" :key="ss.value" :value="ss.value">
+                  {{ ss.label }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
             <a-checkbox-group v-model="queryParam.schoolType" @change="schoolTypeChange">
               <template v-for="options in shoolType">
@@ -452,7 +457,7 @@
                           <a-form-item label="环线" :style="{ height: '30px' }">
                             <span>{{ community.loopSummary }}</span>
                           </a-form-item>
-                          <a-form-item v-for="(m, i) in community.metroInfo" :key="m" :colon="i == 0" :label="i == 0 ? '地铁' : ' '" :style="{ height: '30px' }">
+                          <a-form-item v-for="(m, i) in community.metroInfo" :key="JSON.stringify(m)" :colon="i == 0" :label="i == 0 ? '地铁' : ' '" :style="{ height: '30px' }">
                             <span
                             >{{ m.metroLine + ' ' + m.subwayStation }}</span
                             >
@@ -587,11 +592,14 @@ export default {
       plates: {},
       subwayStations: {},
       schools: schoolOptions(),
+      schools_: [],
+      timer: undefined,
       shoolType
     }
   },
   created () {
     this.search({})
+    this.schools_ = this.schools.slice(0, 50)
   },
   mounted () {
     window.addEventListener('scroll', this.windowScroll)
@@ -886,6 +894,27 @@ export default {
             this.search({ size: this.size })
           }, 100)
         }
+      }
+    },
+    handleOnBlur () {
+      this.schools_ = this.schools.slice(0, 50)
+    },
+    searchValue (value) {
+      const datas = []
+      this.schools.forEach(item => {
+        if (item.label.indexOf(value) > -1) {
+          datas.push(item)
+        }
+      })
+      this.schools_ = datas.slice(0, 50)
+    },
+    handleOnSearch (value) {
+      const that = this
+      if (!this.timer) {
+        this.timer = setTimeout(function () {
+          that.searchValue(value)
+          that.timer = null
+        }, 0)
       }
     }
   }
