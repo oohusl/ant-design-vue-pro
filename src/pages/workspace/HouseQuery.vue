@@ -491,7 +491,7 @@
                         width="200"
                       >
                         均价<span style="font-size: 24px; font-weight: bold">{{
-                          community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice
+                          community.averageLlistedPrice == null ? '--' : community.averageLlistedPrice.toLocaleString()
                         }}</span
                         >元/m²
                       </a-layout-header>

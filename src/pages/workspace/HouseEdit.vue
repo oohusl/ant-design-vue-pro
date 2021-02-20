@@ -16,7 +16,7 @@
               {{ houseSelect.communityName
               }}<span
                 style="font-size:16px;color: #B71C2B; margin-left: 12px"
-              >均价 {{ houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice }}元/m²</span
+              >均价 {{ houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString() }}元/m²</span
               >
             </div>
             <div>
