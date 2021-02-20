@@ -542,13 +542,7 @@
           </a-select>
         </a-form-item>
         <a-form-item>
-          <a-upload
-            customRequest="imageUpload"
-            list-type="picture-card"
-            :file-list="fileList"
-            @preview="handlePreview"
-            @change="handleChange"
-          >
+          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload">
             <div v-if="fileList.length < 8">
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -556,6 +550,17 @@
               </div>
             </div>
           </a-upload>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            type="primary"
+            :disabled="fileList.length === 0"
+            :loading="uploading"
+            style="margin-top: 16px"
+            @click="handleUpload"
+          >
+            {{ uploading ? '处理中' : '提交' }}
+          </a-button>
         </a-form-item>
       </a-form>
     </a-modal>
@@ -565,7 +570,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels } from '@/api/manage'
+import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -585,15 +590,6 @@ import {
   schoolOptions,
   schoolDetail
 } from '@/api/school'
-
-function getBase64 (file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-  })
-}
 
 export default {
   name: 'HouseSelect',
@@ -641,37 +637,9 @@ export default {
       schools: schoolOptions(),
       schools_: [],
       metrolineDistrictInfo: [],
-      fileList: [
-        {
-          uid: '-1',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-2',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-3',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-4',
-          name: 'image.png',
-          status: 'done',
-          url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-        },
-        {
-          uid: '-5',
-          name: 'image.png',
-          status: 'error'
-        }
-      ]
+      fileList: [],
+      uploading: false,
+      toDelete: []
     }
   },
   created () {
@@ -680,6 +648,7 @@ export default {
     })
     this.getMetrolineDistrictInfo()
     this.schools_ = this.schools.slice(0, 50)
+    this.queryPhotos()
   },
   beforeMount () {
     if (this.edit) {
@@ -925,28 +894,6 @@ export default {
       }
       return 'red'
     },
-    imageUpload (file) {
-      console.log(file)
-      return new Promise(function (resolve, reject) {
-                  // 做一些异步操作
-                  setTimeout(function () {
-                      console.log('执行完成')
-                      resolve('随便什么数据')
-                  }, 2000)
-      }
-              )
-    },
-
-    async handlePreview (file) {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj)
-      }
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
-    },
-    handleChange ({ fileList }) {
-      this.fileList = fileList
-    },
     handleOnBlur () {
       this.schools_ = this.schools.slice(0, 50)
     },
@@ -969,6 +916,62 @@ export default {
           that.timer = null
         }, 0)
       }
+    },
+    queryPhotos () {
+      photoQuery().then(e => {
+            this.fileList = []
+            e.forEach(image => {
+              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: 'http://47.98.42.1/media/' + image.url })
+            })
+          })
+    },
+    handleRemove (file) {
+      if (file.url) {
+        this.toDelete.push(file.uid)
+      }
+      const index = this.fileList.indexOf(file)
+      const newFileList = this.fileList.slice()
+      newFileList.splice(index, 1)
+      this.fileList = newFileList
+    },
+    beforeUpload (file) {
+      this.fileList = [...this.fileList, file]
+      return false
+    },
+    doUpload () {
+      this.uploading = true
+      const up = []
+      this.fileList.forEach(file => {
+        if (!file.url) {
+          const formData = new FormData()
+          formData.append('file', file)
+          formData.append('communityId', 1)
+          formData.append('type', '1')
+          up.push(photoUpload(formData))
+        }
+      })
+      this.toDelete.forEach(id => {
+        up.push(photoDelete(id))
+      })
+
+      Promise.all(up).then(r => {
+        console.log(r)
+        this.queryPhotos()
+        this.uploading = false
+      }).catch(e => {
+        console.error(e)
+        this.uploading = false
+        this.queryPhotos()
+      })
+    },
+    handleUpload () {
+      const { fileList } = this
+      const formData = new FormData()
+      fileList.forEach(file => {
+        formData.append('files[]', file)
+      })
+      // this.uploading = true
+      this.doUpload()
     }
   }
 }

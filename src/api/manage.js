@@ -104,3 +104,29 @@ export function getLabels () {
     data: { 'constantType': 'bq' }
   })
 }
+
+export function photoQuery (sub) {
+  return request({
+    url: '/community-infos/findCommunityPhoto',
+    method: 'post',
+    data: { communityId: 1 }
+  })
+}
+
+export function photoUpload (formData) {
+  return request({
+    url: '/community-infos/fileUpload',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+export function photoDelete (id) {
+  return request({
+    url: `/community-infos/fileDeletion/${id}`,
+    method: 'get'
+  })
+}
