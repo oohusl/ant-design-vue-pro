@@ -105,11 +105,11 @@ export function getLabels () {
   })
 }
 
-export function photoQuery (sub) {
+export function photoQuery (id, type) {
   return request({
     url: '/community-infos/findCommunityPhoto',
     method: 'post',
-    data: { communityId: 1 }
+    data: { communityId: id, type: type }
   })
 }
 

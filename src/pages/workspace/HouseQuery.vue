@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper>
+  <div>
     <div>
       <BackTop></BackTop>
     </div>
@@ -518,9 +518,8 @@
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="house" :toCreate="detailFlag === 2" @change="search" ref="houseeditref"></house-edit>
     </a-drawer>
-  </page-header-wrapper>
+  </div>
 </template>
-
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'

@@ -59,7 +59,7 @@
           </a-descriptions-item>
           <template v-for="(line,i) in houseSelect.metroInfo">
             <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
-              {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance}km` }}
+              {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance ? '' : line.distance}m` }}
             </a-descriptions-item>
           </template>
         </a-descriptions>
@@ -277,7 +277,7 @@
                   placeholder="距离"
                   size="small"
                   style="width: 145px"
-                  suffix="km">
+                  suffix="m">
                 </a-input>
                 <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
               </a-input-group>
@@ -531,10 +531,10 @@
       >
         <a-form-item
           label="楼盘名称">
-          <a-input value="复地雅园" :readnly="true"/>
+          <a-input :value="houseSelect.communityName" :readnly="true"/>
         </a-form-item>
         <a-form-item label="相册类目">
-          <a-select>
+          <a-select v-model="photoType">
             <a-select-option value="1">效果图</a-select-option>
             <a-select-option value="2">环境规划图</a-select-option>
             <a-select-option value="3">楼盘实景图</a-select-option>
@@ -543,7 +543,7 @@
         </a-form-item>
         <a-form-item>
           <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload">
-            <div v-if="fileList.length < 8">
+            <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
                 上传图片
@@ -560,6 +560,13 @@
             @click="handleUpload"
           >
             {{ uploading ? '处理中' : '提交' }}
+          </a-button>
+          <a-button
+            :disabled="uploading"
+            style="margin-top: 16px"
+            @click="editImageOK"
+          >
+            取消
           </a-button>
         </a-form-item>
       </a-form>
@@ -637,6 +644,7 @@ export default {
       schools: schoolOptions(),
       schools_: [],
       metrolineDistrictInfo: [],
+      photoType: 1,
       fileList: [],
       uploading: false,
       toDelete: []
@@ -918,10 +926,10 @@ export default {
       }
     },
     queryPhotos () {
-      photoQuery().then(e => {
+      photoQuery(this.houseSelect.id, this.photoType).then(e => {
             this.fileList = []
             e.forEach(image => {
-              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: 'http://47.98.42.1/media/' + image.url })
+              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
             })
           })
     },
@@ -945,8 +953,8 @@ export default {
         if (!file.url) {
           const formData = new FormData()
           formData.append('file', file)
-          formData.append('communityId', 1)
-          formData.append('type', '1')
+          formData.append('communityId', this.houseSelect.id)
+          formData.append('type', this.photoType)
           up.push(photoUpload(formData))
         }
       })

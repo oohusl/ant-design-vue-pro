@@ -1,6 +1,5 @@
 <template>
   <pro-layout
-    :menus="menus"
     :collapsed="collapsed"
     :mediaQuery="query"
     :isMobile="isMobile"
@@ -14,8 +13,8 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <img src="../assets/logo.png" alt="985" />
-        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.2</span></h1>
+        <img src="../assets/logo.png" alt="985" style="cursor: pointer" @click="$router.push({ path: '/house/query' })"/>
+        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.3</span></h1>
       </div>
     </template>
 
@@ -59,7 +58,7 @@ export default {
       // base
       menus: [],
       // 侧栏收起状态
-      collapsed: false,
+      collapsed: true,
       title: defaultSettings.title,
       settings: {
         // 布局类型
