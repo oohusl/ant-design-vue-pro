@@ -929,7 +929,7 @@ export default {
       this.fileList = []
       photoQuery(this.houseSelect.id, this.photoType).then(e => {
             e.forEach(image => {
-              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
+              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: 'http://47.98.42.1/media/' + image.url })
             })
           })
     },
