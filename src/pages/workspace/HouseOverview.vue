@@ -23,12 +23,12 @@
                   </a-layout-header>
                   <a-layout-content :style="{ padding:'8px 0', background: '#ffffff' }">
                     <div class="house-album-view">
-                      <div class="album-view-left">
+                      <div class="album-view-left" @click="flip('prev')">
                         <
                       </div>
                       <div class="album-view-content">
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
-                          <a-list-item slot="renderItem" slot-scope="item">
+                          <a-list-item slot="renderItem" slot-scope="item" @click="selectAlbum(item)">
                             <div class="album-list-item" :class="item.active ? 'active':null">
                               <img :src="item.imgsrc" >
                               <span>{{ item.title }}</span>
@@ -36,7 +36,7 @@
                           </a-list-item>
                         </a-list>
                       </div>
-                      <div class="album-view-right">
+                      <div class="album-view-right" @click="flip('next')">
                         >
                       </div>
                     </div>
@@ -44,9 +44,9 @@
                 </a-layout>
               </a-layout-sider>
               <a-layout-content :style="{ padding: '10px 32px', color: '#262626'}">
-                <a-descriptions title="" :column="4">
+                <a-descriptions title="" :column="4" class="price">
                   <a-descriptions-item label="参考均价" :span="4">
-                    {{ houseSelect.averageLlistedPrice }} {{ houseSelect.totalPrice }}
+                    <span>{{ houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString() }}</span>元/m²(单价) <span>{{ houseSelect.totalPrice == null ? '--' : houseSelect.totalPrice.toLocaleString() }}</span>万元/套(总价)
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
@@ -70,7 +70,7 @@
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
                   <a-descriptions-item label="区域板块" :span="4">
-                    {{ houseSelect.districtPlanning }}
+                    {{ houseSelect.area }} {{ houseSelect.plate }}
                   </a-descriptions-item>
                   <a-descriptions-item label="所属环线" :span="4">
                     {{ houseSelect.loopSummary }}
@@ -133,7 +133,7 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-
+import { photoQuery } from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -175,6 +175,7 @@ export default {
       { title: '1sasd', imgsrc: '/house/6.webp', active: true },
       { title: 'zxkhx', imgsrc: '/house/2.webp', active: false },
       { title: 'sdjds', imgsrc: '/house/4.webp', active: false },
+      { title: 'sdjds', imgsrc: '/house/4.webp', active: false },
       { title: '4sdsa', imgsrc: '/house/1.webp', active: false }
       ],
       pictureList: [
@@ -183,7 +184,8 @@ export default {
       { title: 'sdjds', imgsrc: '/house/4.webp' },
       { title: 'sdjds', imgsrc: '/house/4.webp' },
       { title: '4sdsa', imgsrc: '/house/1.webp' }
-      ]
+      ],
+      scroolPosition: 0
     }
   },
   created () {
@@ -191,6 +193,7 @@ export default {
   beforeMount () {
     console.log(this.$route.params)
     this.houseSelect = this.$route.params.houseSelect
+    this.queryPhotos()
   },
   methods: {
     closeDetail () {
@@ -199,6 +202,47 @@ export default {
     showDetail () {
       this.detailFlag = 1
       this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
+    },
+    queryPhotos () {
+      photoQuery(this.houseSelect.id, 1).then(e => {
+            const fileList = []
+            e.forEach(image => {
+              fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
+            })
+            console.log(fileList)
+          })
+    },
+    flip (opt) {
+      switch (opt) {
+        case 'prev':
+          this.slideList(104)
+          break
+        case 'next':
+          this.slideList(-104)
+          break
+        default:
+          break
+      }
+    },
+    selectAlbum (item) {
+      this.albumList.forEach(i => {
+        i.active = false
+      })
+      item.active = true
+    },
+    slideList (space) {
+      const scroll = document.querySelector('.house-album-list  ul')
+      let position = this.scroolPosition
+      position += space
+      if (position >= 0) {
+        position = 0
+      } else if (position < -this.albumList.length * 104 + 448) {
+        position = -this.albumList.length * 104 + 448
+      }
+      if (scroll) {
+        document.querySelector('.house-album-list  ul').style.transform = `translateX(${ position }px)`
+      }
+      this.scroolPosition = position
     }
   }
 }
@@ -225,7 +269,7 @@ export default {
 .house-album-list >>> .ant-list-item {
   padding: 0 8px 0 0;
   height: 72px;
-  width: 116px;
+  width: 104px;
   border-bottom: unset;
   float: left;
 }
@@ -287,5 +331,14 @@ export default {
   position:absolute;
   right: 10px;
   top: 304px;
+}
+.house-album-list >>> ul {
+  transform: translateX(0px);
+}
+.price >>> .ant-descriptions-item-content{
+  color: #B71C2B;
+}
+.price >>> .ant-descriptions-item-content span{
+  font-size: 22px;
 }
 </style>
