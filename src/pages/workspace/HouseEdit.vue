@@ -59,7 +59,7 @@
           </a-descriptions-item>
           <template v-for="(line,i) in houseSelect.metroInfo">
             <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
-              {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance ? '' : line.distance}m` }}
+              {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance ? '' : line.distance + 'm'}` }}
             </a-descriptions-item>
           </template>
         </a-descriptions>
@@ -526,7 +526,7 @@
         </a-descriptions>
       </a-layout-content>
     </a-layout>
-    <a-modal v-model="imageEditVisible" title="楼盘相册" @ok="editImageOK" width="800px">
+    <a-modal v-model="imageEditVisible" title="楼盘相册" :footer="null" @ok="editImageOK" width="800px">
       <a-form
       >
         <a-form-item
@@ -534,7 +534,7 @@
           <a-input :value="houseSelect.communityName" :readnly="true"/>
         </a-form-item>
         <a-form-item label="相册类目">
-          <a-select v-model="photoType">
+          <a-select v-model="photoType" @change="queryPhotos">
             <a-select-option value="1">效果图</a-select-option>
             <a-select-option value="2">环境规划图</a-select-option>
             <a-select-option value="3">楼盘实景图</a-select-option>
@@ -554,7 +554,6 @@
         <a-form-item>
           <a-button
             type="primary"
-            :disabled="fileList.length === 0"
             :loading="uploading"
             style="margin-top: 16px"
             @click="handleUpload"
@@ -644,7 +643,7 @@ export default {
       schools: schoolOptions(),
       schools_: [],
       metrolineDistrictInfo: [],
-      photoType: 1,
+      photoType: '1',
       fileList: [],
       uploading: false,
       toDelete: []
@@ -742,6 +741,7 @@ export default {
     },
     editImage () {
       this.imageEditVisible = true
+      this.queryPhotos()
     },
     editImageOK () {
       this.imageEditVisible = false
@@ -926,8 +926,8 @@ export default {
       }
     },
     queryPhotos () {
+      this.fileList = []
       photoQuery(this.houseSelect.id, this.photoType).then(e => {
-            this.fileList = []
             e.forEach(image => {
               this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
             })
