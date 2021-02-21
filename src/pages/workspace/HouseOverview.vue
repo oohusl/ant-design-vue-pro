@@ -192,7 +192,7 @@ export default {
   },
   beforeMount () {
     console.log(this.$route.params)
-    this.houseSelect = this.$route.params.houseSelect
+    this.houseSelect = JSON.parse(this.$route.query.houseSelect)
     this.queryPhotos()
   },
   methods: {

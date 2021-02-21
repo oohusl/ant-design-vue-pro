@@ -431,6 +431,7 @@
                           'font-size': '20px',
                           height: '24px',
                           'line-height': '24px',
+                          cursor: 'pointer'
                         }"
                         @click="showOverview(community)"
                       >
@@ -877,7 +878,9 @@ export default {
     },
     showOverview (overview) {
       console.log(overview)
-      this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
+      // this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
+      const routeData = this.$router.resolve({ name: 'HouseOverview', query: { houseSelect: JSON.stringify(overview) } })
+       window.open(routeData.href, '_blank')
     },
     windowScroll () {
       if (
