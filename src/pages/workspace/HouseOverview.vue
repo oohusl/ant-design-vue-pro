@@ -84,16 +84,16 @@
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
-                  <a-descriptions-item label="对口小学" :span="4">
+                  <a-descriptions-item label="小学" :span="4">
                     <template v-for="s in houseSelect.schoolDistrictInfo">
-                      <span :key="s">
+                      <span :key="s" v-if="s.schoolType == '小学'">
                         {{ s.schoolName }}
                       </span>
                     </template>
                   </a-descriptions-item>
-                  <a-descriptions-item label="对口中学" :span="4">
+                  <a-descriptions-item label="中学" :span="4">
                     <template v-for="s in houseSelect.schoolDistrictInfo">
-                      <span :key="s">
+                      <span :key="s" v-if="s.schoolType == '中学'">
                         {{ s.schoolName }}
                       </span>
                     </template>

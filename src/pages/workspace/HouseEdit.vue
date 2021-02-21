@@ -31,7 +31,7 @@
             <a-button @click="editHouse()">
               编辑
             </a-button>
-            <a-button @click="editImage()">
+            <a-button @click="editImage()" v-if="houseSelect.id">
               上传图片
             </a-button>
           </a-layout-sider>
