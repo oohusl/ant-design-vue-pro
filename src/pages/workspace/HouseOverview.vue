@@ -267,7 +267,7 @@ export default {
   text-align: center;
   height: 336px;
   line-height: 336px;
-  background: #364d79;
+  background: #ffffff;
   overflow: hidden;
 }
 .house-album-list >>> .ant-spin-container {
@@ -351,7 +351,6 @@ export default {
 }
 .picture-list img{
   width: 100%;
-  background-color: #FFFFFF;
 }
 .house-album-list >>> ul {
   transform: translateX(0px);
