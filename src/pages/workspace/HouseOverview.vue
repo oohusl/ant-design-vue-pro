@@ -15,9 +15,6 @@
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
                         <img :src="p.url">
                         <span>{{ i+1 +'/'+ pictureList.length }}</span>
-                        <a-button @click="saveHouse()" size="small">
-                          <a-icon type="picture" />查看相册
-                        </a-button>
                       </div>
                     </a-carousel>
                   </a-layout-header>
@@ -86,14 +83,14 @@
                 <a-descriptions title="" :column="4">
                   <a-descriptions-item label="小学" :span="4">
                     <template v-for="s in houseSelect.schoolDistrictInfo">
-                      <span :key="s" v-if="s.schoolType == '小学'">
+                      <span :key="JSON.stringify(s)" v-if="s.schoolType == '小学'">
                         {{ s.schoolName }}
                       </span>
                     </template>
                   </a-descriptions-item>
                   <a-descriptions-item label="中学" :span="4">
                     <template v-for="s in houseSelect.schoolDistrictInfo">
-                      <span :key="s" v-if="s.schoolType == '中学'">
+                      <span :key="JSON.stringify(s)" v-if="s.schoolType == '中学'">
                         {{ s.schoolName }}
                       </span>
                     </template>
@@ -213,12 +210,17 @@ export default {
           }
           photosList[photo.type].push({ uid: photo.id, title: '', url: 'http://47.98.42.1/media/' + photo.url, type: photo.type })
         }
-        for (const photo of photosList) {
-          if (photo) {
-            this.albumList.push({ title: `${ photosOption[photo[0].type] } (${photo.length})`, photos: photo, url: photo[0].url, active: photo[0].type === '1', index: photo[0].type })
+        if (photosList.length) {
+          for (const photo of photosList) {
+            if (photo) {
+              this.albumList.push({ title: `${ photosOption[photo[0].type] } (${photo.length})`, photos: photo, url: photo[0].url, active: photo[0].type === '1', index: photo[0].type })
+            }
           }
+          this.pictureList = photosList[1]
+        } else {
+          this.albumList.push({ title: `暂无图片`, photos: { uid: '', title: '', url: '/common/empty.png' }, url: '/common/empty.png', active: true, index: 1 })
+          this.pictureList = [{ uid: '', title: '', url: '/common/empty.png' }]
         }
-        this.pictureList = photosList[1]
       })
     },
     flip (opt) {
@@ -346,6 +348,10 @@ export default {
   position:absolute;
   right: 10px;
   top: 304px;
+}
+.picture-list img{
+  width: 100%;
+  background-color: #FFFFFF;
 }
 .house-album-list >>> ul {
   transform: translateX(0px);
