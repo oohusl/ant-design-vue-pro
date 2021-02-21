@@ -13,7 +13,7 @@
                   <a-layout-header :style="{ height: '336px', padding:'0'}">
                     <a-carousel autoplay class="house-picture">
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
-                        <img :src="p.imgsrc">
+                        <img :src="p.url">
                         <span>{{ i+1 +'/'+ pictureList.length }}</span>
                         <a-button @click="saveHouse()" size="small">
                           <a-icon type="picture" />查看相册
@@ -30,7 +30,7 @@
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
                           <a-list-item slot="renderItem" slot-scope="item" @click="selectAlbum(item)">
                             <div class="album-list-item" :class="item.active ? 'active':null">
-                              <img :src="item.imgsrc" >
+                              <img :src="item.url" >
                               <span>{{ item.title }}</span>
                             </div>
                           </a-list-item>
@@ -172,18 +172,18 @@ export default {
       current: 0,
       detailFlag: 0,
       albumList: [
-      { title: '1sasd', imgsrc: '/house/6.webp', active: true },
-      { title: 'zxkhx', imgsrc: '/house/2.webp', active: false },
-      { title: 'sdjds', imgsrc: '/house/4.webp', active: false },
-      { title: 'sdjds', imgsrc: '/house/4.webp', active: false },
-      { title: '4sdsa', imgsrc: '/house/1.webp', active: false }
+      // { title: '1sasd', url: '/house/6.webp', active: true },
+      // { title: 'zxkhx', url: '/house/2.webp', active: false },
+      // { title: 'sdjds', url: '/house/4.webp', active: false },
+      // { title: 'sdjds', url: '/house/4.webp', active: false },
+      // { title: '4sdsa', url: '/house/1.webp', active: false }
       ],
       pictureList: [
-      { title: '1sasd', imgsrc: '/house/6.webp' },
-      { title: 'zxkhx', imgsrc: '/house/2.webp' },
-      { title: 'sdjds', imgsrc: '/house/4.webp' },
-      { title: 'sdjds', imgsrc: '/house/4.webp' },
-      { title: '4sdsa', imgsrc: '/house/1.webp' }
+      // { title: '1sasd', url: '/house/6.webp' },
+      // { title: 'zxkhx', url: '/house/2.webp' },
+      // { title: 'sdjds', url: '/house/4.webp' },
+      // { title: 'sdjds', url: '/house/4.webp' },
+      // { title: '4sdsa', url: '/house/1.webp' }
       ],
       scroolPosition: 0
     }
@@ -204,13 +204,22 @@ export default {
       this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
     },
     queryPhotos () {
-      photoQuery(this.houseSelect.id, 1).then(e => {
-            const fileList = []
-            e.forEach(image => {
-              fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
-            })
-            console.log(fileList)
-          })
+      const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
+      photoQuery(this.houseSelect.id).then(photos => {
+        const photosList = []
+        for (const photo of photos) {
+          if (!photosList[photo.type]) {
+            photosList[photo.type] = []
+          }
+          photosList[photo.type].push({ uid: photo.id, title: '', url: 'http://47.98.42.1/media/' + photo.url, type: photo.type })
+        }
+        for (const photo of photosList) {
+          if (photo) {
+            this.albumList.push({ title: `${ photosOption[photo[0].type] } (${photo.length})`, photos: photo, url: photo[0].url, active: photo[0].type === '1', index: photo[0].type })
+          }
+        }
+        this.pictureList = photosList[1]
+      })
     },
     flip (opt) {
       switch (opt) {
@@ -229,9 +238,13 @@ export default {
         i.active = false
       })
       item.active = true
+      this.pictureList = item.photos
     },
     slideList (space) {
       const scroll = document.querySelector('.house-album-list  ul')
+      if (this.albumList.length < 5) {
+        return
+      }
       let position = this.scroolPosition
       position += space
       if (position >= 0) {
@@ -240,7 +253,7 @@ export default {
         position = -this.albumList.length * 104 + 448
       }
       if (scroll) {
-        document.querySelector('.house-album-list  ul').style.transform = `translateX(${ position }px)`
+        scroll.style.transform = `translateX(${ position }px)`
       }
       this.scroolPosition = position
     }
@@ -311,6 +324,8 @@ export default {
   background: rgba(0, 0, 0, 0.6);
   width: 100%;
   text-align: center;
+  font-size: 12px;
+  line-height: 24px;
 }
 .picture-list{
   position: relative;
