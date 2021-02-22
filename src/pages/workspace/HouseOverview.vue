@@ -1,5 +1,5 @@
 <template>
-  <page-header-wrapper class="house-overview">
+  <div class="house-overview">
     <a-layout :style="{ background: '#ffffff', padding: '0', height: '100%', padding: '0 128px' }">
       <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '100%' }">
         <a-layout :style="{ background: '#ffffff', padding: '0', height: '100%' }">
@@ -109,7 +109,7 @@
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
     </a-drawer>
-  </page-header-wrapper>
+  </div>
 </template>
 
 <script>
@@ -208,7 +208,7 @@ export default {
           if (!photosList[photo.type]) {
             photosList[photo.type] = []
           }
-          photosList[photo.type].push({ uid: photo.id, title: '', url: 'http://47.98.42.1/media/' + photo.url, type: photo.type })
+          photosList[photo.type].push({ uid: photo.id, title: '', url: '/media/' + photo.url, type: photo.type })
         }
         if (photosList.length) {
           for (const photo of photosList) {
