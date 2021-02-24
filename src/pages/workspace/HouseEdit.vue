@@ -531,7 +531,7 @@
       >
         <a-form-item
           label="楼盘名称">
-          <a-input :value="houseSelect.communityName" :readnly="true"/>
+          <a-input :value="houseSelect.communityName" :disabled="true"/>
         </a-form-item>
         <a-form-item label="相册类目">
           <a-select v-model="photoType" @change="queryPhotos">
