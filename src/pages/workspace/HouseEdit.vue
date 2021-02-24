@@ -59,7 +59,7 @@
           </a-descriptions-item>
           <template v-for="(line,i) in houseSelect.metroInfo">
             <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
-              {{ `${line.metroLine}号线 / ${line.subwayStation}   ${line.distance ? '' : line.distance + 'm'}` }}
+              {{ `${line.metroLine} / ${line.subwayStation}   ${line.distance != null ? line.distance + 'm' : ''}` }}
             </a-descriptions-item>
           </template>
         </a-descriptions>

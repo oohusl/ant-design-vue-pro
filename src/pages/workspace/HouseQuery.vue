@@ -626,6 +626,7 @@ export default {
         echelonPerformance: {},
         ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
       }
+      this.subwayStations = {}
       this.plates = {}
       this.areaReset()
     },
