@@ -542,7 +542,7 @@
           </a-select>
         </a-form-item>
         <a-form-item>
-          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload" @preview="handlePreview">
+          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload" :preview-file="handlePreview">
             <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -675,13 +675,6 @@ export default {
       this.newHouse()
     }
   },
-  async handlePreview (file) {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj)
-      }
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
-    },
   updated () {
   },
   methods: {
@@ -962,6 +955,13 @@ export default {
       newFileList.splice(index, 1)
       this.fileList = newFileList
     },
+      async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+  },
     beforeUpload (file) {
       this.fileList = [...this.fileList, file]
       return false

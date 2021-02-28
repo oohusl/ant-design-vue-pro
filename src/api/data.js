@@ -588,6 +588,32 @@ export const peopleAndVehiclesOptions = [
     value: '3'
   }
 ]
+export const metroDistanceOption = [
+  {
+    label: '200米以内',
+    value: '0-200'
+  },
+  {
+    label: '500米以内',
+    value: '0-500'
+  },
+  {
+    label: '1000米以内',
+    value: '0-1000'
+  },
+  {
+    label: '2000米以内',
+    value: '0-2000'
+  },
+  {
+    label: '3000米以内',
+    value: '0-4000'
+  },
+  {
+    label: '5000米以内',
+    value: '0-5000'
+  }
+]
 export const parkingSpaceRatioOptions = [
   {
     label: '小于0.5',

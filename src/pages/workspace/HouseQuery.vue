@@ -105,7 +105,7 @@
             </template>
           </a-form-item>
           <a-form-item label="地铁距离">
-            <a-input :style="{ width: '80px' }" v-model="queryParam.subwayDistance" size="small" suffix="米"> </a-input>
+            <a-select v-model="queryParam.subwayDistance" :options="metroDistanceOption" size="small" style="width: 120px"></a-select>
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
@@ -561,7 +561,8 @@ import {
   transactionOwnershipOptions,
   peopleAndVehiclesOptions,
   parkingSpaceRatioOptions,
-  volume2019Options
+  volume2019Options,
+  metroDistanceOption
 } from '@/api/data'
 import {
   schoolOptions,
@@ -618,6 +619,7 @@ export default {
       totalPriceOptions,
       transactionOwnershipOptions,
       peopleAndVehiclesOptions,
+      metroDistanceOption,
       parkingSpaceRatioOptions,
       volume2019Options,
       loading: false,
@@ -737,6 +739,11 @@ export default {
         two[1] = two[1] * 1
         return two
       })
+
+      if (this.queryParam.subwayDistance) {
+        const distances = (this.queryParam.subwayDistance || '').split('-')
+        requestParameters.distances = [[distances[0] * 1, distances[1] * 1]]
+      }
 
       requestParameters.plate = Object.values(this.plates).flat()
 
