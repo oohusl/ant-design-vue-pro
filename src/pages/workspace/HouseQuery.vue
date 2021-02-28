@@ -396,7 +396,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
-            <a-button @click="search()" type="primary"> 查询 </a-button>
+            <a-button @click="doSearch()" type="primary"> 查询 </a-button>
             <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }"> 重置 </a-button>
             <a-dropdown :style="{ marginLeft: '8px' }">
               <a-menu slot="overlay">
@@ -624,11 +624,15 @@ export default {
       schools: schoolOptions(),
       schools_: [],
       timer: undefined,
-      shoolType
+      shoolType,
+      dataExcel: [],
+      headers: '区域,板块,地区规划,小区名称,挂牌均价,环线汇总,小区属性,地铁线,地铁站,距离,交易权属,最大楼层,最小楼层,2019成交量,1房面积段,2房面积段,3房面积段,1房价格段,2房价格段,3房价格段,是否电梯,室外游泳池,室内游泳池,会所,洋房,双阳台,大阳台,带花园,大露台,人车分流,建筑类型,物业属性,物业费,栋数,户数,车位数,容积率,绿化率,在售-3.20,正租-3.20,建筑代,开发商,物业公司,幼儿园,幼儿园等级,小学,小学梯队表现,是否一贯制,中学,初中梯队表现, 叠拼别墅, 独栋别墅, 联排别墅, 双拼别墅,内部配套,地址,产权年限,小区介绍'.split(','),
+      fields: 'area,plate,districtPlanning,communityName,,loopSummary,cellAttributes,metroLine,subwayStation,distance,transactionOwnership,maxFloor,minFloor,volume2019,roomArea1Min,roomArea2Min,roomArea3Min,roomPriceRange1Min,roomPriceRange2Min,roomPriceRange3Min,isLift,isOutdoorSwimmingRoom,isIndoorSwimmingPool,clubhouse,bungalow,doubleBalcony,largeBalcony,withGarden,largeTerrace,peopleAndVehicles,buildingType,propertyAttributes,propertyCosts,buildingNumber,householdsNumber,parkingSpacesNumber,volumeRate,greeningRate,averageLlistedPrice,inStock,constructionAge,developer,propertyCompany,school1Name,school1Level,school2Name,school2Name,,school3Name,school3Name,stackedVilla,singleFamilyVilla,townhouse,semiDetachedHouse,internalSupporting,address,propertyRights,communityDesc'.split(',')
     }
   },
   created () {
-    this.search({})
+    this.searchData()
+    this.dataExportQuery()
     this.schools_ = this.schools.slice(0, 50)
   },
   mounted () {
@@ -641,7 +645,7 @@ export default {
   methods: {
     closeDetail () {
       this.detailFlag = 0
-      this.search()
+      this.searchData(this.size)
     },
 
     resetSearchForm () {
@@ -662,86 +666,17 @@ export default {
       this.areaReset()
     },
 
-    search () {
-      const requestParameters = Object.assign({ sort: this.sort, size: this.size }, this.queryParam)
-      requestParameters.subwayStation = Object.values(this.subwayStations).flat()
-
-      requestParameters.averageLlistedPrice = Array.from(
-        this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 10000
-        if (two.length > 1) {
-          two[1] = two[1] * 10000
-        }
-        return two
-      })
-      requestParameters.totalPrice = Array.from(
-        this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-      requestParameters.roomArea = Array.from(
-        this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-      requestParameters.constructionAge = Array.from(
-        this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-
-      requestParameters.plate = Object.values(this.plates).flat()
-
-      delete requestParameters.ranges
-      delete requestParameters.averageLlistedPriceMin
-      delete requestParameters.averageLlistedPriceMax
-      delete requestParameters.totalPriceMin
-      delete requestParameters.totalPriceMax
-      delete requestParameters.roomAreaMin
-      delete requestParameters.roomAreaMax
-      delete requestParameters.constructionAgeMin
-      delete requestParameters.constructionAgeMax
-
-      // this.queryParam.echelonPerformance = this.echelons.flat()
-      requestParameters.echelonPerformance = Object.values(this.queryParam.echelonPerformance).flat()
-      if (this.queryParam?.isLift?.length !== 1) {
-        delete requestParameters.isLift
-      } else {
-        requestParameters.isLift = requestParameters.isLift[0]
-      }
-
-      if (this.queryParam.checkedList) {
-        this.queryParam.checkedList.forEach((e) => {
-          requestParameters[e] = true
-        })
-        delete requestParameters.checkedList
-      }
-      console.log('loadData request parameters:', requestParameters)
-      getHouse(requestParameters).then((res) => {
-        console.log(res)
-        this.results = res
-      })
+    doSearch () {
+      this.searchData()
+      this.dataExportQuery()
     },
 
     searchData (size) {
-      const requestParameters = Object.assign({ sort: this.sort, size: size }, this.queryParam)
+      this.makeSearchRequest(size).then(e => { this.results = e })
+    },
+
+    makeSearchRequest (size) {
+      const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
 
       requestParameters.averageLlistedPrice = Array.from(
@@ -820,7 +755,6 @@ export default {
       this.queryParam.area.forEach((e) => {
         this.plateOptions.push(...areaPlate[e])
       })
-      this.search()
     },
 
     getPlate (area) {
@@ -915,7 +849,7 @@ export default {
       }
       if (type) {
         this.sort = type + ',' + this.sortType
-        this.search()
+        this.searchData()
       }
     },
 
@@ -1000,7 +934,7 @@ export default {
             this.loading = false
             this.size = this.results.length
             this.size += 20
-            this.search({ size: this.size })
+            this.searchData()
           }, 100)
         }
       }
@@ -1026,29 +960,75 @@ export default {
         }, 0)
       }
     },
-    dataExport () {
-      this.searchData(200).then(r => {
-          if (r.length < 1) {
-            return
-          }
-          let excelData = r.map(e => {
-            delete e.metroInfo
-            delete e.schoolDistrictInfo
-            return Object.values(e)
-          })
-          excelData = [Object.keys(r[0]), ...excelData]
-          console.log(excelData)
 
-          return ExcellentExport.convert({
+    dataExport () {
+      return ExcellentExport.convert({
                     anchor: 'anchorNewApi',
                     filename: '985',
                     format: 'xlsx'
                 }, [{
                     name: '房源信息',
                     from: {
-                        array: excelData
+                        array: this.excelData
                     }
                 }])
+    },
+    dataExportQuery () {
+      this.makeSearchRequest(200).then(r => {
+          if (r.length < 1) {
+            return
+          }
+          let excelData = r.map(e => {
+            // delete e.metroInfo
+            // delete e.schoolDistrictInfo
+            e.metroInfo = e.metroInfo || []
+            e.schoolDistrictInfo = e.schoolDistrictInfo || []
+
+            const metro = { metroLine: [], subwayStation: [], distance: [] }
+
+            e.metroInfo.forEach(m => {
+              metro.metroLine.push(m.metroLine)
+              metro.subwayStation.push(m.subwayStation)
+              metro.distance.push(m.distance)
+             })
+            e.metroLine = metro.metroLine.join('/')
+            e.subwayStation = metro.subwayStation.join('/')
+            e.distance = metro.distance.join('/')
+
+            const school1 = { name: [], level: [] }
+            const school2 = { name: [], level: [] }
+            const school3 = { name: [], level: [] }
+            e.schoolDistrictInfo.forEach(m => {
+              if (m.schoolType === '幼儿园') {
+                school1.name.push(m.schoolName)
+                school1.level.push(m.echelonPerformance)
+              }
+              if (m.schoolType === '小学') {
+                school2.name.push(m.schoolName)
+                school2.level.push(m.echelonPerformance)
+              }
+              if (m.schoolType === '中学') {
+                school3.name.push(m.schoolName)
+                school3.level.push(m.echelonPerformance)
+              }
+            })
+
+            e.school1Name = school1.name.join('/')
+            e.school1Level = school1.level.join('/')
+            e.school2Name = school2.name.join('/')
+            e.school2Level = school2.level.join('/')
+            e.school3Name = school3.name.join('/')
+            e.school3Level = school3.level.join('/')
+
+            const row = []
+            this.fields.forEach(f => {
+              row.push(e[f])
+            })
+            return row
+          })
+          excelData = [this.headers, ...excelData]
+          console.info(excelData)
+          this.excelData = excelData
         })
     }
   }
