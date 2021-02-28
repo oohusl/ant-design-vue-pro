@@ -577,15 +577,15 @@ export const transactionOwnershipOptions = [
 export const peopleAndVehiclesOptions = [
   {
     label: '全人车分流',
-    value: '全人车分流'
+    value: '1'
   },
   {
     label: '半人车分流',
-    value: '半人车分流'
+    value: '2'
   },
   {
     label: '其他',
-    value: '其他'
+    value: '3'
   }
 ]
 export const parkingSpaceRatioOptions = [
@@ -607,7 +607,7 @@ export const parkingSpaceRatioOptions = [
   },
   {
     label: '大于2.0',
-    value: '2.0'
+    value: '2.0-100'
   }
 ]
 export const volume2019Options = [
@@ -653,6 +653,6 @@ export const volume2019Options = [
   },
   {
     label: '400套以上',
-    value: '400'
+    value: '400-100000'
   }
 ]

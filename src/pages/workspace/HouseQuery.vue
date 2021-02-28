@@ -365,7 +365,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="小区权属">
-            <a-checkbox-group v-model="queryParam.transactionOwnership" :options="transactionOwnershipOptions">
+            <a-checkbox-group v-model="queryParam.transactionOwnerships" :options="transactionOwnershipOptions">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="建筑类型">
@@ -388,11 +388,11 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="车位配比">
-            <a-checkbox-group v-model="queryParam.parkingSpaceRatio" :options="parkingSpaceRatioOptions">
+            <a-checkbox-group v-model="queryParam.parkingSpacesRatios" :options="parkingSpaceRatioOptions">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="成交量">
-            <a-checkbox-group v-model="queryParam.volume2019" :options="volume2019Options">
+            <a-checkbox-group v-model="queryParam.volume2019s" :options="volume2019Options">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
@@ -593,6 +593,8 @@ export default {
         roomArea: [],
         constructionAge: [],
         echelonPerformance: {},
+        parkingSpacesRatios: [],
+        volume2019s: [],
         ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
       },
       detailFlag: 0, // 0 close 1 view 2 edit
@@ -659,6 +661,8 @@ export default {
         roomArea: [],
         constructionAge: [],
         echelonPerformance: {},
+        parkingSpacesRatios: [],
+        volume2019s: [],
         ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
       }
       this.subwayStations = {}
@@ -717,6 +721,20 @@ export default {
         if (two.length > 1) {
           two[1] = two[1] * 1
         }
+        return two
+      })
+
+      requestParameters.parkingSpacesRatios = this.queryParam.parkingSpacesRatios.map(e => {
+        const two = e.split('-')
+        two[0] = two[0] * 1
+        two[1] = two[1] * 1
+        return two
+      })
+
+      requestParameters.volume2019s = this.queryParam.volume2019s.map(e => {
+        const two = e.split('-')
+        two[0] = two[0] * 1
+        two[1] = two[1] * 1
         return two
       })
 

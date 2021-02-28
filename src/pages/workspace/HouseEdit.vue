@@ -92,7 +92,7 @@
             {{ houseSelect.parkingSpacesNumber }}
           </a-descriptions-item>
           <a-descriptions-item label="人车分流">
-            {{ houseSelect.peopleAndVehicles ? '是' : '否' }}
+            {{ houseSelect.peopleAndVehicles }}
           </a-descriptions-item>
           <a-descriptions-item label="容积率">
             {{ houseSelect.volumeRate ? houseSelect.volumeRate + '%' : '' }}
@@ -327,7 +327,7 @@
           </a-descriptions-item>
           <a-descriptions-item label="人车分流">
             <a-select
-              :options="booleanOptions"
+              :options="peopleAndVehiclesOptions"
               v-model="houseSelect.peopleAndVehicles"
               class="col1"
               size="small"
@@ -590,7 +590,8 @@ import {
   subwayOptions,
   areaPlate,
   getLabel,
-  statusMap
+  statusMap,
+  peopleAndVehiclesOptions
 } from '@/api/data'
 import {
   schoolOptions,
@@ -644,6 +645,7 @@ export default {
       loopSummaryOptions,
       booleanOptions,
       subwayOptions,
+      peopleAndVehiclesOptions,
       statusMap,
       loading: false,
       plates: {},
