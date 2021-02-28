@@ -383,7 +383,9 @@
               <a-menu slot="overlay">
                 <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
                 <a-menu-item key="2"> 导入 </a-menu-item>
-                <a-menu-item key="3"> 导出 </a-menu-item>
+                <a-menu-item key="3">
+                  <a download="985.xlsx" id="anchorNewApi" href="#" @click="dataExport">导出</a>
+                </a-menu-item>
               </a-menu>
               <a-button> 操作 <a-icon type="down" /> </a-button>
             </a-dropdown>
@@ -543,6 +545,7 @@ import {
   shoolType
 } from '@/api/school'
 import { AutoComplete, BackTop } from 'ant-design-vue'
+import ExcellentExport from 'excellentexport'
 
 export default {
   name: 'HouseQuery',
@@ -603,6 +606,7 @@ export default {
   },
   mounted () {
     window.addEventListener('scroll', this.windowScroll)
+    window.ExcellentExport = ExcellentExport
   },
   beforeDestroy () {
     window.removeEventListener('scroll', this.windowScroll)
@@ -707,6 +711,81 @@ export default {
         console.log(res)
         this.results = res
       })
+    },
+
+    searchData (size) {
+      const requestParameters = Object.assign({ sort: this.sort, size: size }, this.queryParam)
+      requestParameters.subwayStation = Object.values(this.subwayStations).flat()
+
+      requestParameters.averageLlistedPrice = Array.from(
+        this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)
+      ).map((x) => {
+        const two = x.split('-')
+        two[0] = two[0] * 10000
+        if (two.length > 1) {
+          two[1] = two[1] * 10000
+        }
+        return two
+      })
+      requestParameters.totalPrice = Array.from(
+        this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)
+      ).map((x) => {
+        const two = x.split('-')
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
+      })
+      requestParameters.roomArea = Array.from(
+        this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)
+      ).map((x) => {
+        const two = x.split('-')
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
+      })
+      requestParameters.constructionAge = Array.from(
+        this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
+      ).map((x) => {
+        const two = x.split('-')
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
+      })
+
+      requestParameters.plate = Object.values(this.plates).flat()
+
+      delete requestParameters.ranges
+      delete requestParameters.averageLlistedPriceMin
+      delete requestParameters.averageLlistedPriceMax
+      delete requestParameters.totalPriceMin
+      delete requestParameters.totalPriceMax
+      delete requestParameters.roomAreaMin
+      delete requestParameters.roomAreaMax
+      delete requestParameters.constructionAgeMin
+      delete requestParameters.constructionAgeMax
+
+      // this.queryParam.echelonPerformance = this.echelons.flat()
+      requestParameters.echelonPerformance = Object.values(this.queryParam.echelonPerformance).flat()
+      if (this.queryParam?.isLift?.length !== 1) {
+        delete requestParameters.isLift
+      } else {
+        requestParameters.isLift = requestParameters.isLift[0]
+      }
+
+      if (this.queryParam.checkedList) {
+        this.queryParam.checkedList.forEach((e) => {
+          requestParameters[e] = true
+        })
+        delete requestParameters.checkedList
+      }
+      console.log('loadData request parameters:', requestParameters)
+      return getHouse(requestParameters)
     },
 
     areaReset () {
@@ -919,6 +998,31 @@ export default {
           that.timer = null
         }, 0)
       }
+    },
+    dataExport () {
+      this.searchData(200).then(r => {
+          if (r.length < 1) {
+            return
+          }
+          let excelData = r.map(e => {
+            delete e.metroInfo
+            delete e.schoolDistrictInfo
+            return Object.values(e)
+          })
+          excelData = [Object.keys(r[0]), ...excelData]
+          console.log(excelData)
+
+          return ExcellentExport.convert({
+                    anchor: 'anchorNewApi',
+                    filename: '985',
+                    format: 'xlsx'
+                }, [{
+                    name: '房源信息',
+                    from: {
+                        array: excelData
+                    }
+                }])
+        })
     }
   }
 }

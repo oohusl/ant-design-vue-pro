@@ -16,6 +16,8 @@ export const statusMap = {
     text: '异常'
   }
 }
+
+// 上海市示范幼儿园、上海市一级幼儿园、上海市二级幼儿园、长宁区示范幼儿园、宝山区示范幼儿园、闵行区示范幼儿园、浦东新区示范幼儿园、新开园、其他
 export const shoolType = [
   {
     type: '幼儿园',
@@ -53,10 +55,6 @@ export const shoolType = [
     {
       'label': '三梯队',
       'value': '三梯队'
-    },
-    {
-      'label': '菜小',
-      'value': '菜小'
     },
     {
       'label': '其他',

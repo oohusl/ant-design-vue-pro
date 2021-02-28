@@ -542,7 +542,7 @@
           </a-select>
         </a-form-item>
         <a-form-item>
-          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload">
+          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload" @preview="handlePreview">
             <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -597,6 +597,15 @@ import {
   schoolDetail
 } from '@/api/school'
 
+function getBase64 (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
+}
+
 export default {
   name: 'HouseSelect',
   components: {
@@ -646,7 +655,9 @@ export default {
       photoType: '1',
       fileList: [],
       uploading: false,
-      toDelete: []
+      toDelete: [],
+      previewVisible: false,
+      previewImage: ''
     }
   },
   created () {
@@ -662,6 +673,13 @@ export default {
       this.newHouse()
     }
   },
+  async handlePreview (file) {
+      if (!file.url && !file.preview) {
+        file.preview = await getBase64(file.originFileObj)
+      }
+      this.previewImage = file.url || file.preview
+      this.previewVisible = true
+    },
   updated () {
   },
   methods: {
@@ -929,7 +947,7 @@ export default {
       this.fileList = []
       photoQuery(this.houseSelect.id, this.photoType).then(e => {
             e.forEach(image => {
-              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: 'http://47.98.42.1/media/' + image.url })
+              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
             })
           })
     },
