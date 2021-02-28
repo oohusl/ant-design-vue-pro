@@ -104,6 +104,9 @@
               <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, subwayStations[key])">{{ key + '-' + p }}</a-tag>
             </template>
           </a-form-item>
+          <a-form-item label="地铁距离">
+            <a-input :style="{ width: '80px' }" v-model="queryParam.subwayDistance" size="small" suffix="米"> </a-input>
+          </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
@@ -361,6 +364,10 @@
               <a-checkbox value="其他"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
+          <a-form-item v-if="advanced" label="小区权属">
+            <a-checkbox-group v-model="queryParam.transactionOwnership" :options="transactionOwnershipOptions">
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item v-if="advanced" label="建筑类型">
             <a-checkbox-group v-model="queryParam.buildingType">
               <a-checkbox value="塔楼"> 塔楼 </a-checkbox>
@@ -374,6 +381,18 @@
               <a-checkbox :value="1"> 有电梯 </a-checkbox>
               <a-checkbox :value="0"> 无电梯 </a-checkbox>
               <a-checkbox :value="2"> 其他 </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="人车分流">
+            <a-checkbox-group v-model="queryParam.peopleAndVehicles" :options="peopleAndVehiclesOptions">
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="车位配比">
+            <a-checkbox-group v-model="queryParam.parkingSpaceRatio" :options="parkingSpaceRatioOptions">
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="成交量">
+            <a-checkbox-group v-model="queryParam.volume2019" :options="volume2019Options">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
@@ -536,7 +555,11 @@ import {
   loopSummaryOptions,
   booleanOptions,
   subwayOptions,
-  areaPlate
+  areaPlate,
+  transactionOwnershipOptions,
+  peopleAndVehiclesOptions,
+  parkingSpaceRatioOptions,
+  volume2019Options
 } from '@/api/data'
 import {
   schoolOptions,
@@ -588,6 +611,10 @@ export default {
       loopSummaryOptions,
       booleanOptions,
       totalPriceOptions,
+      transactionOwnershipOptions,
+      peopleAndVehiclesOptions,
+      parkingSpaceRatioOptions,
+      volume2019Options,
       loading: false,
       plates: {},
       subwayStations: {},
