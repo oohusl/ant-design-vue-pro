@@ -552,3 +552,107 @@ export function getLabel (value, options) {
   }
   return value
 }
+export const transactionOwnershipOptions = [
+  {
+    label: '商品房',
+    value: '商品房'
+  },
+  {
+    label: '动迁房',
+    value: '动迁房'
+  },
+  {
+    label: '商住房',
+    value: '商住房'
+  },
+  {
+    label: '售后公房',
+    value: '售后公房'
+  },
+  {
+    label: '其他',
+    value: '其他'
+  }
+]
+export const peopleAndVehiclesOptions = [
+  {
+    label: '全人车分流',
+    value: '全人车分流'
+  },
+  {
+    label: '半人车分流',
+    value: '半人车分流'
+  },
+  {
+    label: '其他',
+    value: '其他'
+  }
+]
+export const parkingSpaceRatioOptions = [
+  {
+    label: '小于0.5',
+    value: '0-0.5'
+  },
+  {
+    label: '0.5-1.0',
+    value: '0.5-1.0'
+  },
+  {
+    label: '1.0-1.5',
+    value: '1.0-1.5'
+  },
+  {
+    label: '1.5-2.0',
+    value: '1.5-2.0'
+  },
+  {
+    label: '大于2.0',
+    value: '2.0'
+  }
+]
+export const volume2019Options = [
+  {
+    label: '5套以下',
+    value: '0-5'
+  },
+  {
+    label: '5-10套',
+    value: '5-10'
+  },
+  {
+    label: '10-50套',
+    value: '10-50'
+  },
+  {
+    label: '50-100套',
+    value: '50-100'
+  },
+  {
+    label: '100-150套',
+    value: '100-150'
+  },
+  {
+    label: '150-200套',
+    value: '150-200'
+  },
+  {
+    label: '200-250套',
+    value: '200-250'
+  },
+  {
+    label: '250-300套',
+    value: '250-3000'
+  },
+  {
+    label: '300-350套',
+    value: '300-350'
+  },
+  {
+    label: '350-400套',
+    value: '350-400'
+  },
+  {
+    label: '400套以上',
+    value: '400'
+  }
+]
