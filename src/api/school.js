@@ -77,10 +77,6 @@ export const shoolType = [
         'value': '三梯队'
       },
       {
-        'label': '四梯队',
-        'value': '四梯队'
-      },
-      {
         'label': '其他',
         'value': '其他'
       }

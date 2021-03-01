@@ -252,7 +252,7 @@ export const loopSummaryOptions = [
 export const averageLlistedPriceOptions = [
   {
     'label': '2万以下',
-    'value': '2-2'
+    'value': '0-2'
   },
   {
     'label': '2-3万',
@@ -310,7 +310,7 @@ export const averageLlistedPriceOptions = [
 export const totalPriceOptions = [
   {
     'label': '200万以下',
-    'value': '200-200'
+    'value': '0-200'
   },
   {
     'label': '200-300万',
@@ -368,7 +368,7 @@ export const totalPriceOptions = [
 export const roomAreaOptions = [
   {
     'label': '50平方以下',
-    'value': '50-50'
+    'value': '0-50'
   },
   {
     'label': '50-60平方',
