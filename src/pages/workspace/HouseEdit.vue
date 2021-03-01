@@ -92,7 +92,7 @@
             {{ houseSelect.parkingSpacesNumber }}
           </a-descriptions-item>
           <a-descriptions-item label="人车分流">
-            {{ houseSelect.peopleAndVehicles }}
+            {{ getLabel(houseSelect.peopleAndVehicles, peopleAndVehiclesOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="容积率">
             {{ houseSelect.volumeRate ? houseSelect.volumeRate + '%' : '' }}
