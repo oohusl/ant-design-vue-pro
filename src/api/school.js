@@ -39,7 +39,7 @@ export const shoolType = [
     },
     {
       'label': '其他',
-      'value': '其他'
+      'value': '幼儿园-其他'
     }]
   },
   {
@@ -58,7 +58,7 @@ export const shoolType = [
     },
     {
       'label': '其他',
-      'value': '其他'
+      'value': '小学-其他'
     }]
   },
   {
@@ -78,7 +78,7 @@ export const shoolType = [
       },
       {
         'label': '其他',
-        'value': '其他'
+        'value': '中学-其他'
       }
     ]
   }, {
