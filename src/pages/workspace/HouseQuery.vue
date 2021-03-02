@@ -173,13 +173,16 @@
                 v-for="p in queryParam.schoolType"
                 :key="p"
                 :color="colors[1]"
+                :closable="true"
                 @close="handleTagClose(rangTag, queryParam.schoolType)"
               >{{ p }}</a-tag
               >
               <template v-for="(value, key) in queryParam.echelonPerformance">
                 <a-tag
-                  v-for="v in value"
-                  :key="v"
+                  v-for="(v, i) in value"
+                  :key="v + i"
+                  :color="colors[1]"
+                  :closable="true"
                   @close="handleTagClose(rangTag, queryParam.echelonPerformance)"
                 >{{ key }} - {{ v.replaceAll('中学-', '').replaceAll('小学-', '') }}</a-tag
                 >
@@ -387,13 +390,77 @@
             <a-checkbox-group v-model="queryParam.peopleAndVehicles" :options="peopleAndVehiclesOptions">
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item v-if="advanced" label="车位配比">
-            <a-checkbox-group v-model="queryParam.parkingSpacesRatios" :options="parkingSpaceRatioOptions">
-            </a-checkbox-group>
+          <a-form-item label="车位配比" v-if="advanced">
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.parkingSpacesRatios"
+              size="small"
+              placeholder="选择车位配比"
+              :options="parkingSpaceRatioOptions"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.parkingSpacesRatioMin" size="small" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.parkingSpacesRatioMax" size="small" suffix="%">
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="addToRang(queryParam.ranges.parkingSpacesRatios, queryParam.parkingSpacesRatioMin, queryParam.parkingSpacesRatioMax)"
+                />
+              </a-input>
+            </a-form-item>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.parkingSpacesRatios, queryParam.ranges.parkingSpacesRatios)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.parkingSpacesRatios,queryParam.ranges.parkingSpacesRatios)"
+              color="pink"
+            >{{ rangTag }}</a-tag
+            >
           </a-form-item>
-          <a-form-item v-if="advanced" label="成交量">
-            <a-checkbox-group v-model="queryParam.volume2019s" :options="volume2019Options">
-            </a-checkbox-group>
+          <a-form-item label="成交量" v-if="advanced">
+            <a-select
+              style="width: 120px"
+              v-model="queryParam.volume2019s"
+              size="small"
+              placeholder="选择成交量"
+              :options="volume2019Options"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true"
+            />
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.volume2019Min" size="small" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
+              <a-input style="width: 100%" v-model="queryParam.volume2019Max" size="small" suffix="套">
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="addToRang(queryParam.ranges.volume2019s, queryParam.volume2019Min, queryParam.volume2019Max)"
+                />
+              </a-input>
+            </a-form-item>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.volume2019s, queryParam.ranges.volume2019s)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.volume2019s,queryParam.ranges.volume2019s)"
+              color="pink"
+            >{{ rangTag + '套' }}</a-tag
+            >
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a-button @click="doSearch()" type="primary"> 查询 </a-button>
@@ -596,7 +663,7 @@ export default {
         echelonPerformance: {},
         parkingSpacesRatios: [],
         volume2019s: [],
-        ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
+        ranges: { price: [], total: [], roomArea: [], constructionAge: [], parkingSpacesRatios: [], volume2019s: [] }
       },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
@@ -1055,6 +1122,9 @@ export default {
           console.info(excelData)
           this.excelData = excelData
         })
+    },
+    search () {
+      console.log('search')
     }
   }
 }

@@ -4633,6 +4633,11 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
+excellentexport@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.npm.taobao.org/excellentexport/download/excellentexport-3.6.0.tgz#98cf7d11a9c820d217dab3366fb37c5bfd58e134"
+  integrity sha1-mM99EanIINIX2rM2b7N8W/1Y4TQ=
+
 exec-sh@^0.3.2:
   version "0.3.4"
   resolved "https://registry.npm.taobao.org/exec-sh/download/exec-sh-0.3.4.tgz#3a018ceb526cc6f6df2bb504b2bfe8e3a4934ec5"
