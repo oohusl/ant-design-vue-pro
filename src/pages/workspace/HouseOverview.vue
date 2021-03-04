@@ -104,7 +104,89 @@
           </a-layout-content>
         </a-layout>
       </a-layout-header>
-      <a-layout-content></a-layout-content>
+      <a-layout-content>
+        <div class="house-type">
+          <a-tabs default-active-key="1" >
+            <a-tab-pane key="1" tab="户型分析">
+              <a-layout :style="{ background: '#ffffff', height: '200px' }" class="house-type-item">
+                <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
+                  <img :src="`/house/${houseSelect.id % 10}.webp`" />
+                </a-layout-sider>
+                <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px'}">
+                  <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left', width: '300px' }">
+                    <a-layout-header
+                      :style="{
+                        background: '#ffffff',
+                        padding: 0,
+                        color: 'rgba(0, 0, 0, 0.85)',
+                        'font-size': '20px',
+                        height: '24px',
+                        'line-height': '36px',
+                        cursor: 'pointer',
+                        marginBottom: '24px'
+                      }"
+                    >
+                      {{ houseSelect.communityName }} <a-tag color="green" size="sm">在售</a-tag>
+                    </a-layout-header>
+                    <a-layout-content
+                      :style="{
+                        background: '#ffffff',
+                        padding: 0,
+                        display: 'flex',
+                        'justify-content': 'center',
+                        'algin-item': 'flex-end',
+                      }"
+                    >
+                      <a-descriptions title="" :column="4">
+                        <a-descriptions-item label="朝向" :span="2">
+                          南
+                        </a-descriptions-item>
+                        <a-descriptions-item label="类型" :span="2">
+                          平层
+                        </a-descriptions-item>
+                        <a-descriptions-item label="户型存量" :span="4">
+                          0套
+                        </a-descriptions-item>
+                        <a-descriptions-item label="户型分析" :span="4">
+                          户型方正，采光充足
+                        </a-descriptions-item>
+                      </a-descriptions>
+                    </a-layout-content>
+                  </a-layout>
+                </a-layout-content>
+                <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
+                  <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'center' }">
+                    <a-layout-header
+                      :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
+                      width="200"
+                    >
+                      总价约<span style="font-size: 24px; font-weight: bold">1111万元</span
+                      >
+                    </a-layout-header>
+                    <a-layout-content
+                      :style="{
+                        background: '#ffffff',
+                        padding: 0,
+                        display: 'flex',
+                        'justify-content': 'center',
+                        'align-items': 'flex-end',
+                      }"
+                    >
+                      <a-button >了解户型报价</a-button>
+                    </a-layout-content>
+                  </a-layout>
+                </a-layout-sider>
+              </a-layout>
+            </a-tab-pane>
+            <a-tab-pane key="2" tab="看房日记">
+              看房日记
+            </a-tab-pane>
+            <a-tab-pane key="3" tab="楼盘相册">
+              楼盘相册
+            </a-tab-pane>
+          </a-tabs>
+        </div>
+      </a-layout-content>
     </a-layout>
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
@@ -360,5 +442,41 @@ export default {
 }
 .price >>> .ant-descriptions-item-content span{
   font-size: 22px;
+}
+.house-type {
+  overflow: hidden;
+  padding: 24px;
+}
+.house-type > .ant-tabs-nav-wrap {
+  background: #F5F5F5;
+}
+.house-type > .ant-tabs-card > .ant-tabs-content {
+  height: 120px;
+  margin-top: -16px;
+}
+
+.house-type > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
+  background: #fff;
+  padding: 16px;
+}
+
+.house-type > .ant-tabs-card > .ant-tabs-bar {
+  border-color: #fff;
+}
+
+.house-type > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
+  border-color: transparent;
+  background: transparent;
+}
+
+.house-type > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
+  border-color: #fff;
+  background: #fff;
+}
+img {
+  width: 100%;
+}
+.house-type-item >>> .ant-descriptions-item-label {
+  line-height: 2.5;
 }
 </style>
