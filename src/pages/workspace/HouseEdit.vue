@@ -542,7 +542,13 @@
           </a-select>
         </a-form-item>
         <a-form-item>
-          <a-upload :file-list="fileList" list-type="picture-card" :remove="handleRemove" :before-upload="beforeUpload" :preview-file="handlePreview">
+          <a-upload
+            :file-list="fileList"
+            accept="image/*"
+            list-type="picture-card"
+            :remove="handleRemove"
+            :before-upload="beforeUpload"
+            @preview="handlePreview">
             <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -569,6 +575,9 @@
           </a-button>
         </a-form-item>
       </a-form>
+    </a-modal>
+    <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
+      <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
 
@@ -955,24 +964,26 @@ export default {
       newFileList.splice(index, 1)
       this.fileList = newFileList
     },
-      async handlePreview (file) {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj)
-      }
+    handleCancel () {
+      this.previewVisible = false
+    },
+    handlePreview (file) {
       this.previewImage = file.url || file.preview
       this.previewVisible = true
-  },
+    },
     beforeUpload (file) {
-      this.fileList = [...this.fileList, file]
+      getBase64(file).then(url => {
+        this.fileList = [...this.fileList, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+      })
       return false
     },
     doUpload () {
       this.uploading = true
       const up = []
       this.fileList.forEach(file => {
-        if (!file.url) {
+        if (file.file) {
           const formData = new FormData()
-          formData.append('file', file)
+          formData.append('file', file.file)
           formData.append('communityId', this.houseSelect.id)
           formData.append('type', this.photoType)
           up.push(photoUpload(formData))
