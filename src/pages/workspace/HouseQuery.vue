@@ -853,10 +853,7 @@ export default {
         return two
       })
 
-      if (this.queryParam.subwayDistance) {
-        const distances = (this.queryParam.subwayDistance || '').split('-')
-        requestParameters.distances = [[distances[0] * 1, distances[1] * 1]]
-      }
+      requestParameters.distances = this.gatherSelectParamter(this.queryParam.subwayDistance, requestParameters.ranges.subwayDistance)
 
       requestParameters.plate = Object.values(this.plates).flat()
 
@@ -997,12 +994,22 @@ export default {
       }
     },
     gatherSelect (arr, set) {
-      if (arr) {
-        return new Set(arr.concat(set))
-      }
-      return set
+      arr = arr || []
+      set = set || []
+      return new Set(arr.concat(set))
     },
-
+    gatherSelectParamter (arr, set) {
+      return Array.from(
+        this.gatherSelect(arr, set)
+      ).map((x) => {
+        const two = x.split('-')
+        two[0] = two[0] * 1
+        if (two.length > 1) {
+          two[1] = two[1] * 1
+        }
+        return two
+      })
+    },
     translateRang (rang, unit, options) {
       const r = options.filter((e) => {
         return e.value === rang
