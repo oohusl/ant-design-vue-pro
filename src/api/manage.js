@@ -10,7 +10,8 @@ const api = {
   orgTree: '/org/tree',
   house: '/community-infos/query',
   editHouse: '/community-infos',
-  constants: '/set/constant-infos'
+  constants: '/set/constant-infos',
+  queryAnalysis: '/house-analysis/queryByCommunityId'
 }
 
 export default api
@@ -128,5 +129,12 @@ export function photoDelete (id) {
   return request({
     url: `/community-infos/fileDeletion/${id}`,
     method: 'get'
+  })
+}
+export function queryAnalysis (id, severalBedrooms) {
+  return request({
+    url: api.queryAnalysis,
+    method: 'post',
+    params: { communityId: id, severalBedrooms: severalBedrooms }
   })
 }

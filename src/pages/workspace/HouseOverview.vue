@@ -179,7 +179,28 @@
               </a-layout>
             </a-tab-pane>
             <a-tab-pane key="2" tab="看房日记">
-              看房日记
+              <div class="house-diary">
+                <a-tabs default-active-key="1" >
+                  <a-tab-pane key="1" tab="楼盘点评">
+                    <a-layout>
+                      <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }">
+                        <div class="yelp-option yelp-all">
+                          <span size="small" @click="selectAll()" :class="yelpSelectedAll?'active':null">全部</span>
+                        </div>
+                        <div v-for="(y, i) of yelpTypeOptions" :key="i+y.label" class="yelp-option">
+                          <span :class="y.active?'active':null" @click="triggerYelpType(y)">{{ y.label +'('+ y.count +')' }}</span>
+                        </div>
+                      </a-layout-header>
+                      <a-layout-content>
+                        <div class=""></div>
+                      </a-layout-content>
+                    </a-layout>
+                  </a-tab-pane>
+                  <a-tab-pane key="2" tab="楼盘问问">
+                    楼盘问问
+                  </a-tab-pane>
+                </a-tabs>
+              </div>
             </a-tab-pane>
             <a-tab-pane key="3" tab="楼盘相册">
               楼盘相册
@@ -212,7 +233,7 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-import { photoQuery } from '@/api/manage'
+import { photoQuery, queryAnalysis } from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -264,7 +285,33 @@ export default {
       // { title: 'sdjds', url: '/house/4.webp' },
       // { title: '4sdsa', url: '/house/1.webp' }
       ],
-      scroolPosition: 0
+      scroolPosition: 0,
+      yelpTypeOptions: [{
+        label: '住房舒适度',
+        active: false,
+        count: 1
+      },
+      {
+        label: '周边医院',
+        active: false,
+        count: 1
+      },
+      {
+        label: '交通出行',
+        active: false,
+        count: 3
+      },
+      {
+        label: '楼盘优点',
+        active: false,
+        count: 2
+      },
+      {
+        label: '商业设施',
+        active: false,
+        count: 1
+      }],
+      yelpSelectedAll: true
     }
   },
   created () {
@@ -273,6 +320,7 @@ export default {
     console.log(this.$route.params)
     this.houseSelect = JSON.parse(this.$route.query.houseSelect)
     this.queryPhotos()
+    this.queryAnalysisById()
   },
   methods: {
     closeDetail () {
@@ -340,6 +388,23 @@ export default {
         scroll.style.transform = `translateX(${ position }px)`
       }
       this.scroolPosition = position
+    },
+    queryAnalysisById () {
+      queryAnalysis(this.houseSelect.communityId)
+    },
+    triggerYelpType (yelp) {
+      this.yelpSelectedAll = false
+      this.yelpTypeOptions.forEach(y => {
+        if (y.label === yelp.label) {
+          y.active = !y.active
+        }
+      })
+    },
+    selectAll () {
+      this.yelpSelectedAll = true
+      this.yelpTypeOptions.forEach(y => {
+          y.active = false
+      })
     }
   }
 }
@@ -447,10 +512,10 @@ export default {
   overflow: hidden;
   padding: 24px;
 }
-.house-type > .ant-tabs-nav-wrap {
+.house-type >>> .ant-tabs-nav-wrap {
   background: #F5F5F5;
 }
-.house-type > .ant-tabs-card > .ant-tabs-content {
+/* .house-type > .ant-tabs-card > .ant-tabs-content {
   height: 120px;
   margin-top: -16px;
 }
@@ -472,6 +537,47 @@ export default {
 .house-type > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
   border-color: #fff;
   background: #fff;
+} */
+.house-diary {
+  overflow: hidden;
+  padding: 0;
+}
+.house-diary >>> .ant-tabs-bar{
+  border: unset;
+  margin: 0 0 10px 0;
+}
+.house-diary >>> .ant-tabs-nav-wrap {
+  background: #ffffff;
+}
+.house-diary >>> .ant-tabs-ink-bar {
+  background-color: transparent;
+}
+.house-diary >>> .ant-tabs-nav .ant-tabs-tab {
+  padding: 0px 16px;
+}
+.yelp-option {
+    width: 127px;
+    float: left;
+    padding-right: 10px;
+}
+.yelp-option.yelp-all {
+  width: 80px;
+}
+.yelp-option span {
+  color: #262626;
+  cursor: pointer;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 2px;
+  box-sizing: border-box;
+  display: inline-block;
+  width: 100%;
+}
+.yelp-option span.active {
+  color: #B71C2B;
+  border: 1px solid #B71C2B;
+  background: rgba(183, 28, 43, 0.08);
 }
 img {
   width: 100%;
