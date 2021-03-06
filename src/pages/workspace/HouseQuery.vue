@@ -105,7 +105,51 @@
             </template>
           </a-form-item>
           <a-form-item label="地铁距离">
-            <a-select v-model="queryParam.subwayDistance" :options="metroDistanceOption" size="small" style="width: 120px"></a-select>
+            <a-select
+              v-model="queryParam.subwayDistance"
+              :options="metroDistanceOption"
+              size="small"
+              style="width: 120px"
+              :showSearch="true"
+              :allowClear="true"
+              :maxTagCount="0"
+              mode="multiple"
+              :showArrow="true">
+            </a-select>
+            <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
+              <a-input type="number" style="width: 100%" size="small" v-model="tempParam.minDistance" />
+            </a-form-item>
+            <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
+            <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
+              <a-input
+                type="number"
+                style="width: 100%"
+                size="small"
+                suffix="米"
+                v-model="tempParam.maxDistance"
+              >
+                <a-icon
+                  slot="addonAfter"
+                  type="plus"
+                  aria-disabled="true"
+                  @click="
+                    addToRang(
+                      queryParam.ranges.subwayDistance,
+                      tempParam.minDistance,
+                      tempParam.maxDistance
+                    )
+                  "
+                />
+              </a-input>
+            </a-form-item>
+            <a-tag
+              v-for="rangTag in gatherSelect(queryParam.subwayDistance, queryParam.ranges.subwayDistance)"
+              :key="rangTag"
+              :closable="true"
+              @close="handleTagClose(rangTag, queryParam.subwayDistance, queryParam.ranges.subwayDistance)"
+              color="pink"
+            >{{ translateRang(rangTag, '米', metroDistanceOption) }}</a-tag
+            >
           </a-form-item>
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
@@ -480,7 +524,7 @@
               {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
             </a>
           </a-form-item>
-        </a-form>
+          </a-form-item></a-form>
         <!-- 列表 -->
         <a-card :bordered="false">
           <a-layout>
@@ -663,7 +707,9 @@ export default {
         echelonPerformance: {},
         parkingSpacesRatios: [],
         volume2019s: [],
-        ranges: { price: [], total: [], roomArea: [], constructionAge: [], parkingSpacesRatios: [], volume2019s: [] }
+        ranges: { price: [], total: [], roomArea: [], constructionAge: [], parkingSpacesRatios: [], volume2019s: [], subwayDistance: [] }
+      },
+      tempParam: {
       },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
@@ -950,9 +996,11 @@ export default {
         arr.push(`${min}-${max}`)
       }
     },
-
     gatherSelect (arr, set) {
-      return new Set(arr.concat(set))
+      if (arr) {
+        return new Set(arr.concat(set))
+      }
+      return set
     },
 
     translateRang (rang, unit, options) {

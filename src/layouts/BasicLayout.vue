@@ -14,7 +14,7 @@
     <template v-slot:menuHeaderRender>
       <div>
         <img src="../assets/logo.png" alt="985" style="cursor: pointer" @click="$router.push({ path: '/house/query' })"/>
-        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.4</span></h1>
+        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.5</span></h1>
       </div>
     </template>
 
