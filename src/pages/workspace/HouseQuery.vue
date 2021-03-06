@@ -134,7 +134,7 @@
                   aria-disabled="true"
                   @click="
                     addToRang(
-                      queryParam.ranges.subwayDistance,
+                      tempParam.subwayDistanceRang,
                       tempParam.minDistance,
                       tempParam.maxDistance
                     )
@@ -143,10 +143,10 @@
               </a-input>
             </a-form-item>
             <a-tag
-              v-for="rangTag in gatherSelect(queryParam.subwayDistance, queryParam.ranges.subwayDistance)"
+              v-for="rangTag in gatherSelect(queryParam.subwayDistance, tempParam.subwayDistanceRang)"
               :key="rangTag"
               :closable="true"
-              @close="handleTagClose(rangTag, queryParam.subwayDistance, queryParam.ranges.subwayDistance)"
+              @close="handleTagClose(rangTag, queryParam.subwayDistance, tempParam.subwayDistanceRang)"
               color="pink"
             >{{ translateRang(rangTag, '米', metroDistanceOption) }}</a-tag
             >
@@ -448,26 +448,26 @@
               :showArrow="true"
             />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.parkingSpacesRatioMin" size="small" />
+              <a-input style="width: 100%" v-model="tempParam.parkingSpacesRatioMin" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.parkingSpacesRatioMax" size="small" suffix="%">
+              <a-input style="width: 100%" v-model="tempParam.parkingSpacesRatioMax" size="small" suffix="%">
                 <a-icon
                   slot="addonAfter"
                   type="plus"
                   aria-disabled="true"
-                  @click="addToRang(queryParam.ranges.parkingSpacesRatios, queryParam.parkingSpacesRatioMin, queryParam.parkingSpacesRatioMax)"
+                  @click="addToRang(tempParam.parkingSpacesRatioRang, tempParam.parkingSpacesRatioMin, tempParam.parkingSpacesRatioMax)"
                 />
               </a-input>
             </a-form-item>
             <a-tag
-              v-for="rangTag in gatherSelect(queryParam.parkingSpacesRatios, queryParam.ranges.parkingSpacesRatios)"
+              v-for="rangTag in gatherSelect(queryParam.parkingSpacesRatios, tempParam.parkingSpacesRatioRang)"
               :key="rangTag"
               :closable="true"
-              @close="handleTagClose(rangTag, queryParam.parkingSpacesRatios,queryParam.ranges.parkingSpacesRatios)"
+              @close="handleTagClose(rangTag, queryParam.parkingSpacesRatios,tempParam.parkingSpacesRatioRang)"
               color="pink"
-            >{{ rangTag }}</a-tag
+            >{{ translateRang(rangTag, '', parkingSpaceRatioOptions) }}</a-tag
             >
           </a-form-item>
           <a-form-item label="成交量" v-if="advanced">
@@ -484,27 +484,26 @@
               :showArrow="true"
             />
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.volume2019Min" size="small" />
+              <a-input style="width: 100%" v-model="tempParam.volume2019Min" size="small" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
-              <a-input style="width: 100%" v-model="queryParam.volume2019Max" size="small" suffix="套">
+              <a-input style="width: 100%" v-model="tempParam.volume2019Max" size="small" suffix="套">
                 <a-icon
                   slot="addonAfter"
                   type="plus"
                   aria-disabled="true"
-                  @click="addToRang(queryParam.ranges.volume2019s, queryParam.volume2019Min, queryParam.volume2019Max)"
+                  @click="addToRang(tempParam.volume2019Rang, tempParam.volume2019Min, tempParam.volume2019Max)"
                 />
               </a-input>
             </a-form-item>
             <a-tag
-              v-for="rangTag in gatherSelect(queryParam.volume2019s, queryParam.ranges.volume2019s)"
+              v-for="rangTag in gatherSelect(queryParam.volume2019s, tempParam.volume2019Rang)"
               :key="rangTag"
               :closable="true"
-              @close="handleTagClose(rangTag, queryParam.volume2019s,queryParam.ranges.volume2019s)"
+              @close="handleTagClose(rangTag, queryParam.volume2019s, tempParam.volume2019Rang)"
               color="pink"
-            >{{ rangTag + '套' }}</a-tag
-            >
+            >{{ translateRang(rangTag, '套', volume2019Options) }}</a-tag>
           </a-form-item>
           <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
             <a-button @click="doSearch()" type="primary"> 查询 </a-button>
@@ -709,8 +708,7 @@ export default {
         volume2019s: [],
         ranges: { price: [], total: [], roomArea: [], constructionAge: [], parkingSpacesRatios: [], volume2019s: [], subwayDistance: [] }
       },
-      tempParam: {
-      },
+      tempParam: { parkingSpacesRatioRang: [], volume2019Rang: [], subwayDistanceRang: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
@@ -780,6 +778,7 @@ export default {
         volume2019s: [],
         ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
       }
+      this.tempParam = { parkingSpacesRatioRang: [], volume2019Rang: [], subwayDistanceRang: [] }
       this.subwayStations = {}
       this.plates = {}
       this.areaReset()
@@ -797,65 +796,15 @@ export default {
     makeSearchRequest (size) {
       const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
-
-      requestParameters.averageLlistedPrice = Array.from(
-        this.gatherSelect(requestParameters.averageLlistedPrice, requestParameters.ranges.price)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 10000
-        if (two.length > 1) {
-          two[1] = two[1] * 10000
-        }
-        return two
-      })
-      requestParameters.totalPrice = Array.from(
-        this.gatherSelect(requestParameters.totalPrice, requestParameters.ranges.total)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-      requestParameters.roomArea = Array.from(
-        this.gatherSelect(requestParameters.roomArea, requestParameters.ranges.roomArea)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-      requestParameters.constructionAge = Array.from(
-        this.gatherSelect(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
-      ).map((x) => {
-        const two = x.split('-')
-        two[0] = two[0] * 1
-        if (two.length > 1) {
-          two[1] = two[1] * 1
-        }
-        return two
-      })
-
-      requestParameters.parkingSpacesRatios = this.queryParam.parkingSpacesRatios.map(e => {
-        const two = e.split('-')
-        two[0] = two[0] * 1
-        two[1] = two[1] * 1
-        return two
-      })
-
-      requestParameters.volume2019s = this.queryParam.volume2019s.map(e => {
-        const two = e.split('-')
-        two[0] = two[0] * 1
-        two[1] = two[1] * 1
-        return two
-      })
-
-      requestParameters.distances = this.gatherSelectParamter(this.queryParam.subwayDistance, requestParameters.ranges.subwayDistance)
-
       requestParameters.plate = Object.values(this.plates).flat()
+
+      requestParameters.averageLlistedPrice = this.gatherSelectParamter(requestParameters.averageLlistedPrice, requestParameters.ranges.price, 10000)
+      requestParameters.totalPrice = this.gatherSelectParamter(requestParameters.totalPrice, requestParameters.ranges.total)
+      requestParameters.roomArea = this.gatherSelectParamter(requestParameters.roomArea, requestParameters.ranges.roomArea)
+      requestParameters.constructionAge = this.gatherSelectParamter(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
+      requestParameters.parkingSpacesRatios = this.gatherSelectParamter(this.queryParam.parkingSpacesRatios, this.tempParam.parkingSpacesRatioRang)
+      requestParameters.volume2019s = this.gatherSelectParamter(this.queryParam.volume2019s, this.tempParam.volume2019Rang)
+      requestParameters.distances = this.gatherSelectParamter(this.queryParam.subwayDistance, this.tempParam.subwayDistanceRang)
 
       delete requestParameters.ranges
       delete requestParameters.averageLlistedPriceMin
@@ -998,17 +947,20 @@ export default {
       set = set || []
       return new Set(arr.concat(set))
     },
-    gatherSelectParamter (arr, set) {
-      return Array.from(
-        this.gatherSelect(arr, set)
-      ).map((x) => {
+    rangToValue (arr, factor = 1) {
+      return arr.map((x) => {
         const two = x.split('-')
-        two[0] = two[0] * 1
+        two[0] = two[0] * factor
         if (two.length > 1) {
-          two[1] = two[1] * 1
+          two[1] = two[1] * factor
         }
         return two
       })
+    },
+    gatherSelectParamter (arr, set, factor = 1) {
+      return this.rangToValue(Array.from(
+        this.gatherSelect(arr, set)
+      ))
     },
     translateRang (rang, unit, options) {
       const r = options.filter((e) => {
