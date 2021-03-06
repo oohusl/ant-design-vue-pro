@@ -27,12 +27,15 @@
               </template>
             </div>
           </a-layout-content>
-          <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
+          <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '300px', 'min-width': '300px' }">
             <a-button @click="editHouse()">
-              编辑
+              信息编辑
             </a-button>
             <a-button @click="editImage()" v-if="houseSelect.id">
               上传图片
+            </a-button>
+            <a-button @click="houseTypeEdit()" v-if="houseSelect.id">
+              房型分析
             </a-button>
           </a-layout-sider>
         </a-layout>
@@ -579,6 +582,74 @@
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
+    <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="800px">
+      <a-form
+        :label-col="{ span: 3 }"
+        :wrapper-col="{ span: 5 }"
+      >
+        <a-form-item
+          label="楼盘名称">
+          <a-input :value="houseSelect.communityName" :disabled="true"/>
+        </a-form-item>
+        <a-form-item label="房屋朝向">
+          <a-input addon-after="室"></a-input><a-input addon-after="厅"></a-input><a-input addon-after="厨"></a-input><a-input addon-after="卫"></a-input>
+        </a-form-item>
+        <a-form-item label="房屋朝向">
+          <a-select aria-placeholder="请选择"></a-select>
+        </a-form-item>
+        <a-form-item label="建筑面积">
+          <a-input addon-after="m²"></a-input>
+        </a-form-item>
+        <a-form-item label="房屋层高">
+          <a-input addon-after="米"></a-input>
+        </a-form-item>
+        <a-form-item label="房屋类型">
+          <a-select aria-placeholder="请选择"></a-select>
+        </a-form-item>
+        <a-form-item label="参考单价">
+          <a-input addon-after="元"></a-input>
+        </a-form-item>
+        <a-form-item label="参考总价">
+          <a-input addon-after="万元"></a-input>
+        </a-form-item>
+        <a-form-item label="户型分析">
+          <a-input></a-input>
+        </a-form-item>
+        <a-form-item>
+          <a-upload
+            :file-list="fileList"
+            accept="image/*"
+            list-type="picture-card"
+            :remove="handleRemove"
+            :before-upload="beforeUpload"
+            @preview="handlePreview">
+            <div>
+              <a-icon type="plus" />
+              <div class="ant-upload-text">
+                上传图片
+              </div>
+            </div>
+          </a-upload>
+        </a-form-item>
+        <a-form-item>
+          <a-button
+            type="primary"
+            :loading="uploading"
+            style="margin-top: 16px"
+            @click="handleUpload"
+          >
+            {{ uploading ? '处理中' : '提交' }}
+          </a-button>
+          <a-button
+            :disabled="uploading"
+            style="margin-top: 16px"
+            @click="editImageOK"
+          >
+            取消
+          </a-button>
+        </a-form-item>
+      </a-form>
+    </a-modal>
   </div>
 
 </template>
@@ -668,7 +739,8 @@ export default {
       uploading: false,
       toDelete: [],
       previewVisible: false,
-      previewImage: ''
+      previewImage: '',
+      houseTypeVisible: false
     }
   },
   created () {
@@ -764,6 +836,12 @@ export default {
     editImage () {
       this.imageEditVisible = true
       this.queryPhotos()
+    },
+    houseTypeEdit () {
+      this.houseTypeVisible = true
+    },
+    houseTypeOK () {
+      this.houseTypeVisible = false
     },
     editImageOK () {
       this.imageEditVisible = false
