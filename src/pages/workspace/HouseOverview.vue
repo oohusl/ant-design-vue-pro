@@ -223,7 +223,33 @@
                     </a-layout>
                   </a-tab-pane>
                   <a-tab-pane key="2" tab="楼盘问问">
-                    楼盘问问
+                    <div class="qa-list">
+                      <div class="qa-item" v-for="qa of qaList" :key="qa.username + qa.datetime">
+                        <a-layout>
+                          <a-layout :style="{ background: '#ffffff', padding: '0 5px' }" >
+                            <a-layout-header
+                              :style="{
+                                background: '#ffffff',
+                                padding: 0,
+                                color: 'rgba(0, 0, 0, 0.85)',
+                                'font-size': '16px',
+                                height: '40px',
+                                'line-height': '40px',
+                                cursor: 'pointer'
+                              }">
+                              {{ qa.question }}<span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{ qa.datetime }}</span>
+                            </a-layout-header>
+                            <a-layout-content>
+                              <pre>{{ qa.answer }}</pre>
+                            </a-layout-content>
+                          </a-layout>
+                          <a-layout-sider :style="{ background: '#fff'}" width="90">
+                            <img :src="qa.avatar">
+                            <p>{{ qa.username }}</p>
+                          </a-layout-sider>
+                        </a-layout>
+                      </div>
+                    </div>
                   </a-tab-pane>
                 </a-tabs>
               </div>
@@ -351,7 +377,16 @@ export default {
 【教育配套】项目周边1公里内有光明小学、黄浦区复兴东路第三小学、上海市实验小学、光明中学等。教育资源丰富，且距离较近，方便接送孩子上下学。
 【医疗配套】项目周边4公里内上海九院，瑞金医院，仁济医院西院，黄浦区中西医结合医院，曙光医院西院。
 总的来说，项目交通便利，配套完善，适合本地或在市区上班的刚需偏改善群体。`
-        }]
+        }],
+       qaList: [{
+        avatar: '/common/touxiang.png',
+        username: 'yonghuming',
+        datetime: '2020-03-02',
+        question: '复地雅园怎么样？',
+        answer: `复地雅园位于黄浦区城隍庙板块，靠近河南南路与昼锦路交汇处。项目此次推出建面约108-179平2-4房，共计93套，带装修交付。
+既有较小面积，以较低门槛入主豫园的机会，又有功能性很强的4房户型。复地雅园甄选科勒的智能云镜、浴缸、座便器等产品，双人洗手台的设计让主人更享从容；同时，松下风暖系统出风温和，保障室温均匀舒适。
+`
+      }]
     }
   },
   created () {
