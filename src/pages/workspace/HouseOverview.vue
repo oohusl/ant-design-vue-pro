@@ -192,7 +192,33 @@
                         </div>
                       </a-layout-header>
                       <a-layout-content>
-                        <div class=""></div>
+                        <div class="yelp-list">
+                          <div class="yelp-list-item" v-for="yelp of yelpList" :key="yelp.username" :class="yelp.open?'open':'close'">
+                            <a-layout :style="{ height: '100%'}">
+                              <a-layout-sider :style="{ background: '#fff'}" width="80">
+                                <img :src="yelp.avatar">
+                              </a-layout-sider>
+                              <a-layout :style="{ background: '#ffffff', padding: '0 5px' }" >
+                                <a-layout-header
+                                  :style="{
+                                    background: '#ffffff',
+                                    padding: 0,
+                                    color: 'rgba(0, 0, 0, 0.85)',
+                                    'font-size': '16px',
+                                    height: '40px',
+                                    'line-height': '40px',
+                                    cursor: 'pointer'
+                                  }">{{ yelp.username }} <span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{ yelp.datetime }}</span></a-layout-header>
+                                <a-layout-content :style="{ background: '#ffffff', overflow: 'hidden' }" >
+                                  <pre>{{ yelp.text }}</pre>
+                                </a-layout-content>
+                                <a-layout-footer :style="{ background: '#ffffff', padding: '0' }" >
+                                  {{ yelp.visitDatetime }}看房 <span style="float: right;cursor: pointer;" @click="triggerOpenState(yelp)"> {{ yelp.open ? '收起全文' : '展开全文' }}</span>
+                                </a-layout-footer>
+                              </a-layout>
+                            </a-layout>
+                          </div>
+                        </div>
                       </a-layout-content>
                     </a-layout>
                   </a-tab-pane>
@@ -311,7 +337,21 @@ export default {
         active: false,
         count: 1
       }],
-      yelpSelectedAll: true
+      yelpSelectedAll: true,
+      yelpList: [{
+        avatar: '/common/touxiang.png',
+        username: 'yonghuming',
+        datetime: '2020-03-02',
+        visitDatetime: '2020年2月2日',
+        open: false,
+        text: `复地雅园位于黄浦区中心区域复兴东路与河南南路的交汇处，位于上海心脏地带，邻近上海主要旅游点之一的豫园，尽览黄浦江的美景。
+项目周边设施配套有：
+【商业配套】外滩金融中心、香港名都、南京路步行街、来福士广场。
+【交通配套】交通配套：距离地铁10号线豫园站800米，8号线老西门站800米。自驾出行可走延安路高架，南北高架路，人民路隧道，延安东路隧道。
+【教育配套】项目周边1公里内有光明小学、黄浦区复兴东路第三小学、上海市实验小学、光明中学等。教育资源丰富，且距离较近，方便接送孩子上下学。
+【医疗配套】项目周边4公里内上海九院，瑞金医院，仁济医院西院，黄浦区中西医结合医院，曙光医院西院。
+总的来说，项目交通便利，配套完善，适合本地或在市区上班的刚需偏改善群体。`
+        }]
     }
   },
   created () {
@@ -404,6 +444,13 @@ export default {
       this.yelpSelectedAll = true
       this.yelpTypeOptions.forEach(y => {
           y.active = false
+      })
+    },
+    triggerOpenState (yelp) {
+       this.yelpList.forEach(y => {
+        if (y.username === yelp.username) {
+          y.open = !y.open
+        }
       })
     }
   }
@@ -584,5 +631,14 @@ img {
 }
 .house-type-item >>> .ant-descriptions-item-label {
   line-height: 2.5;
+}
+.yelp-list-item {
+  min-height: 100px;
+}
+.yelp-list-item >>> .ant-layout-footer{
+  display: block;
+}
+.yelp-list-item.close {
+  height: 147px;
 }
 </style>
