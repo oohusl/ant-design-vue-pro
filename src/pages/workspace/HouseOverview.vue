@@ -114,7 +114,7 @@
                 </div>
               </div>
               <a-layout :style="{ background: '#ffffff', height: '200px', padding: '10px 0', 'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)' }" class="house-type-item" v-for="house of houseTypeList" :key="house.unitTypeName">
-                <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: hidden }" width="200">
+                <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
                   <img :src="`/house/${house.id % 10}.webp`" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px'}">
