@@ -144,16 +144,16 @@
                     >
                       <a-descriptions title="" :column="4">
                         <a-descriptions-item label="朝向" :span="2">
-                          南
+                          {{ house.towards }}
                         </a-descriptions-item>
                         <a-descriptions-item label="类型" :span="2">
-                          平层
+                          {{ house.typesOfHouse }}
                         </a-descriptions-item>
                         <a-descriptions-item label="户型存量" :span="4">
-                          0套
+                          {{ house.unitInventory }}
                         </a-descriptions-item>
                         <a-descriptions-item label="户型分析" :span="4">
-                          户型方正，采光充足
+                          {{ house.analysis }}
                         </a-descriptions-item>
                       </a-descriptions>
                     </a-layout-content>
@@ -165,7 +165,7 @@
                       :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                       width="200"
                     >
-                      总价约<span style="font-size: 24px; font-weight: bold">1111万元</span
+                      总价约<span style="font-size: 24px; font-weight: bold">{{ house.referenceTotalPrice }}万元</span
                       >
                     </a-layout-header>
                     <a-layout-content

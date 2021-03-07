@@ -591,11 +591,15 @@
           label="楼盘名称">
           <a-input :value="houseSelect.communityName" :disabled="true"/>
         </a-form-item>
-        <a-form-item label="房屋朝向">
+        <a-form-item label="房屋结构">
           <a-input addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input><a-input addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input><a-input addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input><a-input addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
         </a-form-item>
         <a-form-item label="房屋朝向">
-          <a-select aria-placeholder="请选择" :options="houseTypeOptions" v-model="houseTypeEdit.towards"></a-select>
+          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.towards">
+            <a-select-option v-for="item in towardOptions" :key="item" :value="item">
+              {{ item }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item label="建筑面积">
           <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
@@ -604,7 +608,11 @@
           <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
         </a-form-item>
         <a-form-item label="房屋类型">
-          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse"></a-select>
+          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse">
+            <a-select-option v-for="item in houseTypeOptions" :key="item" :value="item">
+              {{ item }}
+            </a-select-option>
+          </a-select>
         </a-form-item>
         <a-form-item label="参考单价">
           <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
