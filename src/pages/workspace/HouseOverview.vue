@@ -74,7 +74,7 @@
                   </a-descriptions-item>
                   <a-descriptions-item label="地铁站" :span="4">
                     <template v-for="m in houseSelect.metroInfo">
-                      <span :key="m">
+                      <span :key="JSON.stringify(m)">
                         {{ m.metroLine + ' ' + m.subwayStation }}
                       </span>
                     </template>
@@ -108,9 +108,14 @@
         <div class="house-type">
           <a-tabs default-active-key="1" >
             <a-tab-pane key="1" tab="户型分析">
-              <a-layout :style="{ background: '#ffffff', height: '200px' }" class="house-type-item">
-                <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                  <img :src="`/house/${houseSelect.id % 10}.webp`" />
+              <div class="type-select">
+                <div v-for="(h, i) of houseTypeOptions" :class="h.active?'active':null" :key="i+h.label" class="type-list">
+                  <span @click="triggerhouseType(h)">{{ h.label +'('+ h.count +')' }}</span>
+                </div>
+              </div>
+              <a-layout :style="{ background: '#ffffff', height: '200px', padding: '10px 0', 'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)' }" class="house-type-item" v-for="house of houseTypeList" :key="house.unitTypeName">
+                <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: hidden }" width="200">
+                  <img :src="`/house/${house.id % 10}.webp`" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px'}">
                   <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left', width: '300px' }">
@@ -126,7 +131,7 @@
                         marginBottom: '24px'
                       }"
                     >
-                      {{ houseSelect.communityName }} <a-tag color="green" size="sm">在售</a-tag>
+                      {{ house.unitTypeName }} <a-tag color="green" size="sm">在售</a-tag>
                     </a-layout-header>
                     <a-layout-content
                       :style="{
@@ -363,6 +368,26 @@ export default {
         active: false,
         count: 1
       }],
+      houseTypeOptions: [{
+        label: '全部户型',
+        active: false,
+        count: 5
+      },
+      {
+        label: '二居',
+        active: false,
+        count: 1
+      },
+      {
+        label: '三居',
+        active: false,
+        count: 3
+      },
+      {
+        label: '四居',
+        active: false,
+        count: 3
+      }],
       yelpSelectedAll: true,
       yelpList: [{
         avatar: '/common/touxiang.png',
@@ -386,7 +411,8 @@ export default {
         answer: `复地雅园位于黄浦区城隍庙板块，靠近河南南路与昼锦路交汇处。项目此次推出建面约108-179平2-4房，共计93套，带装修交付。
 既有较小面积，以较低门槛入主豫园的机会，又有功能性很强的4房户型。复地雅园甄选科勒的智能云镜、浴缸、座便器等产品，双人洗手台的设计让主人更享从容；同时，松下风暖系统出风温和，保障室温均匀舒适。
 `
-      }]
+      }],
+      houseTypeList: []
     }
   },
   created () {
@@ -465,7 +491,18 @@ export default {
       this.scroolPosition = position
     },
     queryAnalysisById () {
-      queryAnalysis(this.houseSelect.communityId)
+      queryAnalysis(this.houseSelect.id, '1').then(house => {
+        this.houseTypeList = this.houseTypeList.concat(house)
+      })
+      queryAnalysis(this.houseSelect.id, '2').then(house => {
+        this.houseTypeList = this.houseTypeList.concat(house)
+      })
+      queryAnalysis(this.houseSelect.id, '3').then(house => {
+        this.houseTypeList = this.houseTypeList.concat(house)
+      })
+      queryAnalysis(this.houseSelect.id, '4').then(house => {
+        this.houseTypeList = this.houseTypeList.concat(house)
+      })
     },
     triggerYelpType (yelp) {
       this.yelpSelectedAll = false
@@ -487,6 +524,27 @@ export default {
           y.open = !y.open
         }
       })
+    },
+    triggerhouseType (house) {
+      if (this.houseTypeOptions[0].active) {
+        this.houseTypeOptions[0].active = false
+        this.houseTypeOptions.forEach(h => {
+          if (h.label === house.label) {
+            h.active = !h.active
+          }
+        })
+      } else if (house.label === this.houseTypeOptions[0].label) {
+        this.houseTypeOptions.forEach(h => {
+          h.active = false
+        })
+        this.houseTypeOptions[0].active = true
+      } else {
+        this.houseTypeOptions.forEach(h => {
+          if (h.label === house.label) {
+            h.active = !h.active
+          }
+        })
+      }
     }
   }
 }
@@ -675,5 +733,18 @@ img {
 }
 .yelp-list-item.close {
   height: 147px;
+}
+.type-select {
+  width: 100%;
+  height: 30px;
+}
+.type-select .type-list{
+  width: 80px;
+  float: left;
+  cursor: pointer;
+  text-align: center;
+}
+.type-select .type-list.active{
+  color: #B71C2B;
 }
 </style>
