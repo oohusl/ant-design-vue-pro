@@ -595,7 +595,7 @@
           <a-input addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input><a-input addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input><a-input addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input><a-input addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
         </a-form-item>
         <a-form-item label="房屋朝向">
-          <a-select aria-placeholder="请选择" :options="houseTypeOptions" v-model="houseTypeEdit.towards"></a-select>
+          <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select>
         </a-form-item>
         <a-form-item label="建筑面积">
           <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
@@ -604,7 +604,7 @@
           <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
         </a-form-item>
         <a-form-item label="房屋类型">
-          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse"></a-select>
+          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse" :options="houseTypeOptions"></a-select>
         </a-form-item>
         <a-form-item label="参考单价">
           <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
@@ -742,8 +742,8 @@ export default {
       houseTypeVisible: false,
       houseTypes: [],
       houseTypeEdit: {},
-      houseTypeOptions: ['平层', '叠墅', '别墅', 'loft'],
-      towardOptions: ['南北', '朝南', '朝东', '朝北', '朝西']
+      houseTypeOptions: [{ label: '平层', value: '平层' }, { label: '叠墅', value: '叠墅' }, { label: '别墅', value: '别墅' }, { label: 'loft', value: 'loft' }],
+      towardOptions: [{ label: '南北', value: '南北' }, { label: '朝南', value: '朝南' }, { label: '朝东', value: '朝东' }, { label: '朝北', value: '朝北' }, { label: '朝西', value: '朝西' }]
     }
   },
   created () {
@@ -754,6 +754,7 @@ export default {
     this.schools_ = this.schools.slice(0, 50)
     this.queryPhotos()
     this.houseTypeEdit.communityId = this.houseSelect.id
+    this.getHouseTypes()
   },
   beforeMount () {
     if (this.edit) {

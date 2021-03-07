@@ -136,7 +136,7 @@ export function queryAnalysis (id, severalBedrooms) {
   return request({
     url: api.queryAnalysis,
     method: 'post',
-    params: { communityId: id, severalBedrooms: severalBedrooms }
+    data: { communityId: id, severalBedrooms: 3 }
   })
 }
 
