@@ -11,7 +11,8 @@ const api = {
   house: '/community-infos/query',
   editHouse: '/community-infos',
   constants: '/set/constant-infos',
-  queryAnalysis: '/house-analysis/queryByCommunityId'
+  queryAnalysis: '/house-analysis/queryByCommunityId',
+  saveAnalysis: '/house-analysis'
 }
 
 export default api
@@ -136,5 +137,13 @@ export function queryAnalysis (id, severalBedrooms) {
     url: api.queryAnalysis,
     method: 'post',
     params: { communityId: id, severalBedrooms: severalBedrooms }
+  })
+}
+
+export function saveAnalysis (houseType) {
+  return request({
+    url: api.saveAnalysis,
+    method: 'post',
+    data: houseType
   })
 }

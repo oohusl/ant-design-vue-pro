@@ -34,7 +34,7 @@
             <a-button @click="editImage()" v-if="houseSelect.id">
               上传图片
             </a-button>
-            <a-button @click="houseTypeEdit()" v-if="houseSelect.id">
+            <a-button @click="openHouseType()" v-if="houseSelect.id">
               房型分析
             </a-button>
           </a-layout-sider>
@@ -592,28 +592,28 @@
           <a-input :value="houseSelect.communityName" :disabled="true"/>
         </a-form-item>
         <a-form-item label="房屋朝向">
-          <a-input addon-after="室"></a-input><a-input addon-after="厅"></a-input><a-input addon-after="厨"></a-input><a-input addon-after="卫"></a-input>
+          <a-input addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input><a-input addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input><a-input addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input><a-input addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
         </a-form-item>
         <a-form-item label="房屋朝向">
-          <a-select aria-placeholder="请选择"></a-select>
+          <a-select aria-placeholder="请选择" :options="houseTypeOptions" v-model="houseTypeEdit.towards"></a-select>
         </a-form-item>
         <a-form-item label="建筑面积">
-          <a-input addon-after="m²"></a-input>
+          <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
         </a-form-item>
         <a-form-item label="房屋层高">
-          <a-input addon-after="米"></a-input>
+          <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
         </a-form-item>
         <a-form-item label="房屋类型">
-          <a-select aria-placeholder="请选择"></a-select>
+          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse"></a-select>
         </a-form-item>
         <a-form-item label="参考单价">
-          <a-input addon-after="元"></a-input>
+          <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
         </a-form-item>
         <a-form-item label="参考总价">
-          <a-input addon-after="万元"></a-input>
+          <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
         </a-form-item>
         <a-form-item label="户型分析">
-          <a-input></a-input>
+          <a-input v-model="houseTypeEdit.analysis"></a-input>
         </a-form-item>
         <a-form-item>
           <a-upload
@@ -634,11 +634,10 @@
         <a-form-item>
           <a-button
             type="primary"
-            :loading="uploading"
             style="margin-top: 16px"
-            @click="handleUpload"
+            @click="saveHouseType"
           >
-            {{ uploading ? '处理中' : '提交' }}
+            提交
           </a-button>
           <a-button
             :disabled="uploading"
@@ -656,7 +655,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete } from '@/api/manage'
+import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete, queryAnalysis, saveAnalysis } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -740,7 +739,11 @@ export default {
       toDelete: [],
       previewVisible: false,
       previewImage: '',
-      houseTypeVisible: false
+      houseTypeVisible: false,
+      houseTypes: [],
+      houseTypeEdit: {},
+      houseTypeOptions: ['平层', '叠墅', '别墅', 'loft'],
+      towardOptions: ['南北', '朝南', '朝东', '朝北', '朝西']
     }
   },
   created () {
@@ -750,6 +753,7 @@ export default {
     this.getMetrolineDistrictInfo()
     this.schools_ = this.schools.slice(0, 50)
     this.queryPhotos()
+    this.houseTypeEdit.communityId = this.houseSelect.id
   },
   beforeMount () {
     if (this.edit) {
@@ -774,6 +778,18 @@ export default {
         plates.push({ label: v, value: v })
       })
       return plates
+    },
+
+    getHouseTypes () {
+      queryAnalysis(this.houseSelect.id).then(e => {
+        this.houseTypes = e
+      })
+    },
+
+    saveHouseType () {
+      this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.severalBedrooms}室${this.houseTypeEdit.hallNumber || 0}厅${!this.houseTypeEdit.kitchenNumber || 0}厨${this.houseTypeEdit.restRoomNumber || 0}卫`
+      saveAnalysis(this.houseTypeEdit).then(e => {
+      })
     },
 
     areaChange () {
@@ -837,7 +853,7 @@ export default {
       this.imageEditVisible = true
       this.queryPhotos()
     },
-    houseTypeEdit () {
+    openHouseType () {
       this.houseTypeVisible = true
     },
     houseTypeOK () {
