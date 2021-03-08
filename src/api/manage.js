@@ -115,9 +115,28 @@ export function photoQuery (id, type) {
   })
 }
 
+export function photoHouseTypeQuery (id) {
+  return request({
+    url: '/house-analysis/findHousePhoto',
+    method: 'post',
+    data: { houseId: id, type: '1' }
+  })
+}
+
 export function photoUpload (formData) {
   return request({
     url: '/community-infos/fileUpload',
+    method: 'post',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+export function houseTypePhotoUpload (formData) {
+  return request({
+    url: '/house-analysis/fileUpload',
     method: 'post',
     data: formData,
     headers: {

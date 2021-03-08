@@ -582,10 +582,11 @@
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
-    <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="800px">
+    <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="600px">
       <a-form
-        :label-col="{ span: 3 }"
-        :wrapper-col="{ span: 5 }"
+        :label-col="{ span: 6 }"
+        :wrapper-col="{ span: 18 }"
+        :labelAlign="right"
       >
         <a-form-item
           label="楼盘名称">
@@ -596,6 +597,7 @@
         </a-form-item>
         <a-form-item label="房屋朝向">
           <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select>
+        </a-form-item>
         <a-form-item label="建筑面积">
           <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
         </a-form-item>
@@ -614,13 +616,12 @@
         <a-form-item label="户型分析">
           <a-input v-model="houseTypeEdit.analysis"></a-input>
         </a-form-item>
-        <a-form-item>
+        <a-form-item label=" " :colon="false">
           <a-upload
-            :file-list="fileList"
+            :file-list="houseTypeFiles"
             accept="image/*"
             list-type="picture-card"
-            :remove="handleRemove"
-            :before-upload="beforeUpload"
+            :before-upload="beforeHouseTypeUpload"
             @preview="handlePreview">
             <div>
               <a-icon type="plus" />
@@ -630,7 +631,7 @@
             </div>
           </a-upload>
         </a-form-item>
-        <a-form-item>
+        <a-form-item label=" " :colon="false">
           <a-button
             type="primary"
             style="margin-top: 16px"
@@ -639,9 +640,8 @@
             提交
           </a-button>
           <a-button
-            :disabled="uploading"
             style="margin-top: 16px"
-            @click="editImageOK"
+            @click="houseTypeOK"
           >
             取消
           </a-button>
@@ -654,7 +654,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete, queryAnalysis, saveAnalysis } from '@/api/manage'
+import { saveHouse, getLabels, photoUpload, houseTypePhotoUpload, photoQuery, photoDelete, queryAnalysis, saveAnalysis } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -739,6 +739,7 @@ export default {
       previewVisible: false,
       previewImage: '',
       houseTypeVisible: false,
+      houseTypeFiles: [],
       houseTypes: [],
       houseTypeEdit: {},
       houseTypeOptions: [{ label: '平层', value: '平层' }, { label: '叠墅', value: '叠墅' }, { label: '别墅', value: '别墅' }, { label: 'loft', value: 'loft' }],
@@ -789,6 +790,28 @@ export default {
     saveHouseType () {
       this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.severalBedrooms}室${this.houseTypeEdit.hallNumber || 0}厅${!this.houseTypeEdit.kitchenNumber || 0}厨${this.houseTypeEdit.restRoomNumber || 0}卫`
       saveAnalysis(this.houseTypeEdit).then(e => {
+        const up = []
+        this.houseTypeFiles.forEach(file => {
+          if (file.file) {
+            const formData = new FormData()
+            formData.append('file', file.file)
+            formData.append('houseId', e.id)
+            formData.append('type', '1')
+            up.push(houseTypePhotoUpload(formData))
+          }
+        })
+      Promise.all(up).then(r => {
+        console.log('upload success')
+      })
+        this.$notification.success({
+            message: '通知',
+            description: this.houseSelect.id ? '修改成功' : '保存成功'
+          }).catch(e => {
+            this.$notification.error({
+            message: '通知',
+            description: this.houseSelect.id ? '修改失败' : '保存失败'
+          })
+          })
       })
     },
 
@@ -1040,6 +1063,12 @@ export default {
           that.timer = null
         }, 0)
       }
+    },
+    beforeHouseTypeUpload (file) {
+      getBase64(file).then(url => {
+        this.houseTypeFiles = [...this.houseTypeFiles, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+      })
+      return false
     },
     queryPhotos () {
       this.fileList = []
