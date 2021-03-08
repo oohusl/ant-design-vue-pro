@@ -12,6 +12,7 @@ const api = {
   editHouse: '/community-infos',
   constants: '/set/constant-infos',
   queryAnalysis: '/house-analysis/queryByCommunityId',
+  getSeveralBedroomsInfo: '/house-analysis/getSeveralBedroomsInfo',
   saveAnalysis: '/house-analysis'
 }
 
@@ -164,5 +165,12 @@ export function saveAnalysis (houseType) {
     url: api.saveAnalysis,
     method: 'post',
     data: houseType
+  })
+}
+
+export function getSeveralBedroomsInfo (id) {
+  return request({
+    url: api.getSeveralBedroomsInfo + `/${id}`,
+    method: 'get'
   })
 }

@@ -110,7 +110,7 @@
             <a-tab-pane key="1" tab="户型分析">
               <div class="type-select">
                 <div v-for="(h, i) of houseTypeOptions" :class="h.active?'active':null" :key="i+h.label" class="type-list">
-                  <span @click="triggerhouseType(h)">{{ h.label +'('+ h.count +')' }}</span>
+                  <span @click="triggerhouseType(h)">{{ h.label +'('+ h.num +')' }}</span>
                 </div>
               </div>
               <a-layout :style="{ background: '#ffffff', height: '200px', padding: '10px 0', 'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)' }" class="house-type-item" v-for="house of houseTypeList" :key="house.unitTypeName">
@@ -192,7 +192,7 @@
                         <div class="yelp-option yelp-all">
                           <span size="small" @click="selectAll()" :class="yelpSelectedAll?'active':null">全部</span>
                         </div>
-                        <div v-for="(y, i) of yelpTypeOptions" :key="i+y.label" class="yelp-option">
+                        <div v-for="y of yelpTypeOptions" :key="JSON.stringify(y)" class="yelp-option">
                           <span :class="y.active?'active':null" @click="triggerYelpType(y)">{{ y.label +'('+ y.count +')' }}</span>
                         </div>
                       </a-layout-header>
@@ -290,7 +290,7 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-import { photoQuery, queryAnalysis } from '@/api/manage'
+import { photoQuery, queryAnalysis, getSeveralBedroomsInfo } from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -371,22 +371,27 @@ export default {
       houseTypeOptions: [{
         label: '全部户型',
         active: false,
-        count: 5
+        num: 5,
+        severalBedrooms: '0',
+        houseTypeList: []
       },
       {
         label: '二居',
         active: false,
-        count: 1
+        num: 1,
+        severalBedrooms: '2'
       },
       {
         label: '三居',
         active: false,
-        count: 3
+        num: 3,
+        severalBedrooms: '3'
       },
       {
         label: '四居',
         active: false,
-        count: 3
+        num: 3,
+        severalBedrooms: '4'
       }],
       yelpSelectedAll: true,
       yelpList: [{
@@ -421,7 +426,7 @@ export default {
     console.log(this.$route.params)
     this.houseSelect = JSON.parse(this.$route.query.houseSelect)
     this.queryPhotos()
-    this.queryAnalysisById()
+    this.queryAllAnalysis()
   },
   methods: {
     closeDetail () {
@@ -490,18 +495,35 @@ export default {
       }
       this.scroolPosition = position
     },
-    queryAnalysisById () {
-      queryAnalysis(this.houseSelect.id, '1').then(house => {
-        this.houseTypeList = this.houseTypeList.concat(house)
+    queryAllAnalysis () {
+      const bedroomsOption = { '1': '一居室', '2': '二居室', '3': '三居室', '4': '四居室', '5': '四居以上' }
+      getSeveralBedroomsInfo(this.houseSelect.id).then(bedroomsInfo => {
+        if (bedroomsInfo) {
+          this.houseTypeOptions = bedroomsInfo
+          let num = 0
+          this.houseTypeOptions.forEach(async b => {
+            b.active = false
+            b.label = bedroomsOption[b.severalBedrooms]
+            num = num + b.num
+            b.houseTypeList = await queryAnalysis(this.houseSelect.id, b.severalBedrooms)
+            if (b.houseTypeList?.length) {
+                this.houseTypeList = this.houseTypeList.concat(b.houseTypeList)
+            }
+          })
+          this.houseTypeOptions.unshift({
+            label: '全部户型',
+            active: true,
+            num: num,
+            severalBedrooms: '0'
+          })
+        }
       })
-      queryAnalysis(this.houseSelect.id, '2').then(house => {
-        this.houseTypeList = this.houseTypeList.concat(house)
-      })
-      queryAnalysis(this.houseSelect.id, '3').then(house => {
-        this.houseTypeList = this.houseTypeList.concat(house)
-      })
-      queryAnalysis(this.houseSelect.id, '4').then(house => {
-        this.houseTypeList = this.houseTypeList.concat(house)
+    },
+    queryAnalysisByBedrooms (bedrooms) {
+      queryAnalysis(this.houseSelect.id, bedrooms).then(houseTypeList => {
+        if (houseTypeList?.length) {
+            this.houseTypeList = houseTypeList
+          }
       })
     },
     triggerYelpType (yelp) {
@@ -538,13 +560,17 @@ export default {
           h.active = false
         })
         this.houseTypeOptions[0].active = true
+        this.queryAllAnalysis()
+        return
       } else {
         this.houseTypeOptions.forEach(h => {
+          h.active = false
           if (h.label === house.label) {
             h.active = !h.active
           }
         })
       }
+      this.queryAnalysisByBedrooms(house.severalBedrooms)
     }
   }
 }
