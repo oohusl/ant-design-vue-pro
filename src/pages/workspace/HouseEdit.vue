@@ -613,6 +613,9 @@
         <a-form-item label="参考总价">
           <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
         </a-form-item>
+        <a-form-item label="户型存量">
+          <a-input addon-after="套" v-model="houseTypeEdit.unitInventory"></a-input>
+        </a-form-item>
         <a-form-item label="户型分析">
           <a-input v-model="houseTypeEdit.analysis"></a-input>
         </a-form-item>
@@ -622,6 +625,7 @@
             accept="image/*"
             list-type="picture-card"
             :before-upload="beforeHouseTypeUpload"
+            :remove="handleHouseTypeRemove"
             @preview="handlePreview">
             <div>
               <a-icon type="plus" />
@@ -761,8 +765,6 @@ export default {
       this.newHouse()
     }
   },
-  updated () {
-  },
   methods: {
     editAreaChange () {
       if (this.houseSelect.area) {
@@ -800,17 +802,17 @@ export default {
             up.push(houseTypePhotoUpload(formData))
           }
         })
-      Promise.all(up).then(r => {
-        console.log('upload success')
-      })
+        Promise.all(up).then(r => {
+          console.log('upload success')
+        })
         this.$notification.success({
             message: '通知',
             description: this.houseSelect.id ? '修改成功' : '保存成功'
-          }).catch(e => {
+          })
+      }).catch(e => {
             this.$notification.error({
             message: '通知',
             description: this.houseSelect.id ? '修改失败' : '保存失败'
-          })
           })
       })
     },
@@ -1069,6 +1071,12 @@ export default {
         this.houseTypeFiles = [...this.houseTypeFiles, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
       })
       return false
+    },
+    handleHouseTypeRemove (file) {
+      const index = this.houseTypeFiles.indexOf(file)
+      const newFileList = this.houseTypeFiles.slice()
+      newFileList.splice(index, 1)
+      this.houseTypeFiles = newFileList
     },
     queryPhotos () {
       this.fileList = []
