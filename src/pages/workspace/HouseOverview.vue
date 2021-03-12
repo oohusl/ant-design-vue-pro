@@ -259,9 +259,6 @@
                 </a-tabs>
               </div>
             </a-tab-pane>
-            <a-tab-pane key="3" tab="楼盘相册">
-              楼盘相册
-            </a-tab-pane>
           </a-tabs>
         </div>
       </a-layout-content>

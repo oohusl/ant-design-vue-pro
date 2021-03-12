@@ -4,15 +4,14 @@
       <BackTop></BackTop>
     </div>
     <a-layout class="house-query">
-      <a-layout-header :style="{ padding: 0 }">
-        <div class="house-query-search-holder">
+      <a-layout-header :style="{ padding: 0, textAlign: 'center' }">
+        <Affix>
           <AutoComplete
             class="house-query-search"
             dropdown-class-name="house-query-search-dropdown"
             :dropdown-match-select-width="false"
             :dropdown-style="{ width: '552px' }"
-            size="large"
-            style="width: 100%"
+            style="width: 350px; marginRight: 20px"
             placeholder="请输入楼盘名开始找房"
             option-label-prop="value"
             v-model="queryParam.communityName"
@@ -22,7 +21,6 @@
                 slot="suffix"
                 style="margin-right: -12px"
                 class="search-btn"
-                size="large"
                 type="primary"
                 @click="search"
               >
@@ -30,7 +28,23 @@
               </a-button>
             </a-input>
           </AutoComplete>
-        </div>
+          <a-button @click="doSearch()" type="primary"> 查询 </a-button>
+          <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }"> 重置 </a-button>
+          <a-dropdown :style="{ marginLeft: '8px' }">
+            <a-menu slot="overlay">
+              <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
+              <a-menu-item key="2"> 导入 </a-menu-item>
+              <a-menu-item key="3">
+                <a download="985.xlsx" id="anchorNewApi" href="#" @click="dataExport">导出</a>
+              </a-menu-item>
+            </a-menu>
+            <a-button> 操作 <a-icon type="down" /> </a-button>
+          </a-dropdown>
+
+          <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
+            {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
+          </a>
+        </Affix>
       </a-layout-header>
       <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
@@ -505,25 +519,7 @@
               color="pink"
             >{{ translateRang(rangTag, '套', volume2019Options) }}</a-tag>
           </a-form-item>
-          <a-form-item label="" :style="{ fontSize: '12px', textAlign: 'center' }" :wrapper-col="{ span: 22 }">
-            <a-button @click="doSearch()" type="primary"> 查询 </a-button>
-            <a-button @click="resetSearchForm()" :style="{ marginLeft: '8px' }"> 重置 </a-button>
-            <a-dropdown :style="{ marginLeft: '8px' }">
-              <a-menu slot="overlay">
-                <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
-                <a-menu-item key="2"> 导入 </a-menu-item>
-                <a-menu-item key="3">
-                  <a download="985.xlsx" id="anchorNewApi" href="#" @click="dataExport">导出</a>
-                </a-menu-item>
-              </a-menu>
-              <a-button> 操作 <a-icon type="down" /> </a-button>
-            </a-dropdown>
-
-            <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
-              {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
-            </a>
-          </a-form-item>
-          </a-form-item></a-form>
+        </a-form>
         <!-- 列表 -->
         <a-card :bordered="false">
           <a-layout>
@@ -678,7 +674,7 @@ import {
   schoolOptions,
   shoolType
 } from '@/api/school'
-import { AutoComplete, BackTop } from 'ant-design-vue'
+import { AutoComplete, BackTop, Affix } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
 
 export default {
@@ -688,7 +684,8 @@ export default {
     Ellipsis,
     AutoComplete,
     HouseEdit,
-    BackTop
+    BackTop,
+    Affix
   },
   data () {
     return {

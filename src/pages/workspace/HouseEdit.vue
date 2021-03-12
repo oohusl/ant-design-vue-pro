@@ -27,7 +27,7 @@
               </template>
             </div>
           </a-layout-content>
-          <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '300px', 'min-width': '300px' }">
+          <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '380px', 'min-width': '380px' }">
             <a-button @click="editHouse()">
               信息编辑
             </a-button>
@@ -36,6 +36,9 @@
             </a-button>
             <a-button @click="openHouseType()" v-if="houseSelect.id">
               房型分析
+            </a-button>
+            <a-button @click="openHouseDiary()" v-if="houseSelect.id">
+              看房日记
             </a-button>
           </a-layout-sider>
         </a-layout>
@@ -586,7 +589,7 @@
       <a-form
         :label-col="{ span: 6 }"
         :wrapper-col="{ span: 18 }"
-        :labelAlign="right"
+        labelAlign="right"
       >
         <a-form-item
           label="楼盘名称">
@@ -652,6 +655,9 @@
         </a-form-item>
       </a-form>
     </a-modal>
+    <a-modal :visible="houseDiaryVisible">
+      <house-diary :houseSelect="houseSelect"></house-diary>
+    </a-modal>
   </div>
 
 </template>
@@ -679,6 +685,7 @@ import {
   schoolOptions,
   schoolDetail
 } from '@/api/school'
+import HouseDiary from './HouseDiary.vue'
 
 function getBase64 (file) {
   return new Promise((resolve, reject) => {
@@ -692,7 +699,8 @@ function getBase64 (file) {
 export default {
   name: 'HouseSelect',
   components: {
-    AutoComplete
+    AutoComplete,
+    HouseDiary
   },
   props: {
     houseSelect: { type: Object, default: function () { return {} } },
@@ -743,6 +751,7 @@ export default {
       previewVisible: false,
       previewImage: '',
       houseTypeVisible: false,
+      houseDiaryVisible: false,
       houseTypeFiles: [],
       houseTypes: [],
       houseTypeEdit: {},
@@ -880,6 +889,9 @@ export default {
     },
     openHouseType () {
       this.houseTypeVisible = true
+    },
+    openHouseDiary () {
+       this.houseDiaryVisible = true
     },
     houseTypeOK () {
       this.houseTypeVisible = false
