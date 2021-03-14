@@ -3,7 +3,7 @@
     <a-form
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
-      :labelAlign="right"
+      :labelAlign="'right'"
     >
       <a-form-item
         label="楼盘名称">
@@ -19,6 +19,7 @@
 <script>
 import { AutoComplete } from 'ant-design-vue'
 
+import { newHouseDiary } from '@/api/manage'
 export default {
   name: 'HouseDiary',
   components: {
@@ -39,6 +40,16 @@ export default {
   created () {
   },
   methods: {
+    addHouseDiary () {
+      newHouseDiary({ communityId: 485,
+    userName: '房专家',
+    userIcon: 'http://djjd.com/001img',
+    viewingTime: '2021-03-09',
+    reviewContent: null,
+    customerInfo: null,
+    classificationLabel: '户型好1'
+})
+    }
   }
 }
 </script>
