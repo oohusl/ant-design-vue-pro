@@ -86,7 +86,7 @@
             {{ houseSelect.transactionOwnership }}
           </a-descriptions-item>
           <a-descriptions-item label="年限">
-            {{ houseSelect.propertyRights ? houseSelect.propertyRights + '年' : '' }}
+            {{ houseSelect.propertyRights ? houseSelect.propertyRights : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑时间">
             {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
@@ -583,6 +583,7 @@
         </a-form-item>
         <a-form-item label="相册类目">
           <a-select v-model="photoType" @change="queryPhotos">
+            <a-select-option value="0">封面图</a-select-option>
             <a-select-option value="1">效果图</a-select-option>
             <a-select-option value="2">环境规划图</a-select-option>
             <a-select-option value="3">楼盘实景图</a-select-option>
@@ -788,7 +789,7 @@ export default {
       schools: schoolOptions(),
       schools_: [],
       metrolineDistrictInfo: [],
-      photoType: '1',
+      photoType: '0',
       fileList: [],
       uploading: false,
       toDelete: [],
@@ -1153,7 +1154,7 @@ export default {
     },
     queryPhotos () {
       this.fileList = []
-      photoQuery(this.houseSelect.id, this.photoType).then(e => {
+      return photoQuery(this.houseSelect.id, this.photoType).then(e => {
         e.forEach(image => {
           this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
         })
@@ -1177,7 +1178,11 @@ export default {
     },
     beforeUpload (file) {
       getBase64(file).then(url => {
-        this.fileList = [...this.fileList, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+        if (this.photoType === '0') {
+          this.fileList = [{ uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+        } else {
+          this.fileList = [...this.fileList, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+        }
       })
       return false
     },
@@ -1200,13 +1205,23 @@ export default {
       Promise.all(up)
         .then(r => {
           console.log(r)
-          this.queryPhotos()
-          this.uploading = false
         })
         .catch(e => {
           console.error(e)
+        }).finally(e => {
+            this.queryPhotos().then(e => {
+            if (this.photoType === '0') {
+              if (this.fileList.length > 0) {
+                this.houseSelect['communityPhoto'] = this.fileList[0]['url']
+              } else {
+                this.houseSelect['communityPhoto'] = null
+              }
+              saveHouse(this.houseSelect).then(e => {
+                console.log(e)
+              })
+            }
+          })
           this.uploading = false
-          this.queryPhotos()
         })
     },
     handleUpload () {

@@ -546,7 +546,7 @@
               >
                 <a-layout :style="{ background: '#ffffff' }">
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                    <img :src="`/house/${community.id % 10}.webp`" />
+                    <img :src="community.communityPhoto || `/house/${community.id % 10}.webp`" />
                   </a-layout-sider>
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                     <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left' }">
@@ -779,6 +779,7 @@ export default {
       this.subwayStations = {}
       this.plates = {}
       this.areaReset()
+      this.doSearch()
     },
 
     doSearch () {
