@@ -16,7 +16,10 @@
               {{ houseSelect.communityName
               }}<span
                 style="font-size:16px;color: #B71C2B; margin-left: 12px"
-              >均价 {{ houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString() }}元/m²</span
+              >均价
+                {{
+                  houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString()
+                }}元/m²</span
               >
             </div>
             <div>
@@ -63,7 +66,7 @@
           <a-descriptions-item label="区域规划">
             {{ houseSelect.districtPlanning }}
           </a-descriptions-item>
-          <template v-for="(line,i) in houseSelect.metroInfo">
+          <template v-for="(line, i) in houseSelect.metroInfo">
             <a-descriptions-item :label="i > 0 ? '' : '地铁线路'" :key="i" :span="4">
               {{ `${line.metroLine} / ${line.subwayStation}   ${line.distance != null ? line.distance + 'm' : ''}` }}
             </a-descriptions-item>
@@ -126,9 +129,17 @@
           </a-descriptions-item>
         </a-descriptions>
         <a-descriptions title="学区情况" :column="4">
-          <template v-for="(school) in houseSelect.schoolDistrictInfo">
-            <a-descriptions-item label="学校" :key="school.schoolName" :span="2">{{ school.schoolName }}</a-descriptions-item>
-            <a-descriptions-item label="类型" :key="school.schoolName" :span="2">{{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}</a-descriptions-item>
+          <template v-for="school in houseSelect.schoolDistrictInfo">
+            <a-descriptions-item label="学校" :key="school.schoolName" :span="2">{{
+              school.schoolName
+            }}</a-descriptions-item>
+            <a-descriptions-item
+              label="类型"
+              :key="school.schoolName"
+              :span="2"
+            >{{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }}
+              {{ school.echelonPerformance }}</a-descriptions-item
+            >
           </template>
         </a-descriptions>
         <a-descriptions title="价格及交易" :column="4">
@@ -266,8 +277,8 @@
               <a-select-option value="城市中心">城市中心</a-select-option>
             </a-select>
           </a-descriptions-item>
-          <template v-for="(metro,i) in houseSelect.metroInfo">
-            <a-descriptions-item :label="i===0?'地铁线路':''" :span="4" :key="i">
+          <template v-for="(metro, i) in houseSelect.metroInfo">
+            <a-descriptions-item :label="i === 0 ? '地铁线路' : ''" :span="4" :key="i">
               <a-input-group compact>
                 <a-cascader
                   :options="metrolineDistrictInfo"
@@ -276,20 +287,21 @@
                   style="width: 220px"
                   placeholder="地铁"
                   :value="[metro.metroLine, metro.subwayStation]"
-                  @change="selectMetroLine($event, i)">
+                  @change="selectMetroLine($event, i)"
+                >
                 </a-cascader>
-                <a-input
-                  v-model="metro.distance"
-                  placeholder="距离"
-                  size="small"
-                  style="width: 145px"
-                  suffix="m">
+                <a-input v-model="metro.distance" placeholder="距离" size="small" style="width: 145px" suffix="m">
                 </a-input>
-                <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeMetro(i)"><a-icon type="minus-circle" /></span>
+                <span
+                  style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;"
+                  @click="removeMetro(i)"
+                ><a-icon
+                  type="minus-circle"
+                /></span>
               </a-input-group>
             </a-descriptions-item>
           </template>
-          <a-descriptions-item :label="houseSelect.metroInfo.length === 0?'地铁线路':''" :span="4">
+          <a-descriptions-item :label="houseSelect.metroInfo.length === 0 ? '地铁线路' : ''" :span="4">
             <a-button type="dashed" style="width: 100px" size="small" @click="addMetroLine()">
               <a-icon type="plus" /> 添加
             </a-button>
@@ -355,8 +367,7 @@
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
-            <a-select :options="liftOptions" v-model="houseSelect.isLift" class="col1" size="small">
-            </a-select>
+            <a-select :options="liftOptions" v-model="houseSelect.isLift" class="col1" size="small"> </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="最大层数">
             <a-input v-model="houseSelect.maxFloor" class="col1" size="small" addon-after="层" />
@@ -379,7 +390,7 @@
           </a-descriptions-item>
         </a-descriptions>
         <a-descriptions title="学区情况" :column="4">
-          <template v-for="(school,s) in houseSelect.schoolDistrictInfo">
+          <template v-for="(school, s) in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="" :span="2" :key="s">
               {{ school.shcoolName }}
               <a-select
@@ -390,13 +401,18 @@
                 :value="school.schoolName"
                 @blur="handleOnBlur"
                 @search="handleOnSearch"
-                @change="selectSchool($event,s)"
+                @change="selectSchool($event, s)"
               >
                 <a-select-option v-for="ss in schools_" :key="ss.value" :value="ss.value" :disabled="ss.disabled">
                   {{ ss.label }}
                 </a-select-option>
               </a-select>
-              <span style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;" @click="removeSchool(s)"><a-icon type="minus-circle" /></span>
+              <span
+                style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;"
+                @click="removeSchool(s)"
+              ><a-icon
+                type="minus-circle"
+              /></span>
             </a-descriptions-item>
             <a-descriptions-item label="类型" :span="2" :key="s">
               {{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}
@@ -418,96 +434,124 @@
                 placeholder="—"
                 :disabled="true"
               />
-              <a-input v-model="houseSelect.roomArea1Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
+              <a-input
+                v-model="houseSelect.roomArea1Max"
+                class="compactInput"
+                style="border-left: 0"
+                size="small"
+                placeholder="请输入"
+              />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="1居价格" :span="1">
             <a-input-group compact>
-              <a-input v-model="houseSelect.roomPriceRange1Min" class="compactInput" size="small" placeholder="请输入" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomPriceRange1Min"
+                class="compactInput"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomPriceRange1Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
+              <a-input
+                v-model="houseSelect.roomPriceRange1Max"
+                class="compactInput"
+                style="border-left: 0"
+                size="small"
+                placeholder="请输入"
+              />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="2居面积" :span="1">
             <a-input-group compact>
               <a-input v-model="houseSelect.roomArea2Min" class="compactInput" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomArea2Max"
+                class="compactInput"
+                style="border-left: 0"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomArea2Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="2居价格" :span="1">
             <a-input-group compact>
-              <a-input v-model="houseSelect.roomPriceRange2Min" class="compactInput" size="small" placeholder="请输入" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomPriceRange2Min"
+                class="compactInput"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomPriceRange2Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
+              <a-input
+                v-model="houseSelect.roomPriceRange2Max"
+                class="compactInput"
+                style="border-left: 0"
+                size="small"
+                placeholder="请输入"
+              />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="3居面积" :span="1">
             <a-input-group compact>
               <a-input v-model="houseSelect.roomArea3Min" class="compactInput" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomArea3Max"
+                class="compactInput"
+                style="border-left: 0"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomArea3Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="3居价格" :span="1">
             <a-input-group compact>
-              <a-input v-model="houseSelect.roomPriceRange3Min" class="compactInput" size="small" placeholder="请输入" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomPriceRange3Min"
+                class="compactInput"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomPriceRange3Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
+              <a-input
+                v-model="houseSelect.roomPriceRange3Max"
+                class="compactInput"
+                style="border-left: 0"
+                size="small"
+                placeholder="请输入"
+              />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
             <a-input-group compact>
               <a-input v-model="houseSelect.roomArea4Min" class="compactInput" size="small" placeholder="请输入" />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomArea4Max"
+                class="compactInput"
+                style="border-left: 0"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
-              <a-input v-model="houseSelect.roomArea4Max" class="compactInput" style="border-left: 0" size="small" placeholder="请输入" />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
             <a-input-group compact>
-              <a-input v-model="houseSelect.roomPriceRange4Min" class="compactInput" size="small" placeholder="请输入" />
               <a-input
-                class="compactCenter"
+                v-model="houseSelect.roomPriceRange4Min"
+                class="compactInput"
                 size="small"
-                placeholder="—"
-                :disabled="true"
+                placeholder="请输入"
               />
+              <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
                 v-model="houseSelect.roomPriceRange4Max"
                 class="compactInput"
                 style="border-left: 0"
                 size="small"
-                placeholder="请输入" />
+                placeholder="请输入"
+              />
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="在售">
@@ -533,11 +577,9 @@
       </a-layout-content>
     </a-layout>
     <a-modal v-model="imageEditVisible" title="楼盘相册" :footer="null" @ok="editImageOK" width="800px">
-      <a-form
-      >
-        <a-form-item
-          label="楼盘名称">
-          <a-input :value="houseSelect.communityName" :disabled="true"/>
+      <a-form>
+        <a-form-item label="楼盘名称">
+          <a-input :value="houseSelect.communityName" :disabled="true" />
         </a-form-item>
         <a-form-item label="相册类目">
           <a-select v-model="photoType" @change="queryPhotos">
@@ -554,7 +596,8 @@
             list-type="picture-card"
             :remove="handleRemove"
             :before-upload="beforeUpload"
-            @preview="handlePreview">
+            @preview="handlePreview"
+          >
             <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -564,19 +607,10 @@
           </a-upload>
         </a-form-item>
         <a-form-item>
-          <a-button
-            type="primary"
-            :loading="uploading"
-            style="margin-top: 16px"
-            @click="handleUpload"
-          >
+          <a-button type="primary" :loading="uploading" style="margin-top: 16px" @click="handleUpload">
             {{ uploading ? '处理中' : '提交' }}
           </a-button>
-          <a-button
-            :disabled="uploading"
-            style="margin-top: 16px"
-            @click="editImageOK"
-          >
+          <a-button :disabled="uploading" style="margin-top: 16px" @click="editImageOK">
             取消
           </a-button>
         </a-form-item>
@@ -586,17 +620,15 @@
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
     <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="600px">
-      <a-form
-        :label-col="{ span: 6 }"
-        :wrapper-col="{ span: 18 }"
-        labelAlign="right"
-      >
-        <a-form-item
-          label="楼盘名称">
-          <a-input :value="houseSelect.communityName" :disabled="true"/>
+      <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="right">
+        <a-form-item label="楼盘名称">
+          <a-input :value="houseSelect.communityName" :disabled="true" />
         </a-form-item>
         <a-form-item label="房屋结构">
-          <a-input addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input><a-input addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input><a-input addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input><a-input addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
+          <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input
+          ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input
+          ><a-input style="width:100px" addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input
+          ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
         </a-form-item>
         <a-form-item label="房屋朝向">
           <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select>
@@ -608,7 +640,11 @@
           <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
         </a-form-item>
         <a-form-item label="房屋类型">
-          <a-select aria-placeholder="请选择" v-model="houseTypeEdit.typesOfHouse" :options="houseTypeOptions"></a-select>
+          <a-select
+            aria-placeholder="请选择"
+            v-model="houseTypeEdit.typesOfHouse"
+            :options="houseTypeOptions"
+          ></a-select>
         </a-form-item>
         <a-form-item label="参考单价">
           <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
@@ -639,17 +675,10 @@
           </a-upload>
         </a-form-item>
         <a-form-item label=" " :colon="false">
-          <a-button
-            type="primary"
-            style="margin-top: 16px"
-            @click="saveHouseType"
-          >
-            提交
+          <a-button type="primary" :loading="uploading" style="margin-top: 16px" @click="saveHouseType">
+            {{ uploading ? '处理中' : '提交' }}
           </a-button>
-          <a-button
-            style="margin-top: 16px"
-            @click="houseTypeOK"
-          >
+          <a-button style="margin-top: 16px" @click="houseTypeOK">
             取消
           </a-button>
         </a-form-item>
@@ -659,12 +688,20 @@
       <house-diary :houseSelect="houseSelect"></house-diary>
     </a-modal>
   </div>
-
 </template>
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels, photoUpload, houseTypePhotoUpload, photoQuery, photoDelete, queryAnalysis, saveAnalysis } from '@/api/manage'
+import {
+  saveHouse,
+  getLabels,
+  photoUpload,
+  houseTypePhotoUpload,
+  photoQuery,
+  photoDelete,
+  queryAnalysis,
+  saveAnalysis
+} from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -703,12 +740,19 @@ export default {
     HouseDiary
   },
   props: {
-    houseSelect: { type: Object, default: function () { return {} } },
+    houseSelect: {
+      type: Object,
+      default: function () {
+        return {}
+      }
+    },
     toCreate: { type: Boolean, default: false }
   },
   computed: {
     tags: {
-      get: function () { return this.houseSelect.labels ? this.houseSelect.labels.split(',') : [] },
+      get: function () {
+        return this.houseSelect.labels ? this.houseSelect.labels.split(',') : []
+      },
       set: function (newValue) {
         this.houseSelect.labels = newValue.join(',')
       }
@@ -755,8 +799,19 @@ export default {
       houseTypeFiles: [],
       houseTypes: [],
       houseTypeEdit: {},
-      houseTypeOptions: [{ label: '平层', value: '平层' }, { label: '叠墅', value: '叠墅' }, { label: '别墅', value: '别墅' }, { label: 'loft', value: 'loft' }],
-      towardOptions: [{ label: '南北', value: '南北' }, { label: '朝南', value: '朝南' }, { label: '朝东', value: '朝东' }, { label: '朝北', value: '朝北' }, { label: '朝西', value: '朝西' }]
+      houseTypeOptions: [
+        { label: '平层', value: '平层' },
+        { label: '叠墅', value: '叠墅' },
+        { label: '别墅', value: '别墅' },
+        { label: 'loft', value: 'loft' }
+      ],
+      towardOptions: [
+        { label: '南北', value: '南北' },
+        { label: '朝南', value: '朝南' },
+        { label: '朝东', value: '朝东' },
+        { label: '朝北', value: '朝北' },
+        { label: '朝西', value: '朝西' }
+      ]
     }
   },
   created () {
@@ -827,15 +882,15 @@ export default {
     },
 
     areaChange () {
-      this.queryParam.area.forEach((e) => {
-         const areaPlates = []
-         this.getPlate(e).forEach((p) => areaPlates.push(p.value))
-         if (this.plates[e]) {
-         this.plates[e] = this.plates[e].filter(selectedP => {
-           console.log(selectedP)
-           return areaPlates.indexOf(selectedP) < 0
-         })
-         }
+      this.queryParam.area.forEach(e => {
+        const areaPlates = []
+        this.getPlate(e).forEach(p => areaPlates.push(p.value))
+        if (this.plates[e]) {
+          this.plates[e] = this.plates[e].filter(selectedP => {
+            console.log(selectedP)
+            return areaPlates.indexOf(selectedP) < 0
+          })
+        }
       })
     },
 
@@ -870,24 +925,27 @@ export default {
     },
 
     editHouse () {
-        // edit
-        console.log('editHouse')
-        this.editAreaChange()
-        this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
-        this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
-        this.houseSelect.metroInfo.forEach(station => {
-          this.updateMetrolineDistrictInfo([station.metroLine, station.subwayStation], true)
-        })
-        this.houseSelect.schoolDistrictInfo.forEach(school => {
-          this.updateSchoolsOptions(school.schoolName, true)
-        })
-        this.edit = !this.edit
+      // edit
+      console.log('editHouse')
+      this.editAreaChange()
+      this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
+      this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
+      this.houseSelect.metroInfo.forEach(station => {
+        this.updateMetrolineDistrictInfo([station.metroLine, station.subwayStation], true)
+      })
+      this.houseSelect.schoolDistrictInfo.forEach(school => {
+        this.updateSchoolsOptions(school.schoolName, true)
+      })
+      this.edit = !this.edit
     },
     editImage () {
       this.imageEditVisible = true
       this.queryPhotos()
     },
     openHouseType () {
+      this.houseTypeEdit = {}
+      this.houseTypeEdit.communityId = this.houseSelect.id
+      this.houseTypeFiles = []
       this.houseTypeVisible = true
     },
     openHouseDiary () {
@@ -930,6 +988,7 @@ export default {
       this.edit = false
       console.log(this.houseSelect)
     },
+
     getMetrolineDistrictInfo () {
       this.metrolineDistrictInfo = []
       this.metrolineDistrictInfo = this.metroLineOptions
@@ -966,7 +1025,7 @@ export default {
       if (this.houseSelect.metroInfo.length >= index) {
         const metroinfo = this.houseSelect.metroInfo.splice(index, 1)
         if (metroinfo[0].metroLine) {
-            this.updateMetrolineDistrictInfo([metroinfo[0].metroLine, metroinfo[0].subwayStation], false)
+          this.updateMetrolineDistrictInfo([metroinfo[0].metroLine, metroinfo[0].subwayStation], false)
         }
       }
       this.$forceUpdate()
@@ -978,13 +1037,12 @@ export default {
           if (lineoption.value === line) {
             lineoption.children.forEach(option => {
               if (option.value === station) {
-                  option.disabled = disabled
+                option.disabled = disabled
               }
             })
           }
         })
-      } catch (error) {
-      }
+      } catch (error) {}
     },
     removeSchool (index) {
       if (this.houseSelect.schoolDistrictInfo.length >= index) {
@@ -997,11 +1055,11 @@ export default {
     },
     addSchoolsInfo () {
       this.houseSelect.schoolDistrictInfo.push({
-          schoolName: '',
-          echelonPerformance: '',
-          schoolType: ''
-        })
-        this.$forceUpdate()
+        schoolName: '',
+        echelonPerformance: '',
+        schoolType: ''
+      })
+      this.$forceUpdate()
     },
     selectSchool (school, o) {
       const s = schoolDetail[school]
@@ -1080,7 +1138,10 @@ export default {
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {
-        this.houseTypeFiles = [...this.houseTypeFiles, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+        this.houseTypeFiles = [
+          ...this.houseTypeFiles,
+          { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }
+        ]
       })
       return false
     },
@@ -1093,10 +1154,10 @@ export default {
     queryPhotos () {
       this.fileList = []
       photoQuery(this.houseSelect.id, this.photoType).then(e => {
-            e.forEach(image => {
-              this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
-            })
-          })
+        e.forEach(image => {
+          this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
+        })
+      })
     },
     handleRemove (file) {
       if (file.url) {
@@ -1136,15 +1197,17 @@ export default {
         up.push(photoDelete(id))
       })
 
-      Promise.all(up).then(r => {
-        console.log(r)
-        this.queryPhotos()
-        this.uploading = false
-      }).catch(e => {
-        console.error(e)
-        this.uploading = false
-        this.queryPhotos()
-      })
+      Promise.all(up)
+        .then(r => {
+          console.log(r)
+          this.queryPhotos()
+          this.uploading = false
+        })
+        .catch(e => {
+          console.error(e)
+          this.uploading = false
+          this.queryPhotos()
+        })
     },
     handleUpload () {
       const { fileList } = this
@@ -1159,18 +1222,22 @@ export default {
 }
 </script>
 <style scoped>
-  .col1 {
-    width: 120px
-  }
-  .col2 {
-    width: 364px
-  }
-  .compactInput {
-     width: 53px;
-     text-align: center;
-     padding: 2px;
-  }
-  .compactCenter {
-    width: 14px; border-left: 0; border-right: 0; pointer-events: none; padding: 2px
-  }
+.col1 {
+  width: 120px;
+}
+.col2 {
+  width: 364px;
+}
+.compactInput {
+  width: 53px;
+  text-align: center;
+  padding: 2px;
+}
+.compactCenter {
+  width: 14px;
+  border-left: 0;
+  border-right: 0;
+  pointer-events: none;
+  padding: 2px;
+}
 </style>
