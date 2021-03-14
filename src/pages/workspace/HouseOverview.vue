@@ -533,13 +533,13 @@ export default {
         const a = this.diaryTypeOptions.filter(d => d.label === h.classificationLabel)
         if (a.length) {
           a[0].count++
-          a[0].diaryList.push(h)
+          a[0].diaryList.push(Object.assign({ open: false }, h))
         } else {
         this.diaryTypeOptions.push({
                 label: h.classificationLabel,
                 active: false,
                 count: 1,
-                diaryList: [h]
+                diaryList: [Object.assign({ open: false }, h)]
               })
         }
         })
