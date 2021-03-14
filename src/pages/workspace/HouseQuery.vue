@@ -957,7 +957,7 @@ export default {
     gatherSelectParamter (arr, set, factor = 1) {
       return this.rangToValue(Array.from(
         this.gatherSelect(arr, set)
-      ))
+      ), factor)
     },
     translateRang (rang, unit, options) {
       const r = options.filter((e) => {
