@@ -3,14 +3,26 @@
     <a-form
       :label-col="{ span: 6 }"
       :wrapper-col="{ span: 18 }"
-      :labelAlign="right"
+      :labelAlign="'right'"
     >
       <a-form-item
         label="楼盘名称">
         <a-input :value="houseSelect.communityName" :disabled="true"/>
       </a-form-item>
-      <a-form-item label="看房日记">
-        <a-input addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input><a-input addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input><a-input addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input><a-input addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
+      <a-form-item label="用户名">
+        <a-input v-model="houseDiaryEdit.userName"></a-input>
+      </a-form-item>
+      <a-form-item label="分类标签">
+        <a-input v-model="houseDiaryEdit.classificationLabel"></a-input>
+      </a-form-item>
+      <a-form-item label="客户信息">
+        <a-input v-model="houseDiaryEdit.customerInfo"></a-input>
+      </a-form-item>
+      <a-form-item label="看房时间">
+        <a-date-picker valueFormat="YYYY-MM-DD" @change="onChange" v-decorator="['startAt', {rules:[{required: true, message: '请选择开始时间'}]}]"/>
+      </a-form-item>
+      <a-form-item label="点评内容">
+        <a-input v-model="houseDiaryEdit.reviewContent" type="textarea"></a-input>
       </a-form-item>
     </a-form>
   </div>
@@ -19,6 +31,7 @@
 <script>
 import { AutoComplete } from 'ant-design-vue'
 
+import { newHouseDiary } from '@/api/manage'
 export default {
   name: 'HouseDiary',
   components: {
@@ -33,12 +46,21 @@ export default {
       houseTypeVisible: false,
       houseTypeFiles: [],
       houseTypes: [],
-      houseTypeEdit: {}
+      houseDiaryEdit: { viewingTime: new Date() }
     }
   },
   created () {
   },
   methods: {
+    addHouseDiary () {
+      this.houseDiaryEdit.communityId = this.houseSelect.id
+      this.houseDiaryEdit.userIcon = ''
+      newHouseDiary(this.houseDiaryEdit)
+    },
+    onChange (date) {
+      this.houseDiaryEdit.viewingTime = date
+      console.log(date)
+    }
   }
 }
 </script>

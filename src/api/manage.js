@@ -13,7 +13,9 @@ const api = {
   constants: '/set/constant-infos',
   queryAnalysis: '/house-analysis/queryByCommunityId',
   getSeveralBedroomsInfo: '/house-analysis/getSeveralBedroomsInfo',
-  saveAnalysis: '/house-analysis'
+  saveAnalysis: '/house-analysis',
+  newHouseDiary: '/house-diary',
+  queryHouseDiary: '/house-diary/queryHouseAnalysis'
 }
 
 export default api
@@ -172,5 +174,20 @@ export function getSeveralBedroomsInfo (id) {
   return request({
     url: api.getSeveralBedroomsInfo + `/${id}`,
     method: 'get'
+  })
+}
+
+export function newHouseDiary (houseDiary) {
+  return request({
+    url: api.newHouseDiary,
+    method: 'post',
+    data: houseDiary
+  })
+}
+export function queryHouseDiary (communityId, classificationLabel) {
+  return request({
+    url: api.queryHouseDiary,
+    method: 'post',
+    data: { communityId, classificationLabel }
   })
 }

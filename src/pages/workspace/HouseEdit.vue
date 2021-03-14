@@ -620,7 +620,7 @@
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
     <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="600px">
-      <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="right">
+      <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
         <a-form-item label="楼盘名称">
           <a-input :value="houseSelect.communityName" :disabled="true" />
         </a-form-item>
@@ -684,8 +684,8 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal :visible="houseDiaryVisible">
-      <house-diary :houseSelect="houseSelect"></house-diary>
+    <a-modal :visible="houseDiaryVisible" title="添加看房日记" @ok="handleOk('housediary')">
+      <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
     </a-modal>
   </div>
 </template>
@@ -1217,6 +1217,16 @@ export default {
       })
       // this.uploading = true
       this.doUpload()
+    },
+    handleOk (type) {
+      switch (type) {
+        case 'housediary':
+          this.$refs.housediaryref && this.$refs.housediaryref.addHouseDiary()
+          this.houseDiaryVisible = false
+          break
+        default:
+          break
+      }
     }
   }
 }

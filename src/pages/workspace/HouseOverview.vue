@@ -118,7 +118,7 @@
                   <img :src="`/house/${house.id % 10}.webp`" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px'}">
-                  <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left', width: '300px' }">
+                  <a-layout :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '300px' }">
                     <a-layout-header
                       :style="{
                         background: '#ffffff',
@@ -160,7 +160,7 @@
                   </a-layout>
                 </a-layout-content>
                 <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
-                  <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'center' }">
+                  <a-layout :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'center' }">
                     <a-layout-header
                       :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                       width="200"
@@ -189,19 +189,19 @@
                   <a-tab-pane key="1" tab="楼盘点评">
                     <a-layout>
                       <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }">
-                        <div class="yelp-option yelp-all">
-                          <span size="small" @click="selectAll()" :class="yelpSelectedAll?'active':null">全部</span>
+                        <div class="diary-option diary-all">
+                          <span size="small" @click="selectAll()" :class="diarySelectedAll?'active':null">全部</span>
                         </div>
-                        <div v-for="y of yelpTypeOptions" :key="JSON.stringify(y)" class="yelp-option">
-                          <span :class="y.active?'active':null" @click="triggerYelpType(y)">{{ y.label +'('+ y.count +')' }}</span>
+                        <div v-for="y of diaryTypeOptions" :key="JSON.stringify(y)" class="diary-option">
+                          <span :class="y.active?'active':null" @click="triggerDiaryType(y)">{{ y.label +'('+ y.count +')' }}</span>
                         </div>
                       </a-layout-header>
                       <a-layout-content>
-                        <div class="yelp-list">
-                          <div class="yelp-list-item" v-for="yelp of yelpList" :key="yelp.username" :class="yelp.open?'open':'close'">
+                        <div class="diary-list">
+                          <div class="diary-list-item" v-for="diary of diaryList" :key="diary.userName" :class="diary.open?'open':'close'">
                             <a-layout :style="{ height: '100%'}">
                               <a-layout-sider :style="{ background: '#fff'}" width="80">
-                                <img :src="yelp.avatar">
+                                <img :src="diary.userIcon">
                               </a-layout-sider>
                               <a-layout :style="{ background: '#ffffff', padding: '0 5px' }" >
                                 <a-layout-header
@@ -213,12 +213,12 @@
                                     height: '40px',
                                     'line-height': '40px',
                                     cursor: 'pointer'
-                                  }">{{ yelp.username }} <span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{ yelp.datetime }}</span></a-layout-header>
+                                  }">{{ diary.userName }} <span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{ diary.datetime }}</span></a-layout-header>
                                 <a-layout-content :style="{ background: '#ffffff', overflow: 'hidden' }" >
-                                  <pre>{{ yelp.text }}</pre>
+                                  <pre>{{ diary.reviewContent }}</pre>
                                 </a-layout-content>
                                 <a-layout-footer :style="{ background: '#ffffff', padding: '0' }" >
-                                  {{ yelp.visitDatetime }}看房 <span style="float: right;cursor: pointer;" @click="triggerOpenState(yelp)"> {{ yelp.open ? '收起全文' : '展开全文' }}</span>
+                                  {{ diary.viewingTime }}看房 <span style="float: right;cursor: pointer;" @click="triggerOpenState(diary)"> {{ diary.open ? '收起全文' : '展开全文' }}</span>
                                 </a-layout-footer>
                               </a-layout>
                             </a-layout>
@@ -229,7 +229,7 @@
                   </a-tab-pane>
                   <a-tab-pane key="2" tab="楼盘问问">
                     <div class="qa-list">
-                      <div class="qa-item" v-for="qa of qaList" :key="qa.username + qa.datetime">
+                      <div class="qa-item" v-for="qa of qaList" :key="qa.userName + qa.datetime">
                         <a-layout>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }" >
                             <a-layout-header
@@ -249,8 +249,8 @@
                             </a-layout-content>
                           </a-layout>
                           <a-layout-sider :style="{ background: '#fff'}" width="90">
-                            <img :src="qa.avatar">
-                            <p>{{ qa.username }}</p>
+                            <img :src="qa.userIcon">
+                            <p>{{ qa.userName }}</p>
                           </a-layout-sider>
                         </a-layout>
                       </div>
@@ -287,7 +287,7 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-import { photoQuery, queryAnalysis, getSeveralBedroomsInfo } from '@/api/manage'
+import { photoQuery, queryAnalysis, getSeveralBedroomsInfo, queryHouseDiary } from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -340,10 +340,11 @@ export default {
       // { title: '4sdsa', url: '/house/1.webp' }
       ],
       scroolPosition: 0,
-      yelpTypeOptions: [{
+      diaryTypeOptions: [{
         label: '住房舒适度',
         active: false,
-        count: 1
+        count: 1,
+        diaryList: []
       },
       {
         label: '周边医院',
@@ -390,14 +391,14 @@ export default {
         num: 3,
         severalBedrooms: '4'
       }],
-      yelpSelectedAll: true,
-      yelpList: [{
-        avatar: '/common/touxiang.png',
-        username: 'yonghuming',
+      diarySelectedAll: true,
+      diaryList: [{
+        userIcon: '/common/touxiang.png',
+        userName: 'yonghuming',
         datetime: '2020-03-02',
-        visitDatetime: '2020年2月2日',
+        viewingTime: '2020年2月2日',
         open: false,
-        text: `复地雅园位于黄浦区中心区域复兴东路与河南南路的交汇处，位于上海心脏地带，邻近上海主要旅游点之一的豫园，尽览黄浦江的美景。
+        reviewContent: `复地雅园位于黄浦区中心区域复兴东路与河南南路的交汇处，位于上海心脏地带，邻近上海主要旅游点之一的豫园，尽览黄浦江的美景。
 项目周边设施配套有：
 【商业配套】外滩金融中心、香港名都、南京路步行街、来福士广场。
 【交通配套】交通配套：距离地铁10号线豫园站800米，8号线老西门站800米。自驾出行可走延安路高架，南北高架路，人民路隧道，延安东路隧道。
@@ -405,9 +406,9 @@ export default {
 【医疗配套】项目周边4公里内上海九院，瑞金医院，仁济医院西院，黄浦区中西医结合医院，曙光医院西院。
 总的来说，项目交通便利，配套完善，适合本地或在市区上班的刚需偏改善群体。`
         }],
-       qaList: [{
-        avatar: '/common/touxiang.png',
-        username: 'yonghuming',
+      qaList: [{
+        userIcon: '/common/touxiang.png',
+        userName: 'yonghuming',
         datetime: '2020-03-02',
         question: '复地雅园怎么样？',
         answer: `复地雅园位于黄浦区城隍庙板块，靠近河南南路与昼锦路交汇处。项目此次推出建面约108-179平2-4房，共计93套，带装修交付。
@@ -424,6 +425,7 @@ export default {
     this.houseSelect = JSON.parse(this.$route.query.houseSelect)
     this.queryPhotos()
     this.queryAllAnalysis()
+    this.queryAllHouseDiary()
   },
   methods: {
     closeDetail () {
@@ -523,23 +525,51 @@ export default {
           }
       })
     },
-    triggerYelpType (yelp) {
-      this.yelpSelectedAll = false
-      this.yelpTypeOptions.forEach(y => {
-        if (y.label === yelp.label) {
+    queryAllHouseDiary () {
+      this.diaryTypeOptions = []
+      queryHouseDiary(this.houseSelect.id).then(houseDiary => {
+        this.diaryList = houseDiary
+        houseDiary.forEach(h => {
+        const a = this.diaryTypeOptions.filter(d => d.label === h.classificationLabel)
+        if (a.length) {
+          a[0].count++
+          a[0].diaryList.push(Object.assign({ open: false }, h))
+        } else {
+        this.diaryTypeOptions.push({
+                label: h.classificationLabel,
+                active: false,
+                count: 1,
+                diaryList: [Object.assign({ open: false }, h)]
+              })
+        }
+        })
+      })
+    },
+    queryHouseDiaryByLabel (label) {
+      queryHouseDiary(this.houseSelect.id, label).then(houseDiary => {
+        if (houseDiary?.length) {
+            this.diaryList = houseDiary
+          }
+      })
+    },
+    triggerDiaryType (diary) {
+      this.diarySelectedAll = false
+      this.diaryTypeOptions.forEach(y => {
+        if (y.label === diary.label) {
           y.active = !y.active
         }
       })
+      this.diaryList = diary.diaryList
     },
     selectAll () {
-      this.yelpSelectedAll = true
-      this.yelpTypeOptions.forEach(y => {
+      this.diarySelectedAll = true
+      this.diaryTypeOptions.forEach(y => {
           y.active = false
       })
     },
-    triggerOpenState (yelp) {
-       this.yelpList.forEach(y => {
-        if (y.username === yelp.username) {
+    triggerOpenState (diary) {
+       this.diaryList.forEach(y => {
+        if (y.userName === diary.userName) {
           y.open = !y.open
         }
       })
@@ -718,15 +748,15 @@ export default {
 .house-diary >>> .ant-tabs-nav .ant-tabs-tab {
   padding: 0px 16px;
 }
-.yelp-option {
+.diary-option {
     width: 127px;
     float: left;
     padding-right: 10px;
 }
-.yelp-option.yelp-all {
+.diary-option.diary-all {
   width: 80px;
 }
-.yelp-option span {
+.diary-option span {
   color: #262626;
   cursor: pointer;
   height: 22px;
@@ -737,7 +767,7 @@ export default {
   display: inline-block;
   width: 100%;
 }
-.yelp-option span.active {
+.diary-option span.active {
   color: #B71C2B;
   border: 1px solid #B71C2B;
   background: rgba(183, 28, 43, 0.08);
@@ -748,13 +778,13 @@ img {
 .house-type-item >>> .ant-descriptions-item-label {
   line-height: 2.5;
 }
-.yelp-list-item {
+.diary-list-item {
   min-height: 100px;
 }
-.yelp-list-item >>> .ant-layout-footer{
+.diary-list-item >>> .ant-layout-footer{
   display: block;
 }
-.yelp-list-item.close {
+.diary-list-item.close {
   height: 147px;
 }
 .type-select {
