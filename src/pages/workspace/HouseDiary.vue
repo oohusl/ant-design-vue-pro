@@ -9,20 +9,17 @@
         label="楼盘名称">
         <a-input :value="houseSelect.communityName" :disabled="true"/>
       </a-form-item>
-      <a-form-item label="用户名">
-        <a-input v-model="houseDiaryEdit.userName"></a-input>
-      </a-form-item>
-      <a-form-item label="分类标签">
-        <a-input v-model="houseDiaryEdit.classificationLabel"></a-input>
-      </a-form-item>
-      <a-form-item label="客户信息">
-        <a-input v-model="houseDiaryEdit.customerInfo"></a-input>
-      </a-form-item>
       <a-form-item label="看房时间">
         <a-date-picker valueFormat="YYYY-MM-DD" @change="onChange" v-decorator="['startAt', {rules:[{required: true, message: '请选择开始时间'}]}]"/>
       </a-form-item>
       <a-form-item label="点评内容">
         <a-input v-model="houseDiaryEdit.reviewContent" type="textarea"></a-input>
+      </a-form-item>
+      <a-form-item label="客户信息">
+        <a-input v-model="houseDiaryEdit.customerInfo"></a-input>
+      </a-form-item>
+      <a-form-item label="分类标签">
+        <a-input v-model="houseDiaryEdit.classificationLabel"></a-input>
       </a-form-item>
     </a-form>
   </div>
