@@ -52,7 +52,17 @@ export default {
     addHouseDiary () {
       this.houseDiaryEdit.communityId = this.houseSelect.id
       this.houseDiaryEdit.userIcon = ''
-      newHouseDiary(this.houseDiaryEdit)
+      newHouseDiary(this.houseDiaryEdit).then(e => {
+        this.$notification.success({
+            message: '通知',
+            description: '保存成功'
+          })
+      }).catch(e => {
+          this.$notification.error({
+            message: '通知',
+            description: '修改失败'
+          })
+      })
     },
     onChange (date) {
       this.houseDiaryEdit.viewingTime = date

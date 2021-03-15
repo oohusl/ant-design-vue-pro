@@ -685,7 +685,7 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal :visible="houseDiaryVisible" title="添加看房日记" @ok="handleOk('housediary')">
+    <a-modal :visible="houseDiaryVisible" title="添加看房日记" @ok="handleOk('housediary')" @cancel="houseDiaryVisible = false">
       <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
     </a-modal>
   </div>

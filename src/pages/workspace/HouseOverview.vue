@@ -131,7 +131,7 @@
                         marginBottom: '24px'
                       }"
                     >
-                      {{ house.unitTypeName }} <a-tag color="green" size="sm">在售</a-tag>
+                      {{ `${house.room}室${house.hall ? house.hall + '厅' : '' }${house.kitchen ? house.kitchen + '厨' : '' }${house.toilet ? house.toilet + '卫  ' : '  ' }建面${house.acreage}m²` }} <a-tag color="green" size="sm">在售</a-tag>
                     </a-layout-header>
                     <a-layout-content
                       :style="{
@@ -506,7 +506,7 @@ export default {
             num = num + b.num
             b.houseTypeList = await queryAnalysis(this.houseSelect.id, b.severalBedrooms)
             if (b.houseTypeList?.length) {
-                this.houseTypeList = this.houseTypeList.concat(b.houseTypeList)
+                this.houseTypeList = b.houseTypeList
             }
           })
           this.houseTypeOptions.unshift({
