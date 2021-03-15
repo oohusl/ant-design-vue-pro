@@ -632,7 +632,6 @@
                           'align-items': 'flex-end',
                         }"
                       >
-                        <a-button @click="showDetail(community)">查看详情</a-button>
                       </a-layout-content>
                     </a-layout>
                   </a-layout-sider>

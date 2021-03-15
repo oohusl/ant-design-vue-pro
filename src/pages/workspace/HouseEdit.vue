@@ -626,10 +626,10 @@
           <a-input :value="houseSelect.communityName" :disabled="true" />
         </a-form-item>
         <a-form-item label="房屋结构">
-          <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.severalBedrooms"></a-input
-          ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hallNumber"></a-input
-          ><a-input style="width:100px" addon-after="厨" v-model="houseTypeEdit.kitchenNumber"></a-input
-          ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.restRoomNumber"></a-input>
+          <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.room"></a-input
+          ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hall"></a-input
+          ><a-input style="width:100px" addon-after="厨" v-model="houseTypeEdit.kitchen"></a-input
+          ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.toilet"></a-input>
         </a-form-item>
         <a-form-item label="房屋朝向">
           <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select>
@@ -855,7 +855,7 @@ export default {
     },
 
     saveHouseType () {
-      this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.severalBedrooms}室${this.houseTypeEdit.hallNumber || 0}厅${!this.houseTypeEdit.kitchenNumber || 0}厨${this.houseTypeEdit.restRoomNumber || 0}卫`
+      this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this.houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
       saveAnalysis(this.houseTypeEdit).then(e => {
         const up = []
         this.houseTypeFiles.forEach(file => {
