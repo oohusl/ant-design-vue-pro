@@ -723,7 +723,7 @@ export const buildingRankOptions = [
     value: 'D'
   }
 ]
-export const areaPlanningOptions = [
+export const districtPlanningOptions = [
   {
     label: '城市主中心',
     value: '城市主中心'

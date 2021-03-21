@@ -172,7 +172,7 @@
             <a-checkbox-group v-model="queryParam.buildingRank" :options="buildingRankOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地区规划">
-            <a-checkbox-group v-model="queryParam.areaPlanning" :options="areaPlanningOptions"> </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.districtPlanning" :options="districtPlanningOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
             <a-form-item :style="{ display: 'inline-block', width: '160px', 'margin-right': '20px' }">
@@ -672,7 +672,7 @@ import {
   loopSummaryOptions,
   buildingRankOptions,
   booleanOptions,
-  areaPlanningOptions,
+  districtPlanningOptions,
   subwayOptions,
   areaPlate,
   transactionOwnershipOptions,
@@ -736,7 +736,7 @@ export default {
       constructionAgeOptions,
       loopSummaryOptions,
       buildingRankOptions,
-      areaPlanningOptions,
+      districtPlanningOptions,
       booleanOptions,
       totalPriceOptions,
       transactionOwnershipOptions,
