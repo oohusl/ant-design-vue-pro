@@ -309,7 +309,6 @@
             >{{ translateRang(rangTag, '万', averageLlistedPriceOptions) }}</a-tag
             >
           </a-form-item>
-
           <a-form-item label="总价" v-if="advanced">
             <a-select
               style="width: 120px"

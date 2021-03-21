@@ -63,6 +63,9 @@
           <a-descriptions-item label="环线">
             {{ houseSelect.loopSummary }}
           </a-descriptions-item>
+          <a-descriptions-item label="楼盘等级">
+            {{ houseSelect.buildingRank }}
+          </a-descriptions-item>
           <a-descriptions-item label="区域规划">
             {{ houseSelect.districtPlanning }}
           </a-descriptions-item>
@@ -108,6 +111,9 @@
           </a-descriptions-item>
           <a-descriptions-item label="绿化率">
             {{ houseSelect.greeningRate ? houseSelect.greeningRate + '%' : '' }}
+          </a-descriptions-item>
+          <a-descriptions-item label="物业属性">
+            {{ houseSelect.propertyType }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
             {{ houseSelect.buildingType }}
@@ -272,9 +278,11 @@
             ></a-select>
           </a-descriptions-item>
           <a-descriptions-item label="区域规划">
-            <a-select v-model="houseSelect.districtPlanning" size="small" class="col1">
-              <a-select-option value="城市副中心">城市副中心</a-select-option>
-              <a-select-option value="城市中心">城市中心</a-select-option>
+            <a-select v-model="houseSelect.buildingRank" size="small" class="col1" :options="buildingRankOptions">
+            </a-select>
+          </a-descriptions-item>
+          <a-descriptions-item label="区域规划">
+            <a-select v-model="houseSelect.districtPlanning" size="small" class="col1" :options="districtPlanningOptions">
             </a-select>
           </a-descriptions-item>
           <template v-for="(metro, i) in houseSelect.metroInfo">
@@ -357,6 +365,10 @@
           </a-descriptions-item>
           <a-descriptions-item label="绿化率">
             <a-input v-model="houseSelect.greeningRate" class="col1" size="small" addon-after="%" />
+          </a-descriptions-item>
+          <a-descriptions-item label="物业属性">
+            <a-select v-model="houseSelect.propertyType" size="small" class="col1" :options="propertyOptions">
+            </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
             <a-select v-model="houseSelect.buildingType" size="small" class="col1">
@@ -717,7 +729,10 @@ import {
   areaPlate,
   getLabel,
   statusMap,
-  peopleAndVehiclesOptions
+  peopleAndVehiclesOptions,
+  districtPlanningOptions,
+  buildingRankOptions,
+  propertyOptions
 } from '@/api/data'
 import {
   schoolOptions,
@@ -782,6 +797,9 @@ export default {
       subwayOptions,
       peopleAndVehiclesOptions,
       statusMap,
+      districtPlanningOptions,
+      buildingRankOptions,
+      propertyOptions,
       loading: false,
       plates: {},
       subwayStations: {},
