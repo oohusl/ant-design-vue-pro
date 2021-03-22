@@ -682,3 +682,62 @@ export const volume2019Options = [
     value: '400-100000'
   }
 ]
+export const propertyOptions = [
+  {
+    label: '住宅',
+    value: '住宅'
+  },
+  {
+    label: '别墅',
+    value: '别墅'
+  },
+  {
+    label: '商住',
+    value: '商住'
+  },
+  {
+    label: '其他',
+    value: '其他'
+  }
+]
+
+export const buildingRankOptions = [
+  {
+    label: 'A+',
+    value: 'A+'
+  },
+  {
+    label: 'A',
+    value: 'A'
+  },
+  {
+    label: 'B',
+    value: 'B'
+  },
+  {
+    label: 'C',
+    value: 'C'
+  },
+  {
+    label: 'D',
+    value: 'D'
+  }
+]
+export const districtPlanningOptions = [
+  {
+    label: '城市主中心',
+    value: '城市主中心'
+  },
+  {
+    label: '城市副中心',
+    value: '城市副中心'
+  },
+  {
+    label: '地区中心',
+    value: '地区中心'
+  },
+  {
+    label: '其他',
+    value: '其他'
+  }
+]

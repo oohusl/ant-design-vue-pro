@@ -168,6 +168,12 @@
           <a-form-item label="环线">
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
+          <a-form-item label="楼盘等级">
+            <a-checkbox-group v-model="queryParam.buildingRank" :options="buildingRankOptions"> </a-checkbox-group>
+          </a-form-item>
+          <a-form-item label="地区规划">
+            <a-checkbox-group v-model="queryParam.districtPlanning" :options="districtPlanningOptions"> </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="学校" v-if="advanced">
             <a-form-item :style="{ display: 'inline-block', width: '160px', 'margin-right': '20px' }">
               <a-select
@@ -303,7 +309,6 @@
             >{{ translateRang(rangTag, '万', averageLlistedPriceOptions) }}</a-tag
             >
           </a-form-item>
-
           <a-form-item label="总价" v-if="advanced">
             <a-select
               style="width: 120px"
@@ -427,6 +432,10 @@
           </a-form-item>
           <a-form-item v-if="advanced" label="小区权属">
             <a-checkbox-group v-model="queryParam.transactionOwnerships" :options="transactionOwnershipOptions">
+            </a-checkbox-group>
+          </a-form-item>
+          <a-form-item v-if="advanced" label="物业属性">
+            <a-checkbox-group v-model="queryParam.propertyType" :options="propertyOptions">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="建筑类型">
@@ -661,10 +670,13 @@ import {
   roomAreaOptions,
   constructionAgeOptions,
   loopSummaryOptions,
+  buildingRankOptions,
   booleanOptions,
+  districtPlanningOptions,
   subwayOptions,
   areaPlate,
   transactionOwnershipOptions,
+  propertyOptions,
   peopleAndVehiclesOptions,
   parkingSpaceRatioOptions,
   volume2019Options,
@@ -723,9 +735,12 @@ export default {
       roomAreaOptions,
       constructionAgeOptions,
       loopSummaryOptions,
+      buildingRankOptions,
+      districtPlanningOptions,
       booleanOptions,
       totalPriceOptions,
       transactionOwnershipOptions,
+      propertyOptions,
       peopleAndVehiclesOptions,
       metroDistanceOption,
       parkingSpaceRatioOptions,
