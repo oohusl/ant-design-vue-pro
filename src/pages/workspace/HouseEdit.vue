@@ -64,7 +64,7 @@
             {{ houseSelect.loopSummary }}
           </a-descriptions-item>
           <a-descriptions-item label="楼盘等级">
-            {{ houseSelect.buildingRank }}
+            {{ houseSelect.communityLev }}
           </a-descriptions-item>
           <a-descriptions-item label="区域规划">
             {{ houseSelect.districtPlanning }}
@@ -277,12 +277,17 @@
               class="col1"
             ></a-select>
           </a-descriptions-item>
-          <a-descriptions-item label="区域规划">
-            <a-select v-model="houseSelect.buildingRank" size="small" class="col1" :options="buildingRankOptions">
+          <a-descriptions-item label="楼盘等级">
+            <a-select v-model="houseSelect.communityLev" size="small" class="col1" :options="communityLevOptions">
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="区域规划">
-            <a-select v-model="houseSelect.districtPlanning" size="small" class="col1" :options="districtPlanningOptions">
+            <a-select
+              v-model="houseSelect.districtPlanning"
+              size="small"
+              class="col1"
+              :options="districtPlanningOptions"
+            >
             </a-select>
           </a-descriptions-item>
           <template v-for="(metro, i) in houseSelect.metroInfo">
@@ -678,7 +683,8 @@
             list-type="picture-card"
             :before-upload="beforeHouseTypeUpload"
             :remove="handleHouseTypeRemove"
-            @preview="handlePreview">
+            @preview="handlePreview"
+          >
             <div>
               <a-icon type="plus" />
               <div class="ant-upload-text">
@@ -697,7 +703,12 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <a-modal :visible="houseDiaryVisible" title="添加看房日记" @ok="handleOk('housediary')" @cancel="houseDiaryVisible = false">
+    <a-modal
+      :visible="houseDiaryVisible"
+      title="添加看房日记"
+      @ok="handleOk('housediary')"
+      @cancel="houseDiaryVisible = false"
+    >
       <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
     </a-modal>
   </div>
@@ -731,13 +742,10 @@ import {
   statusMap,
   peopleAndVehiclesOptions,
   districtPlanningOptions,
-  buildingRankOptions,
+  communityLevOptions,
   propertyOptions
 } from '@/api/data'
-import {
-  schoolOptions,
-  schoolDetail
-} from '@/api/school'
+import { schoolOptions, schoolDetail } from '@/api/school'
 import HouseDiary from './HouseDiary.vue'
 
 function getBase64 (file) {
@@ -798,7 +806,7 @@ export default {
       peopleAndVehiclesOptions,
       statusMap,
       districtPlanningOptions,
-      buildingRankOptions,
+      communityLevOptions,
       propertyOptions,
       loading: false,
       plates: {},
@@ -873,31 +881,34 @@ export default {
     },
 
     saveHouseType () {
-      this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this.houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
-      saveAnalysis(this.houseTypeEdit).then(e => {
-        const up = []
-        this.houseTypeFiles.forEach(file => {
-          if (file.file) {
-            const formData = new FormData()
-            formData.append('file', file.file)
-            formData.append('houseId', e.id)
-            formData.append('type', '1')
-            up.push(houseTypePhotoUpload(formData))
-          }
-        })
-        Promise.all(up).then(r => {
-          console.log('upload success')
-        })
-        this.$notification.success({
+      this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this
+        .houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
+      saveAnalysis(this.houseTypeEdit)
+        .then(e => {
+          const up = []
+          this.houseTypeFiles.forEach(file => {
+            if (file.file) {
+              const formData = new FormData()
+              formData.append('file', file.file)
+              formData.append('houseId', e.id)
+              formData.append('type', '1')
+              up.push(houseTypePhotoUpload(formData))
+            }
+          })
+          Promise.all(up).then(r => {
+            console.log('upload success')
+          })
+          this.$notification.success({
             message: '通知',
             description: this.houseSelect.id ? '修改成功' : '保存成功'
           })
-      }).catch(e => {
-            this.$notification.error({
+        })
+        .catch(e => {
+          this.$notification.error({
             message: '通知',
             description: this.houseSelect.id ? '修改失败' : '保存失败'
           })
-      })
+        })
     },
 
     areaChange () {
@@ -968,7 +979,7 @@ export default {
       this.houseTypeVisible = true
     },
     openHouseDiary () {
-       this.houseDiaryVisible = true
+      this.houseDiaryVisible = true
     },
     houseTypeOK () {
       this.houseTypeVisible = false
@@ -1226,8 +1237,9 @@ export default {
         })
         .catch(e => {
           console.error(e)
-        }).finally(e => {
-            this.queryPhotos().then(e => {
+        })
+        .finally(e => {
+          this.queryPhotos().then(e => {
             if (this.photoType === '0') {
               if (this.fileList.length > 0) {
                 this.houseSelect['communityPhoto'] = this.fileList[0]['url']
@@ -1254,7 +1266,7 @@ export default {
     handleOk (type) {
       switch (type) {
         case 'housediary':
-          this.$refs.housediaryref && this.$refs.housediaryref.addHouseDiary()
+          this.$refs.housediaryref && this.$refs.housediaryref.save()
           this.houseDiaryVisible = false
           break
         default:

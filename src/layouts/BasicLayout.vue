@@ -13,8 +13,13 @@
     -->
     <template v-slot:menuHeaderRender>
       <div>
-        <img src="../assets/logo.png" alt="985" style="cursor: pointer" @click="$router.push({ path: '/house/query' })"/>
-        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.6</span></h1>
+        <img
+          src="../assets/logo.png"
+          alt="985"
+          style="cursor: pointer"
+          @click="$router.push({ path: '/house/query' })"
+        />
+        <h1>{{ title }} <span style="font-size: 8px; color: blue">v1.3.7</span></h1>
       </div>
     </template>
 
@@ -86,20 +91,20 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: (state) => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters
     })
   },
   created () {
     this.$store
       .dispatch('GetInfo')
-      .then((res) => {
+      .then(res => {
         const asyncRouter = this.filterAsyncRouter(asyncRouterMap, res.authorities)
-        const routes = asyncRouter.find((item) => item.path === '/')
+        const routes = asyncRouter.find(item => item.path === '/')
         this.menus = (routes && routes.children) || []
       })
-     .catch(() => {
-       this.$router.push({ path: '/user/login' })
-     })
+      .catch(() => {
+        this.$router.push({ path: '/user/login' })
+      })
     // const routes = this.mainMenu.find((item) => item.path === '/')
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
@@ -165,8 +170,8 @@ export default {
       if (roles.indexOf('ROLE_ADMIN') >= 0) {
         return routerMap
       }
-      const accessedRouters = routerMap.filter((route) => {
-        if (!route.authority || route.authority.filter((x) => roles.indexOf(x) >= 0).size >= 0) {
+      const accessedRouters = routerMap.filter(route => {
+        if (!route.authority || route.authority.filter(x => roles.indexOf(x) >= 0).size >= 0) {
           if (route.children && route.children.length) {
             route.children = this.filterAsyncRouter(route.children, roles)
           }

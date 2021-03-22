@@ -558,12 +558,8 @@ export const transactionOwnershipOptions = [
     value: '商品房'
   },
   {
-    label: '动迁房',
-    value: '动迁房'
-  },
-  {
-    label: '商住房',
-    value: '商住房'
+    label: '动迁',
+    value: '动迁'
   },
   {
     label: '售后公房',
@@ -701,7 +697,7 @@ export const propertyOptions = [
   }
 ]
 
-export const buildingRankOptions = [
+export const communityLevOptions = [
   {
     label: 'A+',
     value: 'A+'

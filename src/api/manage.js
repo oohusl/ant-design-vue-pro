@@ -15,7 +15,9 @@ const api = {
   getSeveralBedroomsInfo: '/house-analysis/getSeveralBedroomsInfo',
   saveAnalysis: '/house-analysis',
   newHouseDiary: '/house-diary',
-  queryHouseDiary: '/house-diary/queryHouseAnalysis'
+  queryHouseDiary: '/house-diary/queryHouseDiary',
+  queryHouseQuestion: '/house-diary/queryDiaryQuestionInfo/',
+  createHouseQuestion: '/house-diary/diaryQuestionInfo'
 }
 
 export default api
@@ -106,7 +108,7 @@ export function getLabels () {
   return request({
     url: `${api.constants}`,
     method: 'post',
-    data: { 'constantType': 'bq' }
+    data: { constantType: 'bq' }
   })
 }
 
@@ -189,5 +191,27 @@ export function queryHouseDiary (communityId, classificationLabel) {
     url: api.queryHouseDiary,
     method: 'post',
     data: { communityId, classificationLabel }
+  })
+}
+export function queryHouseQuestion (communityId) {
+  return request({
+    url: `${api.queryHouseQuestion}/${communityId}`,
+    method: 'get'
+  })
+}
+
+export function saveHouseQuestion (question) {
+  return request({
+    url: `${api.createHouseQuestion}`,
+    method: 'post',
+    data: question
+  })
+}
+
+export function updateHouseQuestion (question) {
+  return request({
+    url: `${api.createHouseQuestion}`,
+    method: 'put',
+    data: question
   })
 }

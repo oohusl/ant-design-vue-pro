@@ -17,13 +17,7 @@
             v-model="queryParam.communityName"
           >
             <a-input>
-              <a-button
-                slot="suffix"
-                style="margin-right: -12px"
-                class="search-btn"
-                type="primary"
-                @click="search"
-              >
+              <a-button slot="suffix" style="margin-right: -12px" class="search-btn" type="primary" @click="search">
                 <a-icon type="search" />
               </a-button>
             </a-input>
@@ -50,11 +44,20 @@
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">
-              <a-popover v-for="(options,i) in areaOptions" :key="options.value" trigger="hover" :placement=" i > 8 ? 'bottomLeft' : 'topLeft'">
+              <a-popover
+                v-for="(options, i) in areaOptions"
+                :key="options.value"
+                trigger="hover"
+                :placement="i > 8 ? 'bottomLeft' : 'topLeft'"
+              >
                 <template slot="content">
                   <a-checkbox-group v-model="plates[options.value]" @change="plateChange(options)">
                     <a-row>
-                      <a-col v-for="plateOption in getPlate(options.value)" :span="getPlate(options.value).length < 7 ? 4 : 3" :key="plateOption.value">
+                      <a-col
+                        v-for="plateOption in getPlate(options.value)"
+                        :span="getPlate(options.value).length < 7 ? 4 : 3"
+                        :key="plateOption.value"
+                      >
                         <a-checkbox
                           :value="plateOption.value"
                           :indeterminate="queryParam.area && queryParam.area.indexOf(options.value) >= 0"
@@ -72,9 +75,18 @@
                 >
               </a-popover>
             </a-checkbox-group>
-            <a-tag v-for="p in queryParam.area" :key="p" color="pink" :closable="true" @close="handleTagClose(p, queryParam.area)">{{ p }}</a-tag>
+            <a-tag
+              v-for="p in queryParam.area"
+              :key="p"
+              color="pink"
+              :closable="true"
+              @close="handleTagClose(p, queryParam.area)"
+            >{{ p }}</a-tag
+            >
             <template v-for="(value, key) in plates">
-              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, plates[key])">{{ key + '-' + p }}</a-tag>
+              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, plates[key])">{{
+                key + '-' + p
+              }}</a-tag>
             </template>
           </a-form-item>
           <a-form-item label="地铁线路">
@@ -83,9 +95,9 @@
                 <a-col>
                   <a-popover
                     trigger="hover"
-                    v-for="(metroLine,i) in metroLineOptions"
+                    v-for="(metroLine, i) in metroLineOptions"
                     :key="metroLine.value"
-                    :placement=" i > 8 ? 'bottomLeft' : 'topLeft'"
+                    :placement="i > 8 ? 'bottomLeft' : 'topLeft'"
                   >
                     <template slot="content">
                       <a-checkbox-group
@@ -113,9 +125,18 @@
                 </a-col>
               </a-row>
             </a-checkbox-group>
-            <a-tag v-for="ss in queryParam.metroLine" :key="ss" color="pink" :closable="true" @close="handleTagClose(ss, queryParam.metroLine)">{{ ss }}</a-tag>
+            <a-tag
+              v-for="ss in queryParam.metroLine"
+              :key="ss"
+              color="pink"
+              :closable="true"
+              @close="handleTagClose(ss, queryParam.metroLine)"
+            >{{ ss }}</a-tag
+            >
             <template v-for="(value, key) in subwayStations">
-              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, subwayStations[key])">{{ key + '-' + p }}</a-tag>
+              <a-tag v-for="p in value" :key="p" :closable="true" @close="handleTagClose(p, subwayStations[key])">{{
+                key + '-' + p
+              }}</a-tag>
             </template>
           </a-form-item>
           <a-form-item label="地铁距离">
@@ -128,31 +149,20 @@
               :allowClear="true"
               :maxTagCount="0"
               mode="multiple"
-              :showArrow="true">
+              :showArrow="true"
+            >
             </a-select>
             <a-form-item :style="{ display: 'inline-block', width: '60px', 'margin-left': '20px' }">
               <a-input type="number" style="width: 100%" size="small" v-model="tempParam.minDistance" />
             </a-form-item>
             <span :style="{ display: 'inline-block', width: '10px', textAlign: 'center' }"> - </span>
             <a-form-item :style="{ display: 'inline-block', width: '114px', 'margin-right': '20px' }">
-              <a-input
-                type="number"
-                style="width: 100%"
-                size="small"
-                suffix="米"
-                v-model="tempParam.maxDistance"
-              >
+              <a-input type="number" style="width: 100%" size="small" suffix="米" v-model="tempParam.maxDistance">
                 <a-icon
                   slot="addonAfter"
                   type="plus"
                   aria-disabled="true"
-                  @click="
-                    addToRang(
-                      tempParam.subwayDistanceRang,
-                      tempParam.minDistance,
-                      tempParam.maxDistance
-                    )
-                  "
+                  @click="addToRang(tempParam.subwayDistanceRang, tempParam.minDistance, tempParam.maxDistance)"
                 />
               </a-input>
             </a-form-item>
@@ -169,10 +179,11 @@
             <a-checkbox-group v-model="queryParam.loopSummary" :options="loopSummaryOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="楼盘等级">
-            <a-checkbox-group v-model="queryParam.buildingRank" :options="buildingRankOptions"> </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.communityLev" :options="communityLevOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地区规划">
-            <a-checkbox-group v-model="queryParam.districtPlanning" :options="districtPlanningOptions"> </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.districtPlanning" :options="districtPlanningOptions">
+            </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
             <a-form-item :style="{ display: 'inline-block', width: '160px', 'margin-right': '20px' }">
@@ -435,8 +446,7 @@
             </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="物业属性">
-            <a-checkbox-group v-model="queryParam.propertyType" :options="propertyOptions">
-            </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.propertyAttributes" :options="propertyOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="建筑类型">
             <a-checkbox-group v-model="queryParam.buildingType">
@@ -480,7 +490,13 @@
                   slot="addonAfter"
                   type="plus"
                   aria-disabled="true"
-                  @click="addToRang(tempParam.parkingSpacesRatioRang, tempParam.parkingSpacesRatioMin, tempParam.parkingSpacesRatioMax)"
+                  @click="
+                    addToRang(
+                      tempParam.parkingSpacesRatioRang,
+                      tempParam.parkingSpacesRatioMin,
+                      tempParam.parkingSpacesRatioMax
+                    )
+                  "
                 />
               </a-input>
             </a-form-item>
@@ -488,7 +504,7 @@
               v-for="rangTag in gatherSelect(queryParam.parkingSpacesRatios, tempParam.parkingSpacesRatioRang)"
               :key="rangTag"
               :closable="true"
-              @close="handleTagClose(rangTag, queryParam.parkingSpacesRatios,tempParam.parkingSpacesRatioRang)"
+              @close="handleTagClose(rangTag, queryParam.parkingSpacesRatios, tempParam.parkingSpacesRatioRang)"
               color="pink"
             >{{ translateRang(rangTag, '', parkingSpaceRatioOptions) }}</a-tag
             >
@@ -526,7 +542,8 @@
               :closable="true"
               @close="handleTagClose(rangTag, queryParam.volume2019s, tempParam.volume2019Rang)"
               color="pink"
-            >{{ translateRang(rangTag, '套', volume2019Options) }}</a-tag>
+            >{{ translateRang(rangTag, '套', volume2019Options) }}</a-tag
+            >
           </a-form-item>
         </a-form>
         <!-- 列表 -->
@@ -579,7 +596,7 @@
                           padding: 0,
                           display: 'flex',
                           'justify-content': 'center',
-                          'algin-item': 'flex-end',
+                          'algin-item': 'flex-end'
                         }"
                       >
                         <a-form
@@ -594,10 +611,14 @@
                           <a-form-item label="环线" :style="{ height: '30px' }">
                             <span>{{ community.loopSummary }}</span>
                           </a-form-item>
-                          <a-form-item v-for="(m, i) in community.metroInfo" :key="JSON.stringify(m)" :colon="i == 0" :label="i == 0 ? '地铁' : ' '" :style="{ height: '30px' }">
-                            <span
-                            >{{ m.metroLine + ' ' + m.subwayStation }}</span
-                            >
+                          <a-form-item
+                            v-for="(m, i) in community.metroInfo"
+                            :key="JSON.stringify(m)"
+                            :colon="i == 0"
+                            :label="i == 0 ? '地铁' : ' '"
+                            :style="{ height: '30px' }"
+                          >
+                            <span>{{ m.metroLine + ' ' + m.subwayStation }}</span>
                           </a-form-item>
                         </a-form>
                       </a-layout-content>
@@ -638,7 +659,7 @@
                           padding: 0,
                           display: 'flex',
                           'justify-content': 'center',
-                          'align-items': 'flex-end',
+                          'align-items': 'flex-end'
                         }"
                       >
                         <a-button @click="showDetail(community)">查看详情</a-button>
@@ -670,7 +691,7 @@ import {
   roomAreaOptions,
   constructionAgeOptions,
   loopSummaryOptions,
-  buildingRankOptions,
+  communityLevOptions,
   booleanOptions,
   districtPlanningOptions,
   subwayOptions,
@@ -682,10 +703,7 @@ import {
   volume2019Options,
   metroDistanceOption
 } from '@/api/data'
-import {
-  schoolOptions,
-  shoolType
-} from '@/api/school'
+import { schoolOptions, shoolType } from '@/api/school'
 import { AutoComplete, BackTop, Affix } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
 
@@ -715,7 +733,15 @@ export default {
         echelonPerformance: {},
         parkingSpacesRatios: [],
         volume2019s: [],
-        ranges: { price: [], total: [], roomArea: [], constructionAge: [], parkingSpacesRatios: [], volume2019s: [], subwayDistance: [] }
+        ranges: {
+          price: [],
+          total: [],
+          roomArea: [],
+          constructionAge: [],
+          parkingSpacesRatios: [],
+          volume2019s: [],
+          subwayDistance: []
+        }
       },
       tempParam: { parkingSpacesRatioRang: [], volume2019Rang: [], subwayDistanceRang: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
@@ -735,7 +761,7 @@ export default {
       roomAreaOptions,
       constructionAgeOptions,
       loopSummaryOptions,
-      buildingRankOptions,
+      communityLevOptions,
       districtPlanningOptions,
       booleanOptions,
       totalPriceOptions,
@@ -753,8 +779,12 @@ export default {
       timer: undefined,
       shoolType,
       dataExcel: [],
-      headers: '区域,板块,地区规划,小区名称,挂牌均价,环线汇总,小区属性,地铁线,地铁站,距离,交易权属,最大楼层,最小楼层,2019成交量,1房面积段,2房面积段,3房面积段,1房价格段,2房价格段,3房价格段,是否电梯,室外游泳池,室内游泳池,会所,洋房,双阳台,大阳台,带花园,大露台,人车分流,建筑类型,物业属性,物业费,栋数,户数,车位数,容积率,绿化率,在售-3.20,正租-3.20,建筑代,开发商,物业公司,幼儿园,幼儿园等级,小学,小学梯队表现,是否一贯制,中学,初中梯队表现, 叠拼别墅, 独栋别墅, 联排别墅, 双拼别墅,内部配套,地址,产权年限,小区介绍'.split(','),
-      fields: 'area,plate,districtPlanning,communityName,,loopSummary,cellAttributes,metroLine,subwayStation,distance,transactionOwnership,maxFloor,minFloor,volume2019,roomArea1Min,roomArea2Min,roomArea3Min,roomPriceRange1Min,roomPriceRange2Min,roomPriceRange3Min,isLift,isOutdoorSwimmingRoom,isIndoorSwimmingPool,clubhouse,bungalow,doubleBalcony,largeBalcony,withGarden,largeTerrace,peopleAndVehicles,buildingType,propertyAttributes,propertyCosts,buildingNumber,householdsNumber,parkingSpacesNumber,volumeRate,greeningRate,averageLlistedPrice,inStock,constructionAge,developer,propertyCompany,school1Name,school1Level,school2Name,school2Name,,school3Name,school3Name,stackedVilla,singleFamilyVilla,townhouse,semiDetachedHouse,internalSupporting,address,propertyRights,communityDesc'.split(',')
+      headers: '区域,板块,地区规划,小区名称,挂牌均价,环线汇总,小区属性,地铁线,地铁站,距离,交易权属,最大楼层,最小楼层,2019成交量,1房面积段,2房面积段,3房面积段,1房价格段,2房价格段,3房价格段,是否电梯,室外游泳池,室内游泳池,会所,洋房,双阳台,大阳台,带花园,大露台,人车分流,建筑类型,物业属性,物业费,栋数,户数,车位数,容积率,绿化率,在售-3.20,正租-3.20,建筑代,开发商,物业公司,幼儿园,幼儿园等级,小学,小学梯队表现,是否一贯制,中学,初中梯队表现, 叠拼别墅, 独栋别墅, 联排别墅, 双拼别墅,内部配套,地址,产权年限,小区介绍'.split(
+        ','
+      ),
+      fields: 'area,plate,districtPlanning,communityName,,loopSummary,cellAttributes,metroLine,subwayStation,distance,transactionOwnership,maxFloor,minFloor,volume2019,roomArea1Min,roomArea2Min,roomArea3Min,roomPriceRange1Min,roomPriceRange2Min,roomPriceRange3Min,isLift,isOutdoorSwimmingRoom,isIndoorSwimmingPool,clubhouse,bungalow,doubleBalcony,largeBalcony,withGarden,largeTerrace,peopleAndVehicles,buildingType,propertyAttributes,propertyCosts,buildingNumber,householdsNumber,parkingSpacesNumber,volumeRate,greeningRate,averageLlistedPrice,inStock,constructionAge,developer,propertyCompany,school1Name,school1Level,school2Name,school2Name,,school3Name,school3Name,stackedVilla,singleFamilyVilla,townhouse,semiDetachedHouse,internalSupporting,address,propertyRights,communityDesc'.split(
+        ','
+      )
     }
   },
   created () {
@@ -803,7 +833,9 @@ export default {
     },
 
     searchData (size) {
-      this.makeSearchRequest(size).then(e => { this.results = e })
+      this.makeSearchRequest(size).then(e => {
+        this.results = e
+      })
     },
 
     makeSearchRequest (size) {
@@ -811,13 +843,35 @@ export default {
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
       requestParameters.plate = Object.values(this.plates).flat()
 
-      requestParameters.averageLlistedPrice = this.gatherSelectParamter(requestParameters.averageLlistedPrice, requestParameters.ranges.price, 10000)
-      requestParameters.totalPrice = this.gatherSelectParamter(requestParameters.totalPrice, requestParameters.ranges.total)
-      requestParameters.roomArea = this.gatherSelectParamter(requestParameters.roomArea, requestParameters.ranges.roomArea)
-      requestParameters.constructionAge = this.gatherSelectParamter(requestParameters.constructionAge, requestParameters.ranges.constructionAge)
-      requestParameters.parkingSpacesRatios = this.gatherSelectParamter(this.queryParam.parkingSpacesRatios, this.tempParam.parkingSpacesRatioRang)
-      requestParameters.volume2019s = this.gatherSelectParamter(this.queryParam.volume2019s, this.tempParam.volume2019Rang)
-      requestParameters.distances = this.gatherSelectParamter(this.queryParam.subwayDistance, this.tempParam.subwayDistanceRang)
+      requestParameters.averageLlistedPrice = this.gatherSelectParamter(
+        requestParameters.averageLlistedPrice,
+        requestParameters.ranges.price,
+        10000
+      )
+      requestParameters.totalPrice = this.gatherSelectParamter(
+        requestParameters.totalPrice,
+        requestParameters.ranges.total
+      )
+      requestParameters.roomArea = this.gatherSelectParamter(
+        requestParameters.roomArea,
+        requestParameters.ranges.roomArea
+      )
+      requestParameters.constructionAge = this.gatherSelectParamter(
+        requestParameters.constructionAge,
+        requestParameters.ranges.constructionAge
+      )
+      requestParameters.parkingSpacesRatios = this.gatherSelectParamter(
+        this.queryParam.parkingSpacesRatios,
+        this.tempParam.parkingSpacesRatioRang
+      )
+      requestParameters.volume2019s = this.gatherSelectParamter(
+        this.queryParam.volume2019s,
+        this.tempParam.volume2019Rang
+      )
+      requestParameters.distances = this.gatherSelectParamter(
+        this.queryParam.subwayDistance,
+        this.tempParam.subwayDistanceRang
+      )
 
       delete requestParameters.ranges
       delete requestParameters.averageLlistedPriceMin
@@ -838,7 +892,7 @@ export default {
       }
 
       if (this.queryParam.checkedList) {
-        this.queryParam.checkedList.forEach((e) => {
+        this.queryParam.checkedList.forEach(e => {
           requestParameters[e] = true
         })
         delete requestParameters.checkedList
@@ -849,25 +903,25 @@ export default {
 
     areaReset () {
       this.plateOptions.splice(0)
-      this.queryParam.area.forEach((e) => {
+      this.queryParam.area.forEach(e => {
         this.plateOptions.push(...areaPlate[e])
       })
     },
 
     getPlate (area) {
       const plates = []
-      areaPlate[area].forEach((v) => {
+      areaPlate[area].forEach(v => {
         plates.push({ label: v, value: v })
       })
       return plates
     },
 
     areaChange () {
-      this.queryParam.area.forEach((e) => {
+      this.queryParam.area.forEach(e => {
         const areaPlates = []
-        this.getPlate(e).forEach((p) => areaPlates.push(p.value))
+        this.getPlate(e).forEach(p => areaPlates.push(p.value))
         if (this.plates[e]) {
-          this.plates[e] = this.plates[e].filter((selectedP) => {
+          this.plates[e] = this.plates[e].filter(selectedP => {
             return areaPlates.indexOf(selectedP) < 0
           })
         }
@@ -884,7 +938,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwayOptions.forEach((v) => {
+      subwayOptions.forEach(v => {
         if (v.line === i) {
           s = v.station
         }
@@ -894,7 +948,7 @@ export default {
 
     metroLineChange (e) {
       console.log(e)
-      e.forEach((line) => {
+      e.forEach(line => {
         if (this.subwayStations[line]) this.subwayStations[line].splice(0)
       })
     },
@@ -919,7 +973,7 @@ export default {
     },
 
     schoolTypeChange (e) {
-      e.forEach((e) => {
+      e.forEach(e => {
         if (this.queryParam.echelonPerformance[e]) this.queryParam.echelonPerformance[e].splice(0)
       })
     },
@@ -961,7 +1015,7 @@ export default {
       return new Set(arr.concat(set))
     },
     rangToValue (arr, factor = 1) {
-      return arr.map((x) => {
+      return arr.map(x => {
         const two = x.split('-')
         two[0] = two[0] * factor
         if (two.length > 1) {
@@ -971,12 +1025,10 @@ export default {
       })
     },
     gatherSelectParamter (arr, set, factor = 1) {
-      return this.rangToValue(Array.from(
-        this.gatherSelect(arr, set)
-      ), factor)
+      return this.rangToValue(Array.from(this.gatherSelect(arr, set)), factor)
     },
     translateRang (rang, unit, options) {
-      const r = options.filter((e) => {
+      const r = options.filter(e => {
         return e.value === rang
       })
       if (r.length > 0) {
@@ -996,7 +1048,7 @@ export default {
     },
 
     handleTagClose (tag, ...arr1) {
-      arr1.forEach((e) => {
+      arr1.forEach(e => {
         this.removeEle(e, tag)
       })
     },
@@ -1016,7 +1068,7 @@ export default {
       if (!arr2) {
         arr2 = []
       }
-      arr1.concat(arr2).forEach((e) => {
+      arr1.concat(arr2).forEach(e => {
         rangsMap.set(e.label, e)
       })
       return rangsMap.values()
@@ -1032,8 +1084,11 @@ export default {
     showOverview (overview) {
       console.log(overview)
       // this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
-      const routeData = this.$router.resolve({ name: 'HouseOverview', query: { houseSelect: JSON.stringify(overview) } })
-       window.open(routeData.href, '_blank')
+      const routeData = this.$router.resolve({
+        name: 'HouseOverview',
+        query: { houseSelect: JSON.stringify(overview) }
+      })
+      window.open(routeData.href, '_blank')
     },
     windowScroll () {
       if (
@@ -1074,74 +1129,79 @@ export default {
     },
 
     dataExport () {
-      return ExcellentExport.convert({
-                    anchor: 'anchorNewApi',
-                    filename: '985',
-                    format: 'xlsx'
-                }, [{
-                    name: '房源信息',
-                    from: {
-                        array: this.excelData
-                    }
-                }])
+      return ExcellentExport.convert(
+        {
+          anchor: 'anchorNewApi',
+          filename: '985',
+          format: 'xlsx'
+        },
+        [
+          {
+            name: '房源信息',
+            from: {
+              array: this.excelData
+            }
+          }
+        ]
+      )
     },
     dataExportQuery () {
       this.makeSearchRequest(200).then(r => {
-          if (r.length < 1) {
-            return
-          }
-          let excelData = r.map(e => {
-            // delete e.metroInfo
-            // delete e.schoolDistrictInfo
-            e.metroInfo = e.metroInfo || []
-            e.schoolDistrictInfo = e.schoolDistrictInfo || []
+        if (r.length < 1) {
+          return
+        }
+        let excelData = r.map(e => {
+          // delete e.metroInfo
+          // delete e.schoolDistrictInfo
+          e.metroInfo = e.metroInfo || []
+          e.schoolDistrictInfo = e.schoolDistrictInfo || []
 
-            const metro = { metroLine: [], subwayStation: [], distance: [] }
+          const metro = { metroLine: [], subwayStation: [], distance: [] }
 
-            e.metroInfo.forEach(m => {
-              metro.metroLine.push(m.metroLine)
-              metro.subwayStation.push(m.subwayStation)
-              metro.distance.push(m.distance)
-             })
-            e.metroLine = metro.metroLine.join('/')
-            e.subwayStation = metro.subwayStation.join('/')
-            e.distance = metro.distance.join('/')
-
-            const school1 = { name: [], level: [] }
-            const school2 = { name: [], level: [] }
-            const school3 = { name: [], level: [] }
-            e.schoolDistrictInfo.forEach(m => {
-              if (m.schoolType === '幼儿园') {
-                school1.name.push(m.schoolName)
-                school1.level.push(m.echelonPerformance)
-              }
-              if (m.schoolType === '小学') {
-                school2.name.push(m.schoolName)
-                school2.level.push(m.echelonPerformance)
-              }
-              if (m.schoolType === '中学') {
-                school3.name.push(m.schoolName)
-                school3.level.push(m.echelonPerformance)
-              }
-            })
-
-            e.school1Name = school1.name.join('/')
-            e.school1Level = school1.level.join('/')
-            e.school2Name = school2.name.join('/')
-            e.school2Level = school2.level.join('/')
-            e.school3Name = school3.name.join('/')
-            e.school3Level = school3.level.join('/')
-
-            const row = []
-            this.fields.forEach(f => {
-              row.push(e[f])
-            })
-            return row
+          e.metroInfo.forEach(m => {
+            metro.metroLine.push(m.metroLine)
+            metro.subwayStation.push(m.subwayStation)
+            metro.distance.push(m.distance)
           })
-          excelData = [this.headers, ...excelData]
-          console.info(excelData)
-          this.excelData = excelData
+          e.metroLine = metro.metroLine.join('/')
+          e.subwayStation = metro.subwayStation.join('/')
+          e.distance = metro.distance.join('/')
+
+          const school1 = { name: [], level: [] }
+          const school2 = { name: [], level: [] }
+          const school3 = { name: [], level: [] }
+          e.schoolDistrictInfo.forEach(m => {
+            if (m.schoolType === '幼儿园') {
+              school1.name.push(m.schoolName)
+              school1.level.push(m.echelonPerformance)
+            }
+            if (m.schoolType === '小学') {
+              school2.name.push(m.schoolName)
+              school2.level.push(m.echelonPerformance)
+            }
+            if (m.schoolType === '中学') {
+              school3.name.push(m.schoolName)
+              school3.level.push(m.echelonPerformance)
+            }
+          })
+
+          e.school1Name = school1.name.join('/')
+          e.school1Level = school1.level.join('/')
+          e.school2Name = school2.name.join('/')
+          e.school2Level = school2.level.join('/')
+          e.school3Name = school3.name.join('/')
+          e.school3Level = school3.level.join('/')
+
+          const row = []
+          this.fields.forEach(f => {
+            row.push(e[f])
+          })
+          return row
         })
+        excelData = [this.headers, ...excelData]
+        console.info(excelData)
+        this.excelData = excelData
+      })
     },
     search () {
       console.log('search')
