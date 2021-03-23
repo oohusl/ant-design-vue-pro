@@ -16,7 +16,7 @@ const api = {
   saveAnalysis: '/house-analysis',
   newHouseDiary: '/house-diary',
   queryHouseDiary: '/house-diary/queryHouseDiary',
-  queryHouseQuestion: '/house-diary/queryDiaryQuestionInfo/',
+  queryHouseQuestion: '/house-diary/queryDiaryQuestionInfo',
   createHouseQuestion: '/house-diary/diaryQuestionInfo'
 }
 

@@ -550,13 +550,14 @@ export default {
         if (bedroomsInfo) {
           this.houseTypeOptions = bedroomsInfo
           let num = 0
+          this.houseTypeList = []
           this.houseTypeOptions.forEach(async b => {
             b.active = false
             b.label = bedroomsOption[b.severalBedrooms]
             num = num + b.num
             b.houseTypeList = await queryAnalysis(this.houseSelect.id, b.severalBedrooms)
             if (b.houseTypeList?.length) {
-              this.houseTypeList = b.houseTypeList
+              this.houseTypeList.push(...b.houseTypeList)
             }
           })
           this.houseTypeOptions.unshift({
