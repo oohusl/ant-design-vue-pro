@@ -264,7 +264,7 @@
                                   <pre>{{ diary.reviewContent }}</pre>
                                 </a-layout-content>
                                 <a-layout-footer :style="{ background: '#ffffff', padding: '0' }">
-                                  {{ diary.viewingTime }}看房
+                                  {{ diary.viewingTime }}
                                   <!-- <span style="float: right;cursor: pointer;" @click="triggerOpenState(diary)">
                                     {{ diary.open ? '收起全文' : '展开全文' }}</span
                                   > -->
