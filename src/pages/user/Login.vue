@@ -253,7 +253,7 @@ export default {
           .dispatch('GetInfo')
           .then(res => {
             if (res.createdBy === 'admin' && res.createdDate === res.lastModifiedDate) {
-                this.$router.push({ path: 'change-password' })
+                this.$router.push({ path: '/account/settings/changepassword' })
                 return
             }
             this.$router.push({ path: '/' })
@@ -266,7 +266,7 @@ export default {
         }, 1000)
         this.isLoginError = false
         }).catch(e => {
-            this.$router.push({ path: 'change-password' })
+            this.$router.push({ path: '/account/settings/changepassword' })
         })
     },
     requestFailed () {

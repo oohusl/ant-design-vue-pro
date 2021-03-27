@@ -182,7 +182,7 @@
             <a-checkbox-group v-model="queryParam.communityLev" :options="communityLevOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item label="地区规划">
-            <a-checkbox-group v-model="queryParam.districtPlanning" :options="districtPlanningOptions">
+            <a-checkbox-group v-model="queryParam.districtPlannings" :options="districtPlanningOptions">
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="学校" v-if="advanced">
