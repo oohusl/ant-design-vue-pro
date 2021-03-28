@@ -253,22 +253,23 @@
                                     'font-size': '16px',
                                     height: '40px',
                                     'line-height': '40px',
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    'font-weight': 700
                                   }"
                                 >{{ diary.userName }}
-                                  <span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{
-                                    diary.datetime
+                                  <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
+                                    diary.viewingTime
                                   }}</span></a-layout-header
                                   >
-                                <a-layout-content :style="{ background: '#ffffff', overflow: 'hidden' }">
+                                <a-layout-content :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }">
                                   <pre>{{ diary.reviewContent }}</pre>
                                 </a-layout-content>
-                                <a-layout-footer :style="{ background: '#ffffff', padding: '0' }">
+                                <!-- <a-layout-footer :style="{ background: '#ffffff', padding: '0' }">
                                   {{ diary.viewingTime }}
-                                  <!-- <span style="float: right;cursor: pointer;" @click="triggerOpenState(diary)">
-                                    {{ diary.open ? '收起全文' : '展开全文' }}</span
-                                  > -->
-                                </a-layout-footer>
+                                  <span style="float: right;cursor: pointer;" @click="triggerOpenState(diary)">
+                                    {{ diary.open ? '收起全文' : '展开全文' }}
+                                  </span>
+                                </a-layout-footer> -->
                               </a-layout>
                             </a-layout>
                           </div>
@@ -278,7 +279,7 @@
                   </a-tab-pane>
                   <a-tab-pane key="2" tab="楼盘问问">
                     <div class="qa-list">
-                      <div class="qa-item" v-for="qa of qaList" :key="qa.userName + qa.datetime">
+                      <div class="qa-item" v-for="qa of qaList" :key="qa.id">
                         <a-layout>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
                             <a-layout-header
@@ -289,17 +290,19 @@
                                 'font-size': '16px',
                                 height: '40px',
                                 'line-height': '40px',
-                                cursor: 'pointer'
+                                cursor: 'pointer',
+                                'font-weight': 700
                               }"
                             >
-                              {{ qa.diaryQuestion
-                              }}<span :style="{ 'font-size': '14px', color: '#8C8C8C' }">{{ qa.datetime }}</span>
+                            <span class="q-icon">Q</span>  {{ qa.diaryQuestion
+                              }}
+                              <!-- <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal'  }">{{ qa.datetime }}</span> -->
                             </a-layout-header>
                             <a-layout-content>
-                              <pre>{{ qa.diaryAnswer }}</pre>
+                              <span class="a-icon">A</span><pre> {{ qa.diaryAnswer }}</pre>
                             </a-layout-content>
                           </a-layout>
-                          <a-layout-sider :style="{ background: '#fff' }" width="90">
+                          <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
                             <img :src="qa.userIcon" />
                             <p>{{ qa.userName }}</p>
                           </a-layout-sider>
@@ -505,6 +508,7 @@ export default {
     },
     queryQuestion () {
       queryHouseQuestion(this.houseSelect.id).then(e => {
+        console.log(e)
         this.qaList = e
       })
     },
@@ -852,5 +856,26 @@ img {
 }
 .type-select .type-list.active {
   color: #b71c2b;
+}
+.q-icon {
+    color: #FFF;
+    background: #FE9F4C;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+}
+.a-icon {
+    color: #FFF;
+    background: #59C1FF;
+    display: block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    float: left;
 }
 </style>
