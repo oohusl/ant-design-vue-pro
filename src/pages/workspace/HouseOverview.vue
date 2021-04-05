@@ -19,7 +19,7 @@
                         <span>{{ i + 1 + '/' + pictureList.length }}</span>
                       </div>
                     </a-carousel>
-                    <img src="/common/empty.png"  v-if="pictureList.length === 0" />
+                    <img :src="houseSelect.communityPhoto || `/house/${houseSelect.id % 10}.webp`" v-if="pictureList.length === 0" />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
