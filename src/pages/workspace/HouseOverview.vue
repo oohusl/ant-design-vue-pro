@@ -124,6 +124,14 @@
                 >
                   <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
                 </div>
+                <div :style="{ float: 'right' }">
+                  <a-button icon="edit" size="small" @click="showHouseType">
+                    编辑
+                  </a-button>
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType">
+                    新建
+                  </a-button>
+                </div>
               </div>
               <a-layout
                 :style="{
@@ -213,6 +221,14 @@
             </a-tab-pane>
             <a-tab-pane key="2" tab="看房日记">
               <div class="house-diary">
+                <div :style="{ float: 'right' }">
+                  <a-button icon="edit" size="small" @click="houseDiaryVisible = true">
+                    编辑
+                  </a-button>
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="houseDiaryVisible = true">
+                    新建
+                  </a-button>
+                </div>
                 <a-tabs default-active-key="1">
                   <a-tab-pane key="1" tab="楼盘点评">
                     <a-layout>
@@ -294,8 +310,7 @@
                                 'font-weight': 700
                               }"
                             >
-                            <span class="q-icon">Q</span>  {{ qa.diaryQuestion
-                              }}
+                              <span class="q-icon">Q</span>  {{ qa.diaryQuestion }}
                               <!-- <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal'  }">{{ qa.datetime }}</span> -->
                             </a-layout-header>
                             <a-layout-content>
@@ -320,12 +335,25 @@
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
     </a-drawer>
+    <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="600px">
+      <house-type-edit :houseSelect="houseSelect" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
+    </a-modal>
+    <a-modal
+      :visible="houseDiaryVisible"
+      title="看房日记"
+      @ok="handleOk('housediary')"
+      @cancel="houseDiaryVisible = false"
+    >
+      <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
+    </a-modal>
   </div>
 </template>
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
 import HouseEdit from './HouseEdit.vue'
+import HouseTypeEdit from './HouseTypeEdit'
+import HouseDiary from './HouseDiary'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -346,7 +374,9 @@ export default {
   name: 'HouseOverview',
   components: {
     AutoComplete,
-    HouseEdit
+    HouseEdit,
+    HouseTypeEdit,
+    HouseDiary
   },
   computed: {},
   data () {
@@ -378,6 +408,8 @@ export default {
       houseSelect: {},
       current: 0,
       detailFlag: 0,
+      houseTypeVisible: false,
+      houseDiaryVisible: false,
       albumList: [
         // { title: '1sasd', url: '/house/6.webp', active: true },
         // { title: 'zxkhx', url: '/house/2.webp', active: false },
@@ -653,6 +685,23 @@ export default {
         })
       }
       this.queryAnalysisByBedrooms(house.severalBedrooms)
+    },
+    houseTypeOK () {
+      this.houseTypeVisible = false
+      // this.$refs.housetypeeditref && this.$refs.housetypeeditref.houseTypeOK()
+    },
+    showHouseType () {
+      this.houseTypeVisible = true
+    },
+    handleOk (type) {
+      switch (type) {
+        case 'housediary':
+          this.$refs.housediaryref && this.$refs.housediaryref.save()
+          this.houseDiaryVisible = false
+          break
+        default:
+          break
+      }
     }
   }
 }
