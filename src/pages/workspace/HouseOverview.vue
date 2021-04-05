@@ -13,15 +13,16 @@
               <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
                 <a-layout>
                   <a-layout-header :style="{ height: '336px', padding: '0' }">
-                    <a-carousel autoplay class="house-picture">
+                    <a-carousel autoplay class="house-picture" v-if="pictureList.length > 0">
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
                         <img :src="p.url" />
                         <span>{{ i + 1 + '/' + pictureList.length }}</span>
                       </div>
                     </a-carousel>
+                    <img src="/common/empty.png"  v-if="pictureList.length === 0" />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
-                    <div class="house-album-view">
+                    <div class="house-album-view" v-if="albumList.length">
                       <div class="album-view-left" @click="flip('prev')">
                         <
                       </div>
@@ -527,14 +528,8 @@ export default {
           }
           this.pictureList = photosList[1]
         } else {
-          this.albumList.push({
-            title: `暂无图片`,
-            photos: { uid: '', title: '', url: '/common/empty.png' },
-            url: '/common/empty.png',
-            active: true,
-            index: 1
-          })
-          this.pictureList = [{ uid: '', title: '', url: '/common/empty.png' }]
+          this.albumList = []
+          this.pictureList = []
         }
       })
     },
