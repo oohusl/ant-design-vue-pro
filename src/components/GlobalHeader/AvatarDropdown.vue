@@ -10,6 +10,10 @@
           <a-icon type="setting" />
           个人设置
         </a-menu-item>
+        <a-menu-item v-if="menu && currentUser.name === 'admin'" key="settings" @click="handleToUserManage">
+          <a-icon type="user" />
+          用户管理
+        </a-menu-item>
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />
@@ -44,6 +48,9 @@ export default {
     },
     handleToSettings () {
       this.$router.push({ path: '/account/settings' })
+    },
+    handleToUserManage () {
+      this.$router.push({ path: '/system/user-manage' })
     },
     handleLogout (e) {
       Modal.confirm({

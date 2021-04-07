@@ -37,12 +37,12 @@
             <a-button @click="editImage()" v-if="houseSelect.id">
               上传图片
             </a-button>
-            <a-button @click="openHouseType()" v-if="houseSelect.id">
+            <!-- <a-button @click="openHouseType()" v-if="houseSelect.id">
               房型分析
             </a-button>
             <a-button @click="openHouseDiary()" v-if="houseSelect.id">
               看房日记
-            </a-button>
+            </a-button> -->
           </a-layout-sider>
         </a-layout>
       </a-layout-header>

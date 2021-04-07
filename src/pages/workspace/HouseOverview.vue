@@ -126,9 +126,9 @@
                   <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
                 </div>
                 <div :style="{ float: 'right' }">
-                  <a-button icon="edit" size="small" @click="showHouseType">
+                  <!-- <a-button icon="edit" size="small" @click="showHouseType">
                     编辑
-                  </a-button>
+                  </a-button> -->
                   <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType">
                     新建
                   </a-button>
@@ -223,9 +223,9 @@
             <a-tab-pane key="2" tab="看房日记">
               <div class="house-diary">
                 <div :style="{ float: 'right' }">
-                  <a-button icon="edit" size="small" @click="houseDiaryVisible = true">
+                  <!-- <a-button icon="edit" size="small" @click="houseDiaryVisible = true">
                     编辑
-                  </a-button>
+                  </a-button> -->
                   <a-button icon="plus" size="small" style="margin-left: 10px" @click="houseDiaryVisible = true">
                     新建
                   </a-button>
@@ -254,7 +254,7 @@
                           <div
                             class="diary-list-item"
                             v-for="diary of diaryList"
-                            :key="diary.userName"
+                            :key="diary.id"
                             :class="diary.open ? 'open' : 'close'"
                           >
                             <a-layout :style="{ height: '100%' }">
@@ -693,6 +693,7 @@ export default {
         case 'housediary':
           this.$refs.housediaryref && this.$refs.housediaryref.save()
           this.houseDiaryVisible = false
+          this.queryAllHouseDiary()
           break
         default:
           break

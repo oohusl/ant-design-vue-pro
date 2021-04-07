@@ -1,50 +1,48 @@
 <template>
-  <page-header-wrapper>
-    <a-card :bordered="false">
-      <div class="table-operator">
-        <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-        <a-button @click="$refs.table.refresh(true)">查询</a-button>
-      </div>
+  <a-card :bordered="false">
+    <div class="table-operator">
+      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
+      <a-button @click="$refs.table.refresh(true)">查询</a-button>
+    </div>
 
-      <s-table
-        ref="table"
-        size="default"
-        rowKey="key"
-        :columns="columns"
-        :data="loadData"
-        :alert="false"
-        showPagination="auto"
-      >
-        <span slot="serial" slot-scope="text, record, index">
-          {{ index + 1 }}
-        </span>
-        <span slot="status" slot-scope="text">
-          <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
-        </span>
-        <span slot="description" slot-scope="text">
-          <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
-        </span>
+    <s-table
+      ref="table"
+      size="default"
+      rowKey="key"
+      :columns="columns"
+      :data="loadData"
+      :alert="false"
+      showPagination="auto"
+    >
+      <span slot="serial" slot-scope="text, record, index">
+        {{ index + 1 }}
+      </span>
+      <span slot="status" slot-scope="text">
+        <a-badge :status="text | statusTypeFilter" :text="text | statusFilter" />
+      </span>
+      <span slot="description" slot-scope="text">
+        <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
+      </span>
 
-        <span slot="action" slot-scope="text, record">
-          <template>
-            <a @click="handleEdit(record)">配置</a>
-            <a-divider type="vertical" />
-            <a @click="handleSub(record)">订阅报警</a>
-          </template>
-        </span>
-      </s-table>
+      <span slot="action" slot-scope="text, record">
+        <template>
+          <a @click="handleEdit(record)">配置</a>
+          <a-divider type="vertical" />
+          <a @click="handleSub(record)">订阅报警</a>
+        </template>
+      </span>
+    </s-table>
 
-      <create-form
-        ref="createModal"
-        :visible="visible"
-        :loading="confirmLoading"
-        :model="mdl"
-        @cancel="handleCancel"
-        @ok="handleOk"
-      />
-      <step-by-step-modal ref="modal" @ok="handleOk"/>
-    </a-card>
-  </page-header-wrapper>
+    <create-form
+      ref="createModal"
+      :visible="visible"
+      :loading="confirmLoading"
+      :model="mdl"
+      @cancel="handleCancel"
+      @ok="handleOk"
+    />
+    <step-by-step-modal ref="modal" @ok="handleOk" />
+  </a-card>
 </template>
 
 <script>
@@ -123,10 +121,9 @@ export default {
       loadData: parameter => {
         const requestParameters = Object.assign({}, parameter, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
-        return getUserList(requestParameters)
-          .then(res => {
-            return res
-          })
+        return getUserList(requestParameters).then(res => {
+          return res
+        })
       },
       selectedRowKeys: [],
       selectedRows: []
@@ -140,8 +137,7 @@ export default {
       return statusMap[type].status
     }
   },
-  created () {
-  },
+  created () {},
   computed: {
     rowSelection () {
       return {
@@ -185,18 +181,21 @@ export default {
             // 新增
             const user = {}
             user.iphone = values.iphone
-            saveUser(user).then().then(res => {
-              this.visible = false
-              this.confirmLoading = false
-              // 重置表单数据
-              form.resetFields()
-              // 刷新表格
-              this.$refs.table.refresh()
-              this.$message.info('新增成功')
-            }).catch(e => {
-              this.$message.error('新增失败')
-              this.confirmLoading = false
-            })
+            saveUser(user)
+              .then()
+              .then(res => {
+                this.visible = false
+                this.confirmLoading = false
+                // 重置表单数据
+                form.resetFields()
+                // 刷新表格
+                this.$refs.table.refresh()
+                this.$message.info('新增成功')
+              })
+              .catch(e => {
+                this.$message.error('新增失败')
+                this.confirmLoading = false
+              })
           }
         } else {
           this.confirmLoading = false

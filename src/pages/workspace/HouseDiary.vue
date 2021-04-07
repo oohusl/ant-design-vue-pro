@@ -1,9 +1,9 @@
 <template>
   <div>
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
-      <a-form-item label="楼盘名称">
+      <!-- <a-form-item label="楼盘名称">
         <a-input :value="houseSelect.communityName" :disabled="true" />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="类型">
         <a-select v-model="diaryType">
           <a-select-option :value="1">
