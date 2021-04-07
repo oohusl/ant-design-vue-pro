@@ -13,13 +13,16 @@
               <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
                 <a-layout>
                   <a-layout-header :style="{ height: '336px', padding: '0' }">
-                    <a-carousel autoplay class="house-picture" v-if="pictureList.length > 0">
+                    <a-carousel autoplay class="house-picture" v-if="pictureList && pictureList.length > 0">
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
                         <img :src="p.url" />
                         <span>{{ i + 1 + '/' + pictureList.length }}</span>
                       </div>
                     </a-carousel>
-                    <img :src="houseSelect.communityPhoto || `/house/${houseSelect.id % 10}.webp`" v-if="pictureList.length === 0" />
+                    <img
+                      :src="houseSelect.communityPhoto || `/house/${houseSelect.id % 10}.webp`"
+                      v-if="!pictureList || pictureList.length === 0"
+                    />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
@@ -278,7 +281,9 @@
                                     diary.viewingTime
                                   }}</span></a-layout-header
                                   >
-                                <a-layout-content :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }">
+                                <a-layout-content
+                                  :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }"
+                                >
                                   <pre>{{ diary.reviewContent }}</pre>
                                 </a-layout-content>
                                 <!-- <a-layout-footer :style="{ background: '#ffffff', padding: '0' }">
@@ -311,11 +316,12 @@
                                 'font-weight': 700
                               }"
                             >
-                              <span class="q-icon">Q</span>  {{ qa.diaryQuestion }}
+                              <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
                               <!-- <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal'  }">{{ qa.datetime }}</span> -->
                             </a-layout-header>
                             <a-layout-content>
-                              <span class="a-icon">A</span><pre> {{ qa.diaryAnswer }}</pre>
+                              <span class="a-icon">A</span>
+                              <pre> {{ qa.diaryAnswer }}</pre>
                             </a-layout-content>
                           </a-layout>
                           <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
@@ -336,7 +342,13 @@
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
     </a-drawer>
-    <a-modal :visible="houseTypeVisible" title="户型分析" :footer="null" @cancel="houseTypeOK" width="600px">
+    <a-modal
+      :visible="houseTypeVisible"
+      title="户型分析"
+      @cancel="houseTypeOK"
+      @ok="handleOk('houseType')"
+      width="600px"
+    >
       <house-type-edit :houseSelect="houseSelect" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
     </a-modal>
     <a-modal
@@ -693,7 +705,17 @@ export default {
         case 'housediary':
           this.$refs.housediaryref && this.$refs.housediaryref.save()
           this.houseDiaryVisible = false
-          this.queryAllHouseDiary()
+          setTimeout(() => {
+            this.queryAllHouseDiary()
+          }, 100)
+
+          break
+        case 'houseType':
+          this.houseTypeVisible = false
+          this.$refs.housetypeeditref.saveHouseType()
+          setTimeout(() => {
+            this.queryAllAnalysis()
+          }, 100)
           break
         default:
           break
@@ -903,24 +925,24 @@ img {
   color: #b71c2b;
 }
 .q-icon {
-    color: #FFF;
-    background: #FE9F4C;
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    border-radius: 50%;
+  color: #fff;
+  background: #fe9f4c;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
 }
 .a-icon {
-    color: #FFF;
-    background: #59C1FF;
-    display: block;
-    width: 20px;
-    height: 20px;
-    line-height: 20px;
-    text-align: center;
-    border-radius: 50%;
-    float: left;
+  color: #fff;
+  background: #59c1ff;
+  display: block;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  float: left;
 }
 </style>

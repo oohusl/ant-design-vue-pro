@@ -1,9 +1,9 @@
 <template>
   <div>
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
-      <a-form-item label="楼盘名称">
+      <!-- <a-form-item label="楼盘名称">
         <a-input :value="houseSelect.communityName" :disabled="true" />
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="房屋结构">
         <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.room"></a-input
         ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hall"></a-input
@@ -55,14 +55,14 @@
           </div>
         </a-upload>
       </a-form-item>
-      <a-form-item label=" " :colon="false">
+      <!-- <a-form-item label=" " :colon="false">
         <a-button type="primary" :loading="uploading" style="margin-top: 16px" @click="saveHouseType">
           {{ uploading ? '处理中' : '提交' }}
         </a-button>
         <a-button style="margin-top: 16px;margin-left: 20px" @click="houseTypeOK">
           取消
         </a-button>
-      </a-form-item>
+      </a-form-item> -->
     </a-form>
   </div>
 </template>
