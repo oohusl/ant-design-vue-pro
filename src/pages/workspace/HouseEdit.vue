@@ -107,7 +107,7 @@
             {{ getLabel(houseSelect.peopleAndVehicles, peopleAndVehiclesOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="容积率">
-            {{ houseSelect.volumeRate ? houseSelect.volumeRate + '%' : '' }}
+            {{ houseSelect.volumeRate ? houseSelect.volumeRate : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="绿化率">
             {{ houseSelect.greeningRate ? houseSelect.greeningRate + '%' : '' }}
@@ -363,7 +363,7 @@
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="容积率">
-            <a-input v-model="houseSelect.volumeRate" class="col1" size="small" addon-after="%" />
+            <a-input v-model="houseSelect.volumeRate" class="col1" size="small" />
           </a-descriptions-item>
           <a-descriptions-item label="绿化率">
             <a-input v-model="houseSelect.greeningRate" class="col1" size="small" addon-after="%" />
