@@ -916,7 +916,7 @@ img {
   height: 30px;
 }
 .type-select .type-list {
-  width: 80px;
+  width: 90px;
   float: left;
   cursor: pointer;
   text-align: center;
