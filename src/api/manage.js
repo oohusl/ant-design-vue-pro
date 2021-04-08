@@ -91,7 +91,7 @@ export function saveSub (sub) {
 
 export function getHouseDetail (parameter) {
   return request({
-    url: `${api.getHouse}${parameter.size}`,
+    url: `${api.getHouse}${parameter}`,
     method: 'get'
   })
 }
