@@ -378,7 +378,7 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-import { photoQuery, queryAnalysis, getSeveralBedroomsInfo, queryHouseDiary, queryHouseQuestion } from '@/api/manage'
+import { photoQuery, queryAnalysis, getSeveralBedroomsInfo, queryHouseDiary, queryHouseQuestion, getHouseDetail } from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -498,7 +498,10 @@ export default {
   created () {},
   beforeMount () {
     console.log(this.$route.params)
-    this.houseSelect = JSON.parse(this.$route.query.houseSelect)
+
+    this.houseSelect = {}
+    this.houseSelect.id = this.$route.query.houseId
+    this.queryHouse()
     this.queryPhotos()
     this.queryAllAnalysis()
     this.queryAllHouseDiary()
@@ -511,6 +514,11 @@ export default {
     showDetail () {
       this.detailFlag = 1
       this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
+    },
+    queryHouse () {
+      getHouseDetail(this.houseSelect.id).then(d => {
+        this.houseSelect = d
+      })
     },
     queryPhotos () {
       const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']

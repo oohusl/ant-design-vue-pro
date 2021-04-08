@@ -9,6 +9,7 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   house: '/community-infos/query',
+  getHouse: '/community-infos/',
   editHouse: '/community-infos',
   constants: '/set/constant-infos',
   queryAnalysis: '/house-analysis/queryByCommunityId',
@@ -85,6 +86,13 @@ export function saveSub (sub) {
     url: '/sub',
     method: sub.id === 0 ? 'post' : 'put',
     data: sub
+  })
+}
+
+export function getHouseDetail (parameter) {
+  return request({
+    url: `${api.getHouse}${parameter.size}`,
+    method: 'get'
   })
 }
 

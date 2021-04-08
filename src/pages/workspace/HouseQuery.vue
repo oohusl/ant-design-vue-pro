@@ -1087,7 +1087,7 @@ export default {
       // this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
       const routeData = this.$router.resolve({
         name: 'HouseOverview',
-        query: { houseSelect: JSON.stringify(overview) }
+        query: { houseId: overview.id }
       })
       window.open(routeData.href, '_blank')
     },
