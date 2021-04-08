@@ -19,16 +19,11 @@
                         <span>{{ i + 1 + '/' + pictureList.length }}</span>
                       </div>
                     </a-carousel>
-                    <img
-                      :src="houseSelect.communityPhoto || `/house/${houseSelect.id % 10}.webp`"
-                      v-if="!pictureList || pictureList.length === 0"
-                    />
+                    <img src="~@/assets/no.jpeg" v-if="!pictureList || pictureList.length === 0" />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
-                      <div class="album-view-left" @click="flip('prev')">
-                        <
-                      </div>
+                      <div class="album-view-left" @click="flip('prev')"></div>
                       <div class="album-view-content">
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
                           <a-list-item slot="renderItem" slot-scope="item" @click="selectAlbum(item)">
@@ -149,7 +144,8 @@
                 :key="house.unitTypeName"
               >
                 <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
-                  <img :src="`/house/${house.id % 10}.webp`" />
+                  <img v-if="house.photoUrl" :src="house.photoUrl" />
+                  <img v-else src="~@/assets/no.jpeg" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                   <a-layout

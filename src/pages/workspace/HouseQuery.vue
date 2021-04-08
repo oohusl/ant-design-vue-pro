@@ -572,7 +572,8 @@
               >
                 <a-layout :style="{ background: '#ffffff' }">
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
-                    <img :src="community.communityPhoto || `/house/${community.id % 10}.webp`" :style="{ 'border-radius': '4px'}" />
+                    <img v-if="community.communityPhoto" :src="community.communityPhoto" :style="{ 'border-radius': '4px'}" />
+                    <img v-else src="~@/assets/no.jpeg" :style="{ 'border-radius': '4px'}" />
                   </a-layout-sider>
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                     <a-layout :style="{ background: '#ffffff', height: '100%', 'text-align': 'left' }">
