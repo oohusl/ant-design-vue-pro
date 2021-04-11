@@ -246,6 +246,10 @@ export const loopSummaryOptions = [
   {
     label: '外环外',
     value: '外环外'
+  },
+  {
+    label: '其他',
+    value: '其他'
   }
 ]
 

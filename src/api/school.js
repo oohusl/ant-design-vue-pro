@@ -99,8 +99,6 @@ export const shoolType = [
         'value': '中学-其他'
       }
     ]
-  }, {
-    type: '一贯制'
   }]
 
 export function schoolOptions () {

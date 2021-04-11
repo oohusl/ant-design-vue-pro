@@ -223,3 +223,11 @@ export function updateHouseQuestion (question) {
     data: question
   })
 }
+
+export function getSchools (param) {
+  return request({
+    url: `/community-infos/findSchoolDesc`,
+    method: 'post',
+    data: {}
+  })
+}

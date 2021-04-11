@@ -19,7 +19,7 @@
                         <span>{{ i + 1 + '/' + pictureList.length }}</span>
                       </div>
                     </a-carousel>
-                    <img src="~@/assets/no.jpeg" v-if="!pictureList || pictureList.length === 0" />
+                    <img src="~@/assets/first.png" v-if="!pictureList || pictureList.length === 0" />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
@@ -145,7 +145,7 @@
               >
                 <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
                   <img v-if="house.photoUrl" :src="house.photoUrl" />
-                  <img v-else src="~@/assets/no.jpeg" />
+                  <img v-else src="~@/assets/second.png" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                   <a-layout
