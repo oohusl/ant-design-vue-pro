@@ -687,6 +687,7 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse, getSchools } from '@/api/manage'
+import { schoolType } from '@/api/school'
 import HouseEdit from './HouseEdit.vue'
 import {
   areaOptions,
@@ -781,7 +782,7 @@ export default {
       schools: [],
       schools_: [],
       timer: undefined,
-      schoolType: [],
+      schoolType,
       dataExcel: [],
       headers: '区域,板块,地区规划,小区名称,挂牌均价,环线汇总,小区属性,地铁线,地铁站,距离,交易权属,最大楼层,最小楼层,2019成交量,1房面积段,2房面积段,3房面积段,1房价格段,2房价格段,3房价格段,是否电梯,室外游泳池,室内游泳池,会所,洋房,双阳台,大阳台,带花园,大露台,人车分流,建筑类型,物业属性,物业费,栋数,户数,车位数,容积率,绿化率,在售-3.20,正租-3.20,建筑代,开发商,物业公司,幼儿园,幼儿园等级,小学,小学梯队表现,是否一贯制,中学,初中梯队表现, 叠拼别墅, 独栋别墅, 联排别墅, 双拼别墅,内部配套,地址,产权年限,小区介绍'.split(
         ','
@@ -798,22 +799,10 @@ export default {
 
     const _this = this
     getSchools().then(function (e) {
-      const temp = { 幼儿园: new Set(), 小学: new Set(), 中学: new Set() }
       e.forEach(school => {
-        if (school.echelon) {
-          temp[school.schoolType].add(school.echelon)
-        }
         _this.schools.push({ label: school.schoolName, value: school.schoolName })
       })
       _this.schools_ = _this.schools.slice(0, 50)
-      Object.keys(temp).forEach(function (e) {
-        _this.schoolType.push({
-          type: e,
-          echelon: Array.from(temp[e]).map(e => {
-            return { label: e, value: e }
-          })
-        })
-      })
     })
   },
   mounted () {

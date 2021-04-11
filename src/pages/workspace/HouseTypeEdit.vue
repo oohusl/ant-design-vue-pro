@@ -98,7 +98,6 @@ import {
   communityLevOptions,
   propertyOptions
 } from '@/api/data'
-import { schoolOptions, schoolDetail } from '@/api/school'
 import HouseDiary from './HouseDiary.vue'
 
 function getBase64 (file) {
@@ -165,8 +164,6 @@ export default {
       plates: {},
       subwayStations: {},
       getLabel: getLabel,
-      schools: schoolOptions(),
-      schools_: [],
       metrolineDistrictInfo: [],
       photoType: '0',
       fileList: [],
@@ -442,14 +439,6 @@ export default {
         echelonPerformance: '',
         schoolType: ''
       })
-      this.$forceUpdate()
-    },
-    selectSchool (school, o) {
-      const s = schoolDetail[school]
-      if (s) {
-        this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
-      }
-      this.updateSchoolsOptions(school, true)
       this.$forceUpdate()
     },
     updateSchoolsOptions (school, disabled) {

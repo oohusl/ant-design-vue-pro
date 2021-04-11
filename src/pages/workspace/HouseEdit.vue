@@ -402,7 +402,6 @@
         <a-descriptions title="学区情况" :column="4">
           <template v-for="(school, s) in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="" :span="2" :key="s">
-              {{ school.shcoolName }}
               <a-select
                 class="col2"
                 size="small"
@@ -413,8 +412,13 @@
                 @search="handleOnSearch"
                 @change="selectSchool($event, s)"
               >
-                <a-select-option v-for="ss in schools_" :key="ss.value" :value="ss.value" :disabled="ss.disabled">
-                  {{ ss.label }}
+                <a-select-option
+                  v-for="ss in schools_"
+                  :key="ss.schoolName"
+                  :value="ss.schoolName"
+                  :disabled="ss.disabled"
+                >
+                  {{ ss.schoolName }}
                 </a-select-option>
               </a-select>
               <span
@@ -717,7 +721,8 @@ import {
   photoQuery,
   photoDelete,
   queryAnalysis,
-  saveAnalysis
+  saveAnalysis,
+  getSchools
 } from '@/api/manage'
 import {
   areaOptions,
@@ -738,7 +743,6 @@ import {
   communityLevOptions,
   propertyOptions
 } from '@/api/data'
-import { schoolOptions, schoolDetail } from '@/api/school'
 import HouseDiary from './HouseDiary.vue'
 
 function getBase64 (file) {
@@ -805,7 +809,7 @@ export default {
       plates: {},
       subwayStations: {},
       getLabel: getLabel,
-      schools: schoolOptions(),
+      schools: [],
       schools_: [],
       metrolineDistrictInfo: [],
       photoType: '0',
@@ -843,6 +847,12 @@ export default {
     this.queryPhotos()
     this.houseTypeEdit.communityId = this.houseSelect.id
     this.getHouseTypes()
+
+    const _this = this
+    getSchools().then(function (e) {
+      _this.schools = e
+      _this.schools_ = _this.schools.slice(0, 50)
+    })
   },
   beforeMount () {
     if (this.edit) {
@@ -1085,16 +1095,21 @@ export default {
       this.$forceUpdate()
     },
     selectSchool (school, o) {
-      const s = schoolDetail[school]
-      if (s) {
-        this.houseSelect.schoolDistrictInfo.splice(o, 1, s)
-      }
-      this.updateSchoolsOptions(school, true)
+      this.schools.forEach(s => {
+        if (s.schoolName === school) {
+          s.disabled = true
+          this.houseSelect.schoolDistrictInfo.splice(o, 1, {
+            schoolName: school,
+            schoolType: s.schoolType,
+            echelonPerformance: s.echelon
+          })
+        }
+      })
       this.$forceUpdate()
     },
     updateSchoolsOptions (school, disabled) {
       this.schools.forEach(s => {
-        if (s.value === school) {
+        if (s.schoolName === school) {
           s.disabled = disabled
         }
       })
@@ -1143,7 +1158,7 @@ export default {
       const datas = []
       console.log(this.schools, value)
       this.schools.forEach(item => {
-        if (item.label.indexOf(value) > -1) {
+        if (item.schoolName.indexOf(value) > -1) {
           datas.push(item)
         }
       })
