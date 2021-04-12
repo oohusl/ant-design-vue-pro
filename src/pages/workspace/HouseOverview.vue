@@ -592,7 +592,7 @@ export default {
       this.scroolPosition = position
     },
     queryAllAnalysis () {
-      const bedroomsOption = { '1': '一居室', '2': '二居室', '3': '三居室', '4': '四居室', '5': '四居以上' }
+      const bedroomsOption = { '1': '一居室', '2': '二居室', '3': '三居室', '4': '四居室', '5': '四居以上', '6': '四居以上', '7': '四居以上' }
       getSeveralBedroomsInfo(this.houseSelect.id).then(bedroomsInfo => {
         if (bedroomsInfo) {
           this.houseTypeOptions = bedroomsInfo

@@ -11,7 +11,8 @@
         ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.toilet"></a-input>
       </a-form-item>
       <a-form-item label="房屋朝向">
-        <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select>
+        <a-input v-model="houseTypeEdit.towards"></a-input>
+        <!-- <a-select aria-placeholder="请选择" :options="towardOptions" v-model="houseTypeEdit.towards"></a-select> -->
       </a-form-item>
       <a-form-item label="建筑面积">
         <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
@@ -20,11 +21,12 @@
         <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
       </a-form-item>
       <a-form-item label="房屋类型">
-        <a-select
+        <a-input v-model="houseTypeEdit.typesOfHouse"></a-input>
+        <!-- <a-select
           aria-placeholder="请选择"
           v-model="houseTypeEdit.typesOfHouse"
           :options="houseTypeOptions"
-        ></a-select>
+        ></a-select> -->
       </a-form-item>
       <a-form-item label="参考单价">
         <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
@@ -231,6 +233,7 @@ export default {
     },
 
     saveHouseType () {
+      this.houseTypeEdit.communityId = this.houseSelect.id
       this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this
         .houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
       saveAnalysis(this.houseTypeEdit)
