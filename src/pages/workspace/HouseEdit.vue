@@ -140,8 +140,7 @@
               label="类型"
               :key="school.schoolName"
               :span="2"
-            >{{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }}
-              {{ school.echelonPerformance }}</a-descriptions-item
+            >{{ school.schoolType }} {{ getSchool(school.schoolName) }}</a-descriptions-item
             >
           </template>
         </a-descriptions>
@@ -429,7 +428,7 @@
               /></span>
             </a-descriptions-item>
             <a-descriptions-item label="类型" :span="2" :key="s">
-              {{ school.schoolType }} {{ school.echelonPerformance ? '-' : '' }} {{ school.echelonPerformance }}
+              {{ school.schoolType }} {{ getSchool(school.schoolName) }}
             </a-descriptions-item>
           </template>
           <a-descriptions-item label="" :span="4">
@@ -1173,6 +1172,21 @@ export default {
           that.timer = null
         }, 0)
       }
+    },
+    getSchool (schoolName) {
+      const school = this.schools.find(school => {
+        return school.schoolName === schoolName
+      })
+      let desc = ''
+      if (school) {
+        if (school.echelon) {
+          desc = '-' + school.echelon
+        }
+        if (school.isConsistentSystem) {
+          desc += '-' + school.echelon
+        }
+      }
+      return desc
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {
