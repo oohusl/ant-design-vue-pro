@@ -249,7 +249,7 @@
                 :key="p"
                 :color="colors[1]"
                 :closable="true"
-                @close="handleTagClose(rangTag, queryParam.schoolType)"
+                @close="handleTagClose(p, queryParam.schoolType)"
               >{{ p }}</a-tag
               >
               <template v-for="(value, key) in queryParam.echelonPerformance">
@@ -258,8 +258,8 @@
                   :key="v + i"
                   :color="colors[1]"
                   :closable="true"
-                  @close="handleTagClose(rangTag, queryParam.echelonPerformance)"
-                >{{ key }} - {{ v.replaceAll('中学-', '').replaceAll('小学-', '') }}</a-tag
+                  @close="handleTagClose(v, queryParam.echelonPerformance[key])"
+                >{{ key }} - {{ v }}</a-tag
                 >
               </template>
             </div>
@@ -898,6 +898,16 @@ export default {
 
       // this.queryParam.echelonPerformance = this.echelons.flat()
       requestParameters.echelonPerformance = Object.values(this.queryParam.echelonPerformance).flat()
+      // requestParameters.schoolTypeAndEcholon = {}
+      // Object.keys(requestParameters.schoolType).forEach(e => {
+      //   requestParameters.schoolTypeAndEcholon[e] = {}
+      // })
+      // Object.keys(requestParameters.echelonPerformance).forEach(e => {
+      //   requestParameters.schoolTypeAndEcholon[e] = requestParameters.echelonPerformance[e]
+      // })
+      // delete requestParameters.schoolType
+      // delete requestParameters.echelonPerformance
+
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
       } else {

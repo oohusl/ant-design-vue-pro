@@ -638,14 +638,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import {
-  saveHouse,
-  getLabels,
-  photoUpload,
-  photoQuery,
-  photoDelete,
-  getSchools
-} from '@/api/manage'
+import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete, getSchools } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -755,7 +748,6 @@ export default {
     this.schools_ = this.schools.slice(0, 50)
     this.queryPhotos()
     this.houseTypeEdit.communityId = this.houseSelect.id
-    this.getHouseTypes()
 
     const _this = this
     getSchools().then(function (e) {
