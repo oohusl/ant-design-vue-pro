@@ -899,8 +899,8 @@ export default {
       // this.queryParam.echelonPerformance = this.echelons.flat()
       // requestParameters.echelonPerformance = Object.values(this.queryParam.echelonPerformance).flat()
       requestParameters.schoolTypeAndEchelon = {}
-      Object.keys(requestParameters.schoolType).forEach(e => {
-        requestParameters.schoolTypeAndEchelon[e] = {}
+      requestParameters.schoolType.forEach(e => {
+        requestParameters.schoolTypeAndEchelon[e] = []
       })
       Object.keys(requestParameters.echelonPerformance).forEach(e => {
         requestParameters.schoolTypeAndEchelon[e] = requestParameters.echelonPerformance[e]
