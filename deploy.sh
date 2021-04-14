@@ -1,30 +1,24 @@
 #!/bin/bash
-dev=house@47.98.42.1
-prod=house@datoucoin.cn
+dev=house@ho
+prod=house@47.100.79.237
 
 www=/home/house/www/
-project=hk.tar
-
+project=www.tar
 
 function deployDev {
     npm run build
     cd dist
     rm ${project}
     tar -zcvf ${project} *
-    scp ${project} ${dev}:${www}
-    ssh ${dev} tar -xzvf ${www}${project} -C ${www}
-    ssh ${dev} rm ${www}${project}
-}
-
-function deployProd {
-    ssh ${prod} sh update_www.sh
+    scp ${project} ${dev}:/home/house/    
+    ssh ${dev} sh deploy_www.sh
 }
 
 if [ "$1" == "all" ]; then
     deployDev
-    deployProd
+    ssh ${dev} sh deploy_www.sh prod
 elif [ "$1" == "prod" ]; then
-    deployProd
+    ssh ${dev} sh deploy_www.sh prod
 else
     deployDev
 fi
