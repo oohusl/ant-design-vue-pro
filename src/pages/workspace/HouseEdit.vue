@@ -330,11 +330,7 @@
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="权属">
-            <a-select v-model="houseSelect.transactionOwnership" size="small" class="col1">
-              <a-select-option value="商品房"> 商品房 </a-select-option>
-              <a-select-option value="毛坯房"> 毛坯房 </a-select-option>
-              <a-select-option value="售后工房"> 售后工房 </a-select-option>
-              <a-select-option value="其他"> 其他 </a-select-option>
+            <a-select v-model="houseSelect.transactionOwnership" size="small" class="col1" :options="transactionOwnershipOptions">
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="年限">
@@ -385,13 +381,7 @@
             <a-input v-model="houseSelect.minFloor" class="col1" size="small" addon-after="层" />
           </a-descriptions-item>
           <a-descriptions-item label="物业类型">
-            <a-select v-model="houseSelect.propertyAttributes" size="small" class="col1">
-              <a-select-option value="办公"> 办公 </a-select-option>
-              <a-select-option value="别墅"> 别墅 </a-select-option>
-              <a-select-option value="公寓住宅"> 公寓住宅 </a-select-option>
-              <a-select-option value="商业"> 商业 </a-select-option>
-              <a-select-option value="商住楼"> 商住楼 </a-select-option>
-              <a-select-option value="酒店"> 酒店 </a-select-option>
+            <a-select v-model="houseSelect.propertyAttributes" size="small" class="col1" :options="propertyOptions">
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="物业费">
@@ -656,6 +646,7 @@ import {
   peopleAndVehiclesOptions,
   districtPlanningOptions,
   communityLevOptions,
+  transactionOwnershipOptions,
   propertyOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
@@ -720,6 +711,7 @@ export default {
       districtPlanningOptions,
       communityLevOptions,
       propertyOptions,
+      transactionOwnershipOptions,
       loading: false,
       plates: {},
       subwayStations: {},
