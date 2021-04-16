@@ -232,22 +232,7 @@
                 <a-tabs default-active-key="1">
                   <a-tab-pane key="1" tab="楼盘点评">
                     <a-layout>
-                      <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }">
-                        <!-- <div class="diary-option diary-all">
-                          <span
-                            size="small"
-                            @click="selectAll()"
-                            :class="diarySelectedAll ? 'active' : null"
-                          >全部</span
-                          >
-                        </div>
-                        <div v-for="y of diaryTypeOptions" :key="JSON.stringify(y)" class="diary-option">
-                          <span :class="y.active ? 'active' : null" @click="triggerDiaryType(y)">{{
-                            y.label + '(' + y.count + ')'
-                          }}</span>
-                        </div>
-                         -->
-                      </a-layout-header>
+                      <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }"> </a-layout-header>
                       <a-layout-content>
                         <div class="diary-list">
                           <div
@@ -378,7 +363,14 @@ import {
   getLabel,
   statusMap
 } from '@/api/data'
-import { photoQuery, queryAnalysis, getSeveralBedroomsInfo, queryHouseDiary, queryHouseQuestion, getHouseDetail } from '@/api/manage'
+import {
+  photoQuery,
+  queryAnalysis,
+  getSeveralBedroomsInfo,
+  queryHouseDiary,
+  queryHouseQuestion,
+  getHouseDetail
+} from '@/api/manage'
 export default {
   name: 'HouseOverview',
   components: {
@@ -419,76 +411,11 @@ export default {
       detailFlag: 0,
       houseTypeVisible: false,
       houseDiaryVisible: false,
-      albumList: [
-        // { title: '1sasd', url: '/house/6.webp', active: true },
-        // { title: 'zxkhx', url: '/house/2.webp', active: false },
-        // { title: 'sdjds', url: '/house/4.webp', active: false },
-        // { title: 'sdjds', url: '/house/4.webp', active: false },
-        // { title: '4sdsa', url: '/house/1.webp', active: false }
-      ],
-      pictureList: [
-        // { title: '1sasd', url: '/house/6.webp' },
-        // { title: 'zxkhx', url: '/house/2.webp' },
-        // { title: 'sdjds', url: '/house/4.webp' },
-        // { title: 'sdjds', url: '/house/4.webp' },
-        // { title: '4sdsa', url: '/house/1.webp' }
-      ],
+      albumList: [],
+      pictureList: [],
       scroolPosition: 0,
-      diaryTypeOptions: [
-        {
-          label: '住房舒适度',
-          active: false,
-          count: 1,
-          diaryList: []
-        },
-        {
-          label: '周边医院',
-          active: false,
-          count: 1
-        },
-        {
-          label: '交通出行',
-          active: false,
-          count: 3
-        },
-        {
-          label: '楼盘优点',
-          active: false,
-          count: 2
-        },
-        {
-          label: '商业设施',
-          active: false,
-          count: 1
-        }
-      ],
-      houseTypeOptions: [
-        {
-          label: '全部户型',
-          active: false,
-          num: 5,
-          severalBedrooms: '0',
-          houseTypeList: []
-        },
-        {
-          label: '二居',
-          active: false,
-          num: 1,
-          severalBedrooms: '2'
-        },
-        {
-          label: '三居',
-          active: false,
-          num: 3,
-          severalBedrooms: '3'
-        },
-        {
-          label: '四居',
-          active: false,
-          num: 3,
-          severalBedrooms: '4'
-        }
-      ],
+      diaryTypeOptions: [],
+      houseTypeOptions: [],
       diarySelectedAll: true,
       diaryList: [],
       qaList: [],
@@ -592,7 +519,16 @@ export default {
       this.scroolPosition = position
     },
     queryAllAnalysis () {
-      const bedroomsOption = { '0': '零居室', '1': '一居室', '2': '二居室', '3': '三居室', '4': '四居室', '5': '四居以上', '6': '四居以上', '7': '四居以上' }
+      const bedroomsOption = {
+        '0': '零居室',
+        '1': '一居室',
+        '2': '二居室',
+        '3': '三居室',
+        '4': '四居室',
+        '5': '四居以上',
+        '6': '四居以上',
+        '7': '四居以上'
+      }
       getSeveralBedroomsInfo(this.houseSelect.id).then(bedroomsInfo => {
         if (bedroomsInfo) {
           this.houseTypeOptions = bedroomsInfo

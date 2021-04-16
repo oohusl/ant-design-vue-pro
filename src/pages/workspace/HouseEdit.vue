@@ -37,12 +37,6 @@
             <a-button @click="editImage()" v-if="houseSelect.id">
               上传图片
             </a-button>
-            <!-- <a-button @click="openHouseType()" v-if="houseSelect.id">
-              房型分析
-            </a-button>
-            <a-button @click="openHouseDiary()" v-if="houseSelect.id">
-              看房日记
-            </a-button> -->
           </a-layout-sider>
         </a-layout>
       </a-layout-header>
@@ -330,7 +324,12 @@
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="权属">
-            <a-select v-model="houseSelect.transactionOwnership" size="small" class="col1" :options="transactionOwnershipOptions">
+            <a-select
+              v-model="houseSelect.transactionOwnership"
+              size="small"
+              class="col1"
+              :options="transactionOwnershipOptions"
+            >
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="年限">

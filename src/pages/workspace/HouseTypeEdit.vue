@@ -141,33 +141,11 @@ export default {
           })
         })
     },
-    editImage () {
-      this.imageEditVisible = true
-      this.queryPhotos()
-    },
     openHouseType () {
       this.houseTypeEdit = {}
       this.houseTypeEdit.communityId = this.houseSelect.id
       this.houseTypeFiles = []
       this.houseTypeVisible = true
-    },
-    houseTypeOK () {
-      this.$emit('houseTypeOK')
-    },
-    editImageOK () {
-      this.imageEditVisible = false
-    },
-    showDetail () {
-      this.edit = false
-      console.log(this.houseSelect)
-    },
-    showInput () {
-      this.tagInputVisible = true
-      this.$nextTick(function () {})
-    },
-
-    handleInputChange (e) {
-      this.inputValue = e
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {
@@ -181,31 +159,12 @@ export default {
       newFileList.splice(index, 1)
       this.houseTypeFiles = newFileList
     },
-    handleRemove (file) {
-      if (file.url) {
-        this.toDelete.push(file.uid)
-      }
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      this.fileList = newFileList
-    },
     handleCancel () {
       this.previewVisible = false
     },
     handlePreview (file) {
       this.previewImage = file.url || file.preview
       this.previewVisible = true
-    },
-    beforeUpload (file) {
-      getBase64(file).then(url => {
-        if (this.photoType === '0') {
-          this.fileList = [{ uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
-        } else {
-          this.fileList = [...this.fileList, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
-        }
-      })
-      return false
     },
     handleOk (type) {
       switch (type) {
