@@ -124,9 +124,6 @@
                   <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
                 </div>
                 <div>
-                  <!-- <a-button icon="edit" size="small" @click="showHouseType">
-                    编辑
-                  </a-button> -->
                   <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType"> </a-button>
                 </div>
               </div>
@@ -630,7 +627,7 @@ export default {
         content: '确认删除户型信息？',
         onOk () {
           deleteAnalysis(house.id).then(function () {
-              that.queryAllAnalysis()
+            that.queryAllAnalysis()
           })
         },
         onCancel () {
