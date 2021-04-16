@@ -123,13 +123,11 @@
                 >
                   <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
                 </div>
-                <div :style="{ float: 'right' }">
+                <div>
                   <!-- <a-button icon="edit" size="small" @click="showHouseType">
                     编辑
                   </a-button> -->
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType">
-                    新建
-                  </a-button>
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType"> </a-button>
                 </div>
               </div>
               <a-layout
@@ -149,7 +147,7 @@
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                   <a-layout
-                    :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '300px' }"
+                    :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '350px' }"
                   >
                     <a-layout-header
                       :style="{
@@ -169,6 +167,8 @@
                         }${house.toilet ? house.toilet + '卫  ' : '  '}建面${house.acreage}m²`
                       }}
                       <a-tag color="green" size="sm">在售</a-tag>
+                      <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
+                      <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
                     </a-layout-header>
                     <a-layout-content
                       :style="{
@@ -260,8 +260,8 @@
                                 >{{ diary.userName }}
                                   <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
                                     diary.viewingTime
-                                  }}</span></a-layout-header
-                                  >
+                                  }}</span>
+                                </a-layout-header>
                                 <a-layout-content
                                   :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }"
                                 >
@@ -330,7 +330,7 @@
       @ok="handleOk('houseType')"
       width="600px"
     >
-      <house-type-edit :houseAnalysis="{communityId: houseSelect.id}" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
+      <house-type-edit :houseAnalysis="houseType" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
     </a-modal>
     <a-modal
       :visible="houseDiaryVisible"
@@ -369,7 +369,8 @@ import {
   getSeveralBedroomsInfo,
   queryHouseDiary,
   queryHouseQuestion,
-  getHouseDetail
+  getHouseDetail,
+  deleteAnalysis
 } from '@/api/manage'
 export default {
   name: 'HouseOverview',
@@ -419,15 +420,16 @@ export default {
       diarySelectedAll: true,
       diaryList: [],
       qaList: [],
-      houseTypeList: []
+      houseTypeList: [],
+      houseType: {}
     }
   },
   created () {},
   beforeMount () {
     console.log(this.$route.params)
-
     this.houseSelect = {}
     this.houseSelect.id = this.$route.query.houseId
+    this.houseType.communityId = this.houseSelect.id
     this.queryHouse()
     this.queryPhotos()
     this.queryAllAnalysis()
@@ -608,6 +610,34 @@ export default {
         }
       })
     },
+    showHouseType () {
+      this.houseType = { communityId: this.houseSelect.id }
+      this.houseTypeVisible = true
+      this.$nextTick(() => {
+        this.$refs.housetypeeditref.refresh()
+      })
+    },
+    editHouseType (house) {
+      this.houseType = house
+      this.houseTypeVisible = true
+      this.$nextTick(() => {
+        this.$refs.housetypeeditref.refresh()
+      })
+    },
+    deleteHouseType (house) {
+      const that = this
+      this.$confirm({
+        content: '确认删除户型信息？',
+        onOk () {
+          deleteAnalysis(house.id).then(function () {
+              that.queryAllAnalysis()
+          })
+        },
+        onCancel () {
+          console.log('Cancel')
+        }
+      })
+    },
     triggerhouseType (house) {
       if (this.houseTypeOptions[0].active) {
         this.houseTypeOptions[0].active = false
@@ -637,9 +667,6 @@ export default {
       this.houseTypeVisible = false
       // this.$refs.housetypeeditref && this.$refs.housetypeeditref.houseTypeOK()
     },
-    showHouseType () {
-      this.houseTypeVisible = true
-    },
     handleOk (type) {
       switch (type) {
         case 'housediary':
@@ -655,7 +682,7 @@ export default {
           this.$refs.housetypeeditref.saveHouseType()
           setTimeout(() => {
             this.queryAllAnalysis()
-          }, 100)
+          }, 200)
           break
         default:
           break

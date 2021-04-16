@@ -49,8 +49,6 @@
         </a-upload>
       </a-form-item>
     </a-form>
-    {{ houseTypeEdit }}
-    {{ houseAnalysis }}
   </div>
 </template>
 
@@ -70,7 +68,9 @@ export default {
     },
     toCreate: { type: Boolean, default: false }
   },
-  computed: {},
+  computed () {
+    this.houseTypeEdit = this.houseAnalysis
+  },
   data () {
     return {
       imageEditVisible: false,
@@ -81,7 +81,6 @@ export default {
       toDelete: [],
       previewVisible: false,
       previewImage: '',
-      houseTypeVisible: false,
       houseTypeFiles: [],
       houseTypes: [],
       houseTypeEdit: this.houseAnalysis,
@@ -131,9 +130,8 @@ export default {
           })
         })
     },
-    openHouseType () {
-      this.houseTypeFiles = []
-      this.houseTypeVisible = true
+    refresh () {
+      this.houseTypeEdit = this.houseAnalysis
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {

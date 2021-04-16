@@ -175,8 +175,15 @@ export function queryAnalysis (id, severalBedrooms) {
 export function saveAnalysis (houseType) {
   return request({
     url: api.saveAnalysis,
-    method: 'post',
+    method: houseType.id ? 'put' : 'post',
     data: houseType
+  })
+}
+
+export function deleteAnalysis (id) {
+  return request({
+    url: `${api.saveAnalysis}/${id}`,
+    method: 'delete'
   })
 }
 
