@@ -330,7 +330,7 @@
       @ok="handleOk('houseType')"
       width="600px"
     >
-      <house-type-edit :houseSelect="houseSelect" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
+      <house-type-edit :houseAnalysis="{communityId: houseSelect.id}" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
     </a-modal>
     <a-modal
       :visible="houseDiaryVisible"

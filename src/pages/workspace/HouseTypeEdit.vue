@@ -49,26 +49,20 @@
         </a-upload>
       </a-form-item>
     </a-form>
+    {{ houseTypeEdit }}
+    {{ houseAnalysis }}
   </div>
 </template>
 
 <script>
 import { houseTypePhotoUpload, saveAnalysis } from '@/api/manage'
-
-function getBase64 (file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
-  })
-}
+import { getBase64 } from '@/api/util'
 
 export default {
   name: 'HouseTypeEdit',
   components: {},
   props: {
-    houseSelect: {
+    houseAnalysis: {
       type: Object,
       default: function () {
         return {}
@@ -90,7 +84,7 @@ export default {
       houseTypeVisible: false,
       houseTypeFiles: [],
       houseTypes: [],
-      houseTypeEdit: {},
+      houseTypeEdit: this.houseAnalysis,
       houseTypeOptions: [
         { label: '平层', value: '平层' },
         { label: '叠墅', value: '叠墅' },
@@ -106,9 +100,6 @@ export default {
       ]
     }
   },
-  created () {
-    this.houseTypeEdit.communityId = this.houseSelect.id
-  },
   beforeMount () {
     if (this.edit) {
       this.newHouse()
@@ -116,7 +107,6 @@ export default {
   },
   methods: {
     saveHouseType () {
-      this.houseTypeEdit.communityId = this.houseSelect.id
       this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this
         .houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
       saveAnalysis(this.houseTypeEdit)
@@ -131,19 +121,17 @@ export default {
 
           this.$notification.success({
             message: '通知',
-            description: this.houseSelect.id ? '修改成功' : '保存成功'
+            description: this.houseTypeEdit.id ? '修改成功' : '保存成功'
           })
         })
         .catch(e => {
           this.$notification.error({
             message: '通知',
-            description: this.houseSelect.id ? '修改失败' : '保存失败'
+            description: this.houseTypeEdit.id ? '修改失败' : '保存失败'
           })
         })
     },
     openHouseType () {
-      this.houseTypeEdit = {}
-      this.houseTypeEdit.communityId = this.houseSelect.id
       this.houseTypeFiles = []
       this.houseTypeVisible = true
     },
