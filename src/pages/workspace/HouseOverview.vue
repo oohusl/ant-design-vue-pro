@@ -123,8 +123,8 @@
                 >
                   <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
                 </div>
-                <div>
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType"> </a-button>
+                <div style="float:right">
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType"></a-button>
                 </div>
               </div>
               <a-layout
