@@ -269,7 +269,7 @@
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>
               <a-checkbox value="3"> 三房 </a-checkbox>
-              <a-checkbox value="4"> 其他 </a-checkbox>
+              <a-checkbox value="5"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价" v-if="advanced">
@@ -903,7 +903,9 @@ export default {
         requestParameters.schoolTypeAndEchelon[e] = []
       })
       Object.keys(requestParameters.echelonPerformance).forEach(e => {
-        requestParameters.schoolTypeAndEchelon[e] = requestParameters.echelonPerformance[e]
+        if (requestParameters.echelonPerformance[e].length > 0) {
+          requestParameters.schoolTypeAndEchelon[e] = requestParameters.echelonPerformance[e]
+        }
       })
       delete requestParameters.schoolType
       delete requestParameters.echelonPerformance

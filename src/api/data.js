@@ -574,9 +574,14 @@ export const transactionOwnershipOptions = [
     value: '其他'
   }
 ]
+
 export const peopleAndVehiclesOptions = [
   {
-    label: '全人车分流',
+    label: '无人车分流',
+    value: '0'
+  },
+  {
+    label: '人车分流',
     value: '1'
   },
   {
