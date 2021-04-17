@@ -219,11 +219,7 @@
             <a-tab-pane key="2" tab="看房日记">
               <div class="house-diary">
                 <div :style="{ float: 'right' }">
-                  <!-- <a-button icon="edit" size="small" @click="houseDiaryVisible = true">
-                    编辑
-                  </a-button> -->
                   <a-button icon="plus" size="small" style="margin-left: 10px" @click="houseDiaryVisible = true">
-                    新建
                   </a-button>
                 </div>
                 <a-tabs default-active-key="1">
@@ -667,12 +663,13 @@ export default {
     handleOk (type) {
       switch (type) {
         case 'housediary':
-          this.$refs.housediaryref && this.$refs.housediaryref.save()
-          this.houseDiaryVisible = false
-          setTimeout(() => {
+          this.$refs.housediaryref && this.$refs.housediaryref.save().then(e => {
+            setTimeout(() => {
             this.queryAllHouseDiary()
-          }, 100)
-
+            this.queryQuestion()
+          }, 200)
+          })
+          this.houseDiaryVisible = false
           break
         case 'houseType':
           this.houseTypeVisible = false
