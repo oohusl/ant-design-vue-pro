@@ -785,6 +785,7 @@ export default {
       subwayStations: {},
       schools: [],
       schools_: [],
+      originalSchool: [],
       timer: undefined,
       schoolType,
       dataExcel: [],
@@ -794,11 +795,11 @@ export default {
   },
   created () {
     this.searchData()
-    this.dataExportQuery()
     // this.schools_ = this.schools.slice(0, 50)
 
     const _this = this
     getSchools().then(function (e) {
+      _this.originalSchool = e
       e.forEach(school => {
         _this.schools.push({ label: school.schoolName, value: school.schoolName })
       })
@@ -842,13 +843,13 @@ export default {
 
     doSearch () {
       this.searchData()
-      this.dataExportQuery()
     },
 
     searchData (size) {
       this.makeSearchRequest(size).then(e => {
         this.results = e
       })
+      this.dataExportQuery()
     },
 
     makeSearchRequest (size) {
@@ -995,6 +996,22 @@ export default {
 
     hasSubwaySelected (line) {
       return this.subwayStations[line] && this.subwayStations[line].length > 0
+    },
+
+    getSchool (schoolName) {
+      const school = this.originalSchool.find(school => {
+        return school.schoolName === schoolName
+      })
+      let desc = ''
+      if (school) {
+        if (school.echelon) {
+          desc = '-' + school.echelon
+        }
+        if (school.isConsistentSystem) {
+          desc += '-' + school.echelon
+        }
+      }
+      return desc
     },
 
     schoolTypeChange (e) {
@@ -1190,42 +1207,30 @@ export default {
           e.peopleAndVehicles = getLabel(e.peopleAndVehicles, peopleAndVehiclesOptions)
           e.isLift = getLabel(e.isLift, liftOptions)
 
-          const metro = { metroLine: [], subwayStation: [], distance: [] }
-
+          e.metroLine = []
           e.metroInfo.forEach(m => {
-            metro.metroLine.push(m.metroLine)
-            metro.subwayStation.push(m.subwayStation)
-            metro.distance.push(m.distance)
+            e.metroLine.push(`${m.metroLine}-${m.subwayStation}-${m.distance != null ? m.distance + 'm' : ''}`)
           })
-          e.metroLine = metro.metroLine.join('/')
-          e.subwayStation = metro.subwayStation.join('/')
-          e.distance = metro.distance.join('/')
+          e.metroLine = e.metroLine.join('/')
 
-          const school1 = { name: [], level: [] }
-          const school2 = { name: [], level: [] }
-          const school3 = { name: [], level: [] }
+          const school1 = []
+          const school2 = []
+          const school3 = []
           e.schoolDistrictInfo.forEach(m => {
+            const s = m.schoolName + this.getSchool(m.schoolName)
             if (m.schoolType === '幼儿园') {
-              school1.name.push(m.schoolName)
-              school1.level.push(m.echelonPerformance)
+              school1.push(s)
             }
             if (m.schoolType === '小学') {
-              school2.name.push(m.schoolName)
-              school2.level.push(m.echelonPerformance)
+              school2.push(s)
             }
             if (m.schoolType === '中学') {
-              school3.name.push(m.schoolName)
-              school3.level.push(m.echelonPerformance)
+              school3.push(s)
             }
           })
-
-          e.school1Name = school1.name.join('/')
-          e.school1Level = school1.level.join('/')
-          e.school2Name = school2.name.join('/')
-          e.school2Level = school2.level.join('/')
-          e.school3Name = school3.name.join('/')
-          e.school3Level = school3.level.join('/')
-
+          e.school1 = school1.join('/')
+          e.school2 = school1.join('/')
+          e.school3 = school1.join('/')
           const row = []
           this.fields.forEach(f => {
             row.push(e[f])
