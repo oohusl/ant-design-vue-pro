@@ -707,7 +707,11 @@ import {
   peopleAndVehiclesOptions,
   parkingSpaceRatioOptions,
   volume2019Options,
-  metroDistanceOption
+  metroDistanceOption,
+  liftOptions,
+  ExcelInfo,
+  getLabel,
+  calScope
 } from '@/api/data'
 import { AutoComplete, BackTop, Affix } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
@@ -784,12 +788,8 @@ export default {
       timer: undefined,
       schoolType,
       dataExcel: [],
-      headers: '区域,板块,地区规划,小区名称,挂牌均价,环线汇总,小区属性,地铁线,地铁站,距离,交易权属,最大楼层,最小楼层,2019成交量,1房面积段,2房面积段,3房面积段,1房价格段,2房价格段,3房价格段,是否电梯,室外游泳池,室内游泳池,会所,洋房,双阳台,大阳台,带花园,大露台,人车分流,建筑类型,物业属性,物业费,栋数,户数,车位数,容积率,绿化率,在售-3.20,正租-3.20,建筑代,开发商,物业公司,幼儿园,幼儿园等级,小学,小学梯队表现,是否一贯制,中学,初中梯队表现, 叠拼别墅, 独栋别墅, 联排别墅, 双拼别墅,内部配套,地址,产权年限,小区介绍'.split(
-        ','
-      ),
-      fields: 'area,plate,districtPlanning,communityName,,loopSummary,cellAttributes,metroLine,subwayStation,distance,transactionOwnership,maxFloor,minFloor,volume2019,roomArea1Min,roomArea2Min,roomArea3Min,roomPriceRange1Min,roomPriceRange2Min,roomPriceRange3Min,isLift,isOutdoorSwimmingRoom,isIndoorSwimmingPool,clubhouse,bungalow,doubleBalcony,largeBalcony,withGarden,largeTerrace,peopleAndVehicles,buildingType,propertyAttributes,propertyCosts,buildingNumber,householdsNumber,parkingSpacesNumber,volumeRate,greeningRate,averageLlistedPrice,inStock,constructionAge,developer,propertyCompany,school1Name,school1Level,school2Name,school2Name,,school3Name,school3Name,stackedVilla,singleFamilyVilla,townhouse,semiDetachedHouse,internalSupporting,address,propertyRights,communityDesc'.split(
-        ','
-      )
+      headers: Object.keys(ExcelInfo),
+      fields: Object.values(ExcelInfo)
     }
   },
   created () {
@@ -1176,10 +1176,19 @@ export default {
           return
         }
         let excelData = r.map(e => {
-          // delete e.metroInfo
-          // delete e.schoolDistrictInfo
           e.metroInfo = e.metroInfo || []
           e.schoolDistrictInfo = e.schoolDistrictInfo || []
+          e.roomArea1 = calScope(e, 'roomArea', '1')
+          e.roomArea2 = calScope(e, 'roomArea', '2')
+          e.roomArea3 = calScope(e, 'roomArea', '3')
+          e.roomArea4 = calScope(e, 'roomArea', '4')
+
+          e.roomPriceRange1 = calScope(e, 'roomPriceRange', '1')
+          e.roomPriceRange2 = calScope(e, 'roomPriceRange', '2')
+          e.roomPriceRange3 = calScope(e, 'roomPriceRange', '3')
+          e.roomPriceRange4 = calScope(e, 'roomPriceRange', '4')
+          e.peopleAndVehicles = getLabel(e.peopleAndVehicles, peopleAndVehiclesOptions)
+          e.isLift = getLabel(e.isLift, liftOptions)
 
           const metro = { metroLine: [], subwayStation: [], distance: [] }
 

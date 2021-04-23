@@ -746,3 +746,47 @@ export const districtPlanningOptions = [
     value: '其他'
   }
 ]
+export const ExcelInfo = {
+  '楼盘名称': 'communityName',
+  '楼盘地址': 'address',
+  '所属区域': 'area',
+  '所属板块': 'plate',
+  '环线': 'loopSummary',
+  '楼盘等级': 'communityLev',
+  '区域规划': 'districtPlanning',
+  '开发商': 'developer',
+  '物业公司': 'propertyCompany',
+  '类型': 'cellAttributes',
+  '权属': 'transactionOwnership',
+  '年限': 'propertyRights',
+  '建筑时间': 'constructionAge',
+  '小区栋数': 'buildingNumber',
+  '小区户数': 'householdsNumber',
+  '停车位数': 'parkingSpacesNumber',
+  '人车分流': 'peopleAndVehicles',
+  '容积率': 'volumeRate',
+  '绿化率': 'greeningRate',
+  '建筑类型': 'buildingType',
+  '是否电梯': 'isLift',
+  '最大层数': 'maxFloor',
+  '最小层数': 'minFloor',
+  '物业类型': 'propertyAttributes',
+  '物业费': 'propertyCosts',
+  '1居面积': 'roomArea1',
+  '1居价格': 'roomPriceRange1',
+  '2居面积': 'roomArea2',
+  '2居价格': 'roomPriceRange2',
+  '3居面积': 'roomArea3',
+  '3居价格': 'roomPriceRange3',
+  '多居面积': 'roomArea4',
+  '多居价格': 'roomPriceRange4',
+  '在售': 'inStock',
+  '在租': 'positiveRent',
+  '成交量': 'volume2019',
+  '概括介绍': 'communityDesc'
+}
+export function calScope (obj, key, number) {
+  const min = obj[key + number + 'Min'] || ''
+  const max = obj[key + number + 'Max'] || ''
+  return min + '-' + max
+}
