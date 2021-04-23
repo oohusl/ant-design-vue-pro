@@ -19,8 +19,16 @@
               >均价
                 {{
                   houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString()
-                }}元/m²</span
-              >
+                }}元/m²</span>
+              <span style="font-size:16px; margin-left: 12px">
+                {{ houseSelect.communityLev }}
+              </span>
+              <span style="font-size:16px; margin-left: 12px">
+                {{ getLabel(houseSelect.popularComLev, popularComLevOptions) }}
+              </span>
+              <span style="font-size:16px; margin-left: 12px">
+                {{ getLabel(houseSelect.qualityComLev, qualityComLevOptions) }}
+              </span>
             </div>
             <div>
               <template v-for="tag in tags">
@@ -56,9 +64,6 @@
           </a-descriptions-item>
           <a-descriptions-item label="环线">
             {{ houseSelect.loopSummary }}
-          </a-descriptions-item>
-          <a-descriptions-item label="楼盘等级">
-            {{ houseSelect.communityLev }}
           </a-descriptions-item>
           <a-descriptions-item label="区域规划">
             {{ houseSelect.districtPlanning }}
@@ -206,8 +211,16 @@
                 style="font-size:16px;color: #B71C2B; margin-left: 12px"
               >均价
                 <a-input-number v-model="houseSelect.averageLlistedPrice" size="small" style="width: 100px" />
-                元/m²</span
-              >
+                元/m²</span>
+              <span style="margin-left: 12px">
+                <a-select v-model="houseSelect.communityLev" size="small" class="col1" :options="communityLevOptions" placeholder="楼盘等级"></a-select>
+              </span>
+              <span style="margin-left: 12px">
+                <a-select v-model="houseSelect.qualityComLev" size="small" class="col1" :options="qualityComLevOptions" placeholder="品质楼盘"></a-select>
+              </span>
+              <span style="margin-left: 12px">
+                <a-select v-model="houseSelect.popularComLev" size="small" class="col1" :options="popularComLevOptions" placeholder="热门楼盘"></a-select>
+              </span>
             </div>
             <div>
               <template v-for="tag in tags">
@@ -266,10 +279,6 @@
               size="small"
               class="col1"
             ></a-select>
-          </a-descriptions-item>
-          <a-descriptions-item label="楼盘等级">
-            <a-select v-model="houseSelect.communityLev" size="small" class="col1" :options="communityLevOptions">
-            </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="区域规划">
             <a-select
@@ -646,7 +655,9 @@ import {
   districtPlanningOptions,
   communityLevOptions,
   transactionOwnershipOptions,
-  propertyOptions
+  propertyOptions,
+  popularComLevOptions,
+  qualityComLevOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
 import { getBase64 } from '@/api/util'
@@ -703,6 +714,8 @@ export default {
       communityLevOptions,
       propertyOptions,
       transactionOwnershipOptions,
+      qualityComLevOptions,
+      popularComLevOptions,
       loading: false,
       plates: {},
       subwayStations: {},

@@ -746,6 +746,38 @@ export const districtPlanningOptions = [
     value: '其他'
   }
 ]
+export const popularComLevOptions = [
+  {
+    value: 1,
+    label: '热门楼盘1'
+  },
+  {
+    value: 2,
+    label: '热门楼盘2'
+  },
+  {
+    value: 3,
+    label: '热门楼盘3'
+  },
+  {
+    value: 4,
+    label: '热门楼盘4'
+  }
+]
+export const qualityComLevOptions = [
+  {
+    value: 1,
+    label: '品质楼盘1'
+  },
+  {
+    value: 2,
+    label: '品质楼盘2'
+  },
+  {
+    value: 3,
+    label: '品质楼盘3'
+  }
+]
 export const ExcelInfo = {
   '楼盘名称': 'communityName',
   '均价': 'averageLlistedPrice',
