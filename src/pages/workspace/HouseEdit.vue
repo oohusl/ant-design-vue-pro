@@ -195,7 +195,7 @@
     </a-layout>
     <a-layout :style="{ background: '#ffffff', padding: '0', height: '50px' }" v-else>
       <a-layout-header :style="{ padding: '0', height: '80px' }">
-        <a-layout :style="{ background: '#ffffff', padding: '0', height: '80px' }">
+        <a-layout :style="{ background: '#ffffff', padding: '0', height: '100px' }">
           <a-layout-content
             :style="{
               background: '#ffffff',
