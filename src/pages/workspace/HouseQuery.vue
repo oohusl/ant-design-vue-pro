@@ -1229,8 +1229,8 @@ export default {
             }
           })
           e.school1 = school1.join('/')
-          e.school2 = school1.join('/')
-          e.school3 = school1.join('/')
+          e.school2 = school2.join('/')
+          e.school3 = school3.join('/')
           const row = []
           this.fields.forEach(f => {
             row.push(e[f])
