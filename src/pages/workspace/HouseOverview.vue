@@ -35,10 +35,10 @@
                         </a-list>
                       </div>
                       <div class="album-view-right" @click="flip('next')">
-                        >
                       </div>
                     </div>
                   </a-layout-content>
+                  <a-button type="link" icon="upload" size="small" @click="editHouseImage(house)" />
                 </a-layout>
               </a-layout-sider>
               <a-layout-content :style="{ padding: '10px 32px', color: '#262626' }">
@@ -144,7 +144,7 @@
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
                   <a-layout
-                    :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '350px' }"
+                    :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '380px' }"
                   >
                     <a-layout-header
                       :style="{
@@ -210,7 +210,7 @@
                         'align-items': 'flex-end'
                       }"
                     >
-                      <a-button>了解户型报价</a-button>
+                      <!-- <a-button>了解户型报价</a-button> -->
                     </a-layout-content>
                   </a-layout>
                 </a-layout-sider>
@@ -319,8 +319,8 @@
     <a-modal
       :visible="houseTypeVisible"
       title="户型分析"
-      @cancel="houseTypeOK"
       @ok="handleOk('houseType')"
+      @cancel="houseTypeOK"
       width="600px"
     >
       <house-type-edit :houseAnalysis="houseType" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
@@ -333,6 +333,14 @@
     >
       <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
     </a-modal>
+    <a-modal
+      title="楼盘相册"
+      @cancel="imageEditClose"
+      :footer="false"
+      width="800px"
+      :visible="imageEditVisible">
+      <house-image-edit :houseId="houseSelect.id"></house-image-edit>
+    </a-modal>
   </div>
 </template>
 
@@ -341,6 +349,8 @@ import { AutoComplete } from 'ant-design-vue'
 import HouseEdit from './HouseEdit.vue'
 import HouseTypeEdit from './HouseTypeEdit'
 import HouseDiary from './HouseDiary'
+import HouseImageEdit from './HouseImageEdit'
+
 import {
   areaOptions,
   getMetroLineOptions,
@@ -371,7 +381,8 @@ export default {
     AutoComplete,
     HouseEdit,
     HouseTypeEdit,
-    HouseDiary
+    HouseDiary,
+    HouseImageEdit
   },
   computed: {},
   data () {
@@ -405,6 +416,7 @@ export default {
       detailFlag: 0,
       houseTypeVisible: false,
       houseDiaryVisible: false,
+      imageEditVisible: false,
       albumList: [],
       pictureList: [],
       scroolPosition: 0,
@@ -617,6 +629,9 @@ export default {
         this.$refs.housetypeeditref.refresh()
       })
     },
+    editHouseImage (house) {
+      this.imageEditVisible = true
+    },
     deleteHouseType (house) {
       const that = this
       this.$confirm({
@@ -659,6 +674,10 @@ export default {
     houseTypeOK () {
       this.houseTypeVisible = false
       // this.$refs.housetypeeditref && this.$refs.housetypeeditref.houseTypeOK()
+    },
+    imageEditClose () {
+        this.imageEditVisible = false
+        this.queryPhotos()
     },
     handleOk (type) {
       switch (type) {

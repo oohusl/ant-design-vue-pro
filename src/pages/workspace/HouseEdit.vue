@@ -38,12 +38,9 @@
               </template>
             </div>
           </a-layout-content>
-          <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '380px', 'min-width': '380px' }">
+          <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '100px', 'min-width': '100px' }">
             <a-button @click="editHouse()">
-              信息编辑
-            </a-button>
-            <a-button @click="editImage()" v-if="houseSelect.id">
-              上传图片
+              编辑
             </a-button>
           </a-layout-sider>
         </a-layout>
@@ -587,56 +584,12 @@
         </a-descriptions>
       </a-layout-content>
     </a-layout>
-    <a-modal v-model="imageEditVisible" title="楼盘相册" :footer="null" @ok="editImageOK" width="800px">
-      <a-form>
-        <a-form-item label="楼盘名称">
-          <a-input :value="houseSelect.communityName" :disabled="true" />
-        </a-form-item>
-        <a-form-item label="相册类目">
-          <a-select v-model="photoType" @change="queryPhotos">
-            <a-select-option value="0">封面图</a-select-option>
-            <a-select-option value="1">效果图</a-select-option>
-            <a-select-option value="2">环境规划图</a-select-option>
-            <a-select-option value="3">楼盘实景图</a-select-option>
-            <a-select-option value="4">周边实景图</a-select-option>
-          </a-select>
-        </a-form-item>
-        <a-form-item>
-          <a-upload
-            :file-list="fileList"
-            accept="image/*"
-            list-type="picture-card"
-            :remove="handleRemove"
-            :before-upload="beforeUpload"
-            @preview="handlePreview"
-          >
-            <div>
-              <a-icon type="plus" />
-              <div class="ant-upload-text">
-                上传图片
-              </div>
-            </div>
-          </a-upload>
-        </a-form-item>
-        <a-form-item>
-          <a-button type="primary" :loading="uploading" style="margin-top: 16px" @click="handleUpload">
-            {{ uploading ? '处理中' : '提交' }}
-          </a-button>
-          <a-button :disabled="uploading" style="margin-top: 16px" @click="editImageOK">
-            取消
-          </a-button>
-        </a-form-item>
-      </a-form>
-    </a-modal>
-    <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-      <img alt="example" style="width: 100%" :src="previewImage" />
-    </a-modal>
   </div>
 </template>
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels, photoUpload, photoQuery, photoDelete, getSchools } from '@/api/manage'
+import { saveHouse, getLabels, getSchools } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -660,7 +613,6 @@ import {
   qualityComLevOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
-import { getBase64 } from '@/api/util'
 
 export default {
   name: 'HouseSelect',
@@ -689,7 +641,6 @@ export default {
   },
   data () {
     return {
-      imageEditVisible: false,
       tagInputVisible: false,
       edit: this.toCreate,
       stationOptions: [],
@@ -723,12 +674,6 @@ export default {
       schools: [],
       schools_: [],
       metrolineDistrictInfo: [],
-      photoType: '0',
-      fileList: [],
-      uploading: false,
-      toDelete: [],
-      previewVisible: false,
-      previewImage: '',
       houseTypeVisible: false,
       houseDiaryVisible: false,
       houseTypeFiles: [],
@@ -846,9 +791,6 @@ export default {
     },
     houseTypeOK () {
       this.houseTypeVisible = false
-    },
-    editImageOK () {
-      this.imageEditVisible = false
     },
     saveHouse () {
       // save
@@ -1049,102 +991,11 @@ export default {
       }
       return desc
     },
-    beforeHouseTypeUpload (file) {
-      getBase64(file).then(url => {
-        this.houseTypeFiles = [
-          ...this.houseTypeFiles,
-          { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }
-        ]
-      })
-      return false
-    },
     handleHouseTypeRemove (file) {
       const index = this.houseTypeFiles.indexOf(file)
       const newFileList = this.houseTypeFiles.slice()
       newFileList.splice(index, 1)
       this.houseTypeFiles = newFileList
-    },
-    queryPhotos () {
-      this.fileList = []
-      return photoQuery(this.houseSelect.id, this.photoType).then(e => {
-        e.forEach(image => {
-          this.fileList.push({ uid: image.id, status: 'done', name: image.url, url: '/media/' + image.url })
-        })
-      })
-    },
-    handleRemove (file) {
-      if (file.url) {
-        this.toDelete.push(file.uid)
-      }
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      this.fileList = newFileList
-    },
-    handleCancel () {
-      this.previewVisible = false
-    },
-    handlePreview (file) {
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
-    },
-    beforeUpload (file) {
-      getBase64(file).then(url => {
-        if (this.photoType === '0') {
-          this.fileList = [{ uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
-        } else {
-          this.fileList = [...this.fileList, { uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
-        }
-      })
-      return false
-    },
-    doUpload () {
-      this.uploading = true
-      const up = []
-      this.fileList.forEach(file => {
-        if (file.file) {
-          const formData = new FormData()
-          formData.append('file', file.file)
-          formData.append('communityId', this.houseSelect.id)
-          formData.append('type', this.photoType)
-          up.push(photoUpload(formData))
-        }
-      })
-      this.toDelete.forEach(id => {
-        up.push(photoDelete(id))
-      })
-
-      Promise.all(up)
-        .then(r => {
-          console.log(r)
-        })
-        .catch(e => {
-          console.error(e)
-        })
-        .finally(e => {
-          this.queryPhotos().then(e => {
-            if (this.photoType === '0') {
-              if (this.fileList.length > 0) {
-                this.houseSelect['communityPhoto'] = this.fileList[0]['url']
-              } else {
-                this.houseSelect['communityPhoto'] = null
-              }
-              saveHouse(this.houseSelect).then(e => {
-                console.log(e)
-              })
-            }
-          })
-          this.uploading = false
-        })
-    },
-    handleUpload () {
-      const { fileList } = this
-      const formData = new FormData()
-      fileList.forEach(file => {
-        formData.append('files[]', file)
-      })
-      // this.uploading = true
-      this.doUpload()
     },
     handleOk (type) {
       switch (type) {
