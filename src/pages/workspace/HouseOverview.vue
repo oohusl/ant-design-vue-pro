@@ -138,7 +138,7 @@
                 :key="house.unitTypeName"
               >
                 <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
-                  <img v-if="house.photoUrl" :src="house.photoUrl" @click="previewImage = house.photoUrl"/>
+                  <img v-if="house.photoUrl" :src="house.photoUrl" @click="previewImage = house.photoUrl" />
                   <img v-else src="~@/assets/second.png" />
                 </a-layout-sider>
                 <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
@@ -332,7 +332,7 @@
     >
       <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
     </a-modal>
-    <a-modal title="楼盘相册" @cancel="imageEditClose" :footer="false" width="800px" :visible="imageEditVisible">
+    <a-modal title="楼盘相册" @cancel="imageEditClose" :footer="false" width="1000px" :visible="imageEditVisible">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
     </a-modal>
     <a-modal title="图片预览" :visible="previewImage" :footer="false" @cancel="previewImage = null">
