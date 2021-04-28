@@ -216,67 +216,26 @@
                 </a-layout-sider>
               </a-layout>
             </a-tab-pane>
-            <a-tab-pane key="2" tab="看房日记">
+            <a-tab-pane key="2" tab="楼盘点评">
               <div class="house-diary">
                 <div :style="{ float: 'right' }">
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="houseDiaryVisible = true">
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseDiary">
                   </a-button>
                 </div>
-                <a-tabs default-active-key="1">
-                  <a-tab-pane key="1" tab="楼盘点评">
-                    <a-layout>
-                      <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }"> </a-layout-header>
-                      <a-layout-content>
-                        <div class="diary-list">
-                          <div
-                            class="diary-list-item"
-                            v-for="diary of diaryList"
-                            :key="diary.id"
-                            :class="diary.open ? 'open' : 'close'"
-                          >
-                            <a-layout :style="{ height: '100%' }">
-                              <a-layout-sider :style="{ background: '#fff' }" width="80">
-                                <img :src="diary.userIcon" />
-                              </a-layout-sider>
-                              <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
-                                <a-layout-header
-                                  :style="{
-                                    background: '#ffffff',
-                                    padding: 0,
-                                    color: 'rgba(0, 0, 0, 0.85)',
-                                    'font-size': '16px',
-                                    height: '40px',
-                                    'line-height': '40px',
-                                    cursor: 'pointer',
-                                    'font-weight': 700
-                                  }"
-                                >{{ diary.userName }}
-                                  <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
-                                    diary.viewingTime
-                                  }}</span>
-                                </a-layout-header>
-                                <a-layout-content
-                                  :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }"
-                                >
-                                  <pre>{{ diary.reviewContent }}</pre>
-                                </a-layout-content>
-                                <!-- <a-layout-footer :style="{ background: '#ffffff', padding: '0' }">
-                                  {{ diary.viewingTime }}
-                                  <span style="float: right;cursor: pointer;" @click="triggerOpenState(diary)">
-                                    {{ diary.open ? '收起全文' : '展开全文' }}
-                                  </span>
-                                </a-layout-footer> -->
-                              </a-layout>
-                            </a-layout>
-                          </div>
-                        </div>
-                      </a-layout-content>
-                    </a-layout>
-                  </a-tab-pane>
-                  <a-tab-pane key="2" tab="楼盘问问">
-                    <div class="qa-list">
-                      <div class="qa-item" v-for="qa of qaList" :key="qa.id">
-                        <a-layout>
+                <a-layout>
+                  <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }"> </a-layout-header>
+                  <a-layout-content>
+                    <div class="diary-list">
+                      <div
+                        class="diary-list-item"
+                        v-for="diary of diaryList"
+                        :key="diary.id"
+                        :class="diary.open ? 'open' : 'close'"
+                      >
+                        <a-layout :style="{ height: '100%' }">
+                          <a-layout-sider :style="{ background: '#fff' }" width="80">
+                            <img :src="diary.userIcon" />
+                          </a-layout-sider>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
                             <a-layout-header
                               :style="{
@@ -289,24 +248,65 @@
                                 cursor: 'pointer',
                                 'font-weight': 700
                               }"
-                            >
-                              <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
-                              <!-- <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal'  }">{{ qa.datetime }}</span> -->
+                            >{{ diary.userName }}
+                              <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
+                                diary.viewingTime
+                              }}</span>
+                              <a-button type="link" icon="edit" size="small" @click="editHouseDiary(diary)" />
+                              <a-button type="link" icon="delete" size="small" @click="deleteHouseDiary(diary)" />
                             </a-layout-header>
-                            <a-layout-content>
-                              <span class="a-icon">A</span>
-                              <pre> {{ qa.diaryAnswer }}</pre>
+                            <a-layout-content
+                              :style="{ background: '#ffffff', overflow: 'hidden', color: 'rgba(0, 0, 0, 0.65)' }"
+                            >
+                              <pre>{{ diary.reviewContent }}</pre>
                             </a-layout-content>
                           </a-layout>
-                          <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
-                            <img :src="qa.userIcon" />
-                            <p>{{ qa.userName }}</p>
-                          </a-layout-sider>
                         </a-layout>
                       </div>
                     </div>
-                  </a-tab-pane>
-                </a-tabs>
+                  </a-layout-content>
+                </a-layout>
+              </div>
+            </a-tab-pane>
+            <a-tab-pane key="3" tab="楼盘问问">
+              <div class="house-diary">
+                <div :style="{ float: 'right' }">
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseQA">
+                  </a-button>
+                </div>
+                <div class="qa-list">
+                  <div class="qa-item" v-for="qa of qaList" :key="qa.id">
+                    <a-layout>
+                      <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
+                        <a-layout-header
+                          :style="{
+                            background: '#ffffff',
+                            padding: 0,
+                            color: 'rgba(0, 0, 0, 0.85)',
+                            'font-size': '16px',
+                            height: '40px',
+                            'line-height': '40px',
+                            cursor: 'pointer',
+                            'font-weight': 700
+                          }"
+                        >
+                          <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
+                          <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{ qa.datetime }}</span>
+                          <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
+                          <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
+                        </a-layout-header>
+                        <a-layout-content>
+                          <span class="a-icon">A</span>
+                          <pre> {{ qa.diaryAnswer }}</pre>
+                        </a-layout-content>
+                      </a-layout>
+                      <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
+                        <img :src="qa.userIcon" style="width: 60px; height: 60px"/>
+                        <p>{{ qa.userName }}</p>
+                      </a-layout-sider>
+                    </a-layout>
+                  </div>
+                </div>
               </div>
             </a-tab-pane>
           </a-tabs>
@@ -327,11 +327,19 @@
     </a-modal>
     <a-modal
       :visible="houseDiaryVisible"
-      title="看房日记"
+      title="楼盘点评"
       @ok="handleOk('housediary')"
       @cancel="houseDiaryVisible = false"
     >
-      <house-diary :houseSelect="houseSelect" ref="housediaryref"></house-diary>
+      <house-diary :houseSelect="houseSelect" :diary="diaryEdit" ref="housediaryref"></house-diary>
+    </a-modal>
+    <a-modal
+      :visible="houseQAVisible"
+      title="楼盘问答"
+      @ok="handleOk('housediary')"
+      @cancel="houseQAVisible = false"
+    >
+      <HouseQA :houseSelect="houseSelect" ref="housediaryref"></HouseQA>
     </a-modal>
     <a-modal
       title="楼盘相册"
@@ -350,6 +358,7 @@ import HouseEdit from './HouseEdit.vue'
 import HouseTypeEdit from './HouseTypeEdit'
 import HouseDiary from './HouseDiary'
 import HouseImageEdit from './HouseImageEdit'
+import HouseQA from './HouseQA'
 
 import {
   areaOptions,
@@ -373,7 +382,8 @@ import {
   queryHouseDiary,
   queryHouseQuestion,
   getHouseDetail,
-  deleteAnalysis
+  deleteAnalysis,
+  deleteHouseDiary
 } from '@/api/manage'
 export default {
   name: 'HouseOverview',
@@ -382,6 +392,7 @@ export default {
     HouseEdit,
     HouseTypeEdit,
     HouseDiary,
+    HouseQA,
     HouseImageEdit
   },
   computed: {},
@@ -416,6 +427,7 @@ export default {
       detailFlag: 0,
       houseTypeVisible: false,
       houseDiaryVisible: false,
+      houseQAVisible: false,
       imageEditVisible: false,
       albumList: [],
       pictureList: [],
@@ -426,7 +438,8 @@ export default {
       diaryList: [],
       qaList: [],
       houseTypeList: [],
-      houseType: {}
+      houseType: {},
+      diaryEdit: null
     }
   },
   created () {},
@@ -646,6 +659,20 @@ export default {
         }
       })
     },
+    deleteHouseDiary (diary) {
+      const that = this
+      this.$confirm({
+        content: '确认删除点评信息？',
+        onOk () {
+          deleteHouseDiary(diary.id).then(function () {
+            that.queryAllHouseDiary()
+          })
+        },
+        onCancel () {
+          console.log('Cancel')
+        }
+      })
+    },
     triggerhouseType (house) {
       if (this.houseTypeOptions[0].active) {
         this.houseTypeOptions[0].active = false
@@ -678,6 +705,13 @@ export default {
     imageEditClose () {
         this.imageEditVisible = false
         this.queryPhotos()
+    },
+    editHouseDiary (diary) {
+      this.houseDiaryVisible = true
+      this.diaryEdit = diary
+    },
+    editHouseQA () {
+      this.houseQAVisible = true
     },
     handleOk (type) {
       switch (type) {

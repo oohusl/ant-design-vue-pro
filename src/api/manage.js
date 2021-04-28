@@ -197,8 +197,14 @@ export function getSeveralBedroomsInfo (id) {
 export function newHouseDiary (houseDiary) {
   return request({
     url: api.newHouseDiary,
-    method: 'post',
+    method: houseDiary.id ? 'put' : 'post',
     data: houseDiary
+  })
+}
+export function deleteHouseDiary (id) {
+  return request({
+    url: api.newHouseDiary + `/${id}`,
+    method: 'delete'
   })
 }
 export function queryHouseDiary (communityId, classificationLabel) {

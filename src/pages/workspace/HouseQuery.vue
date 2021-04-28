@@ -1008,7 +1008,7 @@ export default {
           desc = '-' + school.echelon
         }
         if (school.isConsistentSystem) {
-          desc += '-' + school.echelon
+          desc += '-' + school.isConsistentSystem
         }
       }
       return desc
