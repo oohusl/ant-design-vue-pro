@@ -5,15 +5,15 @@ const GitRevision = new GitRevisionPlugin()
 const buildDate = JSON.stringify(new Date().toLocaleString())
 const createThemeColorReplacerPlugin = require('./config/plugin.config')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
 // check Git
-function getGitHash() {
+function getGitHash () {
   try {
     return GitRevision.version()
-  } catch (e) { }
+  } catch (e) {}
   return 'unknown'
 }
 
@@ -54,9 +54,8 @@ const vueConfig = {
     externals: isProd ? assetsCDN.externals : {}
   },
 
-  chainWebpack: (config) => {
-    config.resolve.alias
-      .set('@$', resolve('src'))
+  chainWebpack: config => {
+    config.resolve.alias.set('@$', resolve('src'))
 
     const svgRule = config.module.rule('svg')
     svgRule.uses.clear()
@@ -106,6 +105,11 @@ const vueConfig = {
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
     proxy: {
       '/api': {
+        target: 'http://47.100.79.237:81/',
+        ws: false,
+        changeOrigin: true
+      },
+      '/media': {
         target: 'http://47.100.79.237:81/',
         ws: false,
         changeOrigin: true
