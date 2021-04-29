@@ -268,44 +268,50 @@
             </a-tab-pane>
             <a-tab-pane key="3" tab="楼盘问问">
               <div class="house-diary">
-                <div :style="{ float: 'right' }">
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseQA"> </a-button>
-                </div>
-                <div class="qa-list">
-                  <div class="qa-item" v-for="qa of qaList" :key="qa.id">
-                    <a-layout>
-                      <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
-                        <a-layout-header
-                          :style="{
-                            background: '#ffffff',
-                            padding: 0,
-                            color: 'rgba(0, 0, 0, 0.85)',
-                            'font-size': '16px',
-                            height: '40px',
-                            'line-height': '40px',
-                            cursor: 'pointer',
-                            'font-weight': 700
-                          }"
-                        >
-                          <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
-                          <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
-                            qa.datetime
-                          }}</span>
-                          <a-button type="link" icon="edit" size="small" @click="editHouseQA(qa)" />
-                          <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
-                        </a-layout-header>
-                        <a-layout-content>
-                          <span class="a-icon">A</span>
-                          <pre> {{ qa.diaryAnswer }}</pre>
-                        </a-layout-content>
-                      </a-layout>
-                      <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
-                        <img :src="qa.userIcon" style="width: 60px; height: 60px" />
-                        <p>{{ qa.userName }}</p>
-                      </a-layout-sider>
-                    </a-layout>
-                  </div>
-                </div>
+                <a-layout>
+                  <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }">
+                    <span :style="{ float: 'right' }">
+                      <a-button icon="plus" size="small" @click="editHouseQA"> </a-button>
+                    </span>
+                  </a-layout-header>
+                  <a-layout-content>
+                    <div class="qa-list">
+                      <div class="qa-item" v-for="qa of qaList" :key="qa.id">
+                        <a-layout>
+                          <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
+                            <a-layout-header
+                              :style="{
+                                background: '#ffffff',
+                                padding: 0,
+                                color: 'rgba(0, 0, 0, 0.85)',
+                                'font-size': '16px',
+                                height: '40px',
+                                'line-height': '40px',
+                                cursor: 'pointer',
+                                'font-weight': 700
+                              }"
+                            >
+                              <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
+                              <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
+                                qa.datetime
+                              }}</span>
+                              <a-button type="link" icon="edit" size="small" @click="editHouseQA(qa)" />
+                              <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
+                            </a-layout-header>
+                            <a-layout-content>
+                              <span class="a-icon">A</span>
+                              <pre> {{ qa.diaryAnswer }}</pre>
+                            </a-layout-content>
+                          </a-layout>
+                          <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
+                            <img :src="qa.userIcon" style="width: 60px; height: 60px" />
+                            <p>{{ qa.userName }}</p>
+                          </a-layout-sider>
+                        </a-layout>
+                      </div>
+                    </div>
+                  </a-layout-content>
+                </a-layout>
               </div>
             </a-tab-pane>
           </a-tabs>
@@ -315,13 +321,7 @@
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
       <house-edit :houseSelect="houseSelect" :toCreate="detailFlag === 2" ref="houseeditref"></house-edit>
     </a-drawer>
-    <a-modal
-      :visible="houseTypeVisible"
-      title="户型分析"
-      @ok="handleOk('houseType')"
-      @cancel="houseTypeOK"
-      width="600px"
-    >
+    <a-modal title="户型分析" :visible="houseTypeVisible" @ok="saveHouseType" @cancel="houseTypeOK" width="600px">
       <house-type-edit :houseAnalysis="houseType" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
     </a-modal>
     <a-modal
@@ -332,13 +332,13 @@
     >
       <house-diary :houseSelect="houseSelect" :diary="diaryEdit" ref="housediaryref"></house-diary>
     </a-modal>
-    <a-modal :visible="houseQAVisible" title="楼盘问答" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
+    <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
       <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
-    <a-modal title="楼盘相册" @cancel="imageEditClose" :footer="false" width="1000px" :visible="imageEditVisible">
+    <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" :footer="false" width="1000px">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
     </a-modal>
-    <a-modal title="图片预览" :visible="previewImage" :footer="false" @cancel="previewImage = null">
+    <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false" >
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
@@ -719,34 +719,23 @@ export default {
       this.imageEditVisible = false
       this.queryPhotos()
     },
-    handleOk (type) {
-      switch (type) {
-        case 'houseType':
-          this.houseTypeVisible = false
-          this.$refs.housetypeeditref.saveHouseType()
-          setTimeout(() => {
-            this.queryAllAnalysis()
-          }, 200)
-          break
-        default:
-          break
-      }
+    saveHouseType () {
+      this.$refs.housetypeeditref.saveHouseType().then(e => {
+        this.houseTypeVisible = false
+        this.queryAllAnalysis()
+      })
     },
     saveHouseDiary () {
       this.$refs.housediaryref.save().then(e => {
-          setTimeout(() => {
-            this.queryAllHouseDiary()
-          }, 200)
-        })
-      this.houseDiaryVisible = false
+        this.houseDiaryVisible = false
+        this.queryAllHouseDiary()
+      })
     },
     saveHouseQuestion () {
       this.$refs.houseQARef.save().then(e => {
-        setTimeout(() => {
-          this.queryQuestion()
-        }, 200)
+        this.houseQAVisible = false
+        this.queryQuestion()
       })
-      this.houseQAVisible = false
     }
   }
 }

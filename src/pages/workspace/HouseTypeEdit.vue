@@ -108,7 +108,7 @@ export default {
     saveHouseType () {
       this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this
         .houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
-      saveAnalysis(this.houseTypeEdit)
+      return saveAnalysis(this.houseTypeEdit)
         .then(e => {
           if (this.houseTypeFiles.length > 0 && this.houseTypeFiles[0].file) {
             const formData = new FormData()
