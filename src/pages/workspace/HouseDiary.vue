@@ -4,7 +4,7 @@
       <a-form-item label="看房时间">
         <a-date-picker
           valueFormat="YYYY-MM-DD"
-          :value="moment(houseDiary.viewingTime)"
+          :default-value="moment(houseDiary.viewingTime)"
           @change="onChange"
           v-decorator="['startAt', { rules: [{ required: true, message: '请选择开始时间' }] }]"
         />
@@ -50,6 +50,7 @@ export default {
   watch: {
     diary (newDiary) {
         this.houseDiary = Object.assign({}, newDiary)
+        this.$forceUpdate()
     }
   },
   methods: {
