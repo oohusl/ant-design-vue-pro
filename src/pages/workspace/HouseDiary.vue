@@ -6,7 +6,7 @@
           valueFormat="YYYY-MM-DD"
           :default-value="moment(houseDiary.viewingTime)"
           @change="onChange"
-          v-decorator="['startAt', { rules: [{ required: true, message: '请选择开始时间' }] }]"
+          v-decorator="['startAt', { rules: [{ required: true, message: '请选择时间' }] }]"
         />
       </a-form-item>
       <a-form-item label="点评内容">
@@ -32,7 +32,6 @@ export default {
     AutoComplete
   },
   props: {
-    houseDiaryVisible: { type: Boolean, default: false },
     diary: { type: Object, default: () => { return {} } },
     houseSelect: {
       type: Object,
@@ -43,21 +42,19 @@ export default {
   },
   data () {
     return {
-      houseDiaryEdit: { viewingTime: new Date() },
       houseDiary: Object.assign({}, this.diary)
     }
   },
   watch: {
     diary (newDiary) {
-        this.houseDiary = Object.assign({}, newDiary)
-        this.$forceUpdate()
+      this.houseDiary = Object.assign({}, newDiary)
+      this.$forceUpdate()
     }
   },
   methods: {
     moment,
     save () {
       this.houseDiary.communityId = this.houseSelect.id
-      this.houseDiary.userIcon = ''
       return newHouseDiary(this.houseDiary)
         .then(e => {
           this.$notification.success({
@@ -74,7 +71,6 @@ export default {
     },
     onChange (date) {
       this.houseDiary.viewingTime = date
-      console.log(date)
     }
   }
 }
