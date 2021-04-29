@@ -291,7 +291,7 @@
                           <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
                             qa.datetime
                           }}</span>
-                          <a-button type="link" icon="edit" size="small" @click="editHouseType(qa)" />
+                          <a-button type="link" icon="edit" size="small" @click="editHouseQA(qa)" />
                           <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
                         </a-layout-header>
                         <a-layout-content>
@@ -327,13 +327,13 @@
     <a-modal
       :visible="houseDiaryVisible"
       title="楼盘点评"
-      @ok="handleOk('housediary')"
+      @ok="saveHouseDiary"
       @cancel="houseDiaryVisible = false"
     >
       <house-diary :houseSelect="houseSelect" :diary="diaryEdit" ref="housediaryref"></house-diary>
     </a-modal>
-    <a-modal :visible="houseQAVisible" title="楼盘问答" @ok="handleOk('housediary')" @cancel="houseQAVisible = false">
-      <HouseQA :houseSelect="houseSelect" ref="housequestionref"></HouseQA>
+    <a-modal :visible="houseQAVisible" title="楼盘问答" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
+      <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
     <a-modal title="楼盘相册" @cancel="imageEditClose" :footer="false" width="1000px" :visible="imageEditVisible">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
@@ -433,6 +433,7 @@ export default {
       houseTypeList: [],
       houseType: {},
       diaryEdit: null,
+      questionEdit: null,
       previewImage: null
     }
   },
@@ -638,6 +639,14 @@ export default {
     editHouseImage (house) {
       this.imageEditVisible = true
     },
+    editHouseDiary (diary) {
+      this.houseDiaryVisible = true
+      this.diaryEdit = diary
+    },
+    editHouseQA (quesiton) {
+      this.houseQAVisible = true
+      this.questionEdit = quesiton
+    },
     deleteHouseType (house) {
       const that = this
       this.$confirm({
@@ -710,25 +719,8 @@ export default {
       this.imageEditVisible = false
       this.queryPhotos()
     },
-    editHouseDiary (diary) {
-      this.houseDiaryVisible = true
-      this.diaryEdit = diary
-    },
-    editHouseQA () {
-      this.houseQAVisible = true
-    },
     handleOk (type) {
       switch (type) {
-        case 'housediary':
-          this.$refs.housediaryref &&
-            this.$refs.housediaryref.save().then(e => {
-              setTimeout(() => {
-                this.queryAllHouseDiary()
-                this.queryQuestion()
-              }, 200)
-            })
-          this.houseDiaryVisible = false
-          break
         case 'houseType':
           this.houseTypeVisible = false
           this.$refs.housetypeeditref.saveHouseType()
@@ -739,6 +731,22 @@ export default {
         default:
           break
       }
+    },
+    saveHouseDiary () {
+      this.$refs.housediaryref.save().then(e => {
+          setTimeout(() => {
+            this.queryAllHouseDiary()
+          }, 200)
+        })
+      this.houseDiaryVisible = false
+    },
+    saveHouseQuestion () {
+      this.$refs.houseQARef.save().then(e => {
+        setTimeout(() => {
+          this.queryQuestion()
+        }, 200)
+      })
+      this.houseQAVisible = false
     }
   }
 }

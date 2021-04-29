@@ -57,7 +57,7 @@ export default {
     save () {
       this.houseDiary.communityId = this.houseSelect.id
       this.houseDiary.userIcon = ''
-      newHouseDiary(this.houseDiary)
+      return newHouseDiary(this.houseDiary)
         .then(e => {
           this.$notification.success({
             message: '通知',

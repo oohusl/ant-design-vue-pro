@@ -51,11 +51,8 @@ export default {
   created () {},
   methods: {
     save () {
-      this.addHouseQuestion()
-    },
-    addHouseQuestion () {
       this.houseQuestion.communityId = this.houseSelect.id
-      saveHouseQuestion(this.houseQuestion)
+      return saveHouseQuestion(this.houseQuestion)
         .then(e => {
           this.$notification.success({
             message: '通知',
