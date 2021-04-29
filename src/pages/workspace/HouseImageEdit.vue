@@ -6,13 +6,10 @@
       :file-list="fileList[type]"
       accept="image/*"
       action="/api/community-infos/fileUpload"
-      :houseId="communityId"
+      :houseId="houseId"
       :type="type"
       :name="types[type]"
     ></house-image-uploader>
-    <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-      <img alt="example" style="width: 100%" :src="previewImage" />
-    </a-modal>
   </div>
 </template>
 
@@ -31,14 +28,20 @@ export default {
   data () {
     return {
       types: {
+        '0': '封面图',
         '1': '效果图',
         '2': '环境规划图',
         '3': '楼盘实景图',
         '4': '周边实景图'
       },
-      fileList: { '1': [] },
+      fileList: { },
       previewVisible: false,
       previewImage: ''
+    }
+  },
+  watch: {
+    houseId (houseId) {
+      this.queryPhotos()
     }
   },
   created () {
@@ -47,7 +50,7 @@ export default {
   methods: {
     queryPhotos () {
       const that = this
-      return photoQuery(36).then(e => {
+      return photoQuery(that.houseId).then(e => {
         e.forEach(image => {
           that.fileList[image.type] = this.fileList[image.type] || []
           that.fileList[image.type].push({
@@ -58,6 +61,7 @@ export default {
             name: image.url,
             url: '/media/' + image.url
           })
+          that.$forceUpdate()
         })
       })
     }

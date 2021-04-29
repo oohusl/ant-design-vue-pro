@@ -37,7 +37,7 @@
                       <div class="album-view-right" @click="flip('next')"></div>
                     </div>
                   </a-layout-content>
-                  <a-button type="link" icon="upload" size="small" @click="editHouseImage(house)" />
+                  <a-button type="link" icon="upload" size="small" @click="editHouseImage" />
                 </a-layout>
               </a-layout-sider>
               <a-layout-content :style="{ padding: '10px 32px', color: '#262626' }">

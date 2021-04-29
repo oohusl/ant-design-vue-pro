@@ -8,6 +8,7 @@
       :data="{ communityId: houseId, type: type }"
       list-type="picture-card"
       :remove="handleRemove"
+      :beforeUpload="beforeUpload"
       @preview="handlePreview"
       @change="handleChange"
     >
@@ -34,12 +35,9 @@ export default {
   },
   data () {
     return {
-      previewVisible: false,
-      previewImage: ''
     }
   },
   created () {
-    this.queryPhotos()
   },
   methods: {
     handleRemove (file) {
@@ -48,9 +46,6 @@ export default {
       photoDelete(file.imageId || file.response.id)
       if (this.type === '0') {
       }
-    },
-    handleCancel () {
-      this.previewVisible = false
     },
     async handlePreview (file) {
       if (!file.url && !file.preview) {
@@ -69,8 +64,10 @@ export default {
     },
     handleChange (f) {
       this.fileList = f.fileList
+      if (this.type === '0') {
+
+      }
     }
   }
 }
 </script>
-<style scoped></style>

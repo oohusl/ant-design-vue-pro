@@ -687,7 +687,6 @@ export default {
     })
     this.getMetrolineDistrictInfo()
     this.schools_ = this.schools.slice(0, 50)
-    this.queryPhotos()
     this.houseTypeEdit.communityId = this.houseSelect.id
 
     const _this = this
@@ -775,10 +774,6 @@ export default {
         this.updateSchoolsOptions(school.schoolName, true)
       })
       this.edit = !this.edit
-    },
-    editImage () {
-      this.imageEditVisible = true
-      this.queryPhotos()
     },
     openHouseType () {
       this.houseTypeEdit = {}
