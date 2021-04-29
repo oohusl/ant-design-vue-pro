@@ -21,7 +21,12 @@ export default {
     AutoComplete
   },
   props: {
-    houseDiaryVisible: { type: Boolean, default: false },
+    question: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     houseSelect: {
       type: Object,
       default: () => {
@@ -35,13 +40,18 @@ export default {
       houseTypeFiles: [],
       houseTypes: [],
       houseDiaryEdit: { viewingTime: new Date() },
-      houseQuestion: {}
+      houseQuestion: Object.assign({}, this.question)
+    }
+  },
+  watch: {
+    question (newQuestion) {
+      this.houseQuestion = Object.assign({}, newQuestion)
     }
   },
   created () {},
   methods: {
     save () {
-        this.addHouseQuestion()
+      this.addHouseQuestion()
     },
     addHouseQuestion () {
       this.houseQuestion.communityId = this.houseSelect.id

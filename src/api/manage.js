@@ -224,8 +224,14 @@ export function queryHouseQuestion (communityId) {
 export function saveHouseQuestion (question) {
   return request({
     url: `${api.createHouseQuestion}`,
-    method: 'post',
+    method: question.id ? 'put' : 'post',
     data: question
+  })
+}
+export function deleteHouseQuestion (id) {
+  return request({
+    url: api.createHouseQuestion + `/${id}`,
+    method: 'delete'
   })
 }
 

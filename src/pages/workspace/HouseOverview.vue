@@ -218,8 +218,7 @@
             <a-tab-pane key="2" tab="楼盘点评">
               <div class="house-diary">
                 <div :style="{ float: 'right' }">
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseDiary">
-                  </a-button>
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseDiary"> </a-button>
                 </div>
                 <a-layout>
                   <a-layout-header :style="{ height: '30px', padding: 0, lineHeight: '30px' }"> </a-layout-header>
@@ -270,8 +269,7 @@
             <a-tab-pane key="3" tab="楼盘问问">
               <div class="house-diary">
                 <div :style="{ float: 'right' }">
-                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseQA">
-                  </a-button>
+                  <a-button icon="plus" size="small" style="margin-left: 10px" @click="editHouseQA"> </a-button>
                 </div>
                 <div class="qa-list">
                   <div class="qa-item" v-for="qa of qaList" :key="qa.id">
@@ -290,9 +288,11 @@
                           }"
                         >
                           <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
-                          <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{ qa.datetime }}</span>
+                          <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
+                            qa.datetime
+                          }}</span>
                           <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
-                          <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
+                          <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(house)" />
                         </a-layout-header>
                         <a-layout-content>
                           <span class="a-icon">A</span>
@@ -300,7 +300,7 @@
                         </a-layout-content>
                       </a-layout>
                       <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
-                        <img :src="qa.userIcon" style="width: 60px; height: 60px"/>
+                        <img :src="qa.userIcon" style="width: 60px; height: 60px" />
                         <p>{{ qa.userName }}</p>
                       </a-layout-sider>
                     </a-layout>
@@ -332,13 +332,8 @@
     >
       <house-diary :houseSelect="houseSelect" :diary="diaryEdit" ref="housediaryref"></house-diary>
     </a-modal>
-    <a-modal
-      :visible="houseQAVisible"
-      title="楼盘问答"
-      @ok="handleOk('housediary')"
-      @cancel="houseQAVisible = false"
-    >
-      <HouseQA :houseSelect="houseSelect" ref="housediaryref"></HouseQA>
+    <a-modal :visible="houseQAVisible" title="楼盘问答" @ok="handleOk('housediary')" @cancel="houseQAVisible = false">
+      <HouseQA :houseSelect="houseSelect" ref="housequestionref"></HouseQA>
     </a-modal>
     <a-modal title="楼盘相册" @cancel="imageEditClose" :footer="false" width="1000px" :visible="imageEditVisible">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
@@ -380,7 +375,8 @@ import {
   queryHouseQuestion,
   getHouseDetail,
   deleteAnalysis,
-  deleteHouseDiary
+  deleteHouseDiary,
+  deleteHouseQuestion
 } from '@/api/manage'
 export default {
   name: 'HouseOverview',
@@ -496,7 +492,6 @@ export default {
     },
     queryQuestion () {
       queryHouseQuestion(this.houseSelect.id).then(e => {
-        console.log(e)
         this.qaList = e
       })
     },
@@ -668,6 +663,17 @@ export default {
         },
         onCancel () {
           console.log('Cancel')
+        }
+      })
+    },
+    deleteHouseQuestion (question) {
+      const that = this
+      this.$confirm({
+        content: '确认删除问答信息？',
+        onOk () {
+          deleteHouseQuestion(question.id).then(function () {
+            that.queryHouseQuestion()
+          })
         }
       })
     },
