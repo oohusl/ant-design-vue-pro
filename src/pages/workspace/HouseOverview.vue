@@ -291,8 +291,8 @@
                           <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
                             qa.datetime
                           }}</span>
-                          <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
-                          <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(house)" />
+                          <a-button type="link" icon="edit" size="small" @click="editHouseType(qa)" />
+                          <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
                         </a-layout-header>
                         <a-layout-content>
                           <span class="a-icon">A</span>
@@ -672,7 +672,7 @@ export default {
         content: '确认删除问答信息？',
         onOk () {
           deleteHouseQuestion(question.id).then(function () {
-            that.queryHouseQuestion()
+            that.queryQuestion()
           })
         }
       })
