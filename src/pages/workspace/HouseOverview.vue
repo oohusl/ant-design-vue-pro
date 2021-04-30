@@ -472,6 +472,8 @@ export default {
           }
           photosList[photo.type].push({ uid: photo.id, title: '', url: '/media/' + photo.url, type: photo.type })
         }
+        this.albumList = []
+        this.pictureList = []
         if (photosList.length) {
           for (const photo of photosList) {
             if (photo) {
@@ -485,9 +487,6 @@ export default {
             }
           }
           this.pictureList = photosList[1]
-        } else {
-          this.albumList = []
-          this.pictureList = []
         }
       })
     },
