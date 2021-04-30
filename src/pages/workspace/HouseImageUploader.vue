@@ -44,8 +44,6 @@ export default {
       const index = this.fileList.indexOf(file)
       this.fileList = this.fileList.slice().splice(index, 1)
       photoDelete(file.imageId || file.response.id)
-      if (this.type === '0') {
-      }
     },
     handlePreview (file) {
       EventBus.$emit('preview', file.url || file.response.url)
