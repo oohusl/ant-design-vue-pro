@@ -34,11 +34,9 @@ export default {
     fileList: []
   },
   data () {
-    return {
-    }
+    return {}
   },
-  created () {
-  },
+  created () {},
   methods: {
     handleRemove (file) {
       const index = this.fileList.indexOf(file)
@@ -65,7 +63,7 @@ export default {
     handleChange (f) {
       this.fileList = f.fileList
       if (this.type === '0') {
-
+        this.fileList = [f.file]
       }
     }
   }

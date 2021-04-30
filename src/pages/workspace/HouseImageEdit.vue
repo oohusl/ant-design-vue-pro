@@ -34,7 +34,7 @@ export default {
         '3': '楼盘实景图',
         '4': '周边实景图'
       },
-      fileList: { },
+      fileList: {},
       previewVisible: false,
       previewImage: ''
     }
