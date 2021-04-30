@@ -4,8 +4,7 @@
       <a-form-item label="看房时间">
         <a-date-picker
           valueFormat="YYYY-MM-DD"
-          :default-value="moment(houseDiary.viewingTime)"
-          @change="onChange"
+          v-model="houseDiary.viewingTime"
           v-decorator="['startAt', { rules: [{ required: true, message: '请选择时间' }] }]"
         />
       </a-form-item>
@@ -32,7 +31,12 @@ export default {
     AutoComplete
   },
   props: {
-    diary: { type: Object, default: () => { return {} } },
+    diary: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
     houseSelect: {
       type: Object,
       default: () => {
@@ -42,12 +46,12 @@ export default {
   },
   data () {
     return {
-      houseDiary: Object.assign({}, this.diary)
+      houseDiary: Object.assign({ viewingTime: moment() }, this.diary)
     }
   },
   watch: {
     diary (newDiary) {
-      this.houseDiary = Object.assign({}, newDiary)
+      this.houseDiary = Object.assign({ viewingTime: moment() }, newDiary)
       this.$forceUpdate()
     }
   },
@@ -68,9 +72,6 @@ export default {
             description: '修改失败'
           })
         })
-    },
-    onChange (date) {
-      this.houseDiary.viewingTime = date
     }
   }
 }

@@ -232,7 +232,7 @@
                       >
                         <a-layout :style="{ height: '100%' }">
                           <a-layout-sider :style="{ background: '#fff' }" width="80">
-                            <img :src="diary.userIcon" />
+                            <img :src="diary.userIcon" style="width: 60px; height: 60px"/>
                           </a-layout-sider>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
                             <a-layout-header
