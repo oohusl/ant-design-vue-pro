@@ -40,7 +40,7 @@ export default {
       },
       fileList: {},
       previewVisible: false,
-      previewImage: ''
+      previewImage: null
     }
   },
   watch: {
@@ -49,10 +49,10 @@ export default {
     }
   },
   created () {
-    this.queryPhotos()
     EventBus.$on('preview', e => {
       this.previewImage = e
     })
+    this.queryPhotos()
   },
   methods: {
     queryPhotos () {
