@@ -37,7 +37,6 @@
                       <div class="album-view-right" @click="flip('next')"></div>
                     </div>
                   </a-layout-content>
-                  <a-button type="link" icon="upload" size="small" @click="editHouseImage" />
                 </a-layout>
               </a-layout-sider>
               <a-layout-content :style="{ padding: '10px 32px', color: '#262626' }">
@@ -101,7 +100,10 @@
                     </template>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
-                    <a @click="showDetail"> 查看更多楼盘详情 > </a>
+                    <a @click="editHouseImage">上传图片</a>
+                  </a-descriptions-item>
+                  <a-descriptions-item label="" :span="4">
+                    <a @click="showDetail">查看小区详情></a>
                   </a-descriptions-item>
                 </a-descriptions>
               </a-layout-content>
@@ -232,7 +234,7 @@
                       >
                         <a-layout :style="{ height: '100%' }">
                           <a-layout-sider :style="{ background: '#fff' }" width="80">
-                            <img :src="diary.userIcon" style="width: 60px; height: 60px"/>
+                            <img :src="diary.userIcon" style="width: 60px; height: 60px" />
                           </a-layout-sider>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
                             <a-layout-header
@@ -324,12 +326,7 @@
     <a-modal title="户型分析" :visible="houseTypeVisible" @ok="saveHouseType" @cancel="houseTypeOK" width="600px">
       <house-type-edit :houseAnalysis="houseType" @houseTypeOK="houseTypeOK" ref="housetypeeditref"></house-type-edit>
     </a-modal>
-    <a-modal
-      :visible="houseDiaryVisible"
-      title="楼盘点评"
-      @ok="saveHouseDiary"
-      @cancel="houseDiaryVisible = false"
-    >
+    <a-modal :visible="houseDiaryVisible" title="楼盘点评" @ok="saveHouseDiary" @cancel="houseDiaryVisible = false">
       <house-diary :houseSelect="houseSelect" :diary="diaryEdit" ref="housediaryref"></house-diary>
     </a-modal>
     <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
@@ -338,7 +335,7 @@
     <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" :footer="false" width="1000px">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
     </a-modal>
-    <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false" >
+    <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false">
       <img alt="example" style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
@@ -467,6 +464,9 @@ export default {
       photoQuery(this.houseSelect.id).then(photos => {
         const photosList = []
         for (const photo of photos) {
+          if (photo.type === '0') {
+            continue
+          }
           if (!photosList[photo.type]) {
             photosList[photo.type] = []
           }

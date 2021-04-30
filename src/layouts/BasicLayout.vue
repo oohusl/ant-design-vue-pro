@@ -20,7 +20,7 @@
           style="cursor: pointer"
         />
         <h1 style="cursor: pointer" @click="$router.push({ path: '/house/query' })">
-          {{ title }} <span style="font-size: 8px; color: blue">v1.4.2</span>
+          {{ title }} <span style="font-size: 8px; color: blue">v1.4.3</span>
         </h1>
       </div>
     </template>
@@ -29,9 +29,9 @@
     <template v-slot:rightContentRender>
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
-    <!-- <template v-slot:footerRender>
+    <template v-slot:footerRender>
       <global-footer />
-    </template> -->
+    </template>
     <router-view />
   </pro-layout>
 </template>

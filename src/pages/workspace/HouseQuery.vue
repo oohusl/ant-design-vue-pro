@@ -574,7 +574,7 @@
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
                     <img
                       v-if="community.communityPhoto"
-                      :src="community.communityPhoto"
+                      :src="'/media/' + community.communityPhoto"
                       :style="{ 'border-radius': '4px' }"
                     />
                     <img v-else src="~@/assets/first.png" :style="{ 'border-radius': '4px' }" />

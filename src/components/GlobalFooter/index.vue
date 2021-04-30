@@ -7,7 +7,7 @@
       <a>@2020</a>
     </template>
   </global-footer> -->
-  <span></span>
+  <span>沪ICP备20000411号-3</span>
 </template>
 
 <script>
