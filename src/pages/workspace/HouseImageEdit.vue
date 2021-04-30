@@ -10,12 +10,16 @@
       :type="type"
       :name="types[type]"
     ></house-image-uploader>
+    <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false">
+      <img style="width: 100%" :src="previewImage" />
+    </a-modal>
   </div>
 </template>
 
 <script>
 import { photoQuery } from '@/api/manage'
 import HouseImageUploader from './HouseImageUploader'
+import { EventBus } from '@/event-bus'
 
 export default {
   name: 'HouseImageEdit',
@@ -46,6 +50,9 @@ export default {
   },
   created () {
     this.queryPhotos()
+    EventBus.$on('preview', e => {
+      this.previewImage = e
+    })
   },
   methods: {
     queryPhotos () {

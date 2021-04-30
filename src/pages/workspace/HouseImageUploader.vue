@@ -25,6 +25,8 @@
 <script>
 import { photoDelete } from '@/api/manage'
 import { getBase64 } from '@/api/util'
+import { EventBus } from '@/event-bus'
+
 export default {
   name: 'HouseImageUploader',
   props: {
@@ -45,12 +47,8 @@ export default {
       if (this.type === '0') {
       }
     },
-    async handlePreview (file) {
-      if (!file.url && !file.preview) {
-        file.preview = await getBase64(file.originFileObj)
-      }
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
+    handlePreview (file) {
+      EventBus.$emit('preview', file.url || file.response.url)
     },
     beforeUpload (file) {
       getBase64(file).then(url => {

@@ -336,7 +336,7 @@
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
     </a-modal>
     <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false">
-      <img alt="example" style="width: 100%" :src="previewImage" />
+      <img style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
 </template>
