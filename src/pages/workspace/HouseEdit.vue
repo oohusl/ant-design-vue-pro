@@ -170,8 +170,8 @@
             }}{{ houseSelect.roomArea4Max ? houseSelect.roomArea4Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
-            {{ houseSelect.roomPriceRange4Min ? houseSelect.roomPriceRange4Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange4Max ? houseSelect.roomPriceRange4Max + '万' : '' }}
+            {{ houseSelect.roomPriceRangeMoreMin ? houseSelect.roomPriceRangeMoreMin + '-' : ''
+            }}{{ houseSelect.roomPriceRangeMoreMax ? houseSelect.roomPriceRangeMoreMax + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="在售">
             {{ houseSelect.inStock ? houseSelect.inStock + '套' : '' }}
@@ -547,14 +547,14 @@
           <a-descriptions-item label="多居价格" :span="1">
             <a-input-group compact>
               <a-input
-                v-model="houseSelect.roomPriceRange4Min"
+                v-model="houseSelect.roomPriceRangeMoreMin"
                 class="compactInput"
                 size="small"
                 placeholder="请输入"
               />
               <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
-                v-model="houseSelect.roomPriceRange4Max"
+                v-model="houseSelect.roomPriceRangeMoreMax"
                 class="compactInput"
                 style="border-left: 0"
                 size="small"

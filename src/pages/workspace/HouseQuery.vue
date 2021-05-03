@@ -269,7 +269,7 @@
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>
               <a-checkbox value="3"> 三房 </a-checkbox>
-              <a-checkbox value="5"> 其他 </a-checkbox>
+              <a-checkbox value="-1"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
           <a-form-item label="单价" v-if="advanced">
