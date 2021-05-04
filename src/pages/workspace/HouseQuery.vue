@@ -1203,7 +1203,7 @@ export default {
           e.roomPriceRange1 = calScope(e, 'roomPriceRange', '1')
           e.roomPriceRange2 = calScope(e, 'roomPriceRange', '2')
           e.roomPriceRange3 = calScope(e, 'roomPriceRange', '3')
-          e.roomPriceRange4 = calScope(e, 'roomPriceRange', '4')
+          e.roomPriceRangeMore = calScope(e, 'roomPriceRange', 'More')
           e.peopleAndVehicles = getLabel(e.peopleAndVehicles, peopleAndVehiclesOptions)
           e.isLift = getLabel(e.isLift, liftOptions)
 
