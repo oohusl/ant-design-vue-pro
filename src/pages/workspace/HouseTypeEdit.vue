@@ -55,6 +55,7 @@
 <script>
 import { houseTypePhotoUpload, saveAnalysis } from '@/api/manage'
 import { getBase64 } from '@/api/util'
+import { EventBus } from '@/event-bus'
 
 export default {
   name: 'HouseTypeEdit',
@@ -69,7 +70,7 @@ export default {
     toCreate: { type: Boolean, default: false }
   },
   computed () {
-    this.houseTypeEdit = this.houseAnalysis
+    this.refresh()
   },
   data () {
     return {
@@ -81,7 +82,13 @@ export default {
       toDelete: [],
       previewVisible: false,
       previewImage: '',
-      houseTypeFiles: [],
+      houseTypeFiles: this.houseAnalysis.photoUrl ? [{
+            uid: this.houseAnalysis.id,
+            imageId: this.houseAnalysis.id,
+            status: 'done',
+            name: '户型图',
+            url: this.houseAnalysis.photoUrl
+          }] : [],
       houseTypes: [],
       houseTypeEdit: this.houseAnalysis,
       houseTypeOptions: [
@@ -108,6 +115,9 @@ export default {
     saveHouseType () {
       this.houseTypeEdit.unitTypeName = `${this.houseTypeEdit.room}室${this.houseTypeEdit.hall || 0}厅${!this
         .houseTypeEdit.kitchen || 0}厨${this.houseTypeEdit.toilet || 0}卫`
+        if (this.houseTypeFiles.length <= 0) {
+          this.houseTypeEdit.photoUrl = ''
+        }
       return saveAnalysis(this.houseTypeEdit)
         .then(e => {
           if (this.houseTypeFiles.length > 0 && this.houseTypeFiles[0].file) {
@@ -132,6 +142,13 @@ export default {
     },
     refresh () {
       this.houseTypeEdit = this.houseAnalysis
+      this.houseTypeFiles = this.houseAnalysis.photoUrl ? [{
+            uid: this.houseAnalysis.id,
+            imageId: this.houseAnalysis.id,
+            status: 'done',
+            name: '户型图',
+            url: this.houseAnalysis.photoUrl
+          }] : []
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {
@@ -149,8 +166,7 @@ export default {
       this.previewVisible = false
     },
     handlePreview (file) {
-      this.previewImage = file.url || file.preview
-      this.previewVisible = true
+      EventBus.$emit('preview', file.url)
     },
     handleOk (type) {
       switch (type) {

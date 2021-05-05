@@ -335,7 +335,7 @@
     <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" :footer="false" width="1000px">
       <house-image-edit :houseId="houseSelect.id"></house-image-edit>
     </a-modal>
-    <a-modal title="图片预览" :visible="previewImage" @cancel="previewImage = null" :footer="false">
+    <a-modal title="图片预览" :visible="previewImage != null" @cancel="previewImage = null" :footer="false" :zIndex="10000">
       <img style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
@@ -348,6 +348,7 @@ import HouseTypeEdit from './HouseTypeEdit'
 import HouseDiary from './HouseDiary'
 import HouseImageEdit from './HouseImageEdit'
 import HouseQA from './HouseQA'
+import { EventBus } from '@/event-bus'
 
 import {
   areaOptions,
@@ -434,7 +435,11 @@ export default {
       previewImage: null
     }
   },
-  created () {},
+  created () {
+    EventBus.$on('preview', e => {
+      this.previewImage = e
+    })
+  },
   beforeMount () {
     console.log(this.$route.params)
     this.houseSelect = {}
