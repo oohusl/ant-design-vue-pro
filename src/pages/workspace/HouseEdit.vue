@@ -136,7 +136,7 @@
               label="类型"
               :key="school.schoolName"
               :span="2"
-            >{{ school.schoolType }} {{ getSchool(school.schoolName) }}</a-descriptions-item
+            >{{ school.schoolType }} {{ getSchool(school.schoolName, school.schoolType) }}</a-descriptions-item
             >
           </template>
         </a-descriptions>
@@ -423,7 +423,7 @@
               /></span>
             </a-descriptions-item>
             <a-descriptions-item label="类型" :span="2" :key="s">
-              {{ school.schoolType }} {{ getSchool(school.schoolName) }}
+              {{ school.schoolType }} {{ getSchool(school.schoolName, school.schoolType) }}
             </a-descriptions-item>
           </template>
           <a-descriptions-item label="" :span="4">
@@ -971,9 +971,9 @@ export default {
         }, 0)
       }
     },
-    getSchool (schoolName) {
+    getSchool (schoolName, schoolType) {
       const school = this.schools.find(school => {
-        return school.schoolName === schoolName
+        return school.schoolName === schoolName && school.schoolType === schoolType
       })
       let desc = ''
       if (school) {
