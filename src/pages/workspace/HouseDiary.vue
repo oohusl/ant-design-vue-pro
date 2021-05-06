@@ -46,12 +46,12 @@ export default {
   },
   data () {
     return {
-      houseDiary: Object.assign({ viewingTime: moment() }, this.diary)
+      houseDiary: Object.assign({ viewingTime: moment().format('YYYY-MM-DD') }, this.diary)
     }
   },
   watch: {
     diary (newDiary) {
-      this.houseDiary = Object.assign({ viewingTime: moment() }, newDiary)
+      this.houseDiary = Object.assign({ viewingTime: moment().format('YYYY-MM-DD') }, newDiary)
       this.$forceUpdate()
     }
   },

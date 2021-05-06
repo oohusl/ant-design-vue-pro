@@ -58,7 +58,7 @@ export default {
     },
     handleChange (f) {
       this.fileList = f.fileList
-      if (this.type === '0') {
+      if (this.type === '0' && f.file && f.file.status !== 'removed') {
         this.fileList = [f.file]
       }
     }
