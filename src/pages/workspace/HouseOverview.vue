@@ -66,7 +66,7 @@
                     {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
                   </a-descriptions-item>
                   <a-descriptions-item label="楼盘户型" :span="4">
-                    一居 二居 三居
+                    {{ rooms.join(' ') }}
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
@@ -432,7 +432,8 @@ export default {
       houseType: {},
       diaryEdit: null,
       questionEdit: null,
-      previewImage: null
+      previewImage: null,
+      rooms: []
     }
   },
   created () {
@@ -552,9 +553,11 @@ export default {
           this.houseTypeOptions = bedroomsInfo
           let num = 0
           this.houseTypeList = []
+          this.rooms = []
           this.houseTypeOptions.forEach(async b => {
             b.active = false
             b.label = bedroomsOption[b.severalBedrooms]
+            this.rooms.push(b.label)
             num = num + b.num
             b.houseTypeList = await queryAnalysis(this.houseSelect.id, b.severalBedrooms)
             if (b.houseTypeList?.length) {
