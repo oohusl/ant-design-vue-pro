@@ -86,7 +86,11 @@ export default {
       })
     },
     save () {
-      return housePhotoUpload(this.fileList)
+      const files = []
+      Object.keys(this.types).forEach(e => {
+        files[1 * e] = (this.fileList[e] || []).map(f => { return f.url || f.response })
+      })
+      return housePhotoUpload({ id: this.houseId, files: files })
     },
     handleRemove (file, type) {
       const index = this.fileList[type].indexOf(file)
@@ -95,7 +99,7 @@ export default {
       this.$forceUpdate()
     },
     handlePreview (file) {
-      EventBus.$emit('preview', file.url || file.response.url)
+      EventBus.$emit('preview', file.url || file.response)
     },
     beforeUpload (file, type) {
       getBase64(file).then(url => {
