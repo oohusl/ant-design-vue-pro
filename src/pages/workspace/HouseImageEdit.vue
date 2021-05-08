@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { photoQuery } from '@/api/manage'
+import { photoQuery, housePhotoUpload } from '@/api/manage'
 import HouseImageUploader from './HouseImageUploader'
 
 export default {
@@ -59,11 +59,14 @@ export default {
             imageType: image.type,
             status: 'done',
             name: image.url,
-            url: '/media/' + image.url
+            url: image.url
           })
           that.$forceUpdate()
         })
       })
+    },
+    save () {
+      return housePhotoUpload(this.fileList)
     }
   }
 }

@@ -18,7 +18,8 @@ const api = {
   newHouseDiary: '/house-diary',
   queryHouseDiary: '/house-diary/queryHouseDiary',
   queryHouseQuestion: '/house-diary/queryDiaryQuestionInfo',
-  createHouseQuestion: '/house-diary/diaryQuestionInfo'
+  createHouseQuestion: '/house-diary/diaryQuestionInfo',
+  housePhotoUpload: '/community-infos/fileUpload'
 }
 
 export default api
@@ -248,5 +249,13 @@ export function getSchools (param) {
     url: `/community-infos/findSchoolDesc`,
     method: 'post',
     data: {}
+  })
+}
+
+export function housePhotoUpload (param) {
+  return request({
+    url: api.housePhotoUpload,
+    method: 'post',
+    data: param
   })
 }

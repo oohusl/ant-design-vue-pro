@@ -332,10 +332,16 @@
     <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
       <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
-    <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" :footer="false" width="1000px">
-      <house-image-edit :houseId="houseSelect.id"></house-image-edit>
+    <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" @ok="saveHousePhoto" width="1000px">
+      <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef"></house-image-edit>
     </a-modal>
-    <a-modal title="图片预览" :visible="previewImage != null" @cancel="previewImage = null" :footer="false" :zIndex="10000">
+    <a-modal
+      title="图片预览"
+      :visible="previewImage != null"
+      @cancel="previewImage = null"
+      :footer="false"
+      :zIndex="10000"
+    >
       <img style="width: 100%" :src="previewImage" />
     </a-modal>
   </div>
@@ -475,7 +481,7 @@ export default {
           if (!photosList[photo.type]) {
             photosList[photo.type] = []
           }
-          photosList[photo.type].push({ uid: photo.id, title: '', url: '/media/' + photo.url, type: photo.type })
+          photosList[photo.type].push({ uid: photo.id, title: '', url: photo.url, type: photo.type })
         }
         this.albumList = []
         this.pictureList = []
@@ -733,6 +739,12 @@ export default {
       this.$refs.housediaryref.save().then(e => {
         this.houseDiaryVisible = false
         this.queryAllHouseDiary()
+      })
+    },
+    saveHousePhoto () {
+      this.$refs.housePhotoRef.save().then(e => {
+        this.imageEditVisible = false
+        this.queryPhotos()
       })
     },
     saveHouseQuestion () {
