@@ -30,6 +30,12 @@ export const asyncRouterMap = [
             meta: { title: '房源查询', keepAlive: true }
           },
           {
+            path: '/house/ticket',
+            name: 'TicketManage',
+            component: () => import('@/pages/workspace/TicketManage'),
+            meta: { title: '订单管理', keepAlive: true }
+          },
+          {
             path: '/house/query/overview',
             name: 'HouseOverview',
             hidden: true,

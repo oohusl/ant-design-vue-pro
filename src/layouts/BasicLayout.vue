@@ -2,6 +2,7 @@
   <pro-layout
     :collapsed="collapsed"
     :mediaQuery="query"
+    :menus="menus"
     :isMobile="isMobile"
     :handleMediaQuery="handleMediaQuery"
     :handleCollapse="handleCollapse"
@@ -25,7 +26,7 @@
       </div>
     </template>
 
-    <!-- <setting-drawer :settings="settings" @change="handleSettingChange" /> -->
+    <setting-drawer :settings="settings" @change="handleSettingChange" />
     <template v-slot:rightContentRender>
       <right-content :top-menu="settings.layout === 'topmenu'" :is-mobile="isMobile" :theme="settings.theme" />
     </template>
