@@ -1,30 +1,50 @@
 <template>
   <div>
-    <house-image-uploader
+    <a-upload
       v-for="type in Object.keys(types)"
       :key="type"
       :file-list="fileList[type]"
       accept="image/*"
-      action="/api/community-infos/fileUpload"
-      :houseId="houseId"
-      :type="type"
-      :name="types[type]"
-    ></house-image-uploader>
+      action="/api/community-infos/uploadPhoto"
+      list-type="picture-card"
+      :remove="
+        f => {
+          handleRemove(f, type)
+        }
+      "
+      :beforeUpload="
+        f => {
+          beforeUpload(f, type)
+        }
+      "
+      @preview="handlePreview"
+      @change="
+        f => {
+          handleChange(f, type)
+        }
+      "
+    >
+      <div>
+        <a-icon type="plus" />
+        <div class="ant-upload-text">
+          {{ types[type] }}
+        </div>
+      </div>
+    </a-upload>
   </div>
 </template>
 
 <script>
-import { photoQuery, housePhotoUpload } from '@/api/manage'
-import HouseImageUploader from './HouseImageUploader'
+import { photoQuery, photoDelete, housePhotoUpload } from '@/api/manage'
+import { getBase64 } from '@/api/util'
+import { EventBus } from '@/event-bus'
 
 export default {
   name: 'HouseImageEdit',
   props: {
     houseId: Number
   },
-  components: {
-    HouseImageUploader
-  },
+  components: {},
   data () {
     return {
       types: {
@@ -67,6 +87,31 @@ export default {
     },
     save () {
       return housePhotoUpload(this.fileList)
+    },
+    handleRemove (file, type) {
+      const index = this.fileList[type].indexOf(file)
+      this.fileList[type] = this.fileList[type].slice().splice(index, 1)
+      photoDelete(file.imageId || file.response.id)
+      this.$forceUpdate()
+    },
+    handlePreview (file) {
+      EventBus.$emit('preview', file.url || file.response.url)
+    },
+    beforeUpload (file, type) {
+      getBase64(file).then(url => {
+        if (type === '0') {
+          this.fileList[type] = [{ uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
+        }
+      })
+      this.$forceUpdate()
+      return true
+    },
+    handleChange (f, type) {
+      this.fileList[type] = f.fileList
+      if (type === '0' && f.file && f.file.status !== 'removed') {
+        this.fileList[type] = [f.file]
+      }
+      this.$forceUpdate()
     }
   }
 }
