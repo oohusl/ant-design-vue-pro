@@ -184,10 +184,16 @@
                         <a-descriptions-item label="类型" :span="2">
                           {{ house.typesOfHouse }}
                         </a-descriptions-item>
-                        <a-descriptions-item label="户型存量" :span="4">
+                        <a-descriptions-item label="层高" :span="2">
+                          {{ house.floorHeight }}
+                        </a-descriptions-item>
+                        <a-descriptions-item label="户型存量" :span="2">
                           {{ house.unitInventory }}
                         </a-descriptions-item>
-                        <a-descriptions-item label="户型分析" :span="4">
+                        <a-descriptions-item label="梯户比" :span="2">
+                          {{ house.ladderRadio }}
+                        </a-descriptions-item>
+                        <a-descriptions-item label="户型分析" :span="2">
                           {{ house.analysis }}
                         </a-descriptions-item>
                       </a-descriptions>

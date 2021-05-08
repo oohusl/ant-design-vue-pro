@@ -2,7 +2,6 @@
   <pro-layout
     :collapsed="collapsed"
     :mediaQuery="query"
-    :menus="menus"
     :isMobile="isMobile"
     :handleMediaQuery="handleMediaQuery"
     :handleCollapse="handleCollapse"

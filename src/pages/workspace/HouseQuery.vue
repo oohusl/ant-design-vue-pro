@@ -1002,16 +1002,10 @@ export default {
       const school = this.originalSchool.find(school => {
         return school.schoolName === schoolName
       })
-      let desc = ''
       if (school) {
-        if (school.echelon) {
-          desc = '-' + school.echelon
-        }
-        if (school.isConsistentSystem) {
-          desc += '-' + school.isConsistentSystem
-        }
+        return { level: school.echelon, isConsistentSystem: school.isConsistentSystem }
       }
-      return desc
+      return {}
     },
 
     schoolTypeChange (e) {
@@ -1215,22 +1209,31 @@ export default {
 
           const school1 = []
           const school2 = []
+          const school2Level = []
           const school3 = []
+          const school3Level = []
+          const isConsistentSystem = []
           e.schoolDistrictInfo.forEach(m => {
-            const s = m.schoolName + this.getSchool(m.schoolName)
+            const s = this.getSchool(m.schoolName)
             if (m.schoolType === '幼儿园') {
-              school1.push(s)
+              school1.push(m.schoolName)
             }
             if (m.schoolType === '小学') {
-              school2.push(s)
+              school2.push(m.schoolName)
+              school2Level.push(s.level)
             }
             if (m.schoolType === '中学') {
-              school3.push(s)
+              school3.push(m.schoolName)
+              school3Level.push(s.level)
+              isConsistentSystem.push(s.isConsistentSystem)
             }
           })
           e.school1 = school1.join('/')
           e.school2 = school2.join('/')
+          e.school2Level = school2Level.join('/')
           e.school3 = school3.join('/')
+          e.school3Level = school3Level.join('/')
+          e.isConsistentSystem = isConsistentSystem.join('/')
           const row = []
           this.fields.forEach(f => {
             row.push(e[f])
