@@ -830,3 +830,17 @@ export function calScope (obj, key, number) {
   const max = obj[key + number + 'Max'] || ''
   return min + '-' + max
 }
+export const tioletOptions = [
+  {
+    value: '一卫',
+    label: '一卫'
+  },
+  {
+    value: '二卫',
+    label: '二卫'
+  },
+  {
+    value: '其他',
+    label: '其他'
+  }
+]

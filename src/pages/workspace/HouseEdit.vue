@@ -173,6 +173,9 @@
             {{ houseSelect.roomPriceRangeMoreMin ? houseSelect.roomPriceRangeMoreMin + '-' : ''
             }}{{ houseSelect.roomPriceRangeMoreMax ? houseSelect.roomPriceRangeMoreMax + '万' : '' }}
           </a-descriptions-item>
+          <a-descriptions-item label="卫生间">
+            {{ tiolet }}
+          </a-descriptions-item>
           <a-descriptions-item label="在售">
             {{ houseSelect.inStock ? houseSelect.inStock + '套' : '' }}
           </a-descriptions-item>
@@ -562,6 +565,9 @@
               />
             </a-input-group>
           </a-descriptions-item>
+          <a-descriptions-item label="卫生间">
+            <a-select v-model="tiolet" :options="tioletOptions" mode="multiple" class="col1" size="small" />
+          </a-descriptions-item>
           <a-descriptions-item label="在售">
             <a-input v-model="houseSelect.inStock" class="col1" size="small" addon-after="套" />
           </a-descriptions-item>
@@ -610,7 +616,8 @@ import {
   transactionOwnershipOptions,
   propertyOptions,
   popularComLevOptions,
-  qualityComLevOptions
+  qualityComLevOptions,
+  tioletOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
 
@@ -637,6 +644,14 @@ export default {
       set: function (newValue) {
         this.houseSelect.labels = newValue.join(',')
       }
+    },
+    tiolet: {
+      get: function () {
+        return this.houseSelect.tiolet ? this.houseSelect.tiolet.split(',') : []
+      },
+      set: function (newValue) {
+        this.houseSelect.tiolet = newValue.join(',')
+      }
     }
   },
   data () {
@@ -650,6 +665,7 @@ export default {
       editPlateOptions: [],
       areaOptions,
       liftOptions,
+      tioletOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       totalPriceOptions,
