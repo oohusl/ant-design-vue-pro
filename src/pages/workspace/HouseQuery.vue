@@ -998,9 +998,9 @@ export default {
       return this.subwayStations[line] && this.subwayStations[line].length > 0
     },
 
-    getSchool (schoolName) {
+    getSchool (schoolName, schoolType) {
       const school = this.originalSchool.find(school => {
-        return school.schoolName === schoolName
+        return school.schoolName === schoolName && school.schoolType === schoolType
       })
       if (school) {
         return { level: school.echelon, isConsistentSystem: school.isConsistentSystem }
@@ -1214,7 +1214,7 @@ export default {
           const school3Level = []
           const isConsistentSystem = []
           e.schoolDistrictInfo.forEach(m => {
-            const s = this.getSchool(m.schoolName)
+            const s = this.getSchool(m.schoolName, m.schoolType)
             if (m.schoolType === '幼儿园') {
               school1.push(m.schoolName)
             }
