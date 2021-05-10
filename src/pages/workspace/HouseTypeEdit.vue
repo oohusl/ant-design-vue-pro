@@ -169,6 +169,9 @@ export default {
             }
           ]
         : []
+      const t = this.dealLadderRadio(this.houseTypeEdit.ladderRatio)
+      this.houseTypeEdit.ladderNumber = t[0]
+      this.houseTypeEdit.doorNumber = t[1]
     },
     beforeHouseTypeUpload (file) {
       getBase64(file).then(url => {
