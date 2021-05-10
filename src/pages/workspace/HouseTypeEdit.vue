@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'" layout="inline">
+    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
       <a-form-item label="房屋结构">
         <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.room"></a-input
         ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hall"></a-input
@@ -8,32 +8,32 @@
         ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.toilet"></a-input>
       </a-form-item>
       <a-form-item label="建筑面积">
-        <a-input style="width:200px" addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
+        <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
       </a-form-item>
       <a-form-item label="参考单价">
-        <a-input style="width:200px" addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
+        <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
       </a-form-item>
       <a-form-item label="参考总价">
-        <a-input style="width:200px" addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
+        <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
       </a-form-item>
       <a-form-item label="房屋类型">
-        <a-input style="width:200px" v-model="houseTypeEdit.typesOfHouse"></a-input>
+        <a-input v-model="houseTypeEdit.typesOfHouse"></a-input>
       </a-form-item>
       <a-form-item label="房屋朝向">
-        <a-input style="width:200px" v-model="houseTypeEdit.towards"></a-input>
+        <a-input v-model="houseTypeEdit.towards"></a-input>
       </a-form-item>
       <a-form-item label="房屋层高">
-        <a-input style="width:200px" addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
+        <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
       </a-form-item>
       <a-form-item label="梯户比">
         <a-input addon-after="梯" style="width:100px" v-model="houseTypeEdit.ladderNumber"></a-input
         ><a-input addon-after="户" style="width:100px" v-model="houseTypeEdit.doorNumber"></a-input>
       </a-form-item>
       <a-form-item label="户型存量">
-        <a-input style="width:200px" addon-after="套" v-model="houseTypeEdit.unitInventory"></a-input>
+        <a-input addon-after="套" v-model="houseTypeEdit.unitInventory"></a-input>
       </a-form-item>
       <a-form-item label="户型分析">
-        <a-input style="width:200px" v-model="houseTypeEdit.analysis"></a-input>
+        <a-input v-model="houseTypeEdit.analysis"></a-input>
       </a-form-item>
       <a-form-item label=" " :colon="false">
         <a-upload

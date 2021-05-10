@@ -191,7 +191,7 @@
                           {{ house.unitInventory }}
                         </a-descriptions-item>
                         <a-descriptions-item label="梯户比" :span="2">
-                          {{ house.ladderRadio }}
+                          {{ house.ladderRatio }}
                         </a-descriptions-item>
                         <a-descriptions-item label="户型分析" :span="2">
                           {{ house.analysis }}
