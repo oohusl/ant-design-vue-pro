@@ -556,10 +556,10 @@
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
             <a-input-group compact>
-              <a-input v-model="houseSelect.roomArea4Min" class="compactInput" size="small" placeholder="请输入" />
+              <a-input v-model="houseSelect.roomAreaMoreMin" class="compactInput" size="small" placeholder="请输入" />
               <a-input class="compactCenter" size="small" placeholder="—" :disabled="true" />
               <a-input
-                v-model="houseSelect.roomArea4Max"
+                v-model="houseSelect.roomAreaMoreMax"
                 class="compactInput"
                 style="border-left: 0"
                 size="small"
