@@ -736,6 +736,7 @@ export default {
     },
     imageEditClose () {
       this.imageEditVisible = false
+      this.$refs.housePhotoRef.refresh()
       this.queryPhotos()
     },
     saveHouseType () {

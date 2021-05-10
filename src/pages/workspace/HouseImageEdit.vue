@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { photoQuery, photoDelete, housePhotoUpload } from '@/api/manage'
+import { photoQuery, housePhotoUpload } from '@/api/manage'
 import { getBase64 } from '@/api/util'
 import { EventBus } from '@/event-bus'
 
@@ -70,6 +70,7 @@ export default {
   methods: {
     queryPhotos () {
       const that = this
+      this.fileList = {}
       return photoQuery(that.houseId).then(e => {
         e.forEach(image => {
           that.fileList[image.type] = this.fileList[image.type] || []
@@ -85,6 +86,9 @@ export default {
         })
       })
     },
+    refresh () {
+      this.queryPhotos()
+    },
     save () {
       const files = []
       Object.keys(this.types).forEach(e => {
@@ -95,7 +99,7 @@ export default {
     handleRemove (file, type) {
       const index = this.fileList[type].indexOf(file)
       this.fileList[type] = this.fileList[type].slice().splice(index, 1)
-      photoDelete(file.imageId || file.response.id)
+      // photoDelete(file.imageId || file.response.id)
       this.$forceUpdate()
     },
     handlePreview (file) {
