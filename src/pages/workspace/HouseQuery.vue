@@ -272,6 +272,11 @@
               <a-checkbox value="-1"> 其他 </a-checkbox>
             </a-checkbox-group>
           </a-form-item>
+          <a-form-item label="卫生间" v-if="advanced">
+            <a-checkbox-group v-model="queryParam.toilet">
+              <a-checkbox v-for="t in toiletOptions" :key="t.value" :value="t.value"> {{ t.label }} </a-checkbox>
+            </a-checkbox-group>
+          </a-form-item>
           <a-form-item label="单价" v-if="advanced">
             <a-select
               style="width: 120px"
@@ -711,6 +716,7 @@ import {
   liftOptions,
   ExcelInfo,
   getLabel,
+  toiletOptions,
   calScope
 } from '@/api/data'
 import { AutoComplete, BackTop, Affix } from 'ant-design-vue'
@@ -768,6 +774,7 @@ export default {
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       roomAreaOptions,
+      toiletOptions,
       constructionAgeOptions,
       loopSummaryOptions,
       communityLevOptions,

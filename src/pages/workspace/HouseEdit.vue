@@ -19,7 +19,8 @@
               >均价
                 {{
                   houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString()
-                }}元/m²</span>
+                }}元/m²</span
+              >
               <span style="font-size:16px; margin-left: 12px">
                 {{ houseSelect.communityLev }}
               </span>
@@ -174,7 +175,7 @@
             }}{{ houseSelect.roomPriceRangeMoreMax ? houseSelect.roomPriceRangeMoreMax + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
-            {{ tiolet }}
+            {{ houseSelect.toilet }}
           </a-descriptions-item>
           <a-descriptions-item label="在售">
             {{ houseSelect.inStock ? houseSelect.inStock + '套' : '' }}
@@ -211,15 +212,34 @@
                 style="font-size:16px;color: #B71C2B; margin-left: 12px"
               >均价
                 <a-input-number v-model="houseSelect.averageLlistedPrice" size="small" style="width: 100px" />
-                元/m²</span>
+                元/m²</span
+              >
               <span style="margin-left: 12px">
-                <a-select v-model="houseSelect.communityLev" size="small" class="col1" :options="communityLevOptions" placeholder="楼盘等级"></a-select>
+                <a-select
+                  v-model="houseSelect.communityLev"
+                  size="small"
+                  class="col1"
+                  :options="communityLevOptions"
+                  placeholder="楼盘等级"
+                ></a-select>
               </span>
               <span style="margin-left: 12px">
-                <a-select v-model="houseSelect.qualityComLev" size="small" class="col1" :options="qualityComLevOptions" placeholder="品质楼盘"></a-select>
+                <a-select
+                  v-model="houseSelect.qualityComLev"
+                  size="small"
+                  class="col1"
+                  :options="qualityComLevOptions"
+                  placeholder="品质楼盘"
+                ></a-select>
               </span>
               <span style="margin-left: 12px">
-                <a-select v-model="houseSelect.popularComLev" size="small" class="col1" :options="popularComLevOptions" placeholder="热门楼盘"></a-select>
+                <a-select
+                  v-model="houseSelect.popularComLev"
+                  size="small"
+                  class="col1"
+                  :options="popularComLevOptions"
+                  placeholder="热门楼盘"
+                ></a-select>
               </span>
             </div>
             <div>
@@ -566,7 +586,7 @@
             </a-input-group>
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
-            <a-select v-model="tiolet" :options="tioletOptions" mode="multiple" class="col1" size="small" />
+            <a-select v-model="toilet" :options="toiletOptions" mode="multiple" class="col1" size="small" />
           </a-descriptions-item>
           <a-descriptions-item label="在售">
             <a-input v-model="houseSelect.inStock" class="col1" size="small" addon-after="套" />
@@ -617,7 +637,7 @@ import {
   propertyOptions,
   popularComLevOptions,
   qualityComLevOptions,
-  tioletOptions
+  toiletOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
 
@@ -644,14 +664,6 @@ export default {
       set: function (newValue) {
         this.houseSelect.labels = newValue.join(',')
       }
-    },
-    tiolet: {
-      get: function () {
-        return this.houseSelect.tiolet ? this.houseSelect.tiolet.split(',') : []
-      },
-      set: function (newValue) {
-        this.houseSelect.tiolet = newValue.join(',')
-      }
     }
   },
   data () {
@@ -659,13 +671,14 @@ export default {
       tagInputVisible: false,
       edit: this.toCreate,
       stationOptions: [],
+      toilet: this.houseSelect.toilet ? this.houseSelect.toilet.split(',') : [],
       labels: [],
       areaPlate,
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
       liftOptions,
-      tioletOptions,
+      toiletOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       totalPriceOptions,
@@ -807,6 +820,8 @@ export default {
       // save
       console.log('save:', this.houseSelect)
       this.houseSelect.labels = this.tags.join(',')
+      this.houseSelect.toilet = this.toilet.join(',')
+
       // this.houseSelect.schoolDistrictInfo = this.schoolsInfo
       saveHouse(this.houseSelect)
         .then(e => {
