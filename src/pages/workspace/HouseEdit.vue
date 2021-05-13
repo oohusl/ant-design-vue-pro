@@ -420,17 +420,28 @@
           <template v-for="(school, s) in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="" :span="2" :key="s">
               <a-select
+                class="col1"
+                size="small"
+                placeholder="请选择学校类型"
+                :showSearch="true"
+                v-model="school.schoolType"
+                @change="school.schoolName = null">
+                <a-select-option value="幼儿园">幼儿园</a-select-option>
+                <a-select-option value="小学">小学</a-select-option>
+                <a-select-option value="中学">中学</a-select-option>
+              </a-select>
+              <a-select
                 class="col2"
                 size="small"
                 placeholder="请选中配套学校"
                 :showSearch="true"
                 :value="school.schoolName"
                 @blur="handleOnBlur"
-                @search="handleOnSearch"
+                @search="(e)=>{handleOnSearch(e, school.schoolType)}"
                 @change="selectSchool($event, s)"
               >
                 <a-select-option
-                  v-for="ss in schools_"
+                  v-for="ss in schoolGroup[school.schoolType]"
                   :key="ss.schoolName"
                   :value="ss.schoolName"
                   :disabled="ss.disabled"
@@ -701,7 +712,8 @@ export default {
       subwayStations: {},
       getLabel: getLabel,
       schools: [],
-      schools_: [],
+      schoolGroup: { '幼儿园': [], '小学': [], '中学': [] },
+      schoolGroup_: { '幼儿园': [], '小学': [], '中学': [] },
       metrolineDistrictInfo: [],
       houseTypeVisible: false,
       houseDiaryVisible: false,
@@ -715,13 +727,17 @@ export default {
       this.labels = data
     })
     this.getMetrolineDistrictInfo()
-    this.schools_ = this.schools.slice(0, 50)
     this.houseTypeEdit.communityId = this.houseSelect.id
 
     const _this = this
     getSchools().then(function (e) {
       _this.schools = e
-      _this.schools_ = _this.schools.slice(0, 50)
+      e.forEach(s => {
+        _this.schoolGroup_[s.schoolType].push(s)
+      })
+      Object.keys(_this.schoolGroup_).forEach(e => {
+        _this.schoolGroup[e] = _this.schoolGroup_[e].slice(0, 50)
+      })
     })
   },
   beforeMount () {
@@ -943,6 +959,9 @@ export default {
       })
       this.$forceUpdate()
     },
+    getSchoolByType (schoolType) {
+
+    },
     /* tag start */
     handleClose (removedTag) {
       const tags = this.tags.filter(tag => tag !== removedTag)
@@ -980,20 +999,18 @@ export default {
       return 'red'
     },
     handleOnBlur () {
-      this.schools_ = this.schools.slice(0, 50)
+      this.schoolGroup = Object.assign({}, this.schoolGroup_)
     },
-    searchValue (value) {
+    handleOnSearch (value, schoolType) {
       const datas = []
-      console.log(this.schools, value)
-      this.schools.forEach(item => {
+      this.schoolGroup_[schoolType].forEach(item => {
         if (item.schoolName.indexOf(value) > -1) {
           datas.push(item)
         }
       })
-      this.schools_ = datas.slice(0, 50)
-      console.log(this.schools_)
+      this.schoolGroup[schoolType] = datas.slice(0, 50)
     },
-    handleOnSearch (value) {
+    handleOnSearch1 (value) {
       const that = this
       if (!this.timer) {
         this.timer = setTimeout(function () {
