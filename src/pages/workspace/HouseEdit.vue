@@ -9,25 +9,25 @@
               padding: '0',
               'line-height': '32px',
               'font-size': '24px',
-              color: '#000000'
+              color: '#000000',
             }"
           >
             <div>
               {{ houseSelect.communityName
               }}<span
-                style="font-size:16px;color: #B71C2B; margin-left: 12px"
+                style="font-size: 16px; color: #b71c2b; margin-left: 12px"
               >均价
                 {{
                   houseSelect.averageLlistedPrice == null ? '--' : houseSelect.averageLlistedPrice.toLocaleString()
                 }}元/m²</span
               >
-              <span style="font-size:16px; margin-left: 12px">
+              <span style="font-size: 16px; margin-left: 12px">
                 {{ houseSelect.communityLev }}
               </span>
-              <span style="font-size:16px; margin-left: 12px">
+              <span style="font-size: 16px; margin-left: 12px">
                 {{ getLabel(houseSelect.popularComLev, popularComLevOptions) }}
               </span>
-              <span style="font-size:16px; margin-left: 12px">
+              <span style="font-size: 16px; margin-left: 12px">
                 {{ getLabel(houseSelect.qualityComLev, qualityComLevOptions) }}
               </span>
             </div>
@@ -40,9 +40,7 @@
             </div>
           </a-layout-content>
           <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '100px', 'min-width': '100px' }">
-            <a-button @click="editHouse()">
-              编辑
-            </a-button>
+            <a-button @click="editHouse()"> 编辑 </a-button>
           </a-layout-sider>
         </a-layout>
       </a-layout-header>
@@ -128,17 +126,19 @@
             {{ houseSelect.propertyCosts ? houseSelect.propertyCosts + '元/m²' : '' }}
           </a-descriptions-item>
         </a-descriptions>
-        <a-descriptions title="学区情况" :column="4">
+        <a-descriptions title="学区情况" :column="12">
           <template v-for="school in houseSelect.schoolDistrictInfo">
-            <a-descriptions-item label="学校" :key="school.schoolName" :span="2">{{
-              school.schoolName
-            }}</a-descriptions-item>
-            <a-descriptions-item
-              label="类型"
-              :key="school.schoolName"
-              :span="2"
-            >{{ school.schoolType }} {{ getSchool(school.schoolName, school.schoolType) }}</a-descriptions-item
-            >
+            <a-descriptions-item label="类型" :span="2" :key="school.name">
+              {{ school.schoolType }}
+              {{ school.isConsistentSystem }}
+            </a-descriptions-item>
+            <a-descriptions-item label="学校" :span="5" :key="school.name">
+              {{ school.schoolName }}
+            </a-descriptions-item>
+            <a-descriptions-item label="梯队" :span="2" :key="school.name">
+              {{ school.echelon }}
+            </a-descriptions-item>
+            <a-descriptions-item :span="3" :key="school.name"></a-descriptions-item>
           </template>
         </a-descriptions>
         <a-descriptions title="价格及交易" :column="4">
@@ -203,13 +203,13 @@
               padding: '0',
               'line-height': '32px',
               'font-size': '24px',
-              color: '#000000'
+              color: '#000000',
             }"
           >
             <div>
               {{ houseSelect.communityName
               }}<span
-                style="font-size:16px;color: #B71C2B; margin-left: 12px"
+                style="font-size: 16px; color: #b71c2b; margin-left: 12px"
               >均价
                 <a-input-number v-model="houseSelect.averageLlistedPrice" size="small" style="width: 100px" />
                 元/m²</span
@@ -260,15 +260,13 @@
                 @blur="handleInputConfirm"
                 @keyup.enter="handleInputConfirm"
               />
-              <a-tag v-else style="background: #fff; borderStyle: dashed;" @click="showInput">
+              <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput">
                 <a-icon type="plus" /> New Tag
               </a-tag>
             </div>
           </a-layout-content>
           <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
-            <a-button @click="saveHouse()">
-              保存
-            </a-button>
+            <a-button @click="saveHouse()"> 保存 </a-button>
           </a-layout-sider>
         </a-layout>
       </a-layout-header>
@@ -325,7 +323,7 @@
                 <a-input v-model="metro.distance" placeholder="距离" size="small" style="width: 145px" suffix="m">
                 </a-input>
                 <span
-                  style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;"
+                  style="color: red; line-height: 24px; padding-left: 6px; cursor: pointer"
                   @click="removeMetro(i)"
                 ><a-icon
                   type="minus-circle"
@@ -416,72 +414,67 @@
             <a-input v-model="houseSelect.propertyCosts" class="col1" size="small" addon-after="元/m²" />
           </a-descriptions-item>
         </a-descriptions>
-        <a-descriptions title="学区情况" :column="4">
-          <template v-for="(school, s) in houseSelect.schoolDistrictInfo">
-            <a-descriptions-item label="" :span="2" :key="s">
+        <a-descriptions title="学区情况" :column="12">
+          <template v-for="school in houseSelect.schoolDistrictInfo">
+            <a-descriptions-item label="类型" :span="2" :key="school.name">
               {{ school.schoolType }}
-              {{ school.schoolName }}
-              {{ school.echelon }}
               {{ school.isConsistentSystem }}
+            </a-descriptions-item>
+            <a-descriptions-item label="学校" :span="5" :key="school.name">
+              {{ school.schoolName }}
+            </a-descriptions-item>
+            <a-descriptions-item label="梯队" :span="2" :key="school.name">
+              {{ school.echelon }}
+            </a-descriptions-item>
+            <a-descriptions-item label="" :span="3" :key="school.name">
               <span
-                style="color: red; line-height: 24px; padding-left: 6px;cursor: pointer;"
-                @click="removeSchool(s)"
+                style="color: red; line-height: 24px; padding-left: 6px; cursor: pointer"
+                @click="removeSchool(school)"
               ><a-icon
                 type="minus-circle"
               /></span>
             </a-descriptions-item>
-            <a-descriptions-item label="类型" :span="2" :key="s">
-              {{ school.schoolType }} {{ getSchool(school.schoolName, school.schoolType) }}
-            </a-descriptions-item>
           </template>
         </a-descriptions>
-        <a-descriptions>
-          <a-select
-            class="col2"
-            size="small"
-            placeholder="请选中配套学校"
-            :showSearch="true"
-            :value="school"
-            :not-found-content="null"
-            @blur="handleOnBlur"
-            @search="handleOnSearch($event, school.schoolType)"
-            @change="selectSchool($event, s, school.schoolType)"
-          >
-            <a-select-option
-              v-for="ss in schoolGroup[school.schoolType]"
-              :key="ss.schoolName"
-              :value="ss"
-              :disabled="ss.disabled"
+        <a-descriptions :column="12">
+          <a-descriptions-item label="类型" :span="2">
+            <a-select size="small" style="width: 100px" v-model="schoolEdit.schoolType" placeholder="请选择学校类型">
+              <a-select-option value="幼儿园"> 幼儿园 </a-select-option>
+              <a-select-option value="小学"> 小学 </a-select-option>
+              <a-select-option value="中学"> 中学 </a-select-option>
+            </a-select>
+          </a-descriptions-item>
+          <a-descriptions-item label="学校" :span="6">
+            <a-select
+              style="width: 280px; margin-right: 10px"
+              size="small"
+              placeholder="请选择学校"
+              :showSearch="true"
+              v-model="schoolEdit.schoolName"
+              :not-found-content="null"
+              @search="handleOnSearch"
             >
-              {{ ss.schoolName }}
-            </a-select-option>
-          </a-select>
-          <a-descriptions-item label="" :span="4">
+              <a-select-option
+                v-for="(ss, i) in schoolGroup[schoolEdit.schoolType]"
+                :key="i"
+                :value="ss.schoolName"
+                :disabled="isSchoolSelected(ss)"
+              >
+                {{ ss.schoolName }}
+              </a-select-option>
+            </a-select>
             <a-button type="dashed" style="width: 100px" size="small" @click="addSchoolsInfo()">
               <a-icon type="plus" /> 添加
             </a-button>
-            <a-dropdown>
-              <a class="ant-dropdown-link" @click="e => e.preventDefault()"> 添加 <a-icon type="plus" /> </a>
-              <a-menu slot="overlay">
-                <a-menu-item>
-                  <a href="javascript:;" @click="addSchoolsInfo('幼儿园')">幼儿园</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;" @click="addSchoolsInfo('小学')">小学</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;" @click="addSchoolsInfo('初中')">初中</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
           </a-descriptions-item>
+          <a-descriptions-item label="" :span="4"> </a-descriptions-item>
         </a-descriptions>
         <a-descriptions title="价格及交易" :column="4">
           <a-descriptions-item label="1居面积" :span="1">
             <a-input-group compact>
               <a-input v-model="houseSelect.roomArea1Min" class="compactInput" size="small" placeholder="请输入" />
               <a-input
-                style=" width: 14px; border-left: 0; border-right: 0; pointer-events: none; padding: 2px"
+                style="width: 14px; border-left: 0; border-right: 0; pointer-events: none; padding: 2px"
                 size="small"
                 placeholder="—"
                 :disabled="true"
@@ -663,7 +656,7 @@ import {
 import HouseDiary from './HouseDiary.vue'
 
 export default {
-  name: 'HouseSelect',
+  name: 'HouseEdit',
   components: {
     AutoComplete,
     HouseDiary
@@ -728,11 +721,12 @@ export default {
       houseDiaryVisible: false,
       houseTypeFiles: [],
       houseTypes: [],
-      houseTypeEdit: {}
+      houseTypeEdit: {},
+      schoolEdit: {}
     }
   },
   created () {
-    getLabels().then(data => {
+    getLabels().then((data) => {
       this.labels = data
     })
     this.getMetrolineDistrictInfo()
@@ -740,13 +734,16 @@ export default {
 
     const _this = this
     getSchools().then(function (e) {
-      e.forEach(s => {
+      e.forEach((s) => {
         _this.schoolGroup_[s.schoolType].push(s)
       })
-      // Object.keys(_this.schoolGroup_).forEach(e => {
-      //   _this.schoolGroup[e] = _this.schoolGroup_[e].slice(0, 50)
-      // })
+      Object.keys(_this.schoolGroup_).forEach(e => {
+        _this.schoolGroup[e] = _this.schoolGroup_[e].slice(0, 50)
+      })
     })
+
+    // to do
+    this.editHouse()
   },
   beforeMount () {
     if (this.edit) {
@@ -757,7 +754,7 @@ export default {
     editAreaChange () {
       if (this.houseSelect.area) {
         this.editPlateOptions.splice(0)
-        areaPlate[this.houseSelect.area].forEach(v => {
+        areaPlate[this.houseSelect.area].forEach((v) => {
           this.editPlateOptions.push({ label: v, value: v })
         })
       }
@@ -765,18 +762,18 @@ export default {
 
     getPlate (area) {
       const plates = []
-      areaPlate[area].forEach(v => {
+      areaPlate[area].forEach((v) => {
         plates.push({ label: v, value: v })
       })
       return plates
     },
 
     areaChange () {
-      this.queryParam.area.forEach(e => {
+      this.queryParam.area.forEach((e) => {
         const areaPlates = []
-        this.getPlate(e).forEach(p => areaPlates.push(p.value))
+        this.getPlate(e).forEach((p) => areaPlates.push(p.value))
         if (this.plates[e]) {
-          this.plates[e] = this.plates[e].filter(selectedP => {
+          this.plates[e] = this.plates[e].filter((selectedP) => {
             console.log(selectedP)
             return areaPlates.indexOf(selectedP) < 0
           })
@@ -798,7 +795,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwayOptions.forEach(v => {
+      subwayOptions.forEach((v) => {
         if (v.line === i) {
           s = v.station
         }
@@ -809,7 +806,7 @@ export default {
     subwayStationChange () {
       this.queryParam.subwayStation = []
       const that = this
-      Object.keys(this.subwayStations).forEach(e => {
+      Object.keys(this.subwayStations).forEach((e) => {
         that.queryParam.subwayStation.push(...that.subwayStations[e])
       })
     },
@@ -820,10 +817,10 @@ export default {
       this.editAreaChange()
       this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
       this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
-      this.houseSelect.metroInfo.forEach(station => {
+      this.houseSelect.metroInfo.forEach((station) => {
         this.updateMetrolineDistrictInfo([station.metroLine, station.subwayStation], true)
       })
-      this.houseSelect.schoolDistrictInfo.forEach(school => {
+      this.houseSelect.schoolDistrictInfo.forEach((school) => {
         this.updateSchoolsOptions(school.schoolName, true)
       })
       this.edit = !this.edit
@@ -847,7 +844,7 @@ export default {
       this.houseSelect.toilet = this.toilet.join(',')
 
       saveHouse(this.houseSelect)
-        .then(e => {
+        .then((e) => {
           this.edit = !this.edit
           this.$emit('change')
           this.$notification.success({
@@ -877,14 +874,14 @@ export default {
       this.metrolineDistrictInfo = []
       this.metrolineDistrictInfo = this.metroLineOptions
       const stationMap = new Map()
-      subwayOptions.forEach(v => {
+      subwayOptions.forEach((v) => {
         stationMap.set(v.line, v.station)
       })
-      this.metrolineDistrictInfo.forEach(v => {
+      this.metrolineDistrictInfo.forEach((v) => {
         const station = stationMap.get(v.value)
         const stationoption = []
         if (station) {
-          station.forEach(s => {
+          station.forEach((s) => {
             stationoption.push({ label: s, value: s })
           })
           v.children = stationoption
@@ -917,9 +914,9 @@ export default {
     updateMetrolineDistrictInfo (value, disabled) {
       const [line, station] = value
       try {
-        this.metrolineDistrictInfo.forEach(lineoption => {
+        this.metrolineDistrictInfo.forEach((lineoption) => {
           if (lineoption.value === line) {
-            lineoption.children.forEach(option => {
+            lineoption.children.forEach((option) => {
               if (option.value === station) {
                 option.disabled = disabled
               }
@@ -928,34 +925,24 @@ export default {
         })
       } catch (error) {}
     },
-    removeSchool (index) {
-      if (this.houseSelect.schoolDistrictInfo.length >= index) {
-        const s = this.houseSelect.schoolDistrictInfo.splice(index, 1)
-        if (s[0].schoolName) {
-          this.updateSchoolsOptions(s[0].schoolName, false)
-        }
+    removeSchool (school) {
+      const index = this.houseSelect.schoolDistrictInfo.findIndex(e => {
+        return school.schoolType === e.schoolType && school.schoolName === e.schoolName
+      })
+      if (index >= 0) {
+        this.houseSelect.schoolDistrictInfo.splice(index, 1)
       }
+      // TODO
       this.$forceUpdate()
     },
     addSchoolsInfo (type) {
-      this.houseSelect.schoolDistrictInfo.push({
-        schoolName: '',
-        echelonPerformance: '',
-        schoolType: type
-      })
+      this.houseSelect.schoolDistrictInfo.push(this.schoolEdit)
+      this.schoolEdit = {}
+      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].split(0, 50)
       this.$forceUpdate()
     },
-    selectSchool (school, o, schoolType) {
-      this.schoolGroup_[schoolType].forEach(s => {
-        if (s.schoolName === school) {
-          this.houseSelect.schoolDistrictInfo.splice(o, 1, {
-            schoolName: school,
-            schoolType: s.schoolType,
-            echelonPerformance: s.echelon
-          })
-        }
-      })
-      this.$forceUpdate()
+    isSchoolSelected (school) {
+      return this.houseSelect.schoolDistrictInfo.findIndex(e => { return school.schoolName === e.schoolName && school.schoolType === e.schoolType }) >= 0
     },
     updateSchoolsOptions (school, disabled) {
       this.$forceUpdate()
@@ -963,7 +950,7 @@ export default {
     getSchoolByType (schoolType) {},
     /* tag start */
     handleClose (removedTag) {
-      const tags = this.tags.filter(tag => tag !== removedTag)
+      const tags = this.tags.filter((tag) => tag !== removedTag)
       this.tags = tags
     },
 
@@ -979,7 +966,7 @@ export default {
     handleInputConfirm () {
       const inputValue = this.inputValue
       let tags = this.tags
-      if (inputValue && !tags.find(e => e === inputValue)) {
+      if (inputValue && !tags.find((e) => e === inputValue)) {
         tags = [...tags, inputValue]
       }
       this.tags = tags
@@ -1000,26 +987,17 @@ export default {
     handleOnBlur () {
       this.schoolGroup = Object.assign({}, this.schoolGroup_)
     },
-    handleOnSearch (value, schoolType) {
+    handleOnSearch (value) {
       const datas = []
-      this.schoolGroup_[schoolType].forEach(item => {
+      this.schoolGroup_[this.schoolEdit.schoolType].forEach((item) => {
         if (item.schoolName.indexOf(value) > -1) {
           datas.push(item)
         }
       })
-      this.schoolGroup[schoolType] = datas.slice(0, 50)
-    },
-    handleOnSearch1 (value) {
-      const that = this
-      if (!this.timer) {
-        this.timer = setTimeout(function () {
-          that.searchValue(value)
-          that.timer = null
-        }, 0)
-      }
+      this.schoolGroup[this.schoolEdit.schoolType] = datas.slice(0, 50)
     },
     getSchool (schoolName, schoolType) {
-      const school = this.schoolGroup_[schoolType].find(school => {
+      const school = (this.schoolGroup_[schoolType] || []).find((school) => {
         return school.schoolName === schoolName
       })
       let desc = ''
