@@ -13,9 +13,12 @@
               <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
                 <a-layout>
                   <a-layout-header :style="{ height: '336px', padding: '0' }">
-                    <a-carousel autoplay effect="fade" class="house-picture" v-if="pictureList && pictureList.length > 0" ref="carouselRef">
-                      <a slot="customPaging">
-                      </a>
+                    <a-carousel
+                      effect="fade"
+                      class="house-picture"
+                      :dots="false"
+                      v-if="pictureList.length > 0"
+                      ref="carouselRef">
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="i">
                         <img :src="p.url" />
                         <span>{{ p.title }}</span>
@@ -453,6 +456,11 @@ export default {
     EventBus.$on('preview', e => {
       this.previewImage = e
     })
+    const that = this
+    setInterval(() => {
+      that.$refs['carouselRef'].next()
+      that.flip('next')
+    }, 1000)
   },
   beforeMount () {
     console.log(this.$route.params)
