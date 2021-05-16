@@ -13,10 +13,12 @@
               <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
                 <a-layout>
                   <a-layout-header :style="{ height: '336px', padding: '0' }">
-                    <a-carousel autoplay class="house-picture" v-if="pictureList && pictureList.length > 0">
-                      <div class="picture-list" v-for="(p, i) of pictureList" :key="p.title">
+                    <a-carousel autoplay effect="fade" class="house-picture" v-if="pictureList && pictureList.length > 0" ref="carouselRef">
+                      <a slot="customPaging">
+                      </a>
+                      <div class="picture-list" v-for="(p, i) of pictureList" :key="i">
                         <img :src="p.url" />
-                        <span>{{ i + 1 + '/' + pictureList.length }}</span>
+                        <span>{{ p.title }}</span>
                       </div>
                     </a-carousel>
                     <img src="~@/assets/first.png" v-if="!pictureList || pictureList.length === 0" />
@@ -26,10 +28,9 @@
                       <div class="album-view-left" @click="flip('prev')"></div>
                       <div class="album-view-content">
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
-                          <a-list-item slot="renderItem" slot-scope="item" @click="selectAlbum(item)">
+                          <a-list-item slot="renderItem" slot-scope="item, index" @click="selectAlbum(item, index)">
                             <div class="album-list-item" :class="item.active ? 'active' : null">
                               <img :src="item.url" />
-                              <span>{{ item.title }}</span>
                             </div>
                           </a-list-item>
                         </a-list>
@@ -480,31 +481,16 @@ export default {
     queryPhotos () {
       const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
       photoQuery(this.houseSelect.id).then(photos => {
-        const photosList = []
-        for (const photo of photos) {
-          if (photo.type === '0') {
-            continue
-          }
-          if (!photosList[photo.type]) {
-            photosList[photo.type] = []
-          }
-          photosList[photo.type].push({ uid: photo.id, title: '', url: photo.url, type: photo.type })
-        }
         this.albumList = []
         this.pictureList = []
-        if (photosList.length) {
-          for (const photo of photosList) {
-            if (photo) {
-              this.albumList.push({
-                title: `${photosOption[photo[0].type]} (${photo.length})`,
-                photos: photo,
-                url: photo[0].url,
-                active: photo[0].type === '1',
-                index: photo[0].type
+        for (const photo of photos) {
+          this.pictureList.push({ uid: photo.id, title: photosOption[photo.type], url: photo.url, type: photo.type })
+          this.albumList.push({
+                title: photosOption[photo.type],
+                url: photo.url,
+                active: true,
+                index: photo.type
               })
-            }
-          }
-          this.pictureList = photosList[1]
         }
       })
     },
@@ -525,12 +511,12 @@ export default {
           break
       }
     },
-    selectAlbum (item) {
+    selectAlbum (item, index) {
       this.albumList.forEach(i => {
         i.active = false
       })
       item.active = true
-      this.pictureList = item.photos
+      this.$refs['carouselRef'].goTo(index)
     },
     slideList (space) {
       const scroll = document.querySelector('.house-album-list  ul')
