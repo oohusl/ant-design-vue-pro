@@ -9,7 +9,7 @@
               padding: '0',
               'line-height': '32px',
               'font-size': '24px',
-              color: '#000000',
+              color: '#000000'
             }"
           >
             <div>
@@ -126,19 +126,19 @@
             {{ houseSelect.propertyCosts ? houseSelect.propertyCosts + '元/m²' : '' }}
           </a-descriptions-item>
         </a-descriptions>
-        <a-descriptions title="学区情况" :column="12">
+        <a-descriptions title="学区情况" :column="11">
           <template v-for="school in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="类型" :span="2" :key="school.name">
               {{ school.schoolType }}
               {{ school.isConsistentSystem }}
             </a-descriptions-item>
-            <a-descriptions-item label="学校" :span="5" :key="school.name">
+            <a-descriptions-item label="学校" :span="4" :key="school.name">
               {{ school.schoolName }}
             </a-descriptions-item>
-            <a-descriptions-item label="梯队" :span="2" :key="school.name">
-              {{ school.echelon }}
+            <a-descriptions-item label="梯队" :span="3" :key="school.name">
+              {{ getSchoolInfo(school.schoolType, school.schoolName) }}
             </a-descriptions-item>
-            <a-descriptions-item :span="3" :key="school.name"></a-descriptions-item>
+            <a-descriptions-item :span="2" :key="school.name"></a-descriptions-item>
           </template>
         </a-descriptions>
         <a-descriptions title="价格及交易" :column="4">
@@ -203,7 +203,7 @@
               padding: '0',
               'line-height': '32px',
               'font-size': '24px',
-              color: '#000000',
+              color: '#000000'
             }"
           >
             <div>
@@ -414,17 +414,16 @@
             <a-input v-model="houseSelect.propertyCosts" class="col1" size="small" addon-after="元/m²" />
           </a-descriptions-item>
         </a-descriptions>
-        <a-descriptions title="学区情况" :column="12">
+        <a-descriptions title="学区情况" :column="11">
           <template v-for="school in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="类型" :span="2" :key="school.name">
               {{ school.schoolType }}
-              {{ school.isConsistentSystem }}
             </a-descriptions-item>
-            <a-descriptions-item label="学校" :span="5" :key="school.name">
+            <a-descriptions-item label="学校" :span="4" :key="school.name">
               {{ school.schoolName }}
             </a-descriptions-item>
             <a-descriptions-item label="梯队" :span="2" :key="school.name">
-              {{ school.echelon }}
+              {{ getSchoolInfo(school.schoolType, school.schoolName) }}
             </a-descriptions-item>
             <a-descriptions-item label="" :span="3" :key="school.name">
               <span
@@ -726,7 +725,7 @@ export default {
     }
   },
   created () {
-    getLabels().then((data) => {
+    getLabels().then(data => {
       this.labels = data
     })
     this.getMetrolineDistrictInfo()
@@ -734,7 +733,7 @@ export default {
 
     const _this = this
     getSchools().then(function (e) {
-      e.forEach((s) => {
+      e.forEach(s => {
         _this.schoolGroup_[s.schoolType].push(s)
       })
       Object.keys(_this.schoolGroup_).forEach(e => {
@@ -751,7 +750,7 @@ export default {
     editAreaChange () {
       if (this.houseSelect.area) {
         this.editPlateOptions.splice(0)
-        areaPlate[this.houseSelect.area].forEach((v) => {
+        areaPlate[this.houseSelect.area].forEach(v => {
           this.editPlateOptions.push({ label: v, value: v })
         })
       }
@@ -759,18 +758,18 @@ export default {
 
     getPlate (area) {
       const plates = []
-      areaPlate[area].forEach((v) => {
+      areaPlate[area].forEach(v => {
         plates.push({ label: v, value: v })
       })
       return plates
     },
 
     areaChange () {
-      this.queryParam.area.forEach((e) => {
+      this.queryParam.area.forEach(e => {
         const areaPlates = []
-        this.getPlate(e).forEach((p) => areaPlates.push(p.value))
+        this.getPlate(e).forEach(p => areaPlates.push(p.value))
         if (this.plates[e]) {
-          this.plates[e] = this.plates[e].filter((selectedP) => {
+          this.plates[e] = this.plates[e].filter(selectedP => {
             console.log(selectedP)
             return areaPlates.indexOf(selectedP) < 0
           })
@@ -792,7 +791,7 @@ export default {
 
     getSubwayStation (i) {
       let s = []
-      subwayOptions.forEach((v) => {
+      subwayOptions.forEach(v => {
         if (v.line === i) {
           s = v.station
         }
@@ -803,7 +802,7 @@ export default {
     subwayStationChange () {
       this.queryParam.subwayStation = []
       const that = this
-      Object.keys(this.subwayStations).forEach((e) => {
+      Object.keys(this.subwayStations).forEach(e => {
         that.queryParam.subwayStation.push(...that.subwayStations[e])
       })
     },
@@ -814,11 +813,8 @@ export default {
       this.editAreaChange()
       this.houseSelect.metroInfo = this.houseSelect.metroInfo || []
       this.houseSelect.schoolDistrictInfo = this.houseSelect.schoolDistrictInfo || []
-      this.houseSelect.metroInfo.forEach((station) => {
+      this.houseSelect.metroInfo.forEach(station => {
         this.updateMetrolineDistrictInfo([station.metroLine, station.subwayStation], true)
-      })
-      this.houseSelect.schoolDistrictInfo.forEach((school) => {
-        this.updateSchoolsOptions(school.schoolName, true)
       })
       this.edit = !this.edit
     },
@@ -841,7 +837,7 @@ export default {
       this.houseSelect.toilet = this.toilet.join(',')
 
       saveHouse(this.houseSelect)
-        .then((e) => {
+        .then(e => {
           this.edit = !this.edit
           this.$emit('change')
           this.$notification.success({
@@ -871,14 +867,14 @@ export default {
       this.metrolineDistrictInfo = []
       this.metrolineDistrictInfo = this.metroLineOptions
       const stationMap = new Map()
-      subwayOptions.forEach((v) => {
+      subwayOptions.forEach(v => {
         stationMap.set(v.line, v.station)
       })
-      this.metrolineDistrictInfo.forEach((v) => {
+      this.metrolineDistrictInfo.forEach(v => {
         const station = stationMap.get(v.value)
         const stationoption = []
         if (station) {
-          station.forEach((s) => {
+          station.forEach(s => {
             stationoption.push({ label: s, value: s })
           })
           v.children = stationoption
@@ -911,9 +907,9 @@ export default {
     updateMetrolineDistrictInfo (value, disabled) {
       const [line, station] = value
       try {
-        this.metrolineDistrictInfo.forEach((lineoption) => {
+        this.metrolineDistrictInfo.forEach(lineoption => {
           if (lineoption.value === line) {
-            lineoption.children.forEach((option) => {
+            lineoption.children.forEach(option => {
               if (option.value === station) {
                 option.disabled = disabled
               }
@@ -929,25 +925,36 @@ export default {
       if (index >= 0) {
         this.houseSelect.schoolDistrictInfo.splice(index, 1)
       }
-      // TODO
       this.$forceUpdate()
     },
-    addSchoolsInfo (type) {
+    addSchoolsInfo () {
+      if (!this.schoolEdit.schoolName) {
+        this.$message.info('请选择学校后添加')
+        return
+      }
       this.houseSelect.schoolDistrictInfo.push(this.schoolEdit)
       this.schoolEdit = {}
       this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].split(0, 50)
       this.$forceUpdate()
     },
     isSchoolSelected (school) {
-      return this.houseSelect.schoolDistrictInfo.findIndex(e => { return school.schoolName === e.schoolName && school.schoolType === e.schoolType }) >= 0
+      return (
+        this.houseSelect.schoolDistrictInfo.findIndex(e => {
+          return school.schoolName === e.schoolName && school.schoolType === e.schoolType
+        }) >= 0
+      )
     },
-    updateSchoolsOptions (school, disabled) {
-      this.$forceUpdate()
+    getSchoolInfo (type, schoolName) {
+      const s = this.schoolGroup_[type].find(e => {
+        return schoolName === e.schoolName
+      })
+      if (s != null) {
+        return (s.echelon || '') + ' ' + (s.isConsistentSystem || '')
+      }
     },
-    getSchoolByType (schoolType) {},
     /* tag start */
     handleClose (removedTag) {
-      const tags = this.tags.filter((tag) => tag !== removedTag)
+      const tags = this.tags.filter(tag => tag !== removedTag)
       this.tags = tags
     },
 
@@ -963,7 +970,7 @@ export default {
     handleInputConfirm () {
       const inputValue = this.inputValue
       let tags = this.tags
-      if (inputValue && !tags.find((e) => e === inputValue)) {
+      if (inputValue && !tags.find(e => e === inputValue)) {
         tags = [...tags, inputValue]
       }
       this.tags = tags
@@ -986,7 +993,7 @@ export default {
     },
     handleOnSearch (value) {
       const datas = []
-      this.schoolGroup_[this.schoolEdit.schoolType].forEach((item) => {
+      this.schoolGroup_[this.schoolEdit.schoolType].forEach(item => {
         if (item.schoolName.indexOf(value) > -1) {
           datas.push(item)
         }
@@ -994,7 +1001,7 @@ export default {
       this.schoolGroup[this.schoolEdit.schoolType] = datas.slice(0, 50)
     },
     getSchool (schoolName, schoolType) {
-      const school = (this.schoolGroup_[schoolType] || []).find((school) => {
+      const school = (this.schoolGroup_[schoolType] || []).find(school => {
         return school.schoolName === schoolName
       })
       let desc = ''
