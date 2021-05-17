@@ -130,7 +130,6 @@
           <template v-for="school in houseSelect.schoolDistrictInfo">
             <a-descriptions-item label="类型" :span="2" :key="school.name">
               {{ school.schoolType }}
-              {{ school.isConsistentSystem }}
             </a-descriptions-item>
             <a-descriptions-item label="学校" :span="4" :key="school.name">
               {{ school.schoolName }}
@@ -437,7 +436,13 @@
         </a-descriptions>
         <a-descriptions :column="12">
           <a-descriptions-item label="类型" :span="2">
-            <a-select size="small" style="width: 100px" v-model="schoolEdit.schoolType" placeholder="请选择学校类型">
+            <a-select
+              size="small"
+              style="width: 100px"
+              v-model="schoolEdit.schoolType"
+              @change="schoolTypeChange"
+              placeholder="请选择学校类型"
+            >
               <a-select-option value="幼儿园"> 幼儿园 </a-select-option>
               <a-select-option value="小学"> 小学 </a-select-option>
               <a-select-option value="中学"> 中学 </a-select-option>
@@ -927,14 +932,19 @@ export default {
       }
       this.$forceUpdate()
     },
+    schoolTypeChange () {
+      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].splice(0, 50)
+      delete this.schoolEdit.schoolName
+      this.$forceUpdate()
+    },
     addSchoolsInfo () {
       if (!this.schoolEdit.schoolName) {
         this.$message.info('请选择学校后添加')
         return
       }
-      this.houseSelect.schoolDistrictInfo.push(this.schoolEdit)
+      this.houseSelect.schoolDistrictInfo.push(Object.assign({}, this.schoolEdit))
+      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].splice(0, 50)
       this.schoolEdit = {}
-      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].split(0, 50)
       this.$forceUpdate()
     },
     isSchoolSelected (school) {
