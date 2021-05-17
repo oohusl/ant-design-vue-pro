@@ -18,7 +18,8 @@
                       class="house-picture"
                       :dots="false"
                       v-if="pictureList.length > 0"
-                      ref="carouselRef">
+                      ref="carouselRef"
+                    >
                       <div class="picture-list" v-for="(p, i) of pictureList" :key="i">
                         <img :src="p.url" />
                         <span>{{ p.title }}</span>
@@ -492,13 +493,16 @@ export default {
         this.albumList = []
         this.pictureList = []
         for (const photo of photos) {
+          if (photo.type === 0) {
+            continue
+          }
           this.pictureList.push({ uid: photo.id, title: photosOption[photo.type], url: photo.url, type: photo.type })
           this.albumList.push({
-                title: photosOption[photo.type],
-                url: photo.url,
-                active: true,
-                index: photo.type
-              })
+            title: photosOption[photo.type],
+            url: photo.url,
+            active: true,
+            index: photo.type
+          })
         }
       })
     },
