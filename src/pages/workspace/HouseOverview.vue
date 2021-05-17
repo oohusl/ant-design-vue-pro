@@ -461,7 +461,7 @@ export default {
     setInterval(() => {
       that.$refs['carouselRef'].next()
       that.flip('next')
-    }, 1000)
+    }, 2500)
   },
   beforeMount () {
     console.log(this.$route.params)
@@ -493,7 +493,7 @@ export default {
         this.albumList = []
         this.pictureList = []
         for (const photo of photos) {
-          if (photo.type === 0) {
+          if (photo.type === '0') {
             continue
           }
           this.pictureList.push({ uid: photo.id, title: photosOption[photo.type], url: photo.url, type: photo.type })
@@ -841,12 +841,13 @@ export default {
   left: 10px;
   top: 304px;
   height: 24px;
-  width: 40px;
   background: rgba(0, 0, 0, 0.6);
   line-height: 24px;
   font-weight: 400;
   color: #ffffff;
   font-size: 12px;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .picture-list button {
   position: absolute;
