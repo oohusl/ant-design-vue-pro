@@ -741,9 +741,6 @@ export default {
         _this.schoolGroup[e] = _this.schoolGroup_[e].slice(0, 50)
       })
     })
-
-    // to do
-    this.editHouse()
   },
   beforeMount () {
     if (this.edit) {
