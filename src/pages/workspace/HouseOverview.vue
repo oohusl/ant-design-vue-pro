@@ -17,10 +17,10 @@
                       effect="fade"
                       class="house-picture"
                       :dots="false"
-                      v-if="pictureList.length > 0"
+                      v-if="albumList.length > 0"
                       ref="carouselRef"
                     >
-                      <div class="picture-list" v-for="(p, i) of pictureList" :key="i">
+                      <div class="picture-list" v-for="(p, i) of albumList" :key="i">
                         <img :src="p.url" />
                         <span>{{ p.title }}</span>
                       </div>
@@ -440,7 +440,6 @@ export default {
       houseQAVisible: false,
       imageEditVisible: false,
       albumList: [],
-      pictureList: [],
       activeIndex: 0,
       diaryTypeOptions: [],
       houseTypeOptions: [],
@@ -460,7 +459,6 @@ export default {
     EventBus.$on('preview', e => {
       this.previewImage = e
     })
-    this.startCarousel()
   },
   beforeMount () {
     console.log(this.$route.params)
@@ -497,19 +495,18 @@ export default {
       const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
       photoQuery(this.houseSelect.id).then(photos => {
         this.albumList = []
-        this.pictureList = []
         for (const photo of photos) {
           if (photo.type === '0') {
             continue
           }
-          this.pictureList.push({ uid: photo.id, title: photosOption[photo.type], url: photo.url, type: photo.type })
+          // this.pictureList.push({ uid: photo.id, title: photosOption[photo.type], url: photo.url, type: photo.type })
           this.albumList.push({
             title: photosOption[photo.type],
             url: photo.url,
-            active: true,
             index: photo.type
           })
         }
+        this.startCarousel()
       })
     },
     queryQuestion () {
