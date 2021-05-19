@@ -10,7 +10,7 @@
           </a-layout-header>
           <a-layout-content :style="{ width: '100%' }">
             <a-layout :style="{ padding: '0', background: '#ffffff' }">
-              <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="496">
+              <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="560">
                 <a-layout>
                   <a-layout-header :style="{ height: '336px', padding: '0' }">
                     <a-carousel
@@ -29,17 +29,19 @@
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
-                      <div class="album-view-left" @click="flip('prev')"></div>
+                      <div class="album-view-left" @click="flip(-1)"></div>
                       <div class="album-view-content">
                         <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
                           <a-list-item slot="renderItem" slot-scope="item, index" @click="selectAlbum(item, index)">
-                            <div class="album-list-item" :class="item.active ? 'active' : null">
+                            <div class="album-list-item" :class="index === activeIndex ? 'active' : null">
                               <img :src="item.url" />
+                              <span>{{ index }}</span
+                              ><span v-if="index === activeIndex">{{ activeIndex }}</span>
                             </div>
                           </a-list-item>
                         </a-list>
                       </div>
-                      <div class="album-view-right" @click="flip('next')"></div>
+                      <div class="album-view-right" @click="flip(1)"></div>
                     </div>
                   </a-layout-content>
                 </a-layout>
@@ -439,7 +441,7 @@ export default {
       imageEditVisible: false,
       albumList: [],
       pictureList: [],
-      scroolPosition: 0,
+      activeIndex: 0,
       diaryTypeOptions: [],
       houseTypeOptions: [],
       diarySelectedAll: true,
@@ -450,18 +452,15 @@ export default {
       diaryEdit: null,
       questionEdit: null,
       previewImage: null,
-      rooms: []
+      rooms: [],
+      interval: -1
     }
   },
   created () {
     EventBus.$on('preview', e => {
       this.previewImage = e
     })
-    const that = this
-    setInterval(() => {
-      that.$refs['carouselRef'].next()
-      that.flip('next')
-    }, 2500)
+    this.startCarousel()
   },
   beforeMount () {
     console.log(this.$route.params)
@@ -475,6 +474,13 @@ export default {
     this.queryQuestion()
   },
   methods: {
+    startCarousel () {
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.activeIndex = (this.activeIndex + 1) % this.albumList.length
+        this.refreshCarousel()
+      }, 3000)
+    },
     closeDetail () {
       this.detailFlag = 0
     },
@@ -511,41 +517,35 @@ export default {
         this.qaList = e
       })
     },
-    flip (opt) {
-      switch (opt) {
-        case 'prev':
-          this.slideList(104)
-          break
-        case 'next':
-          this.slideList(-104)
-          break
-        default:
-          break
+    flip (i) {
+      const len = this.albumList.length
+      let index = (this.activeIndex + i) % len
+      if (index < 0) {
+        index = len - 1
       }
+      this.activeIndex = index
+      this.refreshCarousel()
+      this.startCarousel()
     },
     selectAlbum (item, index) {
-      this.albumList.forEach(i => {
-        i.active = false
-      })
-      item.active = true
-      this.$refs['carouselRef'].goTo(index)
+      this.activeIndex = index
+      this.refreshCarousel()
+      this.startCarousel()
     },
-    slideList (space) {
+    refreshCarousel () {
       const scroll = document.querySelector('.house-album-list  ul')
-      if (this.albumList.length < 5) {
+      const len = this.albumList.length
+      if (len <= 5 || !scroll) {
         return
       }
-      let position = this.scroolPosition
-      position += space
-      if (position >= 0) {
-        position = 0
-      } else if (position < -this.albumList.length * 104 + 448) {
-        position = -this.albumList.length * 104 + 448
+      let scrollIndex = this.activeIndex - 2
+      if (this.activeIndex < 3) {
+        scrollIndex = 0
+      } else if (this.activeIndex > len - 4) {
+        scrollIndex = len - 5
       }
-      if (scroll) {
-        scroll.style.transform = `translateX(${position}px)`
-      }
-      this.scroolPosition = position
+      scroll.style.transform = `translateX(${-1 * scrollIndex * 104}px)`
+      this.$refs['carouselRef'].goTo(this.activeIndex)
     },
     queryAllAnalysis () {
       const bedroomsOption = {
