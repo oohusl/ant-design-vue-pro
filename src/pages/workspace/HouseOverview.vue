@@ -35,8 +35,6 @@
                           <a-list-item slot="renderItem" slot-scope="item, index" @click="selectAlbum(item, index)">
                             <div class="album-list-item" :class="index === activeIndex ? 'active' : null">
                               <img :src="item.url" />
-                              <span>{{ index }}</span
-                              ><span v-if="index === activeIndex">{{ activeIndex }}</span>
                             </div>
                           </a-list-item>
                         </a-list>
@@ -811,12 +809,13 @@ export default {
   position: relative;
   cursor: pointer;
 }
-.album-list-item.active span {
-  background: rgba(183, 28, 43, 0.8);
-}
 .album-list-item img {
   width: 100%;
   height: 100%;
+  opacity: 0.5;
+}
+.album-list-item.active img {
+  opacity: 1;
 }
 .album-list-item span {
   height: 24px;
