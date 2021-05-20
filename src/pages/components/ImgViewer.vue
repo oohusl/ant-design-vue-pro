@@ -1,5 +1,12 @@
 <template>
-  <div class="viewer-wraper">
+  <div
+    class="viewer-wraper"
+    contenteditable="true"
+    v-focus
+    @keyup.esc="$emit('exit')"
+    @keyup.left="$emit('flip', -1)"
+    @keyup.right="$emit('flip', 1)"
+  >
     <div class="viewer-fullscreen-exit" role="button" @click="$emit('exit')"></div>
     <div>
       <img
@@ -10,7 +17,6 @@
       <img
         :src="src"
         style="position:absolute; max-width:85%; max-height:90%; position: absolute; top: 50%;left: 50%;transform: translate(-50%, -50%);"
-        alt=""
       />
       <img
         style="position:absolute;top: 50%; right: 60px; z-index: 10001; cursor: pointer;"
