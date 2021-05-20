@@ -1,5 +1,11 @@
 <template>
   <div class="house-overview">
+    <img-viewer
+      :src="albumList[activeIndex] && albumList[activeIndex].url"
+      v-if="activeUrl"
+      @exit="imgViewerExit"
+      @flip="imgViewerFlip"
+    ></img-viewer>
     <a-layout :style="{ background: '#ffffff', padding: '0', height: '100%', padding: '0 128px' }">
       <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '100%' }">
         <a-layout :style="{ background: '#ffffff', padding: '0', height: '100%' }">
@@ -23,9 +29,10 @@
                       <div class="picture-list" v-for="(p, i) of albumList" :key="i">
                         <img :src="p.url" />
                         <span>{{ p.title }}</span>
+                        <div @click="showImage(p.url)" class="viewer-button"></div>
                       </div>
                     </a-carousel>
-                    <img src="~@/assets/first.png" v-if="!pictureList || pictureList.length === 0" />
+                    <img src="~@/assets/first.png" v-if="!albumList || albumList.length === 0" />
                   </a-layout-header>
                   <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
                     <div class="house-album-view" v-if="albumList.length">
@@ -360,6 +367,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
+import ImgViewer from '../components/ImgViewer.vue'
 import HouseEdit from './HouseEdit.vue'
 import HouseTypeEdit from './HouseTypeEdit'
 import HouseDiary from './HouseDiary'
@@ -401,7 +409,8 @@ export default {
     HouseTypeEdit,
     HouseDiary,
     HouseQA,
-    HouseImageEdit
+    HouseImageEdit,
+    ImgViewer
   },
   computed: {},
   data () {
@@ -450,7 +459,8 @@ export default {
       questionEdit: null,
       previewImage: null,
       rooms: [],
-      interval: -1
+      interval: -1,
+      activeUrl: null
     }
   },
   created () {
@@ -511,6 +521,23 @@ export default {
       queryHouseQuestion(this.houseSelect.id).then(e => {
         this.qaList = e
       })
+    },
+    imgViewerExit () {
+      this.activeUrl = null
+      this.startCarousel()
+    },
+    imgViewerFlip (i) {
+      const len = this.albumList.length
+      let index = (this.activeIndex + i) % len
+      if (index < 0) {
+        index = len - 1
+      }
+      this.activeIndex = index
+      this.refreshCarousel()
+    },
+    showImage (url) {
+      this.activeUrl = url
+      clearInterval(this.interval)
     },
     flip (i) {
       const len = this.albumList.length
@@ -793,11 +820,15 @@ export default {
 .album-view-left,
 .album-view-right {
   width: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background-image: url(../../assets/left.png);
+  background-size: contain;
   border-radius: 2px 0px 0px 2px;
   color: #ffffff;
   text-align: center;
   cursor: pointer;
+}
+.album-view-right {
+  background-image: url(../../assets/right.png);
 }
 .album-view-content {
   flex: 1;
@@ -869,29 +900,6 @@ export default {
 .house-type >>> .ant-tabs-nav-wrap {
   background: #f5f5f5;
 }
-/* .house-type > .ant-tabs-card > .ant-tabs-content {
-  height: 120px;
-  margin-top: -16px;
-}
-
-.house-type > .ant-tabs-card > .ant-tabs-content > .ant-tabs-tabpane {
-  background: #fff;
-  padding: 16px;
-}
-
-.house-type > .ant-tabs-card > .ant-tabs-bar {
-  border-color: #fff;
-}
-
-.house-type > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab {
-  border-color: transparent;
-  background: transparent;
-}
-
-.house-type > .ant-tabs-card > .ant-tabs-bar .ant-tabs-tab-active {
-  border-color: #fff;
-  background: #fff;
-} */
 .house-diary {
   overflow: hidden;
   padding: 0;
@@ -981,5 +989,43 @@ img {
   text-align: center;
   border-radius: 50%;
   float: left;
+}
+.viewer-button {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  cursor: pointer;
+  border-radius: 50%;
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  overflow: hidden;
+  -webkit-transition: background-color 0.15s;
+  transition: background-color 0.15s;
+  display: none;
+}
+.viewer-button:before {
+  bottom: 15px;
+  left: 15px;
+  position: absolute;
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAARgAAAAUCAYAAABWOyJDAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAQPSURBVHic7Zs/iFxVFMa/0U2UaJGksUgnIVhYxVhpjDbZCBmLdAYECxsRFBTUamcXUiSNncgKQbSxsxH8gzAP3FU2jY0kKKJNiiiIghFlccnP4p3nPCdv3p9778vsLOcHB2bfveeb7955c3jvvNkBIMdxnD64a94GHMfZu3iBcRynN7zAOI7TG15gHCeeNUkr8zaxG2lbYDYsdgMbktBsP03jdQwljSXdtBhLOmtjowC9Mg9L+knSlcD8TNKpSA9lBpK2JF2VdDSR5n5J64m0qli399hNFMUlpshQii5jbXTbHGviB0nLNeNDSd9VO4A2UdB2fp+x0eCnaXxWXGA2X0au/3HgN9P4LFCjIANOJdrLr0zzZ+BEpNYDwKbpnQMeAw4m8HjQtM6Z9qa917zPQwFr3M5KgA6J5rTJCdFZJj9/lyvGhsDvwFNVuV2MhhjrK6b9bFiE+j1r87eBl4HDwCF7/U/k+ofAX5b/EXBv5JoLMuILzf3Ap6Z3EzgdqHMCuF7hcQf4HDgeoHnccncqdK/TvSDWffFXI/exICY/xZyqc6XLWF1UFZna4gJ7q8BsRvgd2/xXpo6P+D9dfT7PpECtA3cnWPM0GXGFZh/wgWltA+cDNC7X+AP4GzjZQe+k5dRxuYPeiuXU7e1qwLpDz7dFjXKRaSwuMLvAlG8zZlG+YmiK1HoFqT7wP2z+4Q45TfEGcMt01xLoNZEBTwRqD4BLpnMLeC1A41UmVxsXgXeBayV/Wx20rpTyrpnWRft7p6O/FdqzGrDukPNtkaMoMo3FBdBSQMOnYBCReyf05s126fU9ytfX98+mY54Kxnp7S9K3kj6U9KYdG0h6UdLbkh7poFXMfUnSOyVvL0h6VtIXHbS6nOP+s/Zm9mvyXW1uuC9ohZ72E9uDmXWLJOB1GxsH+DxPftsB8B6wlGDN02TAkxG6+4D3TWsbeC5CS8CDFce+AW500LhhOW2020TRjK3b21HEmgti9m0RonxbdMZeVzV+/4tF3cBpP7E9mKHNL5q8h5g0eYsCMQz0epq8gQrwMXAgcs0FGXGFRcB9wCemF9PkbYqM/Bas7fxLwNeJPdTdpo4itQti8lPMqTpXuozVRVXPpbHI3KkNTB1NfkL81j2mvhDp91HgV9MKuRIqrykj3WPq4rHyL+axj8/qGPmTqi6F9YDlHOvJU6oYcTsh/TYSzWmTE6JT19CtLTJt32D6CmHe0eQn1O8z5AXgT4sx4Vcu0/EQecMydB8z0hUWkTd2t4CrwNEePqMBcAR4mrBbwyXLPWJa8zrXmmLEhNBmfpkuY2102xxrih+pb+ieAb6vGhuA97UcJ5KR8gZ77K+99xxeYBzH6Q3/Z0fHcXrDC4zjOL3hBcZxnN74F+zlvXFWXF9PAAAAAElFTkSuQmCC);
+  background-position: -220px 0;
+  background-repeat: no-repeat;
+  background-size: 280px;
+  color: transparent;
+  display: block;
+  font-size: 0;
+  height: 20px;
+  line-height: 0;
+  width: 20px;
+  content: 'exit';
+}
+.viewer-button:focus,
+.viewer-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+.picture-list:hover .viewer-button {
+  display: block;
 }
 </style>
