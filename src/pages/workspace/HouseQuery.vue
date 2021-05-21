@@ -185,85 +185,43 @@
             <a-checkbox-group v-model="queryParam.districtPlannings" :options="districtPlanningOptions">
             </a-checkbox-group>
           </a-form-item>
-          <a-form-item label="学校" v-if="advanced">
-            <a-form-item :style="{ display: 'inline-block', width: '160px', 'margin-right': '20px' }">
-              <a-select
-                v-model="queryParam.schoolName"
-                size="small"
-                placeholder="请选择配套学校"
-                :showSearch="true"
-                :allowClear="true"
-                :maxTagCount="0"
-                mode="multiple"
-                :showArrow="true"
-                @blur="handleOnBlur"
-                @search="handleOnSearch"
-              >
-                <a-select-option v-for="ss in schools_" :key="ss.value" :value="ss.value">
-                  {{ ss.label }}
-                </a-select-option>
-              </a-select>
-            </a-form-item>
-            <a-checkbox-group v-model="queryParam.schoolType" @change="schoolTypeChange">
-              <template v-for="options in schoolType">
-                <a-popover :key="options.type" trigger="hover" placement="topLeft" v-if="options.echelon">
-                  <template slot="content">
-                    <a-checkbox-group
-                      v-model="queryParam.echelonPerformance[options.type]"
-                      @change="echelonChange(options.type)"
-                    >
-                      <a-row>
-                        <a-col v-for="e in options.echelon" :key="e.value">
-                          <a-checkbox
-                            :value="e.value"
-                            :indeterminate="queryParam.schoolType.indexOf(options.type) >= 0"
-                          >{{ e.label }}</a-checkbox
-                          >
-                        </a-col>
-                      </a-row>
-                    </a-checkbox-group>
-                  </template>
-                  <a-checkbox
-                    :value="options.type"
-                    :indeterminate="
-                      queryParam.echelonPerformance[options.type] &&
-                        queryParam.echelonPerformance[options.type].length > 0
-                    "
-                  >{{ options.type }}</a-checkbox
-                  >
-                </a-popover>
-                <a-checkbox :key="options.type" v-else :value="options.type">{{ options.type }}</a-checkbox>
-              </template>
-            </a-checkbox-group>
-            <div>
-              <a-tag
-                v-for="p in queryParam.schoolName"
-                :key="p"
-                :color="colors[0]"
-                :closable="true"
-                @close="handleTagClose(p, queryParam.schoolName)"
-              >{{ p }}</a-tag
-              >
-              <a-tag
-                v-for="p in queryParam.schoolType"
-                :key="p"
-                :color="colors[1]"
-                :closable="true"
-                @close="handleTagClose(p, queryParam.schoolType)"
-              >{{ p }}</a-tag
-              >
-              <template v-for="(value, key) in queryParam.echelonPerformance">
-                <a-tag
-                  v-for="(v, i) in value"
-                  :key="v + i"
-                  :color="colors[1]"
-                  :closable="true"
-                  @close="handleTagClose(v, queryParam.echelonPerformance[key])"
-                >{{ key }} - {{ v }}</a-tag
+          <template v-for="st in Object.keys(schoolType)">
+            <a-form-item :label="st" :key="st" v-if="advanced">
+              <a-form-item :style="{ display: 'inline-block', width: '260px', 'margin-right': '20px' }">
+                <a-select
+                  v-model="queryParam.school[st]"
+                  size="small"
+                  placeholder="请选择学校"
+                  :showSearch="true"
+                  :allowClear="true"
+                  :maxTagCount="0"
+                  mode="multiple"
+                  :showArrow="true"
+                  @blur="handleOnBlur(st)"
+                  @search="
+                    value => {
+                      handleOnSearch(value, st)
+                    }
+                  "
                 >
-              </template>
-            </div>
-          </a-form-item>
+                  <a-select-option v-for="(ss, i) in schoolGroup[st]" :key="i" :value="ss.schoolName">
+                    {{ ss.schoolName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+              <a-checkbox-group v-model="queryParam.echelonPerformance[st]" :options="schoolType[st]">
+              </a-checkbox-group>
+              <div>
+                <a-tag
+                  v-for="p in queryParam.school[st]"
+                  :key="p"
+                  :color="colors[0]"
+                  :closable="true"
+                  @close="handleTagClose(p, queryParam.school[schoolType])"
+                >{{ p }}</a-tag>
+              </div>
+            </a-form-item>
+          </template>
           <a-form-item label="户型" v-if="advanced">
             <a-checkbox-group v-model="queryParam.roomType">
               <a-checkbox value="1"> 一房 </a-checkbox>
@@ -692,9 +650,9 @@
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse, getSchools } from '@/api/manage'
-import { schoolType } from '@/api/school'
 import HouseEdit from './HouseEdit.vue'
 import {
+  schoolType,
   areaOptions,
   getMetroLineOptions,
   averageLlistedPriceOptions,
@@ -756,7 +714,8 @@ export default {
           parkingSpacesRatios: [],
           volume2019s: [],
           subwayDistance: []
-        }
+        },
+        school: {}
       },
       tempParam: { parkingSpacesRatioRang: [], volume2019Rang: [], subwayDistanceRang: [] },
       detailFlag: 0, // 0 close 1 view 2 edit
@@ -790,27 +749,25 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
-      schools: [],
-      schools_: [],
-      originalSchool: [],
       timer: undefined,
       schoolType,
       dataExcel: [],
       headers: Object.keys(ExcelInfo),
-      fields: Object.values(ExcelInfo)
+      fields: Object.values(ExcelInfo),
+      schoolGroup: { 幼儿园: [], 小学: [], 中学: [] },
+      schoolGroup_: { 幼儿园: [], 小学: [], 中学: [] }
     }
   },
   created () {
     this.searchData()
-    // this.schools_ = this.schools.slice(0, 50)
-
     const _this = this
     getSchools().then(function (e) {
-      _this.originalSchool = e
-      e.forEach(school => {
-        _this.schools.push({ label: school.schoolName, value: school.schoolName })
+      e.forEach(s => {
+        _this.schoolGroup_[s.schoolType].push(s)
       })
-      _this.schools_ = _this.schools.slice(0, 50)
+      Object.keys(_this.schoolGroup_).forEach(e => {
+        _this.schoolGroup[e] = _this.schoolGroup_[e].slice(0, 50)
+      })
     })
   },
   mounted () {
@@ -839,7 +796,8 @@ export default {
         echelonPerformance: {},
         parkingSpacesRatios: [],
         volume2019s: [],
-        ranges: { price: [], total: [], roomArea: [], constructionAge: [] }
+        ranges: { price: [], total: [], roomArea: [], constructionAge: [] },
+        school: {}
       }
       this.tempParam = { parkingSpacesRatioRang: [], volume2019Rang: [], subwayDistanceRang: [] }
       this.subwayStations = {}
@@ -915,8 +873,14 @@ export default {
           requestParameters.schoolTypeAndEchelon[e] = requestParameters.echelonPerformance[e]
         }
       })
+      requestParameters.schoolName = [
+        ...(requestParameters.school['幼儿园'] || []),
+        ...(requestParameters.school['小学'] || []),
+        ...(requestParameters.school['中学'] || [])
+      ]
       delete requestParameters.schoolType
       delete requestParameters.echelonPerformance
+      delete requestParameters.school
 
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
@@ -1006,21 +970,14 @@ export default {
     },
 
     getSchool (schoolName, schoolType) {
-      const school = this.originalSchool.find(school => {
-        return school.schoolName === schoolName && school.schoolType === schoolType
+      const school = this.schoolGroup_[schoolType].find(school => {
+        return school.schoolName === schoolName
       })
       if (school) {
         return { level: school.echelon, isConsistentSystem: school.isConsistentSystem }
       }
       return {}
     },
-
-    schoolTypeChange (e) {
-      e.forEach(e => {
-        if (this.queryParam.echelonPerformance[e]) this.queryParam.echelonPerformance[e].splice(0)
-      })
-    },
-
     echelonChange (type) {
       const index = this.queryParam.schoolType.indexOf(type)
       if (this.queryParam.echelonPerformance[type].length > 0 && index >= 0) {
@@ -1149,23 +1106,20 @@ export default {
         }
       }
     },
-    handleOnBlur () {
-      this.schools_ = this.schools.slice(0, 50)
+    handleOnBlur (type) {
+      this.schoolGroup[type] = this.schoolGroup_[type].slice(0, 50)
     },
-    searchValue (value) {
-      const datas = []
-      this.schools.forEach(item => {
-        if (item.label.indexOf(value) > -1) {
-          datas.push(item)
-        }
-      })
-      this.schools_ = datas.slice(0, 50)
-    },
-    handleOnSearch (value) {
+    handleOnSearch (value, type) {
       const that = this
       if (!this.timer) {
         this.timer = setTimeout(function () {
-          that.searchValue(value)
+          const datas = []
+          that.schoolGroup_[type].forEach(item => {
+            if (item.schoolName.indexOf(value) > -1) {
+              datas.push(item)
+            }
+          })
+          that.schoolGroup[type] = datas.slice(0, 50)
           that.timer = null
         }, 0)
       }
