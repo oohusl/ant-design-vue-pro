@@ -44,7 +44,7 @@ import { CONTENT_WIDTH_TYPE, SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mu
 
 import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
-// import GlobalFooter from '@/components/GlobalFooter'
+import GlobalFooter from '@/components/GlobalFooter'
 import Ads from '@/components/Other/CarbonAds'
 import { asyncRouterMap } from '@/config/router.config.js'
 
@@ -53,7 +53,7 @@ export default {
   components: {
     SettingDrawer,
     RightContent,
-    // GlobalFooter,
+    GlobalFooter,
     Ads
   },
   data () {
