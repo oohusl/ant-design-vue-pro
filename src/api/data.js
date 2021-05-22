@@ -1188,23 +1188,23 @@ export const propertyOptions = [
 export const communityLevOptions = [
   {
     label: 'A+',
-    value: 'A+'
+    value: '9'
   },
   {
     label: 'A',
-    value: 'A'
+    value: '8'
   },
   {
     label: 'B',
-    value: 'B'
+    value: '7'
   },
   {
     label: 'C',
-    value: 'C'
+    value: '6'
   },
   {
     label: 'D',
-    value: 'D'
+    value: '5'
   }
 ]
 export const districtPlanningOptions = [

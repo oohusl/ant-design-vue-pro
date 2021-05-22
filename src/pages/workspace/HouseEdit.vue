@@ -22,7 +22,7 @@
                 }}元/m²</span
               >
               <span style="font-size: 16px; margin-left: 12px">
-                {{ houseSelect.communityLev }}
+                {{ getLabel(houseSelect.communityLev, communityLevOptions) }}
               </span>
               <span style="font-size: 16px; margin-left: 12px">
                 {{ getLabel(houseSelect.popularComLev, popularComLevOptions) }}
