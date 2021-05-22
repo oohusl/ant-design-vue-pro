@@ -9,9 +9,13 @@
             <div @click="showImage(p.url)" class="viewer-button"></div>
           </div>
         </a-carousel>
-        <img src="~@/assets/first.png" v-if="!albumList || albumList.length === 0" />
+        <img
+          src="~@/assets/first.png"
+          style="width: 550px; margin-top:20px"
+          v-if="!albumList || albumList.length === 0"
+        />
       </a-layout-header>
-      <a-layout-content :style="{ padding: '8px 0', background: '#ffffff' }">
+      <a-layout-content v-if="albumList && albumList.length > 0" :style="{ padding: '8px 0', background: '#ffffff' }">
         <div class="house-album-view" v-if="albumList.length">
           <div class="album-view-left" @click="flip(-1)"></div>
           <div class="album-view-content">
