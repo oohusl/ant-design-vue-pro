@@ -129,6 +129,7 @@ export default {
         index = len - 1
       }
       this.activeIndex = index
+      this.activeUrl = this.albumList[this.activeIndex].url
       this.refreshCarousel()
     },
     showImage (url) {
