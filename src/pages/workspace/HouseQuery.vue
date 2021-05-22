@@ -217,7 +217,7 @@
                   :key="p"
                   :color="colors[0]"
                   :closable="true"
-                  @close="handleTagClose(p, queryParam.school[schoolType])"
+                  @close="handleTagClose(p, queryParam.school[st])"
                 >{{ p }}</a-tag
                 >
               </div>
@@ -885,16 +885,16 @@ export default {
       delete requestParameters.constructionAgeMin
       delete requestParameters.constructionAgeMax
 
-      // requestParameters.schoolEchelon = [
-      //   requestParameters.echelonPerformance['幼儿园'] || [],
-      //   requestParameters.echelonPerformance['小学'] || [],
-      //   requestParameters.echelonPerformance['中学'] || []
-      // ]
-      // requestParameters.schoolName = [
-      //   requestParameters.school['幼儿园'] || [],
-      //   requestParameters.school['小学'] || [],
-      //   requestParameters.school['中学'] || []
-      // ]
+      requestParameters.schoolEchelon = [
+        requestParameters.echelonPerformance['幼儿园'] || [],
+        requestParameters.echelonPerformance['小学'] || [],
+        requestParameters.echelonPerformance['中学'] || []
+      ]
+      requestParameters.schoolName = [
+        requestParameters.school['幼儿园'] || [],
+        requestParameters.school['小学'] || [],
+        requestParameters.school['中学'] || []
+      ]
       delete requestParameters.schoolType
       delete requestParameters.echelonPerformance
       delete requestParameters.school
