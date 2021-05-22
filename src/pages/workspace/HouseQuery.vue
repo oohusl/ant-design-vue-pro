@@ -519,11 +519,22 @@
                 >套 符合条件房源
               </div>
               <a-button-group>
-                <a-button> 排序 </a-button>
-                <a-button @click="sortChange('averageLlistedPrice')">
-                  房屋单价
-                  <a-icon :type="sortType == 'asc' ? 'down' : 'up'" />
-                </a-button>
+                <a-button @click="sortChange('communityLev')">
+                    综合排序
+                    <a-icon v-if="!sort.startsWith('communityLev')" />
+                    <a-icon v-if="sort.startsWith('communityLev')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                  </a-button>
+                  <a-button @click="sortChange('averageLlistedPrice')">
+                    单价
+                    <a-icon v-if="!sort.startsWith('averageLlistedPrice')" />
+                    <a-icon v-if="sort.startsWith('averageLlistedPrice')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                  </a-button>
+                  <a-button @click="sortChange('volume2019')">
+                    成交量
+                    <a-icon v-if="!sort.startsWith('volume2019')" />
+                    <a-icon v-if="sort.startsWith('volume2019')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                  </a-button>
+                </a-button-group>
               </a-button-group>
             </a-layout-header>
             <a-layout-content>
@@ -733,7 +744,7 @@ export default {
       colors: ['pink', 'orange', 'red', 'green', 'cyan', 'blue', 'purple'],
       results: [],
       house: {},
-      sort: 'averageLlistedPrice,asc',
+      sort: 'communityLev,asc',
       sortType: 'asc',
       size: 15,
       stationOptions: [],
