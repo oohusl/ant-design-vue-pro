@@ -65,20 +65,7 @@
 import { photoQuery } from '@/api/manage'
 export default {
   name: 'ImgViewer',
-  props: {
-    houseId: {
-      type: Number,
-      default: () => {
-        return 0
-      }
-    },
-    refresh: {
-      type: Number,
-      default: () => {
-        return 0
-      }
-    }
-  },
+  props: ['houseId', 'refresh'],
   data () {
     return {
       show: true,

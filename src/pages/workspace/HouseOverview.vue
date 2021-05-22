@@ -105,7 +105,12 @@
             <a-tab-pane key="1" tab="户型分析">
               <div class="type-select">
                 <template v-for="h in houseTypeOptions">
-                  <div v-if="h.count > 0" :class="h.room == roomNumber ? 'active' : null" :key="h" class="type-list">
+                  <div
+                    v-if="h.count > 0"
+                    :class="h.room == roomNumber ? 'active' : null"
+                    :key="h.room"
+                    class="type-list"
+                  >
                     <span @click="houseTypeClick(h.room)">{{ h.label + '(' + h.count + ')' }}</span>
                   </div>
                 </template>
@@ -115,7 +120,7 @@
               </div>
               <template v-for="house of houseTypeList">
                 <a-layout
-                  v-if="roomNumber === -1 || (roomNumber > 4 && house.room > 4) || roomNumber == house.room"
+                  v-if="roomNumber === 0 || (roomNumber > 4 && house.room > 4) || roomNumber == house.room"
                   :key="house.unitTypeName"
                   :style="{
                     background: '#ffffff',
@@ -421,7 +426,7 @@ export default {
       activeIndex: 0,
       diaryTypeOptions: [],
       houseTypeOptions: [],
-      roomNumber: -1,
+      roomNumber: 0,
       roomResort: 1,
       diarySelectedAll: true,
       diaryList: [],
@@ -469,7 +474,7 @@ export default {
     },
     queryAllAnalysis () {
       const bedroomsOption = [
-        { label: '全部户型', room: -1, count: 0 },
+        { label: '全部户型', room: 0, count: 0 },
         { label: '一居室', room: 1, count: 0 },
         { label: '二居室', room: 2, count: 0 },
         { label: '三居室', room: 3, count: 0 },
@@ -487,6 +492,9 @@ export default {
           ++bedroomsOption[index].count
         })
         this.houseTypeOptions = bedroomsOption
+        if (bedroomsOption[this.roomNumber].count === 0) {
+          this.roomNumber = 0
+        }
       })
     },
     houseTypeClick (room) {
