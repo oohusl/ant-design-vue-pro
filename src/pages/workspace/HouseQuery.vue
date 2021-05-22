@@ -17,7 +17,7 @@
             v-model="queryParam.communityName"
           >
             <a-input>
-              <a-button slot="suffix" style="margin-right: -12px" class="search-btn" type="primary" @click="search">
+              <a-button slot="suffix" style="margin-right: -12px" class="search-btn" type="primary" @click="doSearch">
                 <a-icon type="search" />
               </a-button>
             </a-input>
