@@ -42,7 +42,12 @@ import { EventBus } from '@/event-bus'
 export default {
   name: 'HouseImageEdit',
   props: {
-    houseId: Number
+    houseId: {
+      type: Number,
+      default: () => {
+        return 0
+      }
+    }
   },
   components: {},
   data () {
@@ -92,7 +97,9 @@ export default {
     save () {
       const files = []
       Object.keys(this.types).forEach(e => {
-        files[1 * e] = (this.fileList[e] || []).map(f => { return f.url || f.response })
+        files[1 * e] = (this.fileList[e] || []).map(f => {
+          return f.url || f.response
+        })
       })
       return housePhotoUpload({ id: this.houseId, files: files })
     },

@@ -513,7 +513,7 @@
         <!-- 列表 -->
         <a-card :bordered="false">
           <a-layout>
-            <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '50px', display: 'flex' }">
+            <a-layout-header :style="{ background: '#ffffff', padding: '0 15px', height: '50px', display: 'flex' }">
               <div class="result">
                 共找到<span>{{ results['x-total-count'] ? results['x-total-count'] : 0 }}</span
                 >套 符合条件房源
@@ -640,6 +640,15 @@
             </a-layout-content>
           </a-layout>
         </a-card>
+        <div style="padding: 0 15px">
+          <a-pagination
+            v-model="queryParam.page"
+            :total="results['x-total-count']"
+            :defaultPageSize="size"
+            @change="pageChanged"
+            show-quick-jumper
+          />
+        </div>
       </a-layout-content>
     </a-layout>
     <a-drawer :visible="detailFlag > 0" width="80vw" @close="closeDetail">
@@ -678,7 +687,7 @@ import {
   toiletOptions,
   calScope
 } from '@/api/data'
-import { AutoComplete, BackTop, Affix } from 'ant-design-vue'
+import { AutoComplete, BackTop, Affix, Pagination } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
 
 export default {
@@ -689,7 +698,8 @@ export default {
     AutoComplete,
     HouseEdit,
     BackTop,
-    Affix
+    Affix,
+    'a-pagination': Pagination
   },
   data () {
     return {
@@ -697,6 +707,7 @@ export default {
       advanced: false,
       // 查询参数
       queryParam: {
+        page: 1,
         area: [],
         metroLine: [],
         averageLlistedPrice: [],
@@ -724,7 +735,7 @@ export default {
       house: {},
       sort: 'averageLlistedPrice,asc',
       sortType: 'asc',
-      size: 20,
+      size: 15,
       stationOptions: [],
       areaPlate,
       plateOptions: [],
@@ -771,11 +782,7 @@ export default {
     })
   },
   mounted () {
-    window.addEventListener('scroll', this.windowScroll)
     window.ExcellentExport = ExcellentExport
-  },
-  beforeDestroy () {
-    window.removeEventListener('scroll', this.windowScroll)
   },
   methods: {
     closeDetail () {
@@ -785,6 +792,7 @@ export default {
 
     resetSearchForm () {
       this.queryParam = {
+        page: 1,
         date: moment(new Date()),
         area: [],
         metroLine: [],
@@ -806,16 +814,22 @@ export default {
     },
 
     doSearch () {
+      this.queryParam.page = 1
       this.searchData()
     },
 
     searchData (size) {
-      this.makeSearchRequest(size).then(e => {
+      return this.makeSearchRequest(size).then(e => {
         this.results = e
+        this.dataExportQuery()
       })
-      this.dataExportQuery()
     },
-
+    pageChanged (event) {
+      this.queryParam.page = event
+      this.searchData(this.size).then(res => {
+        document.querySelector('html').scrollTop = 900
+      })
+    },
     makeSearchRequest (size) {
       const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
@@ -861,19 +875,21 @@ export default {
       delete requestParameters.constructionAgeMin
       delete requestParameters.constructionAgeMax
 
-      requestParameters.schoolEchelon = [
-        requestParameters.echelonPerformance['幼儿园'] || [],
-        requestParameters.echelonPerformance['小学'] || [],
-        requestParameters.echelonPerformance['中学'] || []
-      ]
-      requestParameters.schoolName = [
-        requestParameters.school['幼儿园'] || [],
-        requestParameters.school['小学'] || [],
-        requestParameters.school['中学'] || []
-      ]
+      // requestParameters.schoolEchelon = [
+      //   requestParameters.echelonPerformance['幼儿园'] || [],
+      //   requestParameters.echelonPerformance['小学'] || [],
+      //   requestParameters.echelonPerformance['中学'] || []
+      // ]
+      // requestParameters.schoolName = [
+      //   requestParameters.school['幼儿园'] || [],
+      //   requestParameters.school['小学'] || [],
+      //   requestParameters.school['中学'] || []
+      // ]
       delete requestParameters.schoolType
       delete requestParameters.echelonPerformance
       delete requestParameters.school
+
+      requestParameters.page = requestParameters.page - 1
 
       if (this.queryParam?.isLift?.length !== 1) {
         delete requestParameters.isLift
