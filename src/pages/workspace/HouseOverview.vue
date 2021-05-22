@@ -4,7 +4,14 @@
       <a-layout-header :style="{ background: '#ffffff', padding: '0', height: '100%' }">
         <a-layout :style="{ background: '#ffffff', padding: '0', height: '100%' }">
           <a-layout-header
-            :style="{ padding: '0', height: '80px', width: '100%', color: '#000000', 'font-size': '24px' }"
+            :style="{
+              padding: '0',
+              height: '60px',
+              'margin-top': '10px',
+              width: '100%',
+              color: '#000000',
+              'font-size': '24px'
+            }"
           >
             {{ houseSelect.communityName }}
           </a-layout-header>
@@ -669,7 +676,7 @@ export default {
 <style scoped>
 .house-type {
   overflow: hidden;
-  padding: 24px;
+  padding: 24px 0;
 }
 .house-type >>> .ant-tabs-nav-wrap {
   background: #f5f5f5;
