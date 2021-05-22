@@ -45,7 +45,16 @@
                     {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
                   </a-descriptions-item>
                   <a-descriptions-item label="楼盘户型" :span="4">
-                    {{ rooms.join(' ') }}
+                    {{
+                      houseTypeOptions
+                        .filter(e => {
+                          return e.room > 0 && e.count > 0
+                        })
+                        .map(e => {
+                          return e.label
+                        })
+                        .join(',')
+                    }}
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
@@ -95,112 +104,114 @@
           <a-tabs default-active-key="1">
             <a-tab-pane key="1" tab="户型分析">
               <div class="type-select">
-                <div
-                  v-for="(h, i) of houseTypeOptions"
-                  :class="h.active ? 'active' : null"
-                  :key="i + h.label"
-                  class="type-list"
-                >
-                  <span @click="triggerhouseType(h)">{{ h.label + '(' + h.num + ')' }}</span>
-                </div>
+                <template v-for="h in houseTypeOptions">
+                  <div v-if="h.count > 0" :class="h.room == roomNumber ? 'active' : null" :key="h" class="type-list">
+                    <span @click="houseTypeClick(h.room)">{{ h.label + '(' + h.count + ')' }}</span>
+                  </div>
+                </template>
                 <div style="float:right">
                   <a-button icon="plus" size="small" style="margin-left: 10px" @click="showHouseType"></a-button>
                 </div>
               </div>
-              <a-layout
-                :style="{
-                  background: '#ffffff',
-                  height: '200px',
-                  padding: '10px 0',
-                  'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)'
-                }"
-                class="house-type-item"
-                v-for="house of houseTypeList"
-                :key="house.unitTypeName"
-              >
-                <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
-                  <img v-if="house.photoUrl" :src="house.photoUrl" @click="previewImage = house.photoUrl" />
-                  <img v-else src="~@/assets/second.png" />
-                </a-layout-sider>
-                <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
-                  <a-layout
-                    :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '380px' }"
-                  >
-                    <a-layout-header
-                      :style="{
-                        background: '#ffffff',
-                        padding: 0,
-                        color: 'rgba(0, 0, 0, 0.85)',
-                        'font-size': '20px',
-                        height: '24px',
-                        'line-height': '36px',
-                        cursor: 'pointer',
-                        marginBottom: '24px'
-                      }"
+              <template v-for="house of houseTypeList">
+                <a-layout
+                  v-if="roomNumber === -1 || (roomNumber > 4 && house.room > 4) || roomNumber == house.room"
+                  :key="house.unitTypeName"
+                  :style="{
+                    background: '#ffffff',
+                    height: '200px',
+                    padding: '10px 0',
+                    'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)'
+                  }"
+                  class="house-type-item"
+                >
+                  <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
+                    <img v-if="house.photoUrl" :src="house.photoUrl" @click="previewImage = house.photoUrl" />
+                    <img v-else src="~@/assets/second.png" />
+                  </a-layout-sider>
+                  <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
+                    <a-layout
+                      :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'left', width: '380px' }"
                     >
-                      {{
-                        `${house.room}室${house.hall ? house.hall + '厅' : ''}${
-                          house.kitchen ? house.kitchen + '厨' : ''
-                        }${house.toilet ? house.toilet + '卫  ' : '  '}建面${house.acreage}m²`
-                      }}
-                      <a-tag color="green" size="sm">在售</a-tag>
-                      <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
-                      <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
-                    </a-layout-header>
-                    <a-layout-content
-                      :style="{
-                        background: '#ffffff',
-                        padding: 0,
-                        display: 'flex',
-                        'justify-content': 'center',
-                        'algin-item': 'flex-end'
-                      }"
-                    >
-                      <a-descriptions title="" :column="4">
-                        <a-descriptions-item label="朝向" :span="2">
-                          {{ house.towards }}
-                        </a-descriptions-item>
-                        <a-descriptions-item label="类型" :span="2">
-                          {{ house.typesOfHouse }}
-                        </a-descriptions-item>
-                        <a-descriptions-item label="层高" :span="2">
-                          {{ house.floorHeight }}
-                        </a-descriptions-item>
-                        <a-descriptions-item label="户型存量" :span="2">
-                          {{ house.unitInventory }}
-                        </a-descriptions-item>
-                        <a-descriptions-item label="梯户比" :span="2">
-                          {{ house.ladderRatio }}
-                        </a-descriptions-item>
-                        <a-descriptions-item label="户型分析" :span="2">
-                          {{ house.analysis }}
-                        </a-descriptions-item>
-                      </a-descriptions>
-                    </a-layout-content>
-                  </a-layout>
-                </a-layout-content>
-                <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
-                  <a-layout :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'center' }">
-                    <a-layout-header
-                      :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
-                      width="200"
-                    >
-                      总价约<span style="font-size: 24px; font-weight: bold">{{ house.referenceTotalPrice }}万元</span>
-                    </a-layout-header>
-                    <a-layout-content
-                      :style="{
-                        background: '#ffffff',
-                        padding: 0,
-                        display: 'flex',
-                        'justify-content': 'center',
-                        'align-items': 'flex-end'
-                      }"
-                    >
-                      <!-- <a-button>了解户型报价</a-button> -->
-                    </a-layout-content>
-                  </a-layout>
-                </a-layout-sider>
-              </a-layout>
+                      <a-layout-header
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          color: 'rgba(0, 0, 0, 0.85)',
+                          'font-size': '20px',
+                          height: '24px',
+                          'line-height': '36px',
+                          cursor: 'pointer',
+                          marginBottom: '24px'
+                        }"
+                      >
+                        {{
+                          `${house.room}室${house.hall ? house.hall + '厅' : ''}${
+                            house.kitchen ? house.kitchen + '厨' : ''
+                          }${house.toilet ? house.toilet + '卫  ' : '  '}建面${house.acreage}m²`
+                        }}
+                        <a-tag color="green" size="sm">在售</a-tag>
+                        <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
+                        <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
+                      </a-layout-header>
+                      <a-layout-content
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          display: 'flex',
+                          'justify-content': 'center',
+                          'algin-item': 'flex-end'
+                        }"
+                      >
+                        <a-descriptions title="" :column="4">
+                          <a-descriptions-item label="朝向" :span="2">
+                            {{ house.towards }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="类型" :span="2">
+                            {{ house.typesOfHouse }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="层高" :span="2">
+                            {{ house.floorHeight }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="户型存量" :span="2">
+                            {{ house.unitInventory }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="梯户比" :span="2">
+                            {{ house.ladderRatio }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="户型分析" :span="2">
+                            {{ house.analysis }}
+                          </a-descriptions-item>
+                        </a-descriptions>
+                      </a-layout-content>
+                    </a-layout>
+                  </a-layout-content>
+                  <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
+                    <a-layout :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'center' }">
+                      <a-layout-header
+                        :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
+                        width="200"
+                      >
+                        总价约<span
+                          style="font-size: 24px; font-weight: bold"
+                        >{{ house.referenceTotalPrice }}万元</span
+                        >
+                      </a-layout-header>
+                      <a-layout-content
+                        :style="{
+                          background: '#ffffff',
+                          padding: 0,
+                          display: 'flex',
+                          'justify-content': 'center',
+                          'align-items': 'flex-end'
+                        }"
+                      >
+                        <!-- <a-button>了解户型报价</a-button> -->
+                      </a-layout-content>
+                    </a-layout>
+                  </a-layout-sider>
+                </a-layout>
+              </template>
             </a-tab-pane>
             <a-tab-pane key="2" tab="楼盘点评">
               <div class="house-diary">
@@ -358,7 +369,6 @@ import {
 } from '@/api/data'
 import {
   queryAnalysis,
-  getSeveralBedroomsInfo,
   queryHouseDiary,
   queryHouseQuestion,
   getHouseDetail,
@@ -411,6 +421,8 @@ export default {
       activeIndex: 0,
       diaryTypeOptions: [],
       houseTypeOptions: [],
+      roomNumber: -1,
+      roomResort: 1,
       diarySelectedAll: true,
       diaryList: [],
       qaList: [],
@@ -419,7 +431,6 @@ export default {
       diaryEdit: null,
       questionEdit: null,
       previewImage: null,
-      rooms: [],
       imgViewerReflesh: 0
     }
   },
@@ -457,47 +468,34 @@ export default {
       })
     },
     queryAllAnalysis () {
-      const bedroomsOption = {
-        '0': '零居室',
-        '1': '一居室',
-        '2': '二居室',
-        '3': '三居室',
-        '4': '四居室',
-        '5': '四居以上',
-        '6': '四居以上',
-        '7': '四居以上'
-      }
-      getSeveralBedroomsInfo(this.houseSelect.id).then(bedroomsInfo => {
-        if (bedroomsInfo) {
-          this.houseTypeOptions = bedroomsInfo
-          let num = 0
-          this.houseTypeList = []
-          this.rooms = []
-          this.houseTypeOptions.forEach(async b => {
-            b.active = false
-            b.label = bedroomsOption[b.severalBedrooms]
-            this.rooms.push(b.label)
-            num = num + b.num
-            b.houseTypeList = await queryAnalysis(this.houseSelect.id, b.severalBedrooms)
-            if (b.houseTypeList?.length) {
-              this.houseTypeList.push(...b.houseTypeList)
-            }
-          })
-          this.houseTypeOptions.unshift({
-            label: '全部户型',
-            active: true,
-            num: num,
-            severalBedrooms: '0'
-          })
-        }
+      const bedroomsOption = [
+        { label: '全部户型', room: -1, count: 0 },
+        { label: '一居室', room: 1, count: 0 },
+        { label: '二居室', room: 2, count: 0 },
+        { label: '三居室', room: 3, count: 0 },
+        { label: '四居室', room: 4, count: 0 },
+        { label: '四居室以上', room: 5, count: 0 }
+      ]
+      queryAnalysis(this.houseSelect.id).then(result => {
+        this.houseTypeList = result
+        result.forEach(r => {
+          ++bedroomsOption[0].count
+          const index = r.room > 4 ? 5 : r.room
+          if (index <= 0) {
+            return
+          }
+          ++bedroomsOption[index].count
+        })
+        this.houseTypeOptions = bedroomsOption
       })
     },
-    queryAnalysisByBedrooms (bedrooms) {
-      queryAnalysis(this.houseSelect.id, bedrooms).then(houseTypeList => {
-        // if (houseTypeList?.length) {
-        this.houseTypeList = houseTypeList
-        // }
+    houseTypeClick (room) {
+      // 同一户型点两次切换排序
+      this.roomResort = this.roomResort * (this.roomNumber === room ? -1 : 1)
+      this.houseTypeList.sort((a, b) => {
+        return this.roomResort * (b.acreage - a.acreage)
       })
+      this.roomNumber = room
     },
     queryAllHouseDiary () {
       this.diaryTypeOptions = []
@@ -613,29 +611,7 @@ export default {
       })
     },
     triggerhouseType (house) {
-      if (this.houseTypeOptions[0].active) {
-        this.houseTypeOptions[0].active = false
-        this.houseTypeOptions.forEach(h => {
-          if (h.label === house.label) {
-            h.active = !h.active
-          }
-        })
-      } else if (house.label === this.houseTypeOptions[0].label) {
-        this.houseTypeOptions.forEach(h => {
-          h.active = false
-        })
-        this.houseTypeOptions[0].active = true
-        this.queryAllAnalysis()
-        return
-      } else {
-        this.houseTypeOptions.forEach(h => {
-          h.active = false
-          if (h.label === house.label) {
-            h.active = !h.active
-          }
-        })
-      }
-      this.queryAnalysisByBedrooms(house.severalBedrooms)
+      // this.queryAnalysisByBedrooms(house.severalBedrooms)
     },
     houseTypeOK () {
       this.houseTypeVisible = false
@@ -742,7 +718,7 @@ img {
   height: 30px;
 }
 .type-select .type-list {
-  width: 90px;
+  width: 100px;
   float: left;
   cursor: pointer;
   text-align: center;

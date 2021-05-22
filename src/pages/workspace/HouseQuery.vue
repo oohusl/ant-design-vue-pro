@@ -520,21 +520,20 @@
               </div>
               <a-button-group>
                 <a-button @click="sortChange('communityLev')">
-                    综合排序
-                    <a-icon v-if="!sort.startsWith('communityLev')" />
-                    <a-icon v-if="sort.startsWith('communityLev')" :type="sortType == 'asc' ? 'up' : 'down'" />
-                  </a-button>
-                  <a-button @click="sortChange('averageLlistedPrice')">
-                    单价
-                    <a-icon v-if="!sort.startsWith('averageLlistedPrice')" />
-                    <a-icon v-if="sort.startsWith('averageLlistedPrice')" :type="sortType == 'asc' ? 'up' : 'down'" />
-                  </a-button>
-                  <a-button @click="sortChange('volume2019')">
-                    成交量
-                    <a-icon v-if="!sort.startsWith('volume2019')" />
-                    <a-icon v-if="sort.startsWith('volume2019')" :type="sortType == 'asc' ? 'up' : 'down'" />
-                  </a-button>
-                </a-button-group>
+                  综合排序
+                  <a-icon v-if="!sort.startsWith('communityLev')" />
+                  <a-icon v-if="sort.startsWith('communityLev')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                </a-button>
+                <a-button @click="sortChange('averageLlistedPrice')">
+                  单价
+                  <a-icon v-if="!sort.startsWith('averageLlistedPrice')" />
+                  <a-icon v-if="sort.startsWith('averageLlistedPrice')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                </a-button>
+                <a-button @click="sortChange('volume2019')">
+                  成交量
+                  <a-icon v-if="!sort.startsWith('volume2019')" />
+                  <a-icon v-if="sort.startsWith('volume2019')" :type="sortType == 'asc' ? 'up' : 'down'" />
+                </a-button>
               </a-button-group>
             </a-layout-header>
             <a-layout-content>
