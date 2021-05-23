@@ -14,8 +14,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="建筑面积">
-            <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
+          <a-form-item label="参考单价">
+            <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
