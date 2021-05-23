@@ -37,9 +37,12 @@
       contenteditable="true"
       v-focus
       @keyup.esc="imgViewerExit"
-      @keyup.left="imgViewerFlip(-1)"
-      @keyup.right="imgViewerFlip(1)"
+      @keyup.enter="imgViewerExit"
+      @keydown.left.stop="imgViewerFlip(-1)"
+      @keydown.right.stop="imgViewerFlip(1)"
+      readonly
     >
+      <div></div>
       <div class="viewer-fullscreen-exit" role="button" @click="activeUrl = null"></div>
       <div>
         <img
@@ -122,6 +125,7 @@ export default {
       this.activeIndex = index
       this.activeUrl = this.albumList[this.activeIndex].url
       this.refreshCarousel()
+      return false
     },
     showImage (url) {
       this.activeUrl = url
@@ -170,6 +174,7 @@ export default {
   z-index: 1000;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0);
 }
 .viewer-fullscreen-exit {
   background-color: rgba(0, 0, 0, 0.5);
