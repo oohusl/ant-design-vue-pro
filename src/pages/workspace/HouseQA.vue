@@ -1,6 +1,15 @@
 <template>
   <div>
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
+      <a-form-item label="提问人">
+        <a-input v-model="houseQuestion.questioner" type="text"></a-input>
+      </a-form-item>
+      <a-form-item label="提问时间">
+        <a-date-picker
+          v-model="houseQuestion.questionTime"
+          v-decorator="['startAt', { rules: [{ required: true, message: '请选择时间' }] }]"
+        />
+      </a-form-item>
       <a-form-item label="问题">
         <a-input v-model="houseQuestion.diaryQuestion" type="textarea"></a-input>
       </a-form-item>

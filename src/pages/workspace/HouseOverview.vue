@@ -288,18 +288,23 @@
                                 padding: 0,
                                 color: 'rgba(0, 0, 0, 0.85)',
                                 'font-size': '16px',
-                                height: '40px',
+                                height: qa.questioner ? '70px' : '40px',
                                 'line-height': '40px',
                                 cursor: 'pointer',
                                 'font-weight': 700
                               }"
                             >
-                              <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
-                              <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
-                                qa.datetime
-                              }}</span>
-                              <a-button type="link" icon="edit" size="small" @click="editHouseQA(qa)" />
-                              <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
+                              <div>
+                                <span class="q-icon">Q</span> {{ qa.diaryQuestion }}
+                                <span :style="{ 'font-size': '14px', color: '#8C8C8C', 'font-weight': 'normal' }">{{
+                                  qa.datetime
+                                }}</span>
+                                <a-button type="link" icon="edit" size="small" @click="editHouseQA(qa)" />
+                                <a-button type="link" icon="delete" size="small" @click="deleteHouseQuestion(qa)" />
+                              </div>
+                              <div class="questioner" v-if="qa.questioner">
+                                {{ qa.questioner }}<span>时间: {{ moment(qa.questionTime).format('YYYY-MM-DD') }}</span>
+                              </div>
                             </a-layout-header>
                             <a-layout-content>
                               <span class="a-icon">A</span>
@@ -357,6 +362,7 @@ import HouseDiary from './HouseDiary'
 import HouseImageEdit from './HouseImageEdit'
 import HouseQA from './HouseQA'
 import { EventBus } from '@/event-bus'
+import moment from 'moment'
 
 import {
   areaOptions,
@@ -455,6 +461,7 @@ export default {
     this.queryQuestion()
   },
   methods: {
+    moment,
     closeDetail () {
       this.detailFlag = 0
     },
@@ -754,5 +761,15 @@ img {
   text-align: center;
   border-radius: 50%;
   float: left;
+}
+.questioner {
+  font-size: 13px;
+  top: -15px;
+  left: 22px;
+  position: relative;
+  font-weight: 250;
+}
+.questioner > span {
+  padding-left: 20px;
 }
 </style>

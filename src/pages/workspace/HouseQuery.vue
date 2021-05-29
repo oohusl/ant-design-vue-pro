@@ -519,9 +519,8 @@
                 >套 符合条件房源
               </div>
               <a-button-group>
-                <a-button @click="sortChange('communityLev')">
+                <a-button @click="sortChange('communityLev', 'desc')">
                   综合排序
-                  <a-icon v-if="sort.startsWith('communityLev')" :type="sortType == 'asc' ? 'up' : 'down'" />
                 </a-button>
                 <a-button @click="sortChange('averageLlistedPrice')">
                   单价
@@ -1007,12 +1006,16 @@ export default {
       this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
     },
 
-    sortChange (type) {
+    sortChange (type, sort) {
       console.log(type)
-      if (this.sortType === 'asc') {
-        this.sortType = 'desc'
+      if (sort) {
+        this.sortType = sort
       } else {
-        this.sortType = 'asc'
+        if (this.sortType === 'asc') {
+          this.sortType = 'desc'
+        } else {
+          this.sortType = 'asc'
+        }
       }
       if (type) {
         this.sort = type + ',' + this.sortType
