@@ -17,50 +17,37 @@ export const asyncRouterMap = [
     children: [
       // dashboard
       {
-        path: '/home',
-        name: 'home',
-        redirect: '/house/query',
-        component: RouteView,
-        meta: { title: '工作台', keepAlive: true, icon: bxAnaalyse },
-        children: [
-          {
-            path: '/house/query',
-            name: 'HouseQuery',
-            component: () => import('@/pages/workspace/HouseQuery'),
-            meta: { title: '房源查询', keepAlive: true }
-          },
-          {
-            path: '/house/ticket',
-            name: 'TicketManage',
-            component: () => import('@/pages/workspace/TicketManage'),
-            meta: { title: '订单管理', keepAlive: true }
-          },
-          {
-            path: '/house/query/overview',
-            name: 'HouseOverview',
-            hidden: true,
-            component: () => import('@/pages/workspace/HouseOverview'),
-            meta: { title: '房屋概览' }
-          }
-        ]
+        path: '/house/query',
+        name: 'house',
+        component: () => import('@/pages/workspace/HouseQuery'),
+        meta: { title: '房源查询', keepAlive: true, icon: bxAnaalyse }
       },
-      // user-manage
       {
-        path: '/system',
-        name: 'system',
+        path: '/myticket',
+        name: 'myticket',
+        component: () => import('@/pages/workspace/MyTicket'),
+        meta: { title: '我的订单', keepAlive: true, icon: 'align-center' }
+      },
+      {
+        path: '/ticket-manage',
+        name: 'TicketManage',
         authority: ['ROLE_ADMIN'],
-        redirect: '/system/user-manage',
-        component: RouteView,
-        meta: { title: '系统管理', keepAlive: true, icon: 'form' },
-        children: [
-          {
-            path: '/system/user-manage',
-            name: 'UserManage',
-            authority: ['ROLE_ADMIN'],
-            component: () => import('@/pages/user/UserManage'),
-            meta: { title: '用户管理', keepAlive: true }
-          }
-        ]
+        component: () => import('@/pages/workspace/TicketManage'),
+        meta: { title: '订单管理', keepAlive: true, icon: 'form' }
+      },
+      {
+        path: '/user-manage',
+        name: 'UserManage',
+        authority: ['ROLE_ADMIN'],
+        component: () => import('@/pages/user/UserManage'),
+        meta: { title: '用户管理', keepAlive: true, icon: 'table' }
+      },
+      {
+        path: '/house/query/overview',
+        name: 'HouseOverview',
+        hidden: true,
+        component: () => import('@/pages/workspace/HouseOverview'),
+        meta: { title: '房屋概览' }
       },
       // account
       {
@@ -68,6 +55,7 @@ export const asyncRouterMap = [
         component: RouteView,
         redirect: '/account/center',
         name: 'account',
+        hidden: true,
         meta: { title: '个人页', icon: 'user', keepAlive: true },
         children: [
           {

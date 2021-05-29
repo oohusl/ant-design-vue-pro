@@ -6,7 +6,7 @@
     :handleMediaQuery="handleMediaQuery"
     :handleCollapse="handleCollapse"
     :i18nRender="i18nRender"
-    :menus="[]"
+    :menus="menus"
     v-bind="settings"
   >
     <template v-slot:menuHeaderRender>
@@ -18,7 +18,7 @@
           style="cursor: pointer"
         />
         <h1 style="cursor: pointer" @click="$router.push({ path: '/house/query' })">
-          {{ title }} <span style="font-size: 8px; color: blue">v1.4.6</span>
+          {{ title }} <span style="font-size: 8px; color: blue">v1.4.7</span>
         </h1>
       </div>
     </template>
@@ -83,7 +83,8 @@ export default {
       query: {},
 
       // 是否手机模式
-      isMobile: false
+      isMobile: false,
+      isAdmin: false
     }
   },
   computed: {
@@ -111,6 +112,7 @@ export default {
     this.$watch('isMobile', () => {
       this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
     })
+    this.isAdmin = localStorage.getItem('isAdmin') === 'true'
   },
   mounted () {
     const userAgent = navigator.userAgent
@@ -165,19 +167,27 @@ export default {
       }
     },
     filterAsyncRouter (routerMap, roles) {
-      if (roles.indexOf('ROLE_ADMIN') >= 0) {
-        return routerMap
-      }
-      const accessedRouters = routerMap.filter(route => {
-        if (!route.authority || route.authority.filter(x => roles.indexOf(x) >= 0).size >= 0) {
-          if (route.children && route.children.length) {
-            route.children = this.filterAsyncRouter(route.children, roles)
+      if (roles.indexOf('ROLE_ADMIN') <= 0 || !this.isAdmin) {
+        return routerMap.filter(route => {
+          if (!route.authority) {
+            if (route.children && route.children.length) {
+              route.children = this.filterAsyncRouter(route.children, roles)
+            }
+            return true
           }
-          return true
-        }
-        return false
-      })
-      return accessedRouters
+          return false
+        })
+      } else {
+        return routerMap.filter(route => {
+          if (route.authority || route.path === '/') {
+            if (route.children && route.children.length) {
+              route.children = this.filterAsyncRouter(route.children, roles)
+            }
+            return true
+          }
+          return false
+        })
+      }
     }
   }
 }

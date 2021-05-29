@@ -11,8 +11,8 @@
           个人设置
         </a-menu-item>
         <a-menu-item v-if="menu && currentUser.name === 'admin'" key="settings" @click="handleToUserManage">
-          <a-icon type="user" />
-          用户管理
+          <a-icon type="swap" />
+          {{ isAdmin ? '切换用户端' : '切换管理端' }}
         </a-menu-item>
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
@@ -42,6 +42,14 @@ export default {
       default: true
     }
   },
+  data: function () {
+    return {
+      isAdmin: false
+    }
+  },
+  created: function () {
+    this.isAdmin = localStorage.getItem('isAdmin') === 'true'
+  },
   methods: {
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
@@ -50,7 +58,13 @@ export default {
       this.$router.push({ path: '/account/settings' })
     },
     handleToUserManage () {
-      this.$router.push({ path: '/system/user-manage' })
+      if (this.isAdmin) {
+        localStorage.removeItem('isAdmin')
+        location.href = '/'
+      } else {
+        localStorage.setItem('isAdmin', 'true')
+        location.href = '/ticket-manage'
+      }
     },
     handleLogout (e) {
       Modal.confirm({
