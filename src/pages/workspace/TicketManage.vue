@@ -1,77 +1,87 @@
 <template>
-  <a-table :columns="columns" :data-source="data">
-    <a slot="name" slot-scope="text">{{ text }}</a>
-  </a-table>
+  <div>
+    <a-table :columns="columns" :data-source="data">
+      <span slot="date" slot-scope="text">
+        {{ text | momentTime }}
+      </span>
+      <span slot="action" slot-scope="record">
+        <a-button type="link" @click="viewTicketOwner(record)">分配</a-button>
+        <a-button type="link" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
+      </span>
+    </a-table>
+    <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
+      <ticket-history :ticket="ticketSelected"></ticket-history>
+    </a-modal>
+    <a-modal title="订单分配" :visible="ownerVisible" :footer="null" @cancel="ownerVisible = false" width="800px">
+      <ticket-owner :ticket="ticketSelected"></ticket-owner>
+    </a-modal>
+  </div>
 </template>
 <script>
+import { queryTicketList } from '@/api/manage'
+import TicketHistory from './TicketHistory.vue'
+import TicketOwner from './TicketOwner.vue'
+
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    scopedSlots: { customRender: 'name' }
+    title: 'ID',
+    dataIndex: 'id',
+    key: 'id'
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-    width: 80
+    title: '客户电话',
+    dataIndex: 'clientPhone',
+    key: 'clientPhone'
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address 1',
-    ellipsis: true
+    title: '客户姓名',
+    dataIndex: 'clientName',
+    key: 'clientName'
   },
   {
-    title: 'Long Column Long Column Long Column',
-    dataIndex: 'address',
-    key: 'address 2',
-    ellipsis: true
+    title: '提交时间',
+    dataIndex: 'createdDate',
+    key: 'createdDate',
+    scopedSlots: { customRender: 'date' }
   },
   {
-    title: 'Long Column Long Column',
-    dataIndex: 'address',
-    key: 'address 3',
-    ellipsis: true
-  },
-  {
-    title: 'Long Column',
-    dataIndex: 'address',
-    key: 'address 4',
-    ellipsis: true
+    title: '操作',
+    key: 'action',
+    align: 'center',
+    scopedSlots: { customRender: 'action' }
   }
 ]
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-    tags: ['nice', 'developer']
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 2 Lake Park, London No. 2 Lake Park',
-    tags: ['loser']
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park, Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher']
-  }
-]
+const data = []
 
 export default {
   data () {
     return {
       data,
-      columns
+      columns,
+      ticketSelected: {},
+      historyVisible: false,
+      ownerVisible: false
+    }
+  },
+  components: {
+    TicketHistory,
+    TicketOwner
+  },
+  created () {
+    console.log(queryTicketList)
+    queryTicketList().then(r => {
+      this.data = r
+    })
+  },
+  methods: {
+    viewTicketHistory (record) {
+      this.historyVisible = true
+      this.ticketSelected = record
+    },
+    viewTicketOwner (record) {
+      this.ownerVisible = true
+      this.ticketSelected = record
     }
   }
 }

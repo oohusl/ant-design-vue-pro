@@ -19,7 +19,12 @@ const api = {
   queryHouseDiary: '/house-diary/queryHouseDiary',
   queryHouseQuestion: '/house-diary/queryDiaryQuestionInfo',
   createHouseQuestion: '/house-diary/diaryQuestionInfo',
-  housePhotoUpload: '/community-infos/fileUpload'
+  housePhotoUpload: '/community-infos/fileUpload',
+  ticket: '/ticket-infos/query',
+  ticketHistorys: '/ticket-historys',
+  ticketHistory: '/ticket-history',
+  ticketOwners: '/ticket-owners',
+  ticketOwner: '/ticket-owner'
 }
 
 export default api
@@ -257,5 +262,51 @@ export function housePhotoUpload (param) {
     url: api.housePhotoUpload,
     method: 'post',
     data: param
+  })
+}
+
+export function queryTicketList () {
+  return request({
+    url: api.ticket,
+    method: 'post',
+    data: { page: 0, size: 10 }
+  })
+}
+
+export function queryTicketHistory (ticketId) {
+  return request({
+    url: `${api.ticketHistorys}/${ticketId}`,
+    method: 'get'
+  })
+}
+
+export function createTicketHistory (ticketHistory) {
+  return request({
+    url: api.ticketHistory,
+    method: 'post',
+    data: ticketHistory
+  })
+}
+
+export function removeTiketOwner (id) {
+  return request({
+    url: `${api.ticketOwner}/${id}`,
+    method: 'delete',
+    data: { page: 0, size: 10 }
+  })
+}
+
+export function addTiketOwner (data) {
+  return request({
+    url: `${api.ticketOwner}`,
+    method: 'post',
+    data: data
+  })
+}
+
+export function queryTicketOwner (ticketId) {
+  return request({
+    url: `${api.ticketOwners}/${ticketId}`,
+    method: 'get'
   })
 }

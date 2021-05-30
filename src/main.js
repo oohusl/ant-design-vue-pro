@@ -11,6 +11,7 @@ import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
 import { Carousel } from 'ant-design-vue'
+import moment from 'moment'
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 
@@ -35,6 +36,12 @@ Vue.directive('focus', {
     // 聚焦元素
     el.focus()
   }
+})
+Vue.filter('moment', function (value, format) {
+  return moment(value).format(format || 'YYYY-MM-DD')
+})
+Vue.filter('momentTime', function (value, format) {
+  return moment(value).format(format || 'YYYY-MM-DD H:mm')
 })
 window.umi_plugin_ant_themeVar = themePluginConfig.theme
 
