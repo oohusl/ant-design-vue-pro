@@ -1,27 +1,22 @@
 <template>
   <div>
     <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
-      <a-row :gutter="24">
-        <a-col :span="20">
-          <a-textarea
-            v-model="ticketOwner.owner"
-            placeholder="请输入跟单信息"
-            :auto-size="{ minRows: 3, maxRows: 5 }"
-          />
-        </a-col>
-        <a-col :span="4">
-          <a-button type="primary" @click="onSubmit">发布</a-button>
-        </a-col>
-      </a-row>
+      <a-form-item label="业务员">
+        <a-select v-model="ticketOwner.owner">
+          <a-select-option v-for="u in users" :value="u.login" :key="u.login" :disabled="hasChoosed(u.login)">
+            {{ u.login }}
+          </a-select-option>
+        </a-select>
+        <a-button type="primary" @click="onSubmit">添加</a-button>
+      </a-form-item>
+      <a-form-item label="已分配">
+        <a-tag v-for="o in owners" :key="o.id" closable @close="onDelete(o.id)">{{ o.owner }}</a-tag>
+      </a-form-item>
     </a-form>
-    <a-divider>历史跟单信息</a-divider>
-    <div class="list">
-      <a-tag v-for="o in owners" :key="o.id" closable @close="onDelete(o.id)">{{ o.owner }}</a-tag>
-    </div>
   </div>
 </template>
 <script>
-import { removeTiketOwner, addTiketOwner, queryTicketOwner } from '@/api/manage'
+import { removeTiketOwner, addTiketOwner, queryTicketOwner, queryNormalUsers } from '@/api/manage'
 
 export default {
   props: {
@@ -34,6 +29,7 @@ export default {
   },
   data () {
     return {
+      users: [],
       owners: [],
       ticketOwner: {}
     }
@@ -41,6 +37,7 @@ export default {
   created () {
     this.ticketOwner.ticketId = this.ticket.id
     this.queryTicketOwner()
+    this.queryUsers()
   },
   watch: {
     ticket: function (newVal, oldVal) {
@@ -49,6 +46,11 @@ export default {
     }
   },
   methods: {
+    queryUsers: function () {
+      queryNormalUsers().then(e => {
+        this.users = e
+      })
+    },
     queryTicketOwner: function () {
       queryTicketOwner(this.ticket.id).then(e => {
         this.owners = e
@@ -57,22 +59,27 @@ export default {
     onSubmit: function () {
       addTiketOwner(this.ticketOwner).then(e => {
         this.$notification.info({
-          title: '通知',
+          message: '通知',
           description: '发布成功'
         })
-        this.ticketOwner.content = ''
+        this.ticketOwner.owner = ''
         this.queryTicketOwner()
       })
-    }
-  },
-  onDelete: function (id) {
-    removeTiketOwner(id).then(e => {
-      this.$notification.info({
-        title: '通知',
-        description: '删除成功'
+    },
+    onDelete: function (id) {
+      removeTiketOwner(id).then(e => {
+        this.$notification.info({
+          message: '通知',
+          description: '删除成功'
+        })
+        this.queryTicketOwner()
       })
-      this.queryTicketOwner()
-    })
+    },
+    hasChoosed: function (login) {
+      return this.owners.some(e => {
+        return e.owner === login
+      })
+    }
   }
 }
 </script>

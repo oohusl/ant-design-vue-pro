@@ -2,6 +2,7 @@ import request from '@/utils/request'
 
 const api = {
   user: '/users',
+  normalUsers: '/normal-users',
   createUser: '/usersRegister',
   role: '/role',
   service: '/service',
@@ -307,6 +308,13 @@ export function addTiketOwner (data) {
 export function queryTicketOwner (ticketId) {
   return request({
     url: `${api.ticketOwners}/${ticketId}`,
+    method: 'get'
+  })
+}
+
+export function queryNormalUsers () {
+  return request({
+    url: api.normalUsers,
     method: 'get'
   })
 }

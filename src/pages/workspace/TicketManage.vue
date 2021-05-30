@@ -5,14 +5,14 @@
         {{ text | momentTime }}
       </span>
       <span slot="action" slot-scope="record">
-        <a-button type="link" @click="viewTicketOwner(record)">分配</a-button>
+        <a-button type="link" @click="viewTicketOwner(record)">分单</a-button>
         <a-button type="link" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
       </span>
     </a-table>
     <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
       <ticket-history :ticket="ticketSelected"></ticket-history>
     </a-modal>
-    <a-modal title="订单分配" :visible="ownerVisible" :footer="null" @cancel="ownerVisible = false" width="800px">
+    <a-modal title="分单" :visible="ownerVisible" :footer="null" @cancel="ownerVisible = false" width="500px">
       <ticket-owner :ticket="ticketSelected"></ticket-owner>
     </a-modal>
   </div>
