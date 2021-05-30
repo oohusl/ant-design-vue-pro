@@ -14,7 +14,7 @@
         </a-col>
       </a-row>
     </a-form>
-    <a-divider>历史跟单信息({{ list.length }})</a-divider>
+    <a-divider v-if="edit">历史跟单信息({{ list.length }})</a-divider>
     <div class="list">
       <a-list item-layout="horizontal" :data-source="list">
         <a-list-item slot="renderItem" slot-scope="item">
