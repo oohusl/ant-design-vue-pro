@@ -22,6 +22,7 @@ const api = {
   createHouseQuestion: '/house-diary/diaryQuestionInfo',
   housePhotoUpload: '/community-infos/fileUpload',
   ticket: '/ticket-infos/query',
+  myticket: '/ticket-infos/getMyTicket',
   ticketHistorys: '/ticket-historys',
   ticketHistory: '/ticket-history',
   ticketOwners: '/ticket-owners',
@@ -269,6 +270,14 @@ export function housePhotoUpload (param) {
 export function queryTicketList () {
   return request({
     url: api.ticket,
+    method: 'post',
+    data: { page: 0, size: 10 }
+  })
+}
+
+export function queryMyTicketList () {
+  return request({
+    url: api.myticket,
     method: 'post',
     data: { page: 0, size: 10 }
   })

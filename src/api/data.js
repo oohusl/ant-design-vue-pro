@@ -1311,15 +1311,15 @@ export function calScope (obj, key, number) {
 }
 export const toiletOptions = [
   {
-    value: '一卫',
+    value: '1',
     label: '一卫'
   },
   {
-    value: '二卫',
+    value: '2',
     label: '二卫'
   },
   {
-    value: '其他',
+    value: '-1',
     label: '其他'
   }
 ]

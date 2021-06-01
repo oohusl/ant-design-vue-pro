@@ -11,7 +11,7 @@
   </div>
 </template>
 <script>
-import { queryTicketList } from '@/api/manage'
+import { queryMyTicketList } from '@/api/manage'
 import TicketHistory from './TicketHistory.vue'
 
 const columns = [
@@ -57,8 +57,7 @@ export default {
     TicketHistory
   },
   created () {
-    console.log(queryTicketList)
-    queryTicketList().then(r => {
+    queryMyTicketList().then(r => {
       this.data = r
     })
   },

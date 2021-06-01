@@ -12,7 +12,7 @@
         </a-menu-item>
         <a-menu-item v-if="menu && currentUser.name === 'admin'" key="settings" @click="handleToUserManage">
           <a-icon type="swap" />
-          {{ isAdmin ? '切换用户端' : '切换管理端' }}
+          {{ isAdmin ? '中介端' : '管理端' }}
         </a-menu-item>
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
