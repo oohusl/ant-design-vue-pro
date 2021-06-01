@@ -8,7 +8,7 @@ const components = {
 }
 
 const locale = {
-  'message': '-',
+  message: '-',
   'menu.home': 'Home',
   'menu.dashboard': 'Dashboard',
   'menu.dashboard.analysis': 'Analysis',
@@ -16,7 +16,7 @@ const locale = {
   'menu.dashboard.workplace': 'Workplace',
 
   'layouts.usermenu.dialog.title': 'Message',
-  'layouts.usermenu.dialog.content': 'Do you really log-out.',
+  'layouts.usermenu.dialog.content': '确定退出系统?',
 
   'app.setting.pagestyle': 'Page style setting',
   'app.setting.pagestyle.light': 'Light style',
