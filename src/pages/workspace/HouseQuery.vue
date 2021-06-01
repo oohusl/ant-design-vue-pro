@@ -840,7 +840,9 @@ export default {
       const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
       requestParameters.plate = Object.values(this.plates).flat()
-
+      if (requestParameters.toilet && requestParameters.toilet.length === toiletOptions.length) {
+        requestParameters.toilet = []
+      }
       requestParameters.averageLlistedPrice = this.gatherSelectParamter(
         requestParameters.averageLlistedPrice,
         requestParameters.ranges.price,
