@@ -1,11 +1,19 @@
 <template>
   <a-modal
-    title="新建用户"
+    title="编辑用户"
     :width="640"
     :visible="visible"
     :confirmLoading="loading"
-    @ok="() => { $emit('ok') }"
-    @cancel="() => { $emit('cancel') }"
+    @ok="
+      () => {
+        $emit('ok')
+      }
+    "
+    @cancel="
+      () => {
+        $emit('cancel')
+      }
+    "
   >
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
@@ -14,7 +22,16 @@
           <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
         </a-form-item>
         <a-form-item label="手机号">
-          <a-input v-decorator="['iphone', {rules: [{required: true, min: 11, message: '请输入正确的手机号！'}]}]" />
+          <a-input
+            disabled
+            v-decorator="['iphone', { rules: [{ required: true, min: 11, message: '请输入正确的手机号！' }] }]"
+          />
+        </a-form-item>
+        <a-form-item label="姓名">
+          <a-input v-decorator="['firstName']" />
+        </a-form-item>
+        <a-form-item label="激活">
+          <a-switch default-checked v-decorator="['activated']" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -25,7 +42,7 @@
 import pick from 'lodash.pick'
 
 // 表单字段
-const fields = ['id', 'iphone', 'firstName']
+const fields = ['id', 'iphone', 'firstName', 'activated']
 
 export default {
   props: {

@@ -1,18 +1,25 @@
 <template>
   <div>
-    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
-      <a-form-item label="业务员">
+    <a-form-model
+      :label-col="{ span: 6 }"
+      :wrapper-col="{ span: 18 }"
+      :labelAlign="'right'"
+      :rules="rules"
+      ref="ticketOwnerForm"
+      :model="ticketOwner"
+    >
+      <a-form-model-item label="业务员" prop="owner">
         <a-select v-model="ticketOwner.owner">
           <a-select-option v-for="u in users" :value="u.login" :key="u.login" :disabled="hasChoosed(u.login)">
             {{ u.login }}
           </a-select-option>
         </a-select>
         <a-button type="primary" @click="onSubmit">添加</a-button>
-      </a-form-item>
-      <a-form-item label="已分配">
+      </a-form-model-item>
+      <a-form-model-item label="已分配">
         <a-tag v-for="o in owners" :key="o.id" closable @close="onDelete(o.id)">{{ o.owner }}</a-tag>
-      </a-form-item>
-    </a-form>
+      </a-form-model-item>
+    </a-form-model>
   </div>
 </template>
 <script>
@@ -31,7 +38,10 @@ export default {
     return {
       users: [],
       owners: [],
-      ticketOwner: {}
+      ticketOwner: { owner: '' },
+      rules: {
+        owner: [{ required: true, message: '请选择业务员', trigger: 'blur' }]
+      }
     }
   },
   created () {
@@ -57,13 +67,20 @@ export default {
       })
     },
     onSubmit: function () {
-      addTiketOwner(this.ticketOwner).then(e => {
-        this.$notification.info({
-          message: '通知',
-          description: '发布成功'
-        })
-        this.ticketOwner.owner = ''
-        this.queryTicketOwner()
+      if (!this.ticketOwner.owner) {
+        console.log('')
+      }
+      this.$refs.ticketOwnerForm.validate(err => {
+        if (err) {
+          addTiketOwner(this.ticketOwner).then(e => {
+            this.$notification.info({
+              message: '通知',
+              description: '发布成功'
+            })
+            this.ticketOwner.owner = ''
+            this.queryTicketOwner()
+          })
+        }
       })
     },
     onDelete: function (id) {

@@ -10,7 +10,7 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-import { Carousel } from 'ant-design-vue'
+import { Carousel, FormModel } from 'ant-design-vue'
 import moment from 'moment'
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
@@ -30,6 +30,7 @@ Vue.component('pro-layout', ProLayout)
 Vue.component('page-container', PageHeaderWrapper)
 Vue.component('page-header-wrapper', PageHeaderWrapper)
 Vue.component('a-carousel', Carousel)
+Vue.use(FormModel)
 Vue.directive('focus', {
   // 当被绑定的元素插入到 DOM 中时……
   inserted: function (el) {

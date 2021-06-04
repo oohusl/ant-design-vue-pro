@@ -47,6 +47,14 @@ export function saveUser (parameter) {
   })
 }
 
+export function updateUser (parameter) {
+  return request({
+    url: api.user,
+    method: 'put',
+    data: parameter
+  })
+}
+
 export function getRoleList (parameter) {
   return request({
     url: api.role,
