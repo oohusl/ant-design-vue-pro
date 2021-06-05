@@ -84,26 +84,17 @@ export default {
 
       // 是否手机模式
       isMobile: false,
-      isAdmin: false
+      isAdmin: localStorage.getItem('isAdmin') === 'true'
     }
   },
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      currentUser: state => state.user.info
     })
   },
   created () {
-    this.$store
-      .dispatch('GetInfo')
-      .then(res => {
-        const asyncRouter = this.filterAsyncRouter(asyncRouterMap, res.authorities)
-        const routes = asyncRouter.find(item => item.path === '/')
-        this.menus = (routes && routes.children) || []
-      })
-      .catch(() => {
-        this.$router.push({ path: '/user/login' })
-      })
     // const routes = this.mainMenu.find((item) => item.path === '/')
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
@@ -112,7 +103,11 @@ export default {
     this.$watch('isMobile', () => {
       this.$store.commit(TOGGLE_MOBILE_TYPE, this.isMobile)
     })
-    this.isAdmin = localStorage.getItem('isAdmin') === 'true'
+    if (this.currentUser) {
+      const asyncRouter = this.filterAsyncRouter(asyncRouterMap, this.currentUser.authorities)
+      const routes = asyncRouter.find(item => item.path === '/')
+      this.menus = (routes && routes.children) || []
+    }
   },
   mounted () {
     const userAgent = navigator.userAgent
@@ -167,7 +162,9 @@ export default {
       }
     },
     filterAsyncRouter (routerMap, roles) {
-      if (roles.indexOf('ROLE_ADMIN') <= 0 || !this.isAdmin) {
+      // 普通用户 || 选择了普通用户
+      if (roles.indexOf('ROLE_MANAGER') < 0 || (roles.indexOf('ROLE_MANAGER') >= 0 && !this.isAdmin)) {
+        // 查询普通用户菜单
         return routerMap.filter(route => {
           if (!route.authority) {
             if (route.children && route.children.length) {
@@ -178,6 +175,7 @@ export default {
           return false
         })
       } else {
+        // 查询管理员菜单
         return routerMap.filter(route => {
           if (route.authority || route.path === '/') {
             if (route.children && route.children.length) {

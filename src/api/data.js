@@ -1323,6 +1323,16 @@ export const toiletOptions = [
     label: '其他'
   }
 ]
+export const roleOptions = [
+  {
+    value: 'ROLE_USER',
+    label: '普通用户'
+  },
+  {
+    value: 'ROLE_MANAGER',
+    label: '管理员'
+  }
+]
 export const schoolType = {
   幼儿园: [
     {

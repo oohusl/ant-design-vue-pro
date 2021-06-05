@@ -911,7 +911,6 @@ export default {
         })
         delete requestParameters.checkedList
       }
-      console.log('loadData request parameters:', requestParameters)
       return getHouse(requestParameters)
     },
 
@@ -961,14 +960,12 @@ export default {
     },
 
     metroLineChange (e) {
-      console.log(e)
       e.forEach(line => {
         if (this.subwayStations[line]) this.subwayStations[line].splice(0)
       })
     },
 
     subwayStationChange (line) {
-      console.log(line)
       // 选中地铁站，清空地铁线
       if (this.hasSubwaySelected(line) > 0) {
         const index = this.queryParam.metroLine.indexOf(line)
@@ -1009,7 +1006,6 @@ export default {
     },
 
     sortChange (type, sort) {
-      console.log(type)
       if (sort) {
         this.sortType = sort
       } else {
@@ -1103,7 +1099,6 @@ export default {
       this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
     },
     showOverview (overview) {
-      console.log(overview)
       // this.$router.push({ name: 'HouseOverview', params: { houseSelect: overview } })
       const routeData = this.$router.resolve({
         name: 'HouseOverview',
@@ -1223,7 +1218,6 @@ export default {
           return row
         })
         excelData = [this.headers, ...excelData]
-        console.info(excelData)
         this.excelData = excelData
       })
     },

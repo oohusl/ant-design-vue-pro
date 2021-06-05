@@ -31,14 +31,14 @@ export const asyncRouterMap = [
       {
         path: '/ticket-manage',
         name: 'TicketManage',
-        authority: ['ROLE_ADMIN'],
+        authority: ['ROLE_ADMIN', 'ROLE_MANAGER'],
         component: () => import('@/pages/workspace/TicketManage'),
         meta: { title: '订单管理', keepAlive: true, icon: 'form' }
       },
       {
         path: '/user-manage',
         name: 'UserManage',
-        authority: ['ROLE_ADMIN'],
+        authority: ['ROLE_ADMIN', 'ROLE_MANAGER'],
         component: () => import('@/pages/user/UserManage'),
         meta: { title: '用户管理', keepAlive: true, icon: 'table' }
       },

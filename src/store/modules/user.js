@@ -3,6 +3,7 @@ import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
+const INFO = null
 const user = {
   state: {
     token: '',
@@ -53,6 +54,11 @@ const user = {
 
     // 获取用户信息
     GetInfo ({ commit }) {
+      if (INFO) {
+        return new Promise((resolve, reject) => {
+          resolve(INFO)
+        })
+      }
       return new Promise((resolve, reject) => {
         getInfo()
           .then(response => {

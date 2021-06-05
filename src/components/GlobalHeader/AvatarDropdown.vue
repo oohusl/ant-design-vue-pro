@@ -1,16 +1,16 @@
 <template>
-  <a-dropdown v-if="currentUser && currentUser.name" placement="bottomRight">
+  <a-dropdown v-if="currentUser" placement="bottomRight">
     <span class="ant-pro-account-avatar">
       <a-avatar icon="user" class="antd-pro-global-header-index-avatar" />
-      <span>{{ currentUser.name }}</span>
+      <span>{{ currentUser.login && currentUser.login.replace(/^(\d{3})\d{4}(\d+)/, '$1****$2') }}</span>
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
+        <a-menu-item v-if="menu" @click="handleToSettings">
           <a-icon type="setting" />
           个人设置
         </a-menu-item>
-        <a-menu-item v-if="menu && currentUser.name === 'admin'" key="settings" @click="handleToUserManage">
+        <a-menu-item v-if="menu && currentUser.authorities.indexOf('ROLE_MANAGER') >= 0" @click="handleToUserManage">
           <a-icon type="swap" />
           {{ isAdmin ? '中介端' : '管理端' }}
         </a-menu-item>
@@ -29,14 +29,11 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'AvatarDropdown',
   props: {
-    currentUser: {
-      type: Object,
-      default: () => null
-    },
     menu: {
       type: Boolean,
       default: true
@@ -50,6 +47,9 @@ export default {
   created: function () {
     this.isAdmin = localStorage.getItem('isAdmin') === 'true'
   },
+  computed: mapState({
+    currentUser: state => state.user.info
+  }),
   methods: {
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
@@ -75,7 +75,8 @@ export default {
           //   setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
           // }).catch(() => console.log('Oops errors!'))
           return this.$store.dispatch('Logout').then(() => {
-            this.$router.push({ name: 'login' })
+            // this.$router.push({ name: 'login' })
+            location.href = '/user/login'
           })
         },
         onCancel () {}

@@ -16,6 +16,9 @@
       <span slot="activated" slot-scope="text">
         {{ text ? '' : '冻结' }}
       </span>
+      <span slot="role" slot-scope="text">
+        {{ getLabel(text[0], roleOptions) }}
+      </span>
       <span slot="lastModifiedDate" slot-scope="text">
         {{ text | momentTime }}
       </span>
@@ -25,7 +28,9 @@
 
       <span slot="action" slot-scope="text, record">
         <template>
-          <a @click="handleEdit(record)">修改</a>
+          <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
+          <a @click="resetPassword(record)">重置密码</a>
         </template>
       </span>
     </s-table>
@@ -52,7 +57,8 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getUserList, saveUser, updateUser } from '@/api/manage'
+import { getUserList, saveUser, updateUser, resetPassword } from '@/api/manage'
+import { roleOptions, getLabel } from '@/api/data'
 
 import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
@@ -75,6 +81,11 @@ const columns = [
     title: '状态',
     dataIndex: 'activated',
     scopedSlots: { customRender: 'activated' }
+  },
+  {
+    title: '角色',
+    dataIndex: 'authorities',
+    scopedSlots: { customRender: 'role' }
   },
   {
     title: '更新时间',
@@ -129,7 +140,8 @@ export default {
         })
       },
       selectedRowKeys: [],
-      selectedRows: []
+      selectedRows: [],
+      roleOptions
     }
   },
   filters: {
@@ -214,12 +226,22 @@ export default {
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
     },
-    handleSub (record) {
-      if (record.status !== 0) {
-        this.$message.info(`${record.no} 订阅成功`)
-      } else {
-        this.$message.error(`${record.no} 订阅失败，规则已关闭`)
-      }
+    resetPassword (record) {
+      const that = this
+      this.$confirm({
+        content: '确认重置用户密码？',
+        onOk () {
+          resetPassword(record).then(e => {
+            that.$info({
+              title: '密码重置成功',
+              content: e
+            })
+          })
+        },
+        onCancel () {
+          console.log('Cancel')
+        }
+      })
     },
     onSelectChange (selectedRowKeys, selectedRows) {
       this.selectedRowKeys = selectedRowKeys
@@ -232,7 +254,8 @@ export default {
       this.queryParam = {
         date: moment(new Date())
       }
-    }
+    },
+    getLabel
   }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="编辑用户"
+    title="编辑用户信息"
     :width="640"
     :visible="visible"
     :confirmLoading="loading"
@@ -30,6 +30,9 @@
         <a-form-item label="姓名">
           <a-input v-decorator="['firstName']" />
         </a-form-item>
+        <a-form-item label="角色">
+          <a-select v-decorator="['authorities']" :options="roleOptions"> </a-select>
+        </a-form-item>
         <a-form-item label="激活">
           <a-switch default-checked v-decorator="['activated']" />
         </a-form-item>
@@ -40,9 +43,10 @@
 
 <script>
 import pick from 'lodash.pick'
+import { roleOptions } from '@/api/data'
 
 // 表单字段
-const fields = ['id', 'iphone', 'firstName', 'activated']
+const fields = ['id', 'iphone', 'firstName', 'activated', 'authorities']
 
 export default {
   props: {
@@ -71,7 +75,8 @@ export default {
       }
     }
     return {
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      roleOptions
     }
   },
   created () {

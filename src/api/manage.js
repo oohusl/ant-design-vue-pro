@@ -4,6 +4,7 @@ const api = {
   user: '/users',
   normalUsers: '/normal-users',
   createUser: '/usersRegister',
+  resetPassword: '/user/changeUserPassReset',
   role: '/role',
   service: '/service',
   permission: '/permission',
@@ -333,5 +334,13 @@ export function queryNormalUsers () {
   return request({
     url: api.normalUsers,
     method: 'get'
+  })
+}
+
+export function resetPassword (data) {
+  return request({
+    url: api.resetPassword,
+    method: 'post',
+    data: data
   })
 }

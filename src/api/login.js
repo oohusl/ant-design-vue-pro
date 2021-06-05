@@ -51,6 +51,37 @@ export function getInfo () {
   })
 }
 
+// export const getInfoWithCach = (function () {
+//   let data = null
+//   const getData = () => {
+//     return new Promise((resolve, reject) =>
+//       request({
+//         url: userApi.UserInfo,
+//         method: 'get',
+//         headers: {
+//           'Content-Type': 'application/json;charset=UTF-8'
+//         }
+//       }).then(e => {
+//         data = e
+//         resolve(data)
+//       })
+//     )
+//   }
+
+//   return new Promise((resolve, reject) => {
+//     if (data) {
+//       resolve(data)
+//     }
+//     getData()
+//       .then(e => {
+//         resolve(data)
+//       })
+//       .catch(e => {
+//         alert('x')
+//       })
+//   })
+// })()
+
 export function getCurrentUserNav () {
   return request({
     url: userApi.UserMenu,
