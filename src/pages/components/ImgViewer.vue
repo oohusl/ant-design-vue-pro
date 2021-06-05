@@ -6,11 +6,13 @@
           <div class="picture-list" v-for="(p, i) of albumList" :key="i">
             <img :src="p.url" />
             <span>{{ p.title }}</span>
-            <div @click="showImage(p.url)" class="viewer-button"></div>
-            <div @click="flip(-1)" class="viewer-button-slide viewer-button-left"></div>
-            <div @click="flip(1)" class="viewer-button-slide viewer-button-right"></div>
           </div>
         </a-carousel>
+        <div class="picture-slide">
+          <div @click="showImage" class="viewer-button"></div>
+          <div @click="flip(-1)" class="viewer-button-slide viewer-button-left"></div>
+          <div @click="flip(1)" class="viewer-button-slide viewer-button-right"></div>
+        </div>
         <img
           src="~@/assets/first.png"
           style="width: 550px; margin-top:20px"
@@ -77,7 +79,7 @@ export default {
       albumList: [],
       interval: -1,
       activeUrl: null,
-      activeIndex: -1
+      activeIndex: 0
     }
   },
   created () {
@@ -90,11 +92,11 @@ export default {
   },
   methods: {
     startCarousel () {
-      // clearInterval(this.interval)
-      // this.interval = setInterval(() => {
-      //   this.activeIndex = (this.activeIndex + 1) % this.albumList.length
-      //   this.refreshCarousel()
-      // }, 3000)
+      clearInterval(this.interval)
+      this.interval = setInterval(() => {
+        this.activeIndex = (this.activeIndex + 1) % this.albumList.length
+        this.refreshCarousel()
+      }, 3000)
     },
     queryPhotos () {
       const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
@@ -129,8 +131,8 @@ export default {
       this.refreshCarousel()
       return false
     },
-    showImage (url) {
-      this.activeUrl = url
+    showImage () {
+      this.activeUrl = this.albumList[this.activeIndex].url
       clearInterval(this.interval)
     },
     flip (i) {
@@ -383,6 +385,8 @@ export default {
   background-image: url(../../assets/prev.svg);
   background-repeat: no-repeat;
   background-position: center;
+  line-height: 0;
+  color: transparent;
 }
 .viewer-button-right {
   top: 150px;
@@ -397,10 +401,18 @@ export default {
   background-image: url(../../assets/next.svg);
   background-repeat: no-repeat;
   background-position: center;
+  line-height: 0;
+  color: transparent;
 }
-.picture-list:hover .viewer-button,
-.picture-list:hover .viewer-button-left,
-.picture-list:hover .viewer-button-right {
+.picture-slide {
+  position: relative;
+  height: 336px;
+  top: -336px;
+  overflow: hidden;
+}
+.picture-slide:hover .viewer-button,
+.picture-slide:hover .viewer-button-left,
+.picture-slide:hover .viewer-button-right {
   display: block;
 }
 </style>
