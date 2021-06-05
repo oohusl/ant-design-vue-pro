@@ -7,6 +7,8 @@
             <img :src="p.url" />
             <span>{{ p.title }}</span>
             <div @click="showImage(p.url)" class="viewer-button"></div>
+            <div @click="flip(-1)" class="viewer-button-slide viewer-button-left"></div>
+            <div @click="flip(1)" class="viewer-button-slide viewer-button-right"></div>
           </div>
         </a-carousel>
         <img
@@ -88,11 +90,11 @@ export default {
   },
   methods: {
     startCarousel () {
-      clearInterval(this.interval)
-      this.interval = setInterval(() => {
-        this.activeIndex = (this.activeIndex + 1) % this.albumList.length
-        this.refreshCarousel()
-      }, 3000)
+      // clearInterval(this.interval)
+      // this.interval = setInterval(() => {
+      //   this.activeIndex = (this.activeIndex + 1) % this.albumList.length
+      //   this.refreshCarousel()
+      // }, 3000)
     },
     queryPhotos () {
       const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
@@ -348,10 +350,57 @@ export default {
   content: 'exit';
 }
 .viewer-button:focus,
-.viewer-button:hover {
+.viewer-button:hover,
+.viewer-button-slide:focus,
+.viewer-button-slide:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
-.picture-list:hover .viewer-button {
+
+.viewer-button-slide {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  cursor: pointer;
+  border-radius: 5%;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-transition: background-color 0.15s;
+  transition: background-color 0.15s;
+  width: 20px;
+  height: 60px;
+  display: none;
+}
+
+.viewer-button-left {
+  top: 150px;
+  left: 0;
+}
+.viewer-button-left:before {
+  content: 'Prev';
+  position: absolute;
+  display: block;
+  height: 60px;
+  width: 20px;
+  background-image: url(../../assets/prev.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.viewer-button-right {
+  top: 150px;
+  right: 0;
+}
+.viewer-button-right:before {
+  content: 'Prev';
+  position: absolute;
+  display: block;
+  height: 60px;
+  width: 20px;
+  background-image: url(../../assets/next.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.picture-list:hover .viewer-button,
+.picture-list:hover .viewer-button-left,
+.picture-list:hover .viewer-button-right {
   display: block;
 }
 </style>
