@@ -163,7 +163,7 @@ export default {
     },
     filterAsyncRouter (routerMap, roles) {
       // 普通用户 || 选择了普通用户
-      if (roles.indexOf('ROLE_MANAGER') < 0 || (roles.indexOf('ROLE_MANAGER') >= 0 && !this.isAdmin)) {
+      if (roles.indexOf('ROLE_ADMIN') < 0 || (roles.indexOf('ROLE_ADMIN') >= 0 && !this.isAdmin)) {
         // 查询普通用户菜单
         return routerMap.filter(route => {
           if (!route.authority) {

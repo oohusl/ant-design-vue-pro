@@ -1329,7 +1329,7 @@ export const roleOptions = [
     label: '普通用户'
   },
   {
-    value: 'ROLE_MANAGER',
+    value: 'ROLE_ADMIN',
     label: '管理员'
   }
 ]

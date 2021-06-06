@@ -53,6 +53,7 @@ export default {
   watch: {
     ticket: function (newVal, oldVal) {
       this.ticketHistory.ticketId = this.ticket.id
+      this.list = []
       this.queryTicketHistory()
     }
   },

@@ -54,30 +54,16 @@
       @cancel="handleCancel"
       @ok="handleEditOk"
     />
-    <step-by-step-modal ref="modal" @ok="handleOk" />
   </a-card>
 </template>
 
 <script>
-import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getUserList, saveUser, updateUser, resetPassword } from '@/api/manage'
 import { roleOptions, getLabel } from '@/api/data'
 
-import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
-
-const statusMap = {
-  0: {
-    status: true,
-    text: '激活'
-  },
-  1: {
-    status: false,
-    text: '冻结'
-  }
-}
 
 export default {
   name: 'UserManage',
@@ -85,8 +71,7 @@ export default {
     STable,
     Ellipsis,
     CreateForm,
-    EditForm,
-    StepByStepModal
+    EditForm
   },
   data () {
     return {
@@ -94,8 +79,6 @@ export default {
       visible: 0,
       confirmLoading: false,
       mdl: null,
-      // 高级搜索 展开/关闭
-      advanced: false,
       // 查询参数
       queryParam: {},
       // 加载数据方法 必须为 Promise 对象
@@ -112,15 +95,6 @@ export default {
       roleOptions
     }
   },
-  filters: {
-    statusFilter (type) {
-      return statusMap[type].text
-    },
-    statusTypeFilter (type) {
-      return statusMap[type].status
-    }
-  },
-  created () {},
   computed: {
     rowSelection () {
       return {
@@ -264,16 +238,7 @@ export default {
       this.selectedRowKeys = selectedRowKeys
       this.selectedRows = selectedRows
     },
-    toggleAdvanced () {
-      this.advanced = !this.advanced
-    },
-    resetSearchForm () {
-      this.queryParam = {
-        date: moment(new Date())
-      }
-    },
     handleChange (pagination, filters, sorter) {
-      console.log('Various parameters', pagination, filters, sorter)
       this.sortedInfo = sorter
     },
     getLabel

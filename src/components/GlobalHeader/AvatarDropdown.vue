@@ -10,7 +10,7 @@
           <a-icon type="setting" />
           个人设置
         </a-menu-item>
-        <a-menu-item v-if="menu && currentUser.authorities.indexOf('ROLE_MANAGER') >= 0" @click="handleToUserManage">
+        <a-menu-item v-if="menu && currentUser.authorities.indexOf('ROLE_ADMIN') >= 0" @click="handleToUserManage">
           <a-icon type="swap" />
           {{ isAdmin ? '中介端' : '管理端' }}
         </a-menu-item>
