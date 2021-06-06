@@ -1,10 +1,31 @@
 <template>
-  <div class="account-settings-info-view">
+  <a-spin :spinning="spinning">
     <a-row :gutter="16" type="flex" justify="center">
       <a-col :order="isMobile ? 2 : 1" :md="24" :lg="16">
         <a-form layout="vertical">
           <a-form-item label="手机">
             <a-input v-model="currentUser.login" :disabled="true" />
+          </a-form-item>
+          <a-form-item label="头像" :required="false">
+            <a-upload
+              list-type="picture-card"
+              class="avatar-uploader"
+              :show-upload-list="false"
+              accept="image/*"
+              action="/api/community-infos/uploadPhoto"
+              :before-upload="beforeUpload"
+              @change="handleChange"
+            >
+              <div v-if="currentUser.imageUrl" style="width:120px; height:120px; border-radius:50%; overflow:hidden;">
+                <img :src="currentUser.imageUrl" style="width:120px; height:120px;" alt="avatar" />
+              </div>
+              <div v-else>
+                <a-icon :type="loading ? 'loading' : 'plus'" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
           </a-form-item>
           <a-form-item label="姓名">
             <a-input placeholder="请输入姓名" v-model="currentUser.firstName" />
@@ -18,31 +39,11 @@
           </a-form-item>
         </a-form>
       </a-col>
-      <a-col :order="1" :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <a-upload
-          list-type="picture-card"
-          class="avatar-uploader"
-          :show-upload-list="false"
-          accept="image/*"
-          action="/api/community-infos/uploadPhoto"
-          :before-upload="beforeUpload"
-          @change="handleChange"
-        >
-          <div v-if="currentUser.imageUrl" style="width:120px; height:120px; border-radius:50%; overflow:hidden;">
-            <img :src="currentUser.imageUrl" style="width:120px; height:120px;" alt="avatar" />
-          </div>
-          <div v-else>
-            <a-icon :type="loading ? 'loading' : 'plus'" />
-            <div class="ant-upload-text">
-              Upload
-            </div>
-          </div>
-        </a-upload>
-      </a-col>
+      <a-col :order="1" :md="24" :lg="8" :style="{ minHeight: '180px' }"> </a-col>
     </a-row>
 
     <avatar-modal ref="modal" @ok="setavatar" />
-  </div>
+  </a-spin>
 </template>
 
 <script>
@@ -53,6 +54,7 @@ export default {
   data () {
     return {
       loading: false,
+      spinning: false,
       currentUser: {}
     }
   },
@@ -65,8 +67,10 @@ export default {
       this.currentUser.imageUrl = url
     },
     saveInfo () {
+      this.spinning = true
       saveInfo(this.currentUser).then(e => {
         this.$message.success('个人信息修改成功')
+        this.spinning = false
       })
     },
     resetInfo () {

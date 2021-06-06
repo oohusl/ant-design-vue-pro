@@ -55,7 +55,7 @@ export default {
       this.$router.push({ path: '/account/center' })
     },
     handleToSettings () {
-      this.$router.push({ path: '/account/settings' })
+      this.$router.push({ path: '/account/settings/custom' })
     },
     handleToUserManage () {
       if (this.isAdmin) {

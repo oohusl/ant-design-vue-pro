@@ -10,14 +10,14 @@
             type="inner"
             @openChange="onOpenChange"
           >
-            <a-menu-item key="/account/settings/base">
-              <router-link :to="{ name: 'BaseSettings' }">
-                修改密码
-              </router-link>
-            </a-menu-item>
             <a-menu-item key="/account/settings/custom">
               <router-link :to="{ name: 'CustomSettings' }">
                 个人信息
+              </router-link>
+            </a-menu-item>
+            <a-menu-item key="/account/settings/base">
+              <router-link :to="{ name: 'BaseSettings' }">
+                修改密码
               </router-link>
             </a-menu-item>
           </a-menu>
