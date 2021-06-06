@@ -51,6 +51,14 @@ export function getInfo () {
   })
 }
 
+export function saveInfo (data) {
+  return request({
+    url: userApi.UserInfo,
+    method: 'post',
+    data: data
+  })
+}
+
 // export const getInfoWithCach = (function () {
 //   let data = null
 //   const getData = () => {

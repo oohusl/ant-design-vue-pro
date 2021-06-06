@@ -18,17 +18,37 @@
     <a-spin :spinning="loading">
       <a-form :form="form" v-bind="formLayout">
         <!-- 检查是否有 id 并且大于0，大于0是修改。其他是新增，新增不显示主键ID -->
-        <a-form-item v-show="model && model.id > 0" label="主键ID">
+        <a-form-item v-show="model && model.id > 0" label="主键">
           <a-input v-decorator="['id', { initialValue: 0 }]" disabled />
         </a-form-item>
         <a-form-item label="手机号">
-          <a-input
-            disabled
-            v-decorator="['iphone', { rules: [{ required: true, min: 11, message: '请输入正确的手机号！' }] }]"
-          />
+          <a-input disabled v-decorator="['iphone']" />
         </a-form-item>
         <a-form-item label="姓名">
-          <a-input v-decorator="['firstName']" />
+          <a-input
+            v-decorator="[
+              'firstName',
+              {
+                rules: [{ required: true, message: '请输入姓名' }]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="邮箱">
+          <a-input
+            v-decorator="[
+              'email',
+              {
+                rules: [
+                  { required: true, message: '请输入邮箱' },
+                  {
+                    type: 'email',
+                    message: '请输入正确的邮箱格式'
+                  }
+                ]
+              }
+            ]"
+          />
         </a-form-item>
         <a-form-item label="角色">
           <a-select v-decorator="['authorities']" :options="roleOptions"> </a-select>
@@ -46,7 +66,7 @@ import pick from 'lodash.pick'
 import { roleOptions } from '@/api/data'
 
 // 表单字段
-const fields = ['id', 'iphone', 'firstName', 'activated', 'authorities']
+const fields = ['id', 'iphone', 'firstName', 'activated', 'authorities', 'email']
 
 export default {
   props: {

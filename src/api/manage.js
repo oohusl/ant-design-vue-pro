@@ -34,7 +34,7 @@ export default api
 
 export function getUserList (parameter) {
   return request({
-    url: api.user,
+    url: api.normalUsers,
     method: 'get',
     params: parameter
   })

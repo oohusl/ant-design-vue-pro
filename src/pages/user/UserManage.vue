@@ -6,12 +6,14 @@
     </div>
     <s-table
       ref="table"
-      size="default"
-      rowKey="key"
+      size="middle"
       :columns="columns"
+      rowKey="login"
       :data="loadData"
       :alert="false"
-      showPagination="auto"
+      :pageSize="10000"
+      :showPagination="false"
+      @change="handleChange"
     >
       <span slot="activated" slot-scope="text">
         {{ text ? '' : '冻结' }}
@@ -25,7 +27,9 @@
       <span slot="description" slot-scope="text">
         <ellipsis :length="4" tooltip>{{ text }}</ellipsis>
       </span>
-
+      <span slot="imageUrl" slot-scope="text">
+        <a-avatar v-if="text" :src="text"></a-avatar>
+      </span>
       <span slot="action" slot-scope="text, record">
         <template>
           <a @click="handleEdit(record)">编辑</a>
@@ -36,7 +40,7 @@
     </s-table>
     <create-form
       ref="createModal"
-      :visible="visible"
+      :visible="visible === 1"
       :loading="confirmLoading"
       :model="mdl"
       @cancel="handleCancel"
@@ -44,7 +48,7 @@
     />
     <edit-form
       ref="editModal"
-      :visible="visible"
+      :visible="visible === 2"
       :loading="confirmLoading"
       :model="mdl"
       @cancel="handleCancel"
@@ -63,42 +67,6 @@ import { roleOptions, getLabel } from '@/api/data'
 import StepByStepModal from './modules/StepByStepModal'
 import CreateForm from './modules/CreateForm'
 import EditForm from './modules/EditForm'
-
-const columns = [
-  {
-    title: '#',
-    dataIndex: 'id'
-  },
-  {
-    title: '账号',
-    dataIndex: 'login'
-  },
-  {
-    title: '姓名',
-    dataIndex: 'firstName'
-  },
-  {
-    title: '状态',
-    dataIndex: 'activated',
-    scopedSlots: { customRender: 'activated' }
-  },
-  {
-    title: '角色',
-    dataIndex: 'authorities',
-    scopedSlots: { customRender: 'role' }
-  },
-  {
-    title: '更新时间',
-    dataIndex: 'lastModifiedDate',
-    scopedSlots: { customRender: 'lastModifiedDate' }
-  },
-  {
-    title: '操作',
-    dataIndex: 'action',
-    width: '150px',
-    scopedSlots: { customRender: 'action' }
-  }
-]
 
 const statusMap = {
   0: {
@@ -121,10 +89,9 @@ export default {
     StepByStepModal
   },
   data () {
-    this.columns = columns
     return {
       // create model
-      visible: false,
+      visible: 0,
       confirmLoading: false,
       mdl: null,
       // 高级搜索 展开/关闭
@@ -133,12 +100,13 @@ export default {
       queryParam: {},
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        const requestParameters = Object.assign({}, parameter, this.queryParam)
+        const requestParameters = Object.assign({}, this.queryParam)
         console.log('loadData request parameters:', requestParameters)
         return getUserList(requestParameters).then(res => {
           return res
         })
       },
+      sortedInfo: {},
       selectedRowKeys: [],
       selectedRows: [],
       roleOptions
@@ -159,15 +127,64 @@ export default {
         selectedRowKeys: this.selectedRowKeys,
         onChange: this.onSelectChange
       }
+    },
+    columns () {
+      const columns = [
+        {
+          title: '账号',
+          dataIndex: 'login',
+          sorter: (a, b) => a.login.localeCompare(b.login)
+        },
+        {
+          title: '姓名',
+          dataIndex: 'firstName',
+          sorter: (a, b) => (a.firstName || '').localeCompare(b.firstName || '')
+        },
+        {
+          title: '邮箱',
+          dataIndex: 'email',
+          sorter: (a, b) => a.email.localeCompare(b.email)
+        },
+        {
+          title: '头像',
+          dataIndex: 'imageUrl',
+          scopedSlots: { customRender: 'imageUrl' }
+        },
+        {
+          title: '状态',
+          dataIndex: 'activated',
+          scopedSlots: { customRender: 'activated' },
+          sorter: (a, b) => Number(a.activated) - Number(b.activated)
+        },
+        {
+          title: '角色',
+          dataIndex: 'authorities',
+          scopedSlots: { customRender: 'role' },
+          sorter: (a, b) => a.authorities[0].localeCompare(b.authorities[0])
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'lastModifiedDate',
+          scopedSlots: { customRender: 'lastModifiedDate' },
+          sorter: (a, b) => a.lastModifiedDate.localeCompare(b.lastModifiedDate)
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '150px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ]
+      return columns
     }
   },
   methods: {
     handleAdd () {
       this.mdl = null
-      this.visible = true
+      this.visible = 1
     },
     handleEdit (record) {
-      this.visible = true
+      this.visible = 2
       this.mdl = { ...record }
     },
     handleEditOk () {
@@ -178,7 +195,7 @@ export default {
           console.log('values', values)
           // 修改 e.g.
           updateUser(Object.assign(this.mdl, values)).then(res => {
-            this.visible = false
+            this.visible = 0
             this.confirmLoading = false
             // 重置表单数据
             form.resetFields()
@@ -203,7 +220,7 @@ export default {
           saveUser(user)
             .then()
             .then(res => {
-              this.visible = false
+              this.visible = 0
               this.confirmLoading = false
               // 重置表单数据
               form.resetFields()
@@ -221,7 +238,7 @@ export default {
       })
     },
     handleCancel () {
-      this.visible = false
+      this.visible = 0
       this.confirmLoading = false
       const form = this.$refs.createModal.form
       form.resetFields() // 清理表单数据（可不做）
@@ -254,6 +271,10 @@ export default {
       this.queryParam = {
         date: moment(new Date())
       }
+    },
+    handleChange (pagination, filters, sorter) {
+      console.log('Various parameters', pagination, filters, sorter)
+      this.sortedInfo = sorter
     },
     getLabel
   }

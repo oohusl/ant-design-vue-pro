@@ -1,6 +1,6 @@
 <template>
   <div class="main user-layout-register">
-    <div v-if="!success">
+    <div v-if="!success" style="width: 400px">
       <a-form ref="formRegister" :form="form" id="formRegister">
         <a-form-item>
           <a-input-password
@@ -74,7 +74,6 @@
             :disabled="registerBtn"
           >确认
           </a-button>
-          <router-link class="login" :to="{ name: 'login' }">取消</router-link>
         </a-form-item>
       </a-form>
     </div>

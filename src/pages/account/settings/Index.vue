@@ -15,6 +15,11 @@
                 修改密码
               </router-link>
             </a-menu-item>
+            <a-menu-item key="/account/settings/custom">
+              <router-link :to="{ name: 'CustomSettings' }">
+                个人信息
+              </router-link>
+            </a-menu-item>
           </a-menu>
         </div>
         <div class="account-settings-info-right">
