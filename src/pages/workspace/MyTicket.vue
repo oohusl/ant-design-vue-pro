@@ -4,6 +4,9 @@
       <span slot="action" slot-scope="record">
         <a-button type="primary" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
       </span>
+      <span slot="createdDate" slot-scope="text">
+        {{ text | momentTime }}
+      </span>
     </a-table>
     <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
       <ticket-history :ticket="ticketSelected" :edit="true"></ticket-history>
@@ -22,18 +25,18 @@ const columns = [
   },
   {
     title: '客户电话',
-    dataIndex: 'clientPhone',
+    dataIndex: 'ticketInfo.clientPhone',
     key: 'clientPhone'
   },
   {
     title: '客户姓名',
-    dataIndex: 'clientName',
+    dataIndex: 'ticketInfo.clientName',
     key: 'clientName'
   },
   {
-    title: '提交时间',
-    dataIndex: 'createTime',
-    key: 'createTime'
+    title: '分配时间',
+    dataIndex: 'createdDate',
+    scopedSlots: { customRender: 'createdDate' }
   },
   {
     title: '操作',

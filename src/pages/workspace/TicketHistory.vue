@@ -64,9 +64,7 @@ export default {
     },
     onSubmit: function () {
       createTicketHistory(this.ticketHistory).then(e => {
-        this.$notification.info({
-          description: '发布成功'
-        })
+        this.$message.success('发布成功')
         this.ticketHistory.content = ''
         this.queryTicketHistory()
       })

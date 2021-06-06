@@ -73,10 +73,7 @@ export default {
       this.$refs.ticketOwnerForm.validate(err => {
         if (err) {
           addTiketOwner(this.ticketOwner).then(e => {
-            this.$notification.info({
-              message: '通知',
-              description: '发布成功'
-            })
+            this.$message.success('分配成功')
             this.ticketOwner.owner = ''
             this.queryTicketOwner()
           })
@@ -85,10 +82,7 @@ export default {
     },
     onDelete: function (id) {
       removeTiketOwner(id).then(e => {
-        this.$notification.info({
-          message: '通知',
-          description: '删除成功'
-        })
+        this.$message.success('取消分配成功')
         this.queryTicketOwner()
       })
     },

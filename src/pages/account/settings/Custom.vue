@@ -1,20 +1,21 @@
 <template>
   <a-spin :spinning="spinning">
     <a-row :gutter="16" type="flex" justify="center">
-      <a-col :order="isMobile ? 2 : 1" :md="24" :lg="16">
-        <a-form layout="vertical">
-          <a-form-item label="手机">
+      <a-col :order="1" :md="24" :lg="16">
+        <a-form-model layout="vertical" :model="currentUser" :rules="rules" ref="accountForm">
+          <a-form-model-item label="手机">
             <a-input v-model="currentUser.login" :disabled="true" />
-          </a-form-item>
-          <a-form-item label="头像" :required="false">
+          </a-form-model-item>
+          <a-form-model-item label="头像" :required="false">
             <a-upload
               list-type="picture-card"
               class="avatar-uploader"
               :show-upload-list="false"
               accept="image/*"
-              action="/api/community-infos/uploadPhoto"
+              action="/api/account/avatarUpload"
               :before-upload="beforeUpload"
               @change="handleChange"
+              :headers="headers()"
             >
               <div v-if="currentUser.imageUrl" style="width:120px; height:120px; border-radius:50%; overflow:hidden;">
                 <img :src="currentUser.imageUrl" style="width:120px; height:120px;" alt="avatar" />
@@ -26,28 +27,27 @@
                 </div>
               </div>
             </a-upload>
-          </a-form-item>
-          <a-form-item label="姓名">
+          </a-form-model-item>
+          <a-form-model-item label="姓名" prop="firstName">
             <a-input placeholder="请输入姓名" v-model="currentUser.firstName" />
-          </a-form-item>
-          <a-form-item label="邮箱" :required="false">
+          </a-form-model-item>
+          <a-form-model-item label="邮箱" prop="email">
             <a-input placeholder="example@985home.com" v-model="currentUser.email" />
-          </a-form-item>
-          <a-form-item>
+          </a-form-model-item>
+          <a-form-model-item>
             <a-button type="primary" @click="saveInfo">确认</a-button>
             <a-button @click="resetInfo" style="margin-left: 10px">取消</a-button>
-          </a-form-item>
-        </a-form>
+          </a-form-model-item>
+        </a-form-model>
       </a-col>
       <a-col :order="1" :md="24" :lg="8" :style="{ minHeight: '180px' }"> </a-col>
     </a-row>
-
-    <avatar-modal ref="modal" @ok="setavatar" />
   </a-spin>
 </template>
 
 <script>
 import { saveInfo } from '@/api/login'
+import { headers } from '@/utils/request'
 
 export default {
   components: {},
@@ -55,22 +55,29 @@ export default {
     return {
       loading: false,
       spinning: false,
-      currentUser: {}
+      currentUser: {},
+      rules: {
+        firstName: [{ required: true, message: '请输入姓名' }],
+        email: [{ type: 'email', message: '请输入合法的邮箱信息' }]
+      }
     }
   },
   created: function () {
     this.currentUser = Object.assign({}, this.$store.getters.userInfo)
   },
   methods: {
-    setavatar (url) {
-      console.log(url)
-      this.currentUser.imageUrl = url
-    },
     saveInfo () {
-      this.spinning = true
-      saveInfo(this.currentUser).then(e => {
-        this.$message.success('个人信息修改成功')
-        this.spinning = false
+      this.$refs.accountForm.validate(valid => {
+        if (valid) {
+          this.spinning = true
+          saveInfo(this.currentUser).then(e => {
+            this.$message.success('个人信息修改成功')
+            this.spinning = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
     },
     resetInfo () {
@@ -96,7 +103,8 @@ export default {
         this.$message.error('Image must smaller than 2MB!')
       }
       return isJpgOrPng && isLt2M
-    }
+    },
+    headers
   }
 }
 </script>

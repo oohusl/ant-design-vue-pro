@@ -13,7 +13,7 @@ const request = axios.create({
 })
 
 // 异常拦截处理器
-const errorHandler = (error) => {
+const errorHandler = error => {
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
@@ -53,7 +53,7 @@ request.interceptors.request.use(config => {
 }, errorHandler)
 
 // response interceptor
-request.interceptors.response.use((response) => {
+request.interceptors.response.use(response => {
   if (response.headers['x-total-count']) {
     response.data['x-total-count'] = Number.parseInt(response.headers['x-total-count'])
   }
@@ -69,7 +69,8 @@ const installer = {
 
 export default request
 
-export {
-  installer as VueAxios,
-  request as axios
+export { installer as VueAxios, request as axios }
+
+export function headers () {
+  return { Authorization: 'Bearer ' + storage.get(ACCESS_TOKEN) }
 }
