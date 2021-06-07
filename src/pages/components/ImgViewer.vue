@@ -8,7 +8,7 @@
             <span>{{ p.title }}</span>
           </div>
         </a-carousel>
-        <div class="picture-slide">
+        <div class="picture-slide" v-if="albumList.length > 0">
           <div @click="showImage" class="viewer-button"></div>
           <div @click="flip(-1)" class="viewer-button-slide viewer-button-left"></div>
           <div @click="flip(1)" class="viewer-button-slide viewer-button-right"></div>
