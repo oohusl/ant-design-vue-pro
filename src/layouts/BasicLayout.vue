@@ -18,7 +18,7 @@
           style="cursor: pointer"
         />
         <h1 style="cursor: pointer" @click="$router.push({ path: '/house/query' })">
-          {{ title }} <span style="font-size: 8px; color: blue">v1.4.7</span>
+          {{ title }} <span style="font-size: 8px; color: blue">v1.4.8</span>
         </h1>
       </div>
     </template>
