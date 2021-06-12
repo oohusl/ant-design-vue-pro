@@ -1393,3 +1393,22 @@ export const schoolType = {
     }
   ]
 }
+
+export const buildingTypeOptions = [
+  {
+    label: '塔楼',
+    value: '塔楼'
+  },
+  {
+    label: '板楼',
+    value: '板楼'
+  },
+  {
+    label: '塔板结合',
+    value: '塔板结合'
+  },
+  {
+    label: '其他',
+    value: '其他'
+  }
+]

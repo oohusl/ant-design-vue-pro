@@ -1,36 +1,38 @@
 <template>
   <div>
-    <a-upload
-      v-for="type in Object.keys(types)"
-      :key="type"
-      :file-list="fileList[type]"
-      accept="image/*"
-      action="/api/community-infos/uploadPhoto"
-      list-type="picture-card"
-      :remove="
-        f => {
-          handleRemove(f, type)
-        }
-      "
-      :beforeUpload="
-        f => {
-          beforeUpload(f, type)
-        }
-      "
-      @preview="handlePreview"
-      @change="
-        f => {
-          handleChange(f, type)
-        }
-      "
-    >
-      <div>
-        <a-icon type="plus" />
-        <div class="ant-upload-text">
-          {{ types[type] }}
+    <draggable>
+      <a-upload
+        v-for="type in Object.keys(types)"
+        :key="type"
+        :file-list="fileList[type]"
+        accept="image/*"
+        action="/api/community-infos/uploadPhoto"
+        list-type="picture-card"
+        :remove="
+          f => {
+            handleRemove(f, type)
+          }
+        "
+        :beforeUpload="
+          f => {
+            beforeUpload(f, type)
+          }
+        "
+        @preview="handlePreview"
+        @change="
+          f => {
+            handleChange(f, type)
+          }
+        "
+      >
+        <div>
+          <a-icon type="plus" />
+          <div class="ant-upload-text">
+            {{ types[type] }}
+          </div>
         </div>
-      </div>
-    </a-upload>
+      </a-upload>
+    </draggable>
   </div>
 </template>
 
@@ -38,6 +40,7 @@
 import { photoQuery, housePhotoUpload } from '@/api/manage'
 import { getBase64 } from '@/api/util'
 import { EventBus } from '@/event-bus'
+import draggable from 'vuedraggable'
 
 export default {
   name: 'HouseImageEdit',
@@ -49,13 +52,13 @@ export default {
       }
     }
   },
-  components: {},
+  components: { draggable },
   data () {
     return {
       types: {
         '0': '封面图',
-        '1': '效果图',
-        '2': '环境规划图',
+        '1': '楼盘平面图',
+        '2': '周边规划图',
         '3': '楼盘实景图',
         '4': '周边实景图'
       },

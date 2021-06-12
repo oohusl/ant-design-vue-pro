@@ -99,7 +99,7 @@ export default {
       }, 3000)
     },
     queryPhotos () {
-      const photosOption = ['', '效果图', '环境规划图', '楼盘实景图', '周边实景图']
+      const photosOption = ['', '楼盘平面图', '周边规划图', '楼盘实景图', '周边实景图']
       photoQuery(this.houseId).then(photos => {
         this.albumList = []
         for (const photo of photos) {
@@ -147,12 +147,13 @@ export default {
     },
     selectAlbum (item, index) {
       this.activeIndex = index
-      this.refreshCarousel()
+      this.refreshaCrousel()
       this.startCarousel()
     },
     refreshCarousel () {
       const scroll = document.querySelector('.house-album-list  ul')
       const len = this.albumList.length
+      this.$refs['carouselRef'].goTo(this.activeIndex)
       if (len <= 5 || !scroll) {
         return
       }
@@ -163,7 +164,6 @@ export default {
         scrollIndex = len - 5
       }
       scroll.style.transform = `translateX(${-1 * scrollIndex * 104}px)`
-      this.$refs['carouselRef'].goTo(this.activeIndex)
     }
   }
 }

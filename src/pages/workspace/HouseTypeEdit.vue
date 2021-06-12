@@ -9,25 +9,49 @@
       </a-form-item>
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="建筑面积">
+          <a-form-item label="面积">
             <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="参考单价">
+          <a-form-item label="单价">
             <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="参考总价">
+          <a-form-item label="总价">
             <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
+          <a-form-item label="楼号">
+            <a-input v-model="houseTypeEdit.buildingNumber"></a-input>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <a-form-item label="建筑类型">
+            <a-select v-model="houseTypeEdit.buildingType" :options="buildingTypeOptions"> </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="权属">
+            <a-select v-model="houseTypeEdit.transactionOwnership" :options="transactionOwnershipOptions"> </a-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="24">
+        <a-col :span="12">
           <a-form-item label="房屋类型">
             <a-input v-model="houseTypeEdit.typesOfHouse"></a-input>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="电梯">
+            <a-select :options="liftOptions" v-model="houseTypeEdit.isLift"> </a-select>
           </a-form-item>
         </a-col>
       </a-row>
@@ -56,6 +80,9 @@
           </a-form-item>
         </a-col>
       </a-row>
+      <a-form-item label="标签" :labelCol="{ span: 3 }" :wrapperCol="{ span: 21 }">
+        <InputTag v-model="houseTypeEdit.labels"></InputTag>
+      </a-form-item>
       <a-row :gutter="24">
         <a-col
           :span="24"
@@ -89,12 +116,14 @@
 
 <script>
 import { houseTypePhotoUpload, saveAnalysis } from '@/api/manage'
+import InputTag from '../components/InputTag.vue'
 import { getBase64 } from '@/api/util'
+import { transactionOwnershipOptions, liftOptions, buildingTypeOptions } from '@/api/data'
 import { EventBus } from '@/event-bus'
 
 export default {
   name: 'HouseTypeEdit',
-  components: {},
+  components: { InputTag },
   props: {
     houseAnalysis: {
       type: Object,
@@ -111,6 +140,9 @@ export default {
   },
   data () {
     return {
+      transactionOwnershipOptions,
+      liftOptions,
+      buildingTypeOptions,
       imageEditVisible: false,
       edit: this.toCreate,
       loading: false,
@@ -131,20 +163,7 @@ export default {
           ]
         : [],
       houseTypes: [],
-      houseTypeEdit: this.houseAnalysis,
-      houseTypeOptions: [
-        { label: '平层', value: '平层' },
-        { label: '叠墅', value: '叠墅' },
-        { label: '别墅', value: '别墅' },
-        { label: 'loft', value: 'loft' }
-      ],
-      towardOptions: [
-        { label: '南北', value: '南北' },
-        { label: '朝南', value: '朝南' },
-        { label: '朝东', value: '朝东' },
-        { label: '朝北', value: '朝北' },
-        { label: '朝西', value: '朝西' }
-      ]
+      houseTypeEdit: this.houseAnalysis
     }
   },
   beforeMount () {

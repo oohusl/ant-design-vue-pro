@@ -32,11 +32,7 @@
               </span>
             </div>
             <div>
-              <template v-for="tag in tags">
-                <a-tag :key="tag" :color="isCustomTag(tag)">
-                  {{ tag }}
-                </a-tag>
-              </template>
+              <InputTag v-model="houseSelect.labels" :readonly="true" :labels="labels"></InputTag>
             </div>
           </a-layout-content>
           <a-layout-sider :style="{ background: '#ffffff', padding: '0', width: '100px', 'min-width': '100px' }">
@@ -242,26 +238,7 @@
               </span>
             </div>
             <div>
-              <template v-for="tag in tags">
-                <a-tag :key="tag" closable @close="() => handleClose(tag)" :color="isCustomTag(tag)">
-                  {{ tag }}
-                </a-tag>
-              </template>
-              <AutoComplete
-                :value="inputValue"
-                v-if="tagInputVisible"
-                style="width: 100px"
-                :data-source="labels"
-                :filter-option="tagOptionFilter"
-                size="small"
-                @select="handleInputConfirm"
-                @change="handleInputChange"
-                @blur="handleInputConfirm"
-                @keyup.enter="handleInputConfirm"
-              />
-              <a-tag v-else style="background: #fff; borderstyle: dashed" @click="showInput">
-                <a-icon type="plus" /> New Tag
-              </a-tag>
+              <InputTag v-model="houseSelect.labels" :labels="labels"></InputTag>
             </div>
           </a-layout-content>
           <a-layout-sider :style="{ background: '#ffffff', padding: '0' }">
@@ -389,11 +366,7 @@
             <a-input v-model="houseSelect.greeningRate" class="col1" size="small" addon-after="%" />
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
-            <a-select v-model="houseSelect.buildingType" size="small" class="col1">
-              <a-select-option value="塔楼"> 塔楼 </a-select-option>
-              <a-select-option value="板楼"> 板楼 </a-select-option>
-              <a-select-option value="塔板结合"> 塔板结合 </a-select-option>
-              <a-select-option value="其他"> 其他 </a-select-option>
+            <a-select v-model="houseSelect.buildingType" size="small" :options="buildingTypeOptions" class="col1">
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
@@ -654,15 +627,18 @@ import {
   propertyOptions,
   popularComLevOptions,
   qualityComLevOptions,
-  toiletOptions
+  toiletOptions,
+  buildingTypeOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
+import InputTag from '../components/InputTag.vue'
 
 export default {
   name: 'HouseEdit',
   components: {
     AutoComplete,
-    HouseDiary
+    HouseDiary,
+    InputTag
   },
   props: {
     houseSelect: {
@@ -673,19 +649,8 @@ export default {
     },
     toCreate: { type: Boolean, default: false }
   },
-  computed: {
-    tags: {
-      get: function () {
-        return this.houseSelect.labels ? this.houseSelect.labels.split(',') : []
-      },
-      set: function (newValue) {
-        this.houseSelect.labels = newValue.join(',')
-      }
-    }
-  },
   data () {
     return {
-      tagInputVisible: false,
       edit: this.toCreate,
       stationOptions: [],
       toilet: this.houseSelect.toilet ? this.houseSelect.toilet.split(',') : [],
@@ -712,6 +677,7 @@ export default {
       transactionOwnershipOptions,
       qualityComLevOptions,
       popularComLevOptions,
+      buildingTypeOptions,
       loading: false,
       plates: {},
       subwayStations: {},
@@ -836,7 +802,6 @@ export default {
     saveHouse () {
       // save
       console.log('save:', this.houseSelect)
-      this.houseSelect.labels = this.tags.join(',')
       this.houseSelect.toilet = this.toilet.join(',')
 
       saveHouse(this.houseSelect)
@@ -858,7 +823,6 @@ export default {
 
     newHouse () {
       this.detailVisible = true
-      this.tags = []
       this.edit = true
     },
     showDetail () {
@@ -959,42 +923,6 @@ export default {
       if (s != null) {
         return (s.echelon || '') + ' ' + (s.isConsistentSystem || '')
       }
-    },
-    /* tag start */
-    handleClose (removedTag) {
-      const tags = this.tags.filter(tag => tag !== removedTag)
-      this.tags = tags
-    },
-
-    showInput () {
-      this.tagInputVisible = true
-      this.$nextTick(function () {})
-    },
-
-    handleInputChange (e) {
-      this.inputValue = e
-    },
-
-    handleInputConfirm () {
-      const inputValue = this.inputValue
-      let tags = this.tags
-      if (inputValue && !tags.find(e => e === inputValue)) {
-        tags = [...tags, inputValue]
-      }
-      this.tags = tags
-      this.tagInputVisible = false
-      this.inputValue = ''
-    },
-
-    tagOptionFilter (input, option) {
-      return option.componentOptions.children[0].text.toUpperCase().indexOf(input.toUpperCase()) >= 0
-    },
-
-    isCustomTag (tag) {
-      if (this.labels.includes(tag)) {
-        return ''
-      }
-      return 'red'
     },
     handleOnBlur () {
       this.schoolGroup = Object.assign({}, this.schoolGroup_)
