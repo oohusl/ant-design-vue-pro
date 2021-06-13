@@ -13,7 +13,6 @@
               :show-upload-list="false"
               accept="image/*"
               action="/api/account/avatarUpload"
-              :before-upload="beforeUpload"
               @change="handleChange"
               :headers="headers()"
             >
