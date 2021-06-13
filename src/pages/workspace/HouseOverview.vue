@@ -235,7 +235,7 @@
                       >
                         <a-layout :style="{ height: '100%' }">
                           <a-layout-sider :style="{ background: '#fff' }" width="80">
-                            <img :src="diary.userIcon" style="width: 60px; height: 60px" />
+                            <a-avatar :size="48" :src="diary.userIcon"></a-avatar>
                           </a-layout-sider>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
                             <a-layout-header
@@ -312,7 +312,7 @@
                             </a-layout-content>
                           </a-layout>
                           <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
-                            <img :src="qa.userIcon" style="width: 60px; height: 60px" />
+                            <a-avatar :src="qa.userIcon"></a-avatar>
                             <p>{{ qa.userName }}</p>
                           </a-layout-sider>
                         </a-layout>
