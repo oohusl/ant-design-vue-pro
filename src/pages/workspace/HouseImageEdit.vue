@@ -1,24 +1,12 @@
 <template>
   <div>
-    <draggable>
+    <a-row v-for="type in Object.keys(types)" :key="type">
       <a-upload
-        v-for="type in Object.keys(types)"
-        :key="type"
-        :file-list="fileList[type]"
         accept="image/*"
         action="/api/community-infos/uploadPhoto"
         list-type="picture-card"
-        :remove="
-          f => {
-            handleRemove(f, type)
-          }
-        "
-        :beforeUpload="
-          f => {
-            beforeUpload(f, type)
-          }
-        "
-        @preview="handlePreview"
+        :show-upload-list="false"
+        :multiple="true"
         @change="
           f => {
             handleChange(f, type)
@@ -32,16 +20,33 @@
           </div>
         </div>
       </a-upload>
-    </draggable>
+      <draggable
+        element="span"
+        :value="fileList[type]"
+        @input="
+          v => {
+            dragChange(v, type)
+          }
+        "
+        v-bind="dragOptions"
+      >
+        <transition-group name="no" class="list-group" tag="ul">
+          <li class="list-group-item" v-for="element in fileList[type]" :key="element.uid" style="float:left">
+            <img :src="element.url" style="width:100px; height:100px" />
+            <a-icon type="eye" @click="handlePreview(element.url)" />
+            <a-icon type="delete" @click="handleRemove(element, type)" />
+          </li>
+        </transition-group>
+      </draggable>
+    </a-row>
   </div>
 </template>
 
 <script>
 import { photoQuery, housePhotoUpload } from '@/api/manage'
-import { getBase64 } from '@/api/util'
 import { EventBus } from '@/event-bus'
 import draggable from 'vuedraggable'
-
+const initFileList = { '0': [], '1': [], '2': [], '3': [], '4': [] }
 export default {
   name: 'HouseImageEdit',
   props: {
@@ -62,9 +67,15 @@ export default {
         '3': '楼盘实景图',
         '4': '周边实景图'
       },
-      fileList: {},
+      fileList: initFileList,
       previewVisible: false,
-      previewImage: null
+      previewImage: null,
+      dragOptions: {
+        animation: 0,
+        group: 'description',
+        disabled: false,
+        ghostClass: 'ghost'
+      }
     }
   },
   watch: {
@@ -78,7 +89,7 @@ export default {
   methods: {
     queryPhotos () {
       const that = this
-      this.fileList = {}
+      this.fileList = initFileList
       return photoQuery(that.houseId).then(e => {
         e.forEach(image => {
           that.fileList[image.type] = this.fileList[image.type] || []
@@ -107,31 +118,38 @@ export default {
       return housePhotoUpload({ id: this.houseId, files: files })
     },
     handleRemove (file, type) {
-      const index = this.fileList[type].indexOf(file)
-      this.fileList[type] = this.fileList[type].slice().splice(index, 1)
+      const index = this.fileList[type].findIndex(f => {
+        return f.url === file.url
+      })
+      this.fileList[type].splice(index, 1)
       // photoDelete(file.imageId || file.response.id)
       this.$forceUpdate()
     },
-    handlePreview (file) {
-      EventBus.$emit('preview', file.url || file.response)
-    },
-    beforeUpload (file, type) {
-      getBase64(file).then(url => {
-        if (type === '0') {
-          this.fileList[type] = [{ uid: new Date().getMilliseconds, name: file.name, file: file, url: url }]
-        }
-      })
-      this.$forceUpdate()
-      return true
+    handlePreview (url) {
+      EventBus.$emit('preview', url)
     },
     handleChange (f, type) {
-      this.fileList[type] = f.fileList
-      if (type === '0' && f.file && f.file.status !== 'removed') {
-        this.fileList[type] = [f.file]
+      if (f.file.status === 'done') {
+        this.fileList[type].push({ url: f.file.response, uid: f.file.uid })
       }
+      this.$forceUpdate()
+    },
+    onMove ({ relatedContext, draggedContext }) {
+      const relatedElement = relatedContext.element
+      const draggedElement = draggedContext.element
+      console.log((!relatedElement || !relatedElement.fixed) && !draggedElement.fixed)
+      return (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
+    },
+    dragChange (value, list) {
+      this.fileList[list] = [...value]
       this.$forceUpdate()
     }
   }
 }
 </script>
-<style scoped></style>
+<style>
+.ant-upload-picture-card-wrapper {
+  float: left;
+  width: fit-content;
+}
+</style>

@@ -27,7 +27,8 @@ const api = {
   ticketHistorys: '/ticket-historys',
   ticketHistory: '/ticket-history',
   ticketOwners: '/ticket-owners',
-  ticketOwner: '/ticket-owner'
+  ticketOwner: '/ticket-owner',
+  commAnalysisView: '/communityInfoAnalysisView/'
 }
 
 export default api
@@ -342,5 +343,12 @@ export function resetPassword (data) {
     url: api.resetPassword,
     method: 'post',
     data: data
+  })
+}
+
+export function commAnalysisView (id) {
+  return request({
+    url: api.commAnalysisView + id,
+    method: 'get'
   })
 }

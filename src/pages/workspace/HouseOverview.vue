@@ -633,14 +633,27 @@ export default {
       // this.$refs.housetypeeditref && this.$refs.housetypeeditref.houseTypeOK()
     },
     imageEditClose () {
-      this.imageEditVisible = false
-      this.$refs.housePhotoRef.refresh()
-      ++this.imgViewerReflesh
+      const that = this
+      this.$confirm({
+        content: '取消对楼盘相册的修改？',
+        onOk () {
+          that.imageEditVisible = false
+          that.$refs.housePhotoRef.refresh()
+          ++that.imgViewerReflesh
+        }
+      })
     },
     saveHousePhoto () {
-      this.$refs.housePhotoRef.save().then(e => {
-        this.imageEditVisible = false
-        ++this.imgViewerReflesh
+      const that = this
+      this.$confirm({
+        content: '确认提交楼盘相册？',
+        onOk () {
+          that.$refs.housePhotoRef.save().then(e => {
+            that.imageEditVisible = false
+            ++that.imgViewerReflesh
+            that.$message.success('相册修改成功')
+          })
+        }
       })
     },
     saveHouseType () {
