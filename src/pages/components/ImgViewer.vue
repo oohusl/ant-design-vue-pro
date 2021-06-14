@@ -2,7 +2,7 @@
   <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="560">
     <a-layout>
       <a-layout-header :style="{ height: '336px', padding: '0' }">
-        <a-carousel effect="fade" class="house-picture" :dots="false" v-if="albumList.length > 0" ref="carouselRef">
+        <a-carousel ref="carouselRef" effect="fade" class="house-picture" :dots="false" v-if="albumList.length > 0">
           <div class="picture-list" v-for="(p, i) of albumList" :key="i">
             <img :src="p.url" />
             <span>{{ p.title }}</span>
@@ -147,7 +147,7 @@ export default {
     },
     selectAlbum (item, index) {
       this.activeIndex = index
-      this.refreshCrousel()
+      this.refreshCarousel()
       this.startCarousel()
     },
     refreshCarousel () {

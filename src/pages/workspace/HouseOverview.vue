@@ -251,7 +251,7 @@
                         :class="diary.open ? 'open' : 'close'"
                       >
                         <a-layout :style="{ height: '100%' }">
-                          <a-layout-sider :style="{ background: '#fff' }" width="80">
+                          <a-layout-sider :style="{ background: '#fff' }" width="60">
                             <a-avatar :size="48" :src="diary.userIcon"></a-avatar>
                           </a-layout-sider>
                           <a-layout :style="{ background: '#ffffff', padding: '0 5px' }">
@@ -328,8 +328,8 @@
                               <pre> {{ qa.diaryAnswer }}</pre>
                             </a-layout-content>
                           </a-layout>
-                          <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="90">
-                            <a-avatar :src="qa.userIcon"></a-avatar>
+                          <a-layout-sider :style="{ background: '#fff', 'text-align': 'center' }" width="60">
+                            <a-avatar :size="48" :src="qa.userIcon"></a-avatar>
                             <p>{{ qa.userName }}</p>
                           </a-layout-sider>
                         </a-layout>

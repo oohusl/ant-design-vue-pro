@@ -1035,6 +1035,17 @@ export function getLabel (value, options) {
   }
   return value
 }
+
+export function transLabels (value, options) {
+  const labelSet = []
+  options.forEach(element => {
+    if ((value || []).indexOf(element.value) >= 0) {
+      labelSet.push(element.label)
+    }
+  })
+  return labelSet.join('/')
+}
+
 export const transactionOwnershipOptions = [
   {
     label: '商品房',

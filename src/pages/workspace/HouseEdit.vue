@@ -139,50 +139,55 @@
             <a-descriptions-item :span="2" :key="school.name"></a-descriptions-item>
           </template>
         </a-descriptions>
-        <a-descriptions title="房型" :column="4">
+        <a-descriptions title="户型" :column="4">
           <a-descriptions-item label="1居面积" :span="1">
-            {{ houseSelect.roomArea1Min ? houseSelect.roomArea1Min + '-' : ''
-            }}{{ houseSelect.roomArea1Max ? houseSelect.roomArea1Max + 'm²' : '' }}
+            {{ commView.roomArea1Min ? commView.roomArea1Min + '-' : ''
+            }}{{ commView.roomArea1Max ? commView.roomArea1Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="1居价格" :span="1">
-            {{ houseSelect.roomPriceRange1Min ? houseSelect.roomPriceRange1Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange1Max ? houseSelect.roomPriceRange1Max + '万' : '' }}
+            {{ commView.roomPriceRange1Min ? commView.roomPriceRange1Min + '-' : ''
+            }}{{ commView.roomPriceRange1Max ? commView.roomPriceRange1Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="2居面积" :span="1">
-            {{ houseSelect.roomArea2Min ? houseSelect.roomArea2Min + '-' : ''
-            }}{{ houseSelect.roomArea2Max ? houseSelect.roomArea2Max + 'm²' : '' }}
+            {{ commView.roomArea2Min ? commView.roomArea2Min + '-' : ''
+            }}{{ commView.roomArea2Max ? commView.roomArea2Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="2居价格" :span="1">
-            {{ houseSelect.roomPriceRange2Min ? houseSelect.roomPriceRange2Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange2Max ? houseSelect.roomPriceRange2Max + '万' : '' }}
+            {{ commView.roomPriceRange2Min ? commView.roomPriceRange2Min + '-' : ''
+            }}{{ commView.roomPriceRange2Max ? commView.roomPriceRange2Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="3居面积" :span="1">
-            {{ houseSelect.roomArea3Min ? houseSelect.roomArea3Min + '-' : ''
-            }}{{ houseSelect.roomArea3Max ? houseSelect.roomArea3Max + 'm²' : '' }}
+            {{ commView.roomArea3Min ? commView.roomArea3Min + '-' : ''
+            }}{{ commView.roomArea3Max ? commView.roomArea3Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="3居价格" :span="1">
-            {{ houseSelect.roomPriceRange3Min ? houseSelect.roomPriceRange3Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange3Max ? houseSelect.roomPriceRange3Max + '万' : '' }}
+            {{ commView.roomPriceRange3Min ? commView.roomPriceRange3Min + '-' : ''
+            }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
-            {{ houseSelect.roomArea4Min ? houseSelect.roomArea4Min + '-' : ''
-            }}{{ houseSelect.roomArea4Max ? houseSelect.roomArea4Max + 'm²' : '' }}
+            {{ commView.roomArea4Min ? commView.roomArea4Min + '-' : ''
+            }}{{ commView.roomArea4Max ? commView.roomArea4Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
-            {{ houseSelect.roomPriceRangeMoreMin ? houseSelect.roomPriceRangeMoreMin + '-' : ''
-            }}{{ houseSelect.roomPriceRangeMoreMax ? houseSelect.roomPriceRangeMoreMax + '万' : '' }}
+            {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
+            }}{{ commView.roomPriceRangeMoreMax ? commView.roomPriceRangeMoreMax + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="权属">
-            {{ houseSelect.transactionOwnership }}
+            {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
-            {{ houseSelect.buildingType }}
+            {{ transLabels(commView.buildingType, buildingTypeOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
-            {{ getLabel(houseSelect.isLift, liftOptions) }}
+            {{ transLabels(commView.isLift, liftOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
-            {{ houseSelect.toilet }}
+            {{
+              ([...commView.toilet] || [])
+                .sort((a, b) => a - b)
+                .map(e => e + '卫')
+                .join('/')
+            }}
           </a-descriptions-item>
         </a-descriptions>
       </a-layout-content>
@@ -444,50 +449,55 @@
             </a-button>
           </a-descriptions-item>
         </a-descriptions>
-        <a-descriptions title="房型" :column="4">
+        <a-descriptions title="户型" :column="4">
           <a-descriptions-item label="1居面积" :span="1">
-            {{ houseSelect.roomArea1Min ? houseSelect.roomArea1Min + '-' : ''
-            }}{{ houseSelect.roomArea1Max ? houseSelect.roomArea1Max + 'm²' : '' }}
+            {{ commView.roomArea1Min ? commView.roomArea1Min + '-' : ''
+            }}{{ commView.roomArea1Max ? commView.roomArea1Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="1居价格" :span="1">
-            {{ houseSelect.roomPriceRange1Min ? houseSelect.roomPriceRange1Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange1Max ? houseSelect.roomPriceRange1Max + '万' : '' }}
+            {{ commView.roomPriceRange1Min ? commView.roomPriceRange1Min + '-' : ''
+            }}{{ commView.roomPriceRange1Max ? commView.roomPriceRange1Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="2居面积" :span="1">
-            {{ houseSelect.roomArea2Min ? houseSelect.roomArea2Min + '-' : ''
-            }}{{ houseSelect.roomArea2Max ? houseSelect.roomArea2Max + 'm²' : '' }}
+            {{ commView.roomArea2Min ? commView.roomArea2Min + '-' : ''
+            }}{{ commView.roomArea2Max ? commView.roomArea2Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="2居价格" :span="1">
-            {{ houseSelect.roomPriceRange2Min ? houseSelect.roomPriceRange2Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange2Max ? houseSelect.roomPriceRange2Max + '万' : '' }}
+            {{ commView.roomPriceRange2Min ? commView.roomPriceRange2Min + '-' : ''
+            }}{{ commView.roomPriceRange2Max ? commView.roomPriceRange2Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="3居面积" :span="1">
-            {{ houseSelect.roomArea3Min ? houseSelect.roomArea3Min + '-' : ''
-            }}{{ houseSelect.roomArea3Max ? houseSelect.roomArea3Max + 'm²' : '' }}
+            {{ commView.roomArea3Min ? commView.roomArea3Min + '-' : ''
+            }}{{ commView.roomArea3Max ? commView.roomArea3Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="3居价格" :span="1">
-            {{ houseSelect.roomPriceRange3Min ? houseSelect.roomPriceRange3Min + '-' : ''
-            }}{{ houseSelect.roomPriceRange3Max ? houseSelect.roomPriceRange3Max + '万' : '' }}
+            {{ commView.roomPriceRange3Min ? commView.roomPriceRange3Min + '-' : ''
+            }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
-            {{ houseSelect.roomArea4Min ? houseSelect.roomArea4Min + '-' : ''
-            }}{{ houseSelect.roomArea4Max ? houseSelect.roomArea4Max + 'm²' : '' }}
+            {{ commView.roomArea4Min ? commView.roomArea4Min + '-' : ''
+            }}{{ commView.roomArea4Max ? commView.roomArea4Max + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
-            {{ houseSelect.roomPriceRangeMoreMin ? houseSelect.roomPriceRangeMoreMin + '-' : ''
-            }}{{ houseSelect.roomPriceRangeMoreMax ? houseSelect.roomPriceRangeMoreMax + '万' : '' }}
+            {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
+            }}{{ commView.roomPriceRangeMoreMax ? commView.roomPriceRangeMoreMax + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="权属">
-            {{ houseSelect.transactionOwnership }}
+            {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
-            {{ houseSelect.buildingType }}
+            {{ transLabels(commView.buildingType, buildingTypeOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
-            {{ getLabel(houseSelect.isLift, liftOptions) }}
+            {{ transLabels(commView.isLift, liftOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
-            {{ houseSelect.toilet }}
+            {{
+              ([...commView.toilet] || [])
+                .sort((a, b) => a - b)
+                .map(e => e + '卫')
+                .join('/')
+            }}
           </a-descriptions-item>
         </a-descriptions>
       </a-layout-content>
@@ -511,6 +521,7 @@ import {
   subwayOptions,
   areaPlate,
   getLabel,
+  transLabels,
   peopleAndVehiclesOptions,
   districtPlanningOptions,
   communityLevOptions,
@@ -572,7 +583,8 @@ export default {
       loading: false,
       plates: {},
       subwayStations: {},
-      getLabel: getLabel,
+      getLabel,
+      transLabels,
       schoolGroup: { 幼儿园: [], 小学: [], 中学: [] },
       schoolGroup_: { 幼儿园: [], 小学: [], 中学: [] },
       metrolineDistrictInfo: [],
