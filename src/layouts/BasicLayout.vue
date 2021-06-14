@@ -166,7 +166,7 @@ export default {
       if (roles.indexOf('ROLE_ADMIN') < 0 || (roles.indexOf('ROLE_ADMIN') >= 0 && !this.isAdmin)) {
         // 查询普通用户菜单
         return routerMap.filter(route => {
-          if (!route.authority) {
+          if (!route.authority || route.authority.indexOf('ROLE_USER') >= 0) {
             if (route.children && route.children.length) {
               route.children = this.filterAsyncRouter(route.children, roles)
             }
@@ -177,7 +177,7 @@ export default {
       } else {
         // 查询管理员菜单
         return routerMap.filter(route => {
-          if (route.authority || route.path === '/') {
+          if ((route.authority && route.authority.indexOf('ROLE_ADMIN') >= 0) || route.path === '/') {
             if (route.children && route.children.length) {
               route.children = this.filterAsyncRouter(route.children, roles)
             }

@@ -51,58 +51,49 @@ export const asyncRouterMap = [
       },
       // account
       {
-        path: '/account',
-        component: RouteView,
-        redirect: '/account/center',
-        name: 'account',
-        hidden: true,
-        meta: { title: '个人页', icon: 'user', keepAlive: true },
+        path: '/account/settings',
+        name: 'settings',
+        component: () => import('@/pages/account/settings/Index'),
+        meta: { title: '个人设置', icon: 'user' },
+        redirect: '/account/settings/custom',
+        authority: ['ROLE_ADMIN', 'ROLE_USER'],
+        hideChildrenInMenu: true,
         children: [
           {
-            path: '/account/settings',
-            name: 'settings',
-            component: () => import('@/pages/account/settings/Index'),
-            meta: { title: '个人设置', hideHeader: true },
-            redirect: '/account/settings/changepassword',
-            hideChildrenInMenu: true,
-            children: [
-              {
-                path: '/account/settings/base',
-                name: 'BaseSettings',
-                component: () => import('@/pages/account/settings/ChangePassword'),
-                meta: { title: '修改密码', hidden: true }
-              },
-              {
-                path: '/account/settings/security',
-                name: 'SecuritySettings',
-                component: () => import('@/pages/account/settings/Security'),
-                meta: { title: '安全设置', hidden: true, keepAlive: true }
-              },
-              {
-                path: '/account/settings/changepassword',
-                name: 'ChangePassword',
-                component: () => import('@/pages/account/settings/ChangePassword'),
-                meta: { title: '修改密码', hidden: true, keepAlive: true }
-              },
-              {
-                path: '/account/settings/custom',
-                name: 'CustomSettings',
-                component: () => import('@/pages/account/settings/Custom'),
-                meta: { title: '个性化设置', hidden: true, keepAlive: true }
-              },
-              {
-                path: '/account/settings/binding',
-                name: 'BindingSettings',
-                component: () => import('@/pages/account/settings/Binding'),
-                meta: { title: '账户绑定', hidden: true, keepAlive: true }
-              },
-              {
-                path: '/account/settings/notification',
-                name: 'NotificationSettings',
-                component: () => import('@/pages/account/settings/Notification'),
-                meta: { title: '新消息通知', hidden: true, keepAlive: true }
-              }
-            ]
+            path: '/account/settings/base',
+            name: 'BaseSettings',
+            component: () => import('@/pages/account/settings/ChangePassword'),
+            meta: { title: '修改密码', hidden: true }
+          },
+          {
+            path: '/account/settings/security',
+            name: 'SecuritySettings',
+            component: () => import('@/pages/account/settings/Security'),
+            meta: { title: '安全设置', hidden: true, keepAlive: true }
+          },
+          {
+            path: '/account/settings/changepassword',
+            name: 'ChangePassword',
+            component: () => import('@/pages/account/settings/ChangePassword'),
+            meta: { title: '修改密码', hidden: true, keepAlive: true }
+          },
+          {
+            path: '/account/settings/custom',
+            name: 'CustomSettings',
+            component: () => import('@/pages/account/settings/Custom'),
+            meta: { title: '个性化设置', hidden: true, keepAlive: true }
+          },
+          {
+            path: '/account/settings/binding',
+            name: 'BindingSettings',
+            component: () => import('@/pages/account/settings/Binding'),
+            meta: { title: '账户绑定', hidden: true, keepAlive: true }
+          },
+          {
+            path: '/account/settings/notification',
+            name: 'NotificationSettings',
+            component: () => import('@/pages/account/settings/Notification'),
+            meta: { title: '新消息通知', hidden: true, keepAlive: true }
           }
         ]
       }

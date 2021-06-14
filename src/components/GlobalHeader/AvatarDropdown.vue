@@ -6,10 +6,6 @@
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" @click="handleToSettings">
-          <a-icon type="setting" />
-          个人设置
-        </a-menu-item>
         <a-menu-item v-if="menu && currentUser.authorities.indexOf('ROLE_ADMIN') >= 0" @click="handleToUserManage">
           <a-icon type="swap" />
           {{ isAdmin ? '中介端' : '管理端' }}
@@ -51,12 +47,6 @@ export default {
     currentUser: state => state.user.info
   }),
   methods: {
-    handleToCenter () {
-      this.$router.push({ path: '/account/center' })
-    },
-    handleToSettings () {
-      this.$router.push({ path: '/account/settings/custom' })
-    },
     handleToUserManage () {
       if (this.isAdmin) {
         localStorage.removeItem('isAdmin')
