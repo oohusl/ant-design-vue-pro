@@ -40,7 +40,7 @@
               @mouseleave="handleHover({},'out')">
             <img :src="element.url" style="width:100px; height:100px"/>
             <div class="list-item-actions" v-if="element.imageId === actionElement.imageId ">
-              <a-icon type="eye" @click="handlePreview(element.url)" />
+              <a-icon type="eye" @click="handlePreview(element.url)" :style="{ 'pointer-events': element.status === 'done'?'auto':'none', opacity: element.status === 'done'?1:0.5 }"/>
               <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px"/>
             </div>
           </li>
@@ -155,7 +155,7 @@ export default {
     },
     handleHover (element, action) {
       // console.log(event)
-      console.log(action)
+      // console.log(action)
       this.actionElement = element
     }
   }
