@@ -1,11 +1,11 @@
 <template>
   <div>
-    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'right'">
+    <a-form :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" :labelAlign="'left'">
       <a-form-item label="房屋结构" :labelCol="{ span: 3 }" :wrapperCol="{ span: 21 }">
-        <a-input style="width:100px" addon-after="室" v-model="houseTypeEdit.room"></a-input
-        ><a-input style="width:100px" addon-after="厅" v-model="houseTypeEdit.hall"></a-input
-        ><a-input style="width:100px" addon-after="厨" v-model="houseTypeEdit.kitchen"></a-input
-        ><a-input style="width:100px" addon-after="卫" v-model="houseTypeEdit.toilet"></a-input>
+        <a-input style="width:120px" addon-after="室" v-model="houseTypeEdit.room"></a-input
+        ><a-input style="width:120px" addon-after="厅" v-model="houseTypeEdit.hall"></a-input
+        ><a-input style="width:120px" addon-after="厨" v-model="houseTypeEdit.kitchen"></a-input
+        ><a-input style="width:120px" addon-after="卫" v-model="houseTypeEdit.toilet"></a-input>
       </a-form-item>
       <a-row :gutter="24">
         <a-col :span="12">
@@ -26,8 +26,8 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="楼号">
-            <a-input v-model="houseTypeEdit.buildingNumber"></a-input>
+          <a-form-item label="户型存量">
+            <a-input addon-after="套" v-model="houseTypeEdit.unitInventory"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
@@ -50,33 +50,40 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="电梯">
-            <a-select :options="liftOptions" v-model="houseTypeEdit.isLift"> </a-select>
+          <a-form-item label="房屋朝向">
+            <a-input v-model="houseTypeEdit.towards"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="房屋朝向">
-            <a-input v-model="houseTypeEdit.towards"></a-input>
+          <a-form-item label="总高">
+            <a-input v-model="houseTypeEdit.totalHeight"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="房屋层高">
+          <a-form-item label="层高">
             <a-input addon-after="米" v-model="houseTypeEdit.floorHeight"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
+          <a-form-item label="电梯">
+            <a-select :options="liftOptions" v-model="houseTypeEdit.isLift"> </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
           <a-form-item label="梯户比">
             <a-input addon-after="梯" style="width:98px" v-model="houseTypeEdit.ladderNumber"></a-input
             ><a-input addon-after="户" style="width:98px" v-model="houseTypeEdit.doorNumber"></a-input>
           </a-form-item>
         </a-col>
+      </a-row>
+      <a-row :gutter="24">
         <a-col :span="12">
-          <a-form-item label="户型存量">
-            <a-input addon-after="套" v-model="houseTypeEdit.unitInventory"></a-input>
+          <a-form-item label="楼号">
+            <a-input v-model="houseTypeEdit.buildingNumber"></a-input>
           </a-form-item>
         </a-col>
       </a-row>

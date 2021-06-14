@@ -168,21 +168,36 @@
                           'algin-item': 'flex-end'
                         }"
                       >
-                        <a-descriptions title="" :column="4">
+                        <a-descriptions title="" :column="6">
+                          <a-descriptions-item label="建筑类型" :span="2">
+                            {{ house.buildingType }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="权属" :span="2">
+                            {{ house.transactionOwnership }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="房屋类型" :span="2">
+                            {{ house.typesOfHouse }}
+                          </a-descriptions-item>
                           <a-descriptions-item label="朝向" :span="2">
                             {{ house.towards }}
                           </a-descriptions-item>
-                          <a-descriptions-item label="类型" :span="2">
-                            {{ house.typesOfHouse }}
+                          <a-descriptions-item label="总高" :span="2">
+                            {{ house.totalHeight }}
                           </a-descriptions-item>
                           <a-descriptions-item label="层高" :span="2">
                             {{ house.floorHeight }}
                           </a-descriptions-item>
-                          <a-descriptions-item label="户型存量" :span="2">
-                            {{ house.unitInventory }}
+                          <a-descriptions-item label="电梯" :span="2">
+                            {{ house.isLift }}
                           </a-descriptions-item>
                           <a-descriptions-item label="梯户比" :span="2">
                             {{ house.ladderRatio }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="楼号" :span="2">
+                            {{ house.buildingNumber }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="户型存量" :span="2">
+                            {{ house.unitInventory }}
                           </a-descriptions-item>
                           <a-descriptions-item label="户型分析" :span="2">
                             {{ house.analysis }}

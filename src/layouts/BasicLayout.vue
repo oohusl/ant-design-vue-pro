@@ -12,13 +12,12 @@
     <template v-slot:menuHeaderRender>
       <div>
         <img
-          @click="$router.push({ path: '/house/query' })"
           src="../assets/logo.png"
           alt="985"
           style="cursor: pointer"
         />
-        <h1 style="cursor: pointer" @click="$router.push({ path: '/house/query' })">
-          {{ title }} <span style="font-size: 8px; color: blue">v1.4.8</span>
+        <h1 style="cursor: pointer"">
+          {{ title }} <span style="font-size: 8px; color: blue">v1.4.9</span>
         </h1>
       </div>
     </template>
