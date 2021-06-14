@@ -35,7 +35,6 @@
               class="list-group-item"
               v-for="element in fileList[type]"
               :key="element.uid"
-              style="float:left;position: relative;"
               @mouseenter="handleHover(element,'in')"
               @mouseleave="handleHover({},'out')">
             <img :src="element.url" style="width:100px; height:100px"/>
@@ -168,13 +167,31 @@ export default {
 }
 .list-item-actions{
   position: absolute;
-    top: 0;
-    left: 0;
+    top: 8px;
+    left: 8px;
     background: rgba(0,0,0,0.5);
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     line-height: 100px;
     color: #fff;
     text-align: center;
 }
+
+</style>
+<style lang="less" scope>
+  .list-group-item{
+    padding: 8px;
+    float: left;
+    position: relative;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .list-group {
+    margin: 0;
+  }
+  .ant-upload.ant-upload-select-picture-card{
+    margin-top: 8px;
+  }
 </style>
