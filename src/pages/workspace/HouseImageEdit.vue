@@ -31,10 +31,18 @@
         v-bind="dragOptions"
       >
         <transition-group name="no" class="list-group" tag="ul">
-          <li class="list-group-item" v-for="element in fileList[type]" :key="element.uid" style="float:left">
-            <img :src="element.url" style="width:100px; height:100px" />
-            <a-icon type="eye" @click="handlePreview(element.url)" />
-            <a-icon type="delete" @click="handleRemove(element, type)" />
+          <li
+              class="list-group-item"
+              v-for="element in fileList[type]"
+              :key="element.uid"
+              style="float:left;position: relative;"
+              @mouseenter="handleHover(element,'in')"
+              @mouseleave="handleHover({},'out')">
+            <img :src="element.url" style="width:100px; height:100px"/>
+            <div class="list-item-actions" v-if="element.imageId === actionElement.imageId ">
+              <a-icon type="eye" @click="handlePreview(element.url)" />
+              <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px"/>
+            </div>
           </li>
         </transition-group>
       </draggable>
@@ -75,7 +83,8 @@ export default {
         group: 'description',
         disabled: false,
         ghostClass: 'ghost'
-      }
+      },
+      actionElement: {}
     }
   },
   watch: {
@@ -143,6 +152,11 @@ export default {
     dragChange (value, list) {
       this.fileList[list] = [...value]
       this.$forceUpdate()
+    },
+    handleHover (element, action) {
+      // console.log(event)
+      console.log(action)
+      this.actionElement = element
     }
   }
 }
@@ -151,5 +165,16 @@ export default {
 .ant-upload-picture-card-wrapper {
   float: left;
   width: fit-content;
+}
+.list-item-actions{
+  position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba(0,0,0,0.5);
+    width: 100%;
+    height: 100%;
+    line-height: 100px;
+    color: #fff;
+    text-align: center;
 }
 </style>
