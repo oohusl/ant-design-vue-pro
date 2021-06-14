@@ -35,12 +35,11 @@
               class="list-group-item"
               v-for="element in fileList[type]"
               :key="element.uid"
-              style="float:left;position: relative;"
               @mouseenter="handleHover(element,'in')"
               @mouseleave="handleHover({},'out')">
             <img :src="element.url" style="width:100px; height:100px"/>
             <div class="list-item-actions" v-if="element.imageId === actionElement.imageId ">
-              <a-icon type="eye" @click="handlePreview(element.url)" />
+              <a-icon type="eye" @click="handlePreview(element.url)" :style="{ 'pointer-events': element.status === 'done'?'auto':'none', opacity: element.status === 'done'?1:0.5 }"/>
               <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px"/>
             </div>
           </li>
@@ -155,7 +154,7 @@ export default {
     },
     handleHover (element, action) {
       // console.log(event)
-      console.log(action)
+      // console.log(action)
       this.actionElement = element
     }
   }
@@ -168,13 +167,31 @@ export default {
 }
 .list-item-actions{
   position: absolute;
-    top: 0;
-    left: 0;
+    top: 8px;
+    left: 8px;
     background: rgba(0,0,0,0.5);
-    width: 100%;
-    height: 100%;
+    width: 100px;
+    height: 100px;
     line-height: 100px;
     color: #fff;
     text-align: center;
 }
+
+</style>
+<style lang="less" scope>
+  .list-group-item{
+    padding: 8px;
+    float: left;
+    position: relative;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .list-group {
+    margin: 0;
+  }
+  .ant-upload.ant-upload-select-picture-card{
+    margin-top: 8px;
+  }
 </style>
