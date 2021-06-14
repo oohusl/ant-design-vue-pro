@@ -165,8 +165,8 @@
             }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
-            {{ commView.roomArea4Min ? commView.roomArea4Min + '-' : ''
-            }}{{ commView.roomArea4Max ? commView.roomArea4Max + 'm²' : '' }}
+            {{ commView.roomAreaMoreMin ? commView.roomAreaMoreMin + '-' : ''
+            }}{{ commView.roomAreaMoreMax ? commView.roomAreaMoreMax + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
             {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
@@ -475,8 +475,8 @@
             }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居面积" :span="1">
-            {{ commView.roomArea4Min ? commView.roomArea4Min + '-' : ''
-            }}{{ commView.roomArea4Max ? commView.roomArea4Max + 'm²' : '' }}
+            {{ commView.roomAreaMoreMin ? commView.roomAreaMoreMin + '-' : ''
+            }}{{ commView.roomAreaMoreMax ? commView.roomAreaMoreMax + 'm²' : '' }}
           </a-descriptions-item>
           <a-descriptions-item label="多居价格" :span="1">
             {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
@@ -802,7 +802,7 @@ export default {
       this.$forceUpdate()
     },
     schoolTypeChange () {
-      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].splice(0, 50)
+      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].slice(0, 50)
       delete this.schoolEdit.schoolName
       this.$forceUpdate()
     },
@@ -812,7 +812,7 @@ export default {
         return
       }
       this.houseSelect.schoolDistrictInfo.push(Object.assign({}, this.schoolEdit))
-      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].splice(0, 50)
+      this.schoolGroup[this.schoolEdit.schoolType] = this.schoolGroup_[this.schoolEdit.schoolType].slice(0, 50)
       this.schoolEdit = {}
       this.$forceUpdate()
     },

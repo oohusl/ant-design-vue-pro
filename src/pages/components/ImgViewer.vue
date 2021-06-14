@@ -85,6 +85,9 @@ export default {
   created () {
     this.queryPhotos()
   },
+  destroyed () {
+    clearInterval(this.interval)
+  },
   watch: {
     refresh (newValue, oldValue) {
       newValue && this.queryPhotos()
@@ -113,7 +116,9 @@ export default {
             index: photo.type
           })
         }
-        this.startCarousel()
+        if (this.albumList.length > 0) {
+          this.startCarousel()
+        }
       })
     },
     imgViewerExit () {
