@@ -188,6 +188,9 @@ export default {
       if (this.houseTypeFiles.length <= 0) {
         this.houseTypeEdit.photoUrl = ''
       }
+      this.houseTypeEdit.referenceTotalPrice =
+        this.houseTypeEdit.referenceTotalPrice ||
+        Math.round((this.houseTypeEdit.referenceUnitPrice * this.houseTypeEdit.acreage) / 10000)
       return saveAnalysis(this.houseTypeEdit)
         .then(e => {
           if (this.houseTypeFiles.length > 0 && this.houseTypeFiles[0].file) {

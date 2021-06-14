@@ -124,7 +124,7 @@
                   :key="house.unitTypeName"
                   :style="{
                     background: '#ffffff',
-                    height: '200px',
+                    height: '222px',
                     padding: '10px 0',
                     'border-bottom': 'solid 1px rgba(0, 0, 0, 0.06)'
                   }"
@@ -153,9 +153,16 @@
                         {{
                           `${house.room}室${house.hall ? house.hall + '厅' : ''}${
                             house.kitchen ? house.kitchen + '厨' : ''
-                          }${house.toilet ? house.toilet + '卫  ' : '  '}建面${house.acreage}m²`
+                          }${house.toilet ? house.toilet + '卫  ' : '  '}`
                         }}
-                        <a-tag color="green" size="sm">在售</a-tag>
+                        <template v-if="house.acreage">{{ house.acreage }}m²</template>
+                        <a-tag
+                          style="margin-left: 10px"
+                          color="green"
+                          size="sm"
+                          v-if="house.unitInventory"
+                        >{{ house.unitInventory }}套</a-tag
+                        >
                         <a-button type="link" icon="edit" size="small" @click="editHouseType(house)" />
                         <a-button type="link" icon="delete" size="small" @click="deleteHouseType(house)" />
                       </a-layout-header>
@@ -196,9 +203,6 @@
                           <a-descriptions-item label="楼号" :span="2">
                             {{ house.buildingNumber }}
                           </a-descriptions-item>
-                          <a-descriptions-item label="户型存量" :span="2">
-                            {{ house.unitInventory }}
-                          </a-descriptions-item>
                           <a-descriptions-item label="户型分析" :span="2">
                             {{ house.analysis }}
                           </a-descriptions-item>
@@ -209,13 +213,11 @@
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="200">
                     <a-layout :style="{ background: '#ffffff', height: '100%', 'reviewContent-align': 'center' }">
                       <a-layout-header
+                        v-if="calcTotalPrice(house)"
                         :style="{ background: '#ffffff', padding: 0, color: '#B71C2B', 'font-size': '16px' }"
                         width="200"
                       >
-                        总价约<span
-                          style="font-size: 24px; font-weight: bold"
-                        >{{ house.referenceTotalPrice }}万元</span
-                        >
+                        总价约<span style="font-size: 24px; font-weight: bold">{{ calcTotalPrice(house) }}万元</span>
                       </a-layout-header>
                       <a-layout-content
                         :style="{
@@ -688,6 +690,9 @@ export default {
         this.houseQAVisible = false
         this.queryQuestion()
       })
+    },
+    calcTotalPrice (house) {
+      return house.referenceTotalPrice || Math.round((house.referenceUnitPrice * house.acreage) / 10000)
     }
   }
 }

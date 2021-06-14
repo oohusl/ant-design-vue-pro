@@ -147,13 +147,13 @@ export default {
     },
     selectAlbum (item, index) {
       this.activeIndex = index
-      this.refreshaCrousel()
+      this.refreshCrousel()
       this.startCarousel()
     },
     refreshCarousel () {
       const scroll = document.querySelector('.house-album-list  ul')
       const len = this.albumList.length
-      this.$refs['carouselRef'].goTo(this.activeIndex)
+      this.$refs.carouselRef.goTo(this.activeIndex)
       if (len <= 5 || !scroll) {
         return
       }
