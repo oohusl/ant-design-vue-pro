@@ -32,15 +32,23 @@
       >
         <transition-group name="no" class="list-group" tag="ul">
           <li
-              class="list-group-item"
-              v-for="element in fileList[type]"
-              :key="element.uid"
-              @mouseenter="handleHover(element,'in')"
-              @mouseleave="handleHover({},'out')">
-            <img :src="element.url" style="width:100px; height:100px"/>
-            <div class="list-item-actions" v-if="element.imageId === actionElement.imageId ">
-              <a-icon type="eye" @click="handlePreview(element.url)" :style="{ 'pointer-events': element.status === 'done'?'auto':'none', opacity: element.status === 'done'?1:0.5 }"/>
-              <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px"/>
+            class="list-group-item"
+            v-for="element in fileList[type]"
+            :key="element.uid"
+            @mouseenter="handleHover(element, 'in')"
+            @mouseleave="handleHover({}, 'out')"
+          >
+            <img :src="element.url" style="width:100px; height:100px" />
+            <div class="list-item-actions" v-if="element.imageId === actionElement.imageId">
+              <a-icon
+                type="eye"
+                @click="handlePreview(element.url)"
+                :style="{
+                  'pointer-events': element.status === 'done' ? 'auto' : 'none',
+                  opacity: element.status === 'done' ? 1 : 0.5
+                }"
+              />
+              <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px" />
             </div>
           </li>
         </transition-group>
@@ -53,7 +61,6 @@
 import { photoQuery, housePhotoUpload } from '@/api/manage'
 import { EventBus } from '@/event-bus'
 import draggable from 'vuedraggable'
-const initFileList = { '0': [], '1': [], '2': [], '3': [], '4': [] }
 export default {
   name: 'HouseImageEdit',
   props: {
@@ -74,7 +81,7 @@ export default {
         '3': '楼盘实景图',
         '4': '周边实景图'
       },
-      fileList: initFileList,
+      fileList: { '0': [], '1': [], '2': [], '3': [], '4': [] },
       previewVisible: false,
       previewImage: null,
       dragOptions: {
@@ -97,10 +104,9 @@ export default {
   methods: {
     queryPhotos () {
       const that = this
-      this.fileList = initFileList
+      this.fileList = { '0': [], '1': [], '2': [], '3': [], '4': [] }
       return photoQuery(that.houseId).then(e => {
         e.forEach(image => {
-          that.fileList[image.type] = this.fileList[image.type] || []
           that.fileList[image.type].push({
             uid: image.id,
             imageId: image.id,
@@ -165,33 +171,34 @@ export default {
   float: left;
   width: fit-content;
 }
-.list-item-actions{
+.list-item-actions {
   position: absolute;
-    top: 8px;
-    left: 8px;
-    background: rgba(0,0,0,0.5);
-    width: 100px;
-    height: 100px;
-    line-height: 100px;
-    color: #fff;
-    text-align: center;
+  top: 8px;
+  left: 8px;
+  background: rgba(0, 0, 0, 0.5);
+  width: 100px;
+  height: 100px;
+  line-height: 100px;
+  color: #fff;
+  text-align: center;
 }
-
 </style>
 <style lang="less" scope>
-  .list-group-item{
-    padding: 8px;
-    float: left;
-    position: relative;
-    border: 1px solid #d9d9d9;
-    border-radius: 4px;
-    margin-right: 8px;
-    margin-bottom: 8px;
-  }
-  .list-group {
-    margin: 0;
-  }
-  .ant-upload.ant-upload-select-picture-card{
-    margin-top: 8px;
-  }
+.list-group-item {
+  padding: 8px;
+  float: left;
+  position: relative;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+.list-group {
+  margin: 0;
+  min-height: 120px;
+  min-width: 810px;
+}
+.ant-upload.ant-upload-select-picture-card {
+  margin-top: 8px;
+}
 </style>

@@ -734,6 +734,9 @@ export default {
     },
     showDetail () {
       this.edit = false
+      commAnalysisView(this.houseTypeEdit.communityId).then(e => {
+        this.commView = e
+      })
       console.log(this.houseSelect)
     },
 
