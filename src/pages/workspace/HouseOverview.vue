@@ -195,7 +195,7 @@
                             {{ house.floorHeight }}
                           </a-descriptions-item>
                           <a-descriptions-item label="电梯" :span="2">
-                            {{ house.isLift }}
+                            {{ transLabels(house.isLift, liftOptions) }}
                           </a-descriptions-item>
                           <a-descriptions-item label="梯户比" :span="2">
                             {{ house.ladderRatio }}
@@ -393,7 +393,8 @@ import {
   liftOptions,
   subwayOptions,
   areaPlate,
-  getLabel
+  getLabel,
+  transLabels
 } from '@/api/data'
 import {
   queryAnalysis,
@@ -424,7 +425,6 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
-      liftOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       totalPriceOptions,
@@ -434,6 +434,7 @@ export default {
       loopSummaryOptions,
       booleanOptions,
       subwayOptions,
+      liftOptions,
       loading: false,
       plates: {},
       subwayStations: {},
@@ -479,6 +480,7 @@ export default {
   },
   methods: {
     moment,
+    transLabels,
     closeDetail () {
       this.detailFlag = 0
     },
