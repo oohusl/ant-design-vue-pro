@@ -116,6 +116,7 @@ export default {
             index: photo.type
           })
         }
+        this.$forceUpdate()
         if (this.albumList.length > 0) {
           this.startCarousel()
         }

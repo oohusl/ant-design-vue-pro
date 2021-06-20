@@ -10,19 +10,19 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-item label="面积">
-            <a-input addon-after="m²" v-model="houseTypeEdit.acreage"></a-input>
+            <a-input addon-after="m²" v-model="houseTypeEdit.acreage" @change="changeTotalPrice"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
           <a-form-item label="单价">
-            <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice"></a-input>
+            <a-input addon-after="元" v-model="houseTypeEdit.referenceUnitPrice" @change="changeTotalPrice"></a-input>
           </a-form-item>
         </a-col>
       </a-row>
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-item label="总价">
-            <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice"></a-input>
+            <a-input addon-after="万元" v-model="houseTypeEdit.referenceTotalPrice" @change="changePrice"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -46,7 +46,7 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-item label="房屋类型">
-            <a-input v-model="houseTypeEdit.typesOfHouse"></a-input>
+            <a-select v-model="houseTypeEdit.typesOfHouse" :options="typesOfHouseOptions"></a-select>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -58,7 +58,7 @@
       <a-row :gutter="24">
         <a-col :span="12">
           <a-form-item label="总高">
-            <a-input v-model="houseTypeEdit.totalHeight"></a-input>
+            <a-input addon-after="层" v-model="houseTypeEdit.totalHeight"></a-input>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -125,7 +125,7 @@
 import { houseTypePhotoUpload, saveAnalysis } from '@/api/manage'
 import InputTag from '../components/InputTag.vue'
 import { getBase64 } from '@/api/util'
-import { transactionOwnershipOptions, liftOptions, buildingTypeOptions } from '@/api/data'
+import { transactionOwnershipOptions, liftOptions, buildingTypeOptions, typesOfHouseOptions } from '@/api/data'
 import { EventBus } from '@/event-bus'
 
 export default {
@@ -148,6 +148,7 @@ export default {
   data () {
     return {
       transactionOwnershipOptions,
+      typesOfHouseOptions,
       liftOptions,
       buildingTypeOptions,
       imageEditVisible: false,
@@ -188,9 +189,6 @@ export default {
       if (this.houseTypeFiles.length <= 0) {
         this.houseTypeEdit.photoUrl = ''
       }
-      this.houseTypeEdit.referenceTotalPrice =
-        this.houseTypeEdit.referenceTotalPrice ||
-        Math.round((this.houseTypeEdit.referenceUnitPrice * this.houseTypeEdit.acreage) / 10000)
       return saveAnalysis(this.houseTypeEdit)
         .then(e => {
           if (this.houseTypeFiles.length > 0 && this.houseTypeFiles[0].file) {
@@ -213,8 +211,22 @@ export default {
           })
         })
     },
+    changeTotalPrice () {
+      this.houseTypeEdit.acreage &&
+        this.houseTypeEdit.referenceUnitPrice &&
+        (this.houseTypeEdit.referenceTotalPrice = Math.round(
+          (this.houseTypeEdit.referenceUnitPrice * this.houseTypeEdit.acreage) / 10000
+        ))
+    },
+    changePrice () {
+      this.houseTypeEdit.acreage &&
+        this.houseTypeEdit.referenceTotalPrice &&
+        (this.houseTypeEdit.referenceUnitPrice = Math.round(
+          (10000 * this.houseTypeEdit.referenceTotalPrice) / this.houseTypeEdit.acreage
+        ))
+    },
     refresh () {
-      this.houseTypeEdit = this.houseAnalysis
+      this.houseTypeEdit = Object.assign({}, this.houseAnalysis)
       this.houseTypeFiles = this.houseAnalysis.photoUrl
         ? [
             {

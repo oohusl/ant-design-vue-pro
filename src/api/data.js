@@ -1423,3 +1423,16 @@ export const buildingTypeOptions = [
     value: '其他'
   }
 ]
+
+export const typesOfHouseOptions = [
+  { label: '平层', value: '平层' },
+  { label: '塔楼', value: '塔楼' },
+  { label: '洋房', value: '洋房' },
+  { label: '复式', value: '复式' },
+  { label: '叠层', value: '叠层' },
+  { label: '错层', value: '错层' },
+  { label: '跃层', value: '跃层' },
+  { label: '独栋', value: '独栋' },
+  { label: '联排', value: '联排' },
+  { label: '合院', value: '合院' }
+]

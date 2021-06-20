@@ -88,7 +88,10 @@
                     </template>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
-                    <a @click="editHouseImage">上传图片</a>
+                    <a @click="$refs.housePhotoRef.open()">小区相册</a>
+                  </a-descriptions-item>
+                  <a-descriptions-item label="" :span="4">
+                    <a @click="$refs.houseFileRef.open()">小区网盘</a>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
                     <a @click="showDetail">查看小区详情></a>
@@ -355,9 +358,8 @@
     <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
       <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
-    <a-modal title="楼盘相册" :visible="imageEditVisible" @cancel="imageEditClose" @ok="saveHousePhoto" width="1000px">
-      <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef"></house-image-edit>
-    </a-modal>
+    <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef" @changed="imageChange"> </house-image-edit>
+    <house-file-edit :houseId="houseSelect.id" ref="houseFileRef"></house-file-edit>
     <a-modal
       title="图片预览"
       :visible="previewImage != null"
@@ -374,6 +376,7 @@
 import { AutoComplete } from 'ant-design-vue'
 import ImgViewer from '../components/ImgViewer.vue'
 import HouseEdit from './HouseEdit.vue'
+import HouseFileEdit from './HouseFileEdit.vue'
 import HouseTypeEdit from './HouseTypeEdit'
 import HouseDiary from './HouseDiary'
 import HouseImageEdit from './HouseImageEdit'
@@ -414,6 +417,7 @@ export default {
     HouseDiary,
     HouseQA,
     HouseImageEdit,
+    HouseFileEdit,
     ImgViewer
   },
   computed: {},
@@ -446,7 +450,7 @@ export default {
       houseTypeVisible: false,
       houseDiaryVisible: false,
       houseQAVisible: false,
-      imageEditVisible: false,
+      fileEditVisible: false,
       activeIndex: 0,
       diaryTypeOptions: [],
       houseTypeOptions: [],
@@ -523,6 +527,9 @@ export default {
         }
       })
     },
+    imageChange () {
+      ++this.imgViewerReflesh
+    },
     houseTypeClick (room) {
       // 同一户型点两次切换排序
       this.roomResort = this.roomResort * (this.roomNumber === room ? -1 : 1)
@@ -594,8 +601,8 @@ export default {
         this.$refs.housetypeeditref.refresh()
       })
     },
-    editHouseImage (house) {
-      this.imageEditVisible = true
+    editHouseFile (house) {
+      this.fileEditVisible = true
     },
     editHouseDiary (diary) {
       this.houseDiaryVisible = true
@@ -650,30 +657,6 @@ export default {
     houseTypeOK () {
       this.houseTypeVisible = false
       // this.$refs.housetypeeditref && this.$refs.housetypeeditref.houseTypeOK()
-    },
-    imageEditClose () {
-      const that = this
-      this.$confirm({
-        content: '取消对楼盘相册的修改？',
-        onOk () {
-          that.imageEditVisible = false
-          that.$refs.housePhotoRef.refresh()
-          ++that.imgViewerReflesh
-        }
-      })
-    },
-    saveHousePhoto () {
-      const that = this
-      this.$confirm({
-        content: '确认提交楼盘相册？',
-        onOk () {
-          that.$refs.housePhotoRef.save().then(e => {
-            that.imageEditVisible = false
-            ++that.imgViewerReflesh
-            that.$message.success('相册修改成功')
-          })
-        }
-      })
     },
     saveHouseType () {
       this.$refs.housetypeeditref.saveHouseType().then(e => {

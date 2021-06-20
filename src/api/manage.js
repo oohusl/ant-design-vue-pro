@@ -28,7 +28,9 @@ const api = {
   ticketHistory: '/ticket-history',
   ticketOwners: '/ticket-owners',
   ticketOwner: '/ticket-owner',
-  commAnalysisView: '/communityInfoAnalysisView/'
+  commAnalysisView: '/communityInfoAnalysisView/',
+  imageUpload: '/community-infos/uploadPhoto',
+  communityFolder: 'community-folder'
 }
 
 export default api
@@ -350,5 +352,35 @@ export function commAnalysisView (id) {
   return request({
     url: api.commAnalysisView + id,
     method: 'get'
+  })
+}
+
+export function imageUPload (data) {
+  return request({
+    url: api.imageUpload,
+    method: 'post',
+    data: data
+  })
+}
+
+export function communityFolderUpload (data) {
+  return request({
+    url: api.communityFolder,
+    method: 'post',
+    data: data
+  })
+}
+
+export function communityFolderQuery (communityId) {
+  return request({
+    url: api.communityFolder + '/' + communityId,
+    method: 'get'
+  })
+}
+
+export function communityFolderDelete (fileId) {
+  return request({
+    url: api.communityFolder + '/' + fileId,
+    method: 'delete'
   })
 }

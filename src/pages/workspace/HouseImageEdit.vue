@@ -1,5 +1,33 @@
 <template>
-  <div>
+  <a-modal
+    title="楼盘相册"
+    :visible="visible"
+    @cancel="imageEditClose"
+    @ok="saveHousePhoto"
+    width="1000px"
+    :destroyOnClose="true"
+  >
+    <a-modal
+      title="图片编辑"
+      :visible="editItem != null"
+      :destroyOnClose="true"
+      @cancel="editItem = null"
+      :footer="false"
+      :zIndex="10000"
+    >
+      <div>
+        <img id="image" style="max-width: 100%; min-width: 400px" />
+      </div>
+      <div class="img-toolbar">
+        <!-- <img src="../../assets/crop.svg" @click="cropper.setDragMode('crop')" /> -->
+        <img src="../../assets/rotate-left.svg" @click="cropper.rotate(-90)" />
+        <img src="../../assets/magnify-plus.svg" @click="cropper.zoom(0.1)" />
+        <img src="../../assets/magnify-minus.svg" @click="cropper.zoom(-0.1)" />
+        <a-divider type="vertical" />
+        <img src="../../assets/reset.svg" @click="cropper.reset()" />
+        <img @click="saveEditImage" src="../../assets/save.svg" />
+      </div>
+    </a-modal>
     <a-row v-for="type in Object.keys(types)" :key="type">
       <a-upload
         accept="image/*"
@@ -40,25 +68,21 @@
           >
             <img :src="element.url" style="width:100px; height:100px" />
             <div class="list-item-actions" v-if="element.imageId === actionElement.imageId">
-              <a-icon
-                type="eye"
-                @click="handlePreview(element.url)"
-                :style="{
-                  'pointer-events': element.status === 'done' ? 'auto' : 'none',
-                  opacity: element.status === 'done' ? 1 : 0.5
-                }"
-              />
+              <a-icon type="eye" @click="handlePreview(element.url)" />
               <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px" />
+              <a-icon type="edit" @click="handleEdit(element, type)" style="margin-left:5px" />
             </div>
           </li>
         </transition-group>
       </draggable>
     </a-row>
-  </div>
+  </a-modal>
 </template>
 
 <script>
-import { photoQuery, housePhotoUpload } from '@/api/manage'
+import 'cropperjs/dist/cropper.css'
+import Cropper from 'cropperjs'
+import { photoQuery, housePhotoUpload, imageUPload } from '@/api/manage'
 import { EventBus } from '@/event-bus'
 import draggable from 'vuedraggable'
 export default {
@@ -74,6 +98,7 @@ export default {
   components: { draggable },
   data () {
     return {
+      visible: false,
       types: {
         '0': '封面图',
         '1': '楼盘平面图',
@@ -84,13 +109,16 @@ export default {
       fileList: { '0': [], '1': [], '2': [], '3': [], '4': [] },
       previewVisible: false,
       previewImage: null,
+      editItem: null,
+      cropper: null,
       dragOptions: {
         animation: 0,
         group: 'description',
         disabled: false,
         ghostClass: 'ghost'
       },
-      actionElement: {}
+      actionElement: {},
+      modified: false
     }
   },
   watch: {
@@ -101,13 +129,16 @@ export default {
   created () {
     this.queryPhotos()
   },
+  mounted () {},
   methods: {
+    open () {
+      this.visible = true
+    },
     queryPhotos () {
-      const that = this
-      this.fileList = { '0': [], '1': [], '2': [], '3': [], '4': [] }
-      return photoQuery(that.houseId).then(e => {
+      return photoQuery(this.houseId).then(e => {
+        this.fileList = { '0': [], '1': [], '2': [], '3': [], '4': [] }
         e.forEach(image => {
-          that.fileList[image.type].push({
+          this.fileList[image.type].push({
             uid: image.id,
             imageId: image.id,
             imageType: image.type,
@@ -115,12 +146,10 @@ export default {
             name: image.url,
             url: image.url
           })
-          that.$forceUpdate()
+          this.$forceUpdate()
         })
+        this.modified = false
       })
-    },
-    refresh () {
-      this.queryPhotos()
     },
     save () {
       const files = []
@@ -131,21 +160,63 @@ export default {
       })
       return housePhotoUpload({ id: this.houseId, files: files })
     },
-    handleRemove (file, type) {
-      const index = this.fileList[type].findIndex(f => {
-        return f.url === file.url
+    saveEditImage () {
+      this.cropper.getCroppedCanvas().toBlob(blob => {
+        const formData = new FormData()
+        // Pass the image file name as the third parameter if necessary.
+        formData.append('file', blob)
+        // Use `jQuery.ajax` method for example
+        this.modified = true
+        imageUPload(formData).then(e => {
+          this.editItem.url = e
+          this.editItem = null
+        })
       })
-      this.fileList[type].splice(index, 1)
-      // photoDelete(file.imageId || file.response.id)
-      this.$forceUpdate()
+    },
+    handleRemove (file, type) {
+      this.$confirm({
+        content: '确认删除图片？',
+        onOk: () => {
+          const index = this.fileList[type].findIndex(f => {
+            return f.url === file.url
+          })
+          this.fileList[type].splice(index, 1)
+          this.modified = true
+          this.$forceUpdate()
+        }
+      })
     },
     handlePreview (url) {
       EventBus.$emit('preview', url)
+    },
+    handleEdit (item) {
+      this.editItem = item
+      // if (!this.cropper) {
+      this.$nextTick(() => {
+        const image = document.getElementById('image')
+        // eslint-disable-next-line no-new
+        this.cropper = new Cropper(image, {
+          crop (event) {
+            console.log(event.detail.x)
+            console.log(event.detail.y)
+            console.log(event.detail.width)
+            console.log(event.detail.height)
+            console.log(event.detail.rotate)
+            console.log(event.detail.scaleX)
+            console.log(event.detail.scaleY)
+          }
+        })
+        this.cropper.replace(item.url)
+      })
+      // } else {
+      //   this.cropper.replace(item.url)
+      // }
     },
     handleChange (f, type) {
       if (f.file.status === 'done') {
         this.fileList[type].push({ url: f.file.response, uid: f.file.uid })
       }
+      this.modified = true
       this.$forceUpdate()
     },
     onMove ({ relatedContext, draggedContext }) {
@@ -156,12 +227,40 @@ export default {
     },
     dragChange (value, list) {
       this.fileList[list] = [...value]
+      this.modified = true
       this.$forceUpdate()
     },
     handleHover (element, action) {
-      // console.log(event)
-      // console.log(action)
       this.actionElement = element
+    },
+    imageEditClose () {
+      if (!this.modified) {
+        this.visible = false
+        return
+      }
+      this.$confirm({
+        content: '取消对楼盘相册的修改？',
+        onOk: () => {
+          this.visible = false
+          this.queryPhotos()
+        }
+      })
+    },
+    saveHousePhoto () {
+      if (!this.modified) {
+        this.visible = false
+        return
+      }
+      this.$confirm({
+        content: '确认提交楼盘相册？',
+        onOk: () => {
+          this.save().then(e => {
+            this.visible = false
+            this.$message.success('相册修改成功')
+          })
+          this.$emit('changed')
+        }
+      })
     }
   }
 }
@@ -200,5 +299,16 @@ export default {
 }
 .ant-upload.ant-upload-select-picture-card {
   margin-top: 8px;
+}
+.img-toolbar {
+  text-align: center;
+  background-color: #f6f6f6;
+  border: 1px solid #dcdcdc;
+  height: 42px;
+}
+.img-toolbar * {
+  margin-top: 8px;
+  margin-left: 30px;
+  cursor: pointer;
 }
 </style>

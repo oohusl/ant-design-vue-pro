@@ -17,6 +17,7 @@
     "ant-design-vue": "^1.6.2",
     "axios": "^0.19.0",
     "core-js": "^3.1.2",
+    "cropperjs": "^1.5.12",
     "enquire.js": "^2.1.6",
     "excellentexport": "^3.6.0",
     "lodash.clonedeep": "^4.5.0",
