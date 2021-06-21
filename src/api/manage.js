@@ -30,7 +30,7 @@ const api = {
   ticketOwner: '/ticket-owner',
   commAnalysisView: '/communityInfoAnalysisView/',
   imageUpload: '/community-infos/uploadPhoto',
-  communityFolder: 'community-folder'
+  communityFolder: '/community-folder'
 }
 
 export default api
@@ -363,7 +363,7 @@ export function imageUPload (data) {
   })
 }
 
-export function communityFolderUpload (data) {
+export function communityFolderSave (data) {
   return request({
     url: api.communityFolder,
     method: 'post',

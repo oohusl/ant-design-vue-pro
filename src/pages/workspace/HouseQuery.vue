@@ -511,7 +511,7 @@
             <a-layout-header :style="{ background: '#ffffff', padding: '0 15px', height: '50px', display: 'flex' }">
               <div class="result">
                 共找到<span>{{ results['x-total-count'] ? results['x-total-count'] : 0 }}</span
-                >套 符合条件房源
+                >个 符合条件小区
               </div>
               <a-button-group>
                 <a-button @click="sortChange('communityLev', 'desc')">
