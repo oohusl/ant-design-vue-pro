@@ -140,38 +140,6 @@
           </template>
         </a-descriptions>
         <a-descriptions title="户型" :column="4">
-          <a-descriptions-item label="1居面积" :span="1">
-            {{ commView.roomArea1Min ? commView.roomArea1Min + '-' : ''
-            }}{{ commView.roomArea1Max ? commView.roomArea1Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="1居价格" :span="1">
-            {{ commView.roomPriceRange1Min ? commView.roomPriceRange1Min + '-' : ''
-            }}{{ commView.roomPriceRange1Max ? commView.roomPriceRange1Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="2居面积" :span="1">
-            {{ commView.roomArea2Min ? commView.roomArea2Min + '-' : ''
-            }}{{ commView.roomArea2Max ? commView.roomArea2Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="2居价格" :span="1">
-            {{ commView.roomPriceRange2Min ? commView.roomPriceRange2Min + '-' : ''
-            }}{{ commView.roomPriceRange2Max ? commView.roomPriceRange2Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="3居面积" :span="1">
-            {{ commView.roomArea3Min ? commView.roomArea3Min + '-' : ''
-            }}{{ commView.roomArea3Max ? commView.roomArea3Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="3居价格" :span="1">
-            {{ commView.roomPriceRange3Min ? commView.roomPriceRange3Min + '-' : ''
-            }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="多居面积" :span="1">
-            {{ commView.roomAreaMoreMin ? commView.roomAreaMoreMin + '-' : ''
-            }}{{ commView.roomAreaMoreMax ? commView.roomAreaMoreMax + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="多居价格" :span="1">
-            {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
-            }}{{ commView.roomPriceRangeMoreMax ? commView.roomPriceRangeMoreMax + '万' : '' }}
-          </a-descriptions-item>
           <a-descriptions-item label="权属">
             {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
@@ -189,6 +157,16 @@
                 .join('/')
             }}
           </a-descriptions-item>
+          <template v-for="roomType in commView.roomTypes">
+            <a-descriptions-item :label="roomType.room + '居面积'" :span="1" :key="roomType.room">
+              {{ roomType.roomAreaMin ? roomType.roomAreaMin + '-' : ''
+              }}{{ roomType.roomAreaMax ? roomType.roomAreaMax + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="roomType.room + '居价格'" :span="1" :key="roomType.room">
+              {{ roomType.roomPriceMin ? roomType.roomPriceMin + '-' : ''
+              }}{{ roomType.roomPriceMax ? roomType.roomPriceMax + '万' : '' }}
+            </a-descriptions-item>
+          </template>
         </a-descriptions>
       </a-layout-content>
     </a-layout>
@@ -450,38 +428,6 @@
           </a-descriptions-item>
         </a-descriptions>
         <a-descriptions title="户型" :column="4">
-          <a-descriptions-item label="1居面积" :span="1">
-            {{ commView.roomArea1Min ? commView.roomArea1Min + '-' : ''
-            }}{{ commView.roomArea1Max ? commView.roomArea1Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="1居价格" :span="1">
-            {{ commView.roomPriceRange1Min ? commView.roomPriceRange1Min + '-' : ''
-            }}{{ commView.roomPriceRange1Max ? commView.roomPriceRange1Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="2居面积" :span="1">
-            {{ commView.roomArea2Min ? commView.roomArea2Min + '-' : ''
-            }}{{ commView.roomArea2Max ? commView.roomArea2Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="2居价格" :span="1">
-            {{ commView.roomPriceRange2Min ? commView.roomPriceRange2Min + '-' : ''
-            }}{{ commView.roomPriceRange2Max ? commView.roomPriceRange2Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="3居面积" :span="1">
-            {{ commView.roomArea3Min ? commView.roomArea3Min + '-' : ''
-            }}{{ commView.roomArea3Max ? commView.roomArea3Max + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="3居价格" :span="1">
-            {{ commView.roomPriceRange3Min ? commView.roomPriceRange3Min + '-' : ''
-            }}{{ commView.roomPriceRange3Max ? commView.roomPriceRange3Max + '万' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="多居面积" :span="1">
-            {{ commView.roomAreaMoreMin ? commView.roomAreaMoreMin + '-' : ''
-            }}{{ commView.roomAreaMoreMax ? commView.roomAreaMoreMax + 'm²' : '' }}
-          </a-descriptions-item>
-          <a-descriptions-item label="多居价格" :span="1">
-            {{ commView.roomPriceRangeMoreMin ? commView.roomPriceRangeMoreMin + '-' : ''
-            }}{{ commView.roomPriceRangeMoreMax ? commView.roomPriceRangeMoreMax + '万' : '' }}
-          </a-descriptions-item>
           <a-descriptions-item label="权属">
             {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
@@ -499,6 +445,16 @@
                 .join('/')
             }}
           </a-descriptions-item>
+          <template v-for="roomType in commView.roomTypes">
+            <a-descriptions-item :label="roomType.room + '居面积'" :span="1" :key="roomType.room">
+              {{ roomType.roomAreaMin ? roomType.roomAreaMin + '-' : ''
+              }}{{ roomType.roomAreaMax ? roomType.roomAreaMax + 'm²' : '' }}
+            </a-descriptions-item>
+            <a-descriptions-item :label="roomType.room + '居价格'" :span="1" :key="roomType.room">
+              {{ roomType.roomPriceMin ? roomType.roomPriceMin + '-' : ''
+              }}{{ roomType.roomPriceMax ? roomType.roomPriceMax + '万' : '' }}
+            </a-descriptions-item>
+          </template>
         </a-descriptions>
       </a-layout-content>
     </a-layout>
