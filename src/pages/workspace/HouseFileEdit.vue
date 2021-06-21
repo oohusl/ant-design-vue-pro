@@ -8,7 +8,6 @@
     @cancel="cancel">
     <div>
       <a-upload
-        accept="image/*"
         action="/api/community-folder/uploadFile"
         :multiple="true"
         :show-upload-list="false"
