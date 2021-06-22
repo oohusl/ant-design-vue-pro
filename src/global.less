@@ -23,6 +23,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-width: 1280px;
 }
 
 ul,
@@ -173,4 +174,9 @@ ol {
   }
   pre {
     white-space: pre-wrap;
+  }
+  @media (max-width: 1280px) {
+    .house-query-content{
+      padding: 0 32px !important;
+    }
   }
