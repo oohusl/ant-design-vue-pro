@@ -36,6 +36,13 @@ export const asyncRouterMap = [
         meta: { title: '订单管理', keepAlive: true, icon: 'form' }
       },
       {
+        path: '/yun-pan',
+        name: 'YunPan',
+        component: () => import('@/pages/workspace/YunPan'),
+        authority: ['ROLE_ADMIN', 'ROLE_USER'],
+        meta: { title: '资料中心', keepAlive: true, icon: 'database' }
+      },
+      {
         path: '/user-manage',
         name: 'UserManage',
         authority: ['ROLE_ADMIN'],

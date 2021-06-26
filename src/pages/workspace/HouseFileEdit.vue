@@ -126,7 +126,8 @@ export default {
       })
     },
     handleShare (f) {
-      navigator.clipboard.writeText(location.origin + f.filePath)
+      // navigator.clipboard.writeText(location.origin + f.filePath)
+      this.$clipboard(location.origin + f.filePath)
       this.$message.success('分享链接已拷贝的剪贴板')
     },
     handleRemove (file) {
