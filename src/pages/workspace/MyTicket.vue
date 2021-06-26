@@ -2,13 +2,13 @@
   <div>
     <a-table :columns="columns" :data-source="data">
       <span slot="action" slot-scope="record">
-        <a-button type="primary" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
+        <a-button type="primary" @click="viewTicketHistory(record)"> 写跟进 </a-button>
       </span>
       <span slot="createdDate" slot-scope="text">
         {{ text | momentTime }}
       </span>
     </a-table>
-    <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
+    <a-modal title="跟进信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
       <ticket-history :ticket="ticketSelected" :edit="true"></ticket-history>
     </a-modal>
   </div>

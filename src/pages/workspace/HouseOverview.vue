@@ -505,11 +505,11 @@ export default {
     queryAllAnalysis () {
       const bedroomsOption = [
         { label: '全部户型', room: 0, count: 0 },
-        { label: '1居', room: 1, count: 0 },
-        { label: '2居', room: 2, count: 0 },
-        { label: '3居', room: 3, count: 0 },
-        { label: '4居', room: 4, count: 0 },
-        { label: '5居', room: 5, count: 0 },
+        { label: '一居', room: 1, count: 0 },
+        { label: '二居', room: 2, count: 0 },
+        { label: '三居', room: 3, count: 0 },
+        { label: '四居', room: 4, count: 0 },
+        { label: '多居', room: 5, count: 0 },
         { label: '6居', room: 6, count: 0 },
         { label: '7居', room: 7, count: 0 }
       ]
