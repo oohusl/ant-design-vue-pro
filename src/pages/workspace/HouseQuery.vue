@@ -40,7 +40,7 @@
           </a>
         </Affix>
       </a-layout-header>
-      <a-layout-content :style="{ background: '#ffffff', padding: '0 128px' }">
+      <a-layout-content class="house-query-content" :style="{ background: '#ffffff', padding: '0 128px' }">
         <a-form :label-col="{ span: 2 }" :wrapper-col="{ span: 22 }" style="margin-top: 10px">
           <a-form-item label="区域板块">
             <a-checkbox-group v-model="queryParam.area" size="small" @change="areaChange">

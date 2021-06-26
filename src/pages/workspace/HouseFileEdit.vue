@@ -170,7 +170,7 @@ export default {
   margin-top: 8px;
 }
 .anticon {
-  top: 4px;
+  // top: 4px;
   cursor: pointer;
 }
 .anticon-share {
