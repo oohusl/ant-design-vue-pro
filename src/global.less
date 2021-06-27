@@ -199,3 +199,27 @@ ol {
       content: '';
     }
   }
+ @media print{
+  .ant-pro-basicLayout-content{
+    margin: 0 !important;
+  }
+  .sidemenu{
+    padding: 0 !important;
+    flex: unset;
+  }
+  .ant-pro-basicLayout-content{
+    height: 792px;
+    width: 1123px;
+    flex: unset;
+    background: red;
+  }
+  body{
+    min-width: 1px;
+    overflow: hidden;
+  }
+  ::-webkit-scrollbar{display:none;/*ChromeSafari*/}
+ }
+ @page{
+  size:210mm 297mm landspace;//定义为a4纸
+  margin:0 ;//页面的边距
+ }
