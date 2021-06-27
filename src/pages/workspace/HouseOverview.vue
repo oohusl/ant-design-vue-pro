@@ -94,6 +94,9 @@
                     <a @click="$refs.houseFileRef.open()">小区网盘</a>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
+                    <a @click="showBuildingOverview">楼盘概览></a>
+                  </a-descriptions-item>
+                  <a-descriptions-item label="" :span="4">
                     <a @click="showDetail">查看小区详情></a>
                   </a-descriptions-item>
                 </a-descriptions>
@@ -680,6 +683,13 @@ export default {
     },
     calcTotalPrice (house) {
       return house.referenceTotalPrice || Math.round((house.referenceUnitPrice * house.acreage) / 10000)
+    },
+    showBuildingOverview () {
+      const routeData = this.$router.resolve({
+        name: 'BuildingOverview',
+        query: { houseId: this.houseSelect.id }
+      })
+      window.open(routeData.href, '_blank')
     }
   }
 }
