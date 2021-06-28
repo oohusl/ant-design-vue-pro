@@ -78,11 +78,74 @@
           <div style="display:flex;height:100%">
             <div style="flex:1">
               <a-layout :style="{ background: 'transparent', padding: '0'}">
-                <a-layout-header :style="{ background: 'transparent', padding: '0'}">
-
+                <a-layout-header :style="{ background: 'transparent', padding: '40px 0 0 0', height: '150px'}">
+                  <div class="living-around">
+                    <a-row :gutter="[16,16]">
+                      <a-col class="gutter-row" :span="12">
+                        <div class="gutter-box">
+                          <a-descriptions title="" :column="4">
+                            <template v-for="(metro, v) of houseSelect.metroInfo.slice(0,2)">
+                              <a-descriptions-item :label="metro.distance+'米'" :span="2" :key="v">
+                                {{ metro.metroLine + metro.subwayStation}}
+                              </a-descriptions-item>
+                            </template>
+                          </a-descriptions>
+                        </div>
+                      </a-col>
+                      <a-col class="gutter-row" :span="12">
+                        <div class="gutter-box">
+                          <a-descriptions title="" :column="4">
+                            <a-descriptions-item label="358米" :span="2">
+                              上海明珠医院
+                            </a-descriptions-item>
+                          </a-descriptions>
+                        </div>
+                      </a-col>
+                    </a-row>
+                    <a-row :gutter="[16,16]">
+                      <a-col class="gutter-row" :span="12">
+                        <div class="gutter-box">
+                          <a-descriptions title="" :column="4">
+                            <a-descriptions-item label="697米" :span="2">
+                              亿丰时代广场
+                            </a-descriptions-item>
+                            <a-descriptions-item label="703米" :span="2">
+                              俪金生活广场
+                            </a-descriptions-item>
+                          </a-descriptions>
+                        </div>
+                      </a-col>
+                      <a-col class="gutter-row" :span="12">
+                        <div class="gutter-box">
+                          <a-descriptions title="" :column="4">
+                            <a-descriptions-item label="697米" :span="2">
+                              上南公园
+                            </a-descriptions-item>
+                            <a-descriptions-item label="1.5千米" :span="2">
+                              蔓趣公园
+                            </a-descriptions-item>
+                          </a-descriptions>
+                        </div>
+                      </a-col>
+                      </a-col>
+                    </a-row>
+                    <a-row>
+                      <a-col class="gutter-row" :span="24">
+                        <div class="gutter-box">
+                          <a-descriptions title="" :column="4">
+                            <a-descriptions-item label="附  近" :span="2">
+                              {{ schoolText() }}
+                            </a-descriptions-item>
+                          </a-descriptions>
+                        </div>
+                      </a-col>
+                    </a-row>
+                  </div>
                 </a-layout-header>
                 <a-layout-content :style="{ background: 'transparent', padding: '0'}">
-
+                  <div class="type-header">
+                    <img class="type-image" src="~@/assets/tmp/fangxing.png" alt="">
+                  </div>
                 </a-layout-content>
               </a-layout>
             </div>
@@ -117,10 +180,21 @@ export default {
     queryHouse () {
       getHouseDetail(this.houseSelect.id).then(d => {
         this.houseSelect = d
+        console.log(d)
       })
     },
     printpdf () {
       this.$print(this.$refs.print)
+    },
+    schoolText () {
+      let text = ''
+      this.houseSelect.schoolDistrictInfo && this.houseSelect.schoolDistrictInfo.forEach(school => {
+        if (text) {
+          text = text + '+'
+        }
+        text = text + school.schoolName + school.schoolType
+      })
+      return text
     }
   }
 }
@@ -128,7 +202,7 @@ export default {
 <style scoped lang='less'>
 .building-overview {
   padding:0;
-  background: url(~@/assets/print-bg.png);
+  background: url(~@/assets/tmp/print-bg.png);
   height: 792px;
   width: 1123px;;
 }
@@ -183,5 +257,21 @@ export default {
     font-size: 18px;
     font-weight: bold;
   }
+}
+.living-around{
+  line-height: 1.4;
+  font-size: 12px;
+  .gutter-row{
+    line-height: 26px;
+  }
+  .gutter-box{
+
+  }
+}
+.type-header{
+  padding: 80px 20px 0;
+}
+.type-image{
+  width: 100%
 }
 </style>
