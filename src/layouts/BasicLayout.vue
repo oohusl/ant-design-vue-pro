@@ -17,7 +17,7 @@
           style="cursor: pointer"
         />
         <h1 style="cursor: pointer"">
-          {{ title }} <span style="font-size: 8px; color: blue">v1.5.0</span>
+          {{ title }} <span style="font-size: 8px; color: blue">v1.5.1</span>
         </h1>
       </div>
     </template>
