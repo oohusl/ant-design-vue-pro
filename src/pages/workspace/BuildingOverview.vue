@@ -129,7 +129,7 @@
                       </a-col>
                       </a-col>
                     </a-row>
-                    <a-row>
+                    <a-row :gutter="[16,16]">
                       <a-col class="gutter-row" :span="24">
                         <div class="gutter-box">
                           <a-descriptions title="" :column="4">
@@ -149,7 +149,17 @@
                 </a-layout-content>
               </a-layout>
             </div>
-            <div style="flex:1"></div>
+            <div style="flex:1">
+              <div class="deal-rate">
+                <img class="type-image" src="~@/assets/tmp/chengjiao1.png" alt="">
+              </div>
+              <div class="deal-volume">
+                <img class="type-image" src="~@/assets/tmp/chengjiaol.png" alt="">
+              </div>
+              <div class="deal-price">
+                <img class="type-image" src="~@/assets/tmp/chengjiaojia.png" alt="">
+              </div>
+            </div>
           </div>
         </a-layout-content>
       </a-layout>
@@ -256,13 +266,18 @@ export default {
   span{
     font-size: 18px;
     font-weight: bold;
+    margin-left: 12px;
   }
+}
+.sent-label {
+  margin-left: 24px;
 }
 .living-around{
   line-height: 1.4;
   font-size: 12px;
   .gutter-row{
-    line-height: 26px;
+    padding: 14px 8px !important;
+    height: 42px;
   }
   .gutter-box{
 
@@ -273,5 +288,20 @@ export default {
 }
 .type-image{
   width: 100%
+}
+.deal-rate{
+      margin-top: 26px;
+    width: 475px;
+    margin-left: 50px;
+}
+.deal-volume {
+      margin-top: 10px;
+    width: 475px;
+    margin-left: 50px;
+}
+.deal-price {
+      margin-top: 80px;
+    width: 475px;
+    margin-left: 50px;
 }
 </style>
