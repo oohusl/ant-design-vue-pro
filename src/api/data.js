@@ -1436,3 +1436,19 @@ export const typesOfHouseOptions = [
   { label: '联排', value: '联排' },
   { label: '合院', value: '合院' }
 ]
+
+export const purchasePurposeOptions = ['刚需自住', '改善', '投资'].map(e => {
+  return { label: e, value: e }
+})
+
+export const registeredResidenceOptions = ['本地户口', '外地户口'].map(e => {
+  return { label: e, value: e }
+})
+
+export const maritalStatusOptions = ['已婚', '未婚'].map(e => {
+  return { label: e, value: e }
+})
+
+export const paymentMethodOptions = ['按揭贷款', '一次付清'].map(e => {
+  return { label: e, value: e }
+})
