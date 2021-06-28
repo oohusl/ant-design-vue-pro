@@ -69,7 +69,7 @@
       </a-row>
       <a-row>
         <a-col :md="12">
-          <a-form-model-item label="户型" prop="intentionHouseType">
+          <a-form-model-item label="户型" prop="intentionHouseType" v-bind="formItemLayout2">
             <a-checkbox-group v-model="ticket.intentionHouseType">
               <a-checkbox value="1"> 一房 </a-checkbox>
               <a-checkbox value="2"> 二房 </a-checkbox>

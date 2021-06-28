@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 import { UserLayout, BasicLayout, BlankLayout } from '@/layouts'
-import { bxAnaalyse } from '@/core/icons'
+import { pan, personal, common, house, allot, users, setting } from '@/core/icons'
 
 const RouteView = {
   name: 'RouteView',
@@ -20,26 +20,26 @@ export const asyncRouterMap = [
         path: '/house/query',
         name: 'house',
         component: () => import('@/pages/workspace/HouseQuery'),
-        meta: { title: '房源查询', keepAlive: true, icon: bxAnaalyse }
+        meta: { title: '房源', keepAlive: true, icon: house }
       },
       {
         path: '/myticket',
         name: 'myticket',
         component: () => import('@/pages/workspace/MyTicket'),
-        meta: { title: '私单', keepAlive: true, icon: 'align-center' }
+        meta: { title: '私客', keepAlive: true, icon: personal }
       },
       {
         path: '/public-ticket',
-        name: 'TicketManage',
-        component: () => import('@/pages/workspace/TicketManage'),
-        meta: { title: '公单', keepAlive: true, icon: 'form' }
+        name: 'PublicTicket',
+        component: () => import('@/pages/workspace/PublicTicket'),
+        meta: { title: '公客', keepAlive: true, icon: common }
       },
       {
         path: '/ticket-manage',
         name: 'TicketManage',
         authority: ['ROLE_ADMIN'],
         component: () => import('@/pages/workspace/TicketManage'),
-        meta: { title: '订单分配', keepAlive: true, icon: 'form' }
+        meta: { title: '分单', keepAlive: true, icon: allot }
       },
       {
         path: '/ticket-form',
@@ -53,14 +53,14 @@ export const asyncRouterMap = [
         name: 'YunPan',
         component: () => import('@/pages/workspace/YunPan'),
         authority: ['ROLE_ADMIN', 'ROLE_USER'],
-        meta: { title: '资料中心', keepAlive: true, icon: 'database' }
+        meta: { title: '云盘', keepAlive: true, icon: pan }
       },
       {
         path: '/user-manage',
         name: 'UserManage',
         authority: ['ROLE_ADMIN'],
         component: () => import('@/pages/user/UserManage'),
-        meta: { title: '用户管理', keepAlive: true, icon: 'table' }
+        meta: { title: '用户', keepAlive: true, icon: users }
       },
       {
         path: '/house/query/overview',
@@ -81,7 +81,7 @@ export const asyncRouterMap = [
         path: '/account/settings',
         name: 'settings',
         component: () => import('@/pages/account/settings/Index'),
-        meta: { title: '个人设置', icon: 'user' },
+        meta: { title: '设置', icon: setting },
         redirect: '/account/settings/custom',
         authority: ['ROLE_ADMIN', 'ROLE_USER'],
         hideChildrenInMenu: true,
