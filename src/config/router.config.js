@@ -26,14 +26,27 @@ export const asyncRouterMap = [
         path: '/myticket',
         name: 'myticket',
         component: () => import('@/pages/workspace/MyTicket'),
-        meta: { title: '我的订单', keepAlive: true, icon: 'align-center' }
+        meta: { title: '私单', keepAlive: true, icon: 'align-center' }
+      },
+      {
+        path: '/public-ticket',
+        name: 'TicketManage',
+        component: () => import('@/pages/workspace/TicketManage'),
+        meta: { title: '公单', keepAlive: true, icon: 'form' }
       },
       {
         path: '/ticket-manage',
         name: 'TicketManage',
         authority: ['ROLE_ADMIN'],
         component: () => import('@/pages/workspace/TicketManage'),
-        meta: { title: '订单管理', keepAlive: true, icon: 'form' }
+        meta: { title: '订单分配', keepAlive: true, icon: 'form' }
+      },
+      {
+        path: '/ticket-form',
+        name: 'TicketForm',
+        hidden: true,
+        component: () => import('@/pages/workspace/TicketForm'),
+        meta: { title: '录入客户信息' }
       },
       {
         path: '/yun-pan',
