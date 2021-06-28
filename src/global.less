@@ -177,3 +177,46 @@ ol {
       padding: 0 32px !important;
     }
   }
+  .building-params {
+    .ant-descriptions-row > td {
+      padding-bottom: 0;
+      line-height: 1.8;
+    }
+    .ant-descriptions-item-label {
+      color: white;
+      font-weight: bold;
+    }
+    .ant-descriptions {
+      padding: 0;
+    }
+    .ant-descriptions-item-content{
+      color: white;
+    }
+    .ant-descriptions-item-colon::after{
+      content: '';
+    }
+  }
+ @media print{
+  .ant-pro-basicLayout-content{
+    margin: 0 !important;
+  }
+  .sidemenu{
+    padding: 0 !important;
+    flex: unset;
+  }
+  .ant-pro-basicLayout-content{
+    height: 792px;
+    width: 1123px;
+    flex: unset;
+    background: red;
+  }
+  body{
+    min-width: 1px;
+    overflow: hidden;
+  }
+  ::-webkit-scrollbar{display:none;/*ChromeSafari*/}
+ }
+ @page{
+  size:210mm 297mm landspace;//定义为a4纸
+  margin:0 ;//页面的边距
+ }

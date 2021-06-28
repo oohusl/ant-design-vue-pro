@@ -69,6 +69,13 @@ export const asyncRouterMap = [
         component: () => import('@/pages/workspace/HouseOverview'),
         meta: { title: '房屋概览' }
       },
+      {
+        path: '/house/query/huildingoverview',
+        name: 'BuildingOverview',
+        hidden: true,
+        component: () => import('@/pages/workspace/BuildingOverview'),
+        meta: { title: '楼盘概览' }
+      },
       // account
       {
         path: '/account/settings',
