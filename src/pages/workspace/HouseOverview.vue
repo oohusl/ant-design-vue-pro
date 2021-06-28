@@ -94,7 +94,7 @@
                     <a @click="$refs.houseFileRef.open()">小区网盘</a>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
-                    <a @click="showBuildingOverview">楼盘概览></a>
+                    <a @click="showBuildingOverview">楼盘概览</a>
                   </a-descriptions-item>
                   <a-descriptions-item label="" :span="4">
                     <a @click="showDetail">查看小区详情></a>

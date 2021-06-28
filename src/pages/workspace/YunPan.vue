@@ -43,13 +43,16 @@
       <a-layout-footer>
         <div>
           <a-upload
-            action="/api/community-folder/uploadFile"
+            :action="'/api/community-folder/upload/' + panId"
             :multiple="true"
             :show-upload-list="false"
             :headers="headers()"
             @change="handleChange"
           >
-            <a-button> <a-icon type="upload" />选择文件</a-button>
+            <a-button v-if="!uploading"> <a-icon type="upload" />选择文件</a-button>
+            <a-spin v-if="uploading">
+              <a-icon slot="indicator" type="loading" style="font-size: 24px" spin />
+            </a-spin>
           </a-upload>
         </div>
       </a-layout-footer>
@@ -58,7 +61,7 @@
 </template>
 
 <script>
-import { communityFolderQuery, communityFolderSave } from '@/api/manage'
+import { communityFolderQuery, communityFolderDelete } from '@/api/manage'
 import { headers } from '@/utils/request'
 export default {
   name: 'YunPan',
@@ -67,9 +70,8 @@ export default {
     return {
       current: ['1'],
       panId: 1,
-      visible: false,
       fileList: [],
-      modified: false
+      uploading: false
     }
   },
   created () {
@@ -77,10 +79,6 @@ export default {
   },
   methods: {
     headers,
-    open () {
-      this.visible = true
-      this.communityFolderQuery()
-    },
     panChanged (event) {
       this.panId = event.key
       this.communityFolderQuery()
@@ -93,56 +91,39 @@ export default {
         this.$forceUpdate()
       })
     },
-    ok () {
-      if (!this.modified) {
-        this.visible = false
-        return
-      }
-      this.$confirm({
-        content: '确认提交小区网盘？',
-        onOk: () => {
-          communityFolderSave({
-            communityId: this.panId,
-            communityFolders: this.fileList.map(e => {
-              return { filePath: e.filePath, fileName: e.fileName, fileSize: e.fileSize }
-            })
-          }).then(e => {
-            this.visible = false
-            this.$message.success('小区网盘修改成功')
-          })
-        }
-      })
-    },
-    cancel () {
-      if (!this.modified) {
-        this.visible = false
-        return
-      }
-      const that = this
-      this.$confirm({
-        content: '取消对小区网盘的修改？',
-        onOk () {
-          that.visible = false
-        }
-      })
-    },
     handleShare (f) {
       // navigator.clipboard.writeText(location.origin + f.filePath)
       this.$clipboard(location.origin + f.filePath)
       this.$message.success('分享链接已拷贝的剪贴板')
     },
     handleRemove (file) {
-      const index = this.fileList.findIndex(f => {
-        return f.filePath === file.filePath
+      this.$confirm({
+        content: '确认删除文件？',
+        onOk: () => {
+          const index = this.fileList.findIndex(f => {
+            return f.filePath === file.filePath
+          })
+          communityFolderDelete(this.fileList[index].id).then(e => {
+            this.fileList.splice(index, 1)
+            this.$message.success('删除成功')
+          })
+          this.$forceUpdate()
+        },
+        onCancel () {
+          console.log('Cancel')
+        }
       })
-      this.fileList.splice(index, 1)
-      this.modified = true
-      this.$forceUpdate()
     },
     handleChange (f) {
       if (f.file.status === 'done') {
         this.fileList.push(f.file.response)
-        this.modified = true
+        this.$message.success('文件上传成功')
+        this.uploading = false
+      } else if (f.file.status === 'error') {
+        this.$message.error('文件上传失败')
+        this.uploading = false
+      } else {
+        this.uploading = true
       }
       this.$forceUpdate()
     }

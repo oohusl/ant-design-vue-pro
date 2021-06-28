@@ -30,7 +30,9 @@ const api = {
   ticketOwner: '/ticket-owner',
   commAnalysisView: '/communityInfoAnalysisView/',
   imageUpload: '/community-infos/uploadPhoto',
-  communityFolder: '/community-folder'
+  communityFolder: '/community-folder',
+  deleteCommunityFolder: '/community-folder/delete',
+  ticketInfo: '/ticket-infos'
 }
 
 export default api
@@ -380,7 +382,15 @@ export function communityFolderQuery (communityId) {
 
 export function communityFolderDelete (fileId) {
   return request({
-    url: api.communityFolder + '/' + fileId,
+    url: api.deleteCommunityFolder + '/' + fileId,
     method: 'delete'
+  })
+}
+
+export function createTicketInfo (ticket) {
+  return request({
+    url: api.ticketInfo,
+    data: ticket,
+    method: 'post'
   })
 }

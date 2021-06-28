@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">新建</a-button>
-    </div>
     <a-table :columns="columns" :data-source="data">
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
@@ -85,9 +82,6 @@ export default {
     viewTicketOwner (record) {
       this.ownerVisible = true
       this.ticketSelected = record
-    },
-    handleAdd () {
-      this.$router.push({ path: 'ticket-form' })
     }
   }
 }
