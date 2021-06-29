@@ -37,6 +37,15 @@ const api = {
 
 export default api
 
+function changePagination (data) {
+  const r = Object.assign({}, data)
+  r.page = r.current - 1 || 0
+  r.size = r.pageSize || 10
+  delete r.current
+  delete r.pageSize
+  return r
+}
+
 export function getUserList (parameter) {
   return request({
     url: api.normalUsers,
@@ -281,11 +290,11 @@ export function housePhotoUpload (param) {
   })
 }
 
-export function queryTicketList () {
+export function queryTicketList (data) {
   return request({
     url: api.ticket,
     method: 'post',
-    data: { page: 0, size: 10 }
+    data: changePagination(data)
   })
 }
 

@@ -11,13 +11,13 @@
       <a-form-model-item label="业务员" prop="owner">
         <a-select v-model="ticketOwner.owner">
           <a-select-option v-for="u in users" :value="u.login" :key="u.login" :disabled="hasChoosed(u.login)">
-            {{ u.login }}
+            {{ u.firstName || u.login }}
           </a-select-option>
         </a-select>
         <a-button type="primary" @click="onSubmit">添加</a-button>
       </a-form-model-item>
       <a-form-model-item label="已分配">
-        <a-tag v-for="o in owners" :key="o.id" closable @close="onDelete(o.id)">{{ o.owner }}</a-tag>
+        <a-tag v-for="o in owners" :key="o.id" closable @close="onDelete(o.id)">{{ getUserName(o.owner) }}</a-tag>
       </a-form-model-item>
     </a-form-model>
   </div>
@@ -60,6 +60,13 @@ export default {
       queryNormalUsers().then(e => {
         this.users = e
       })
+    },
+    getUserName: function (login) {
+      const user =
+        this.users.find(e => {
+          return e.login === login
+        }) || {}
+      return user.firstName || login
     },
     queryTicketOwner: function () {
       queryTicketOwner(this.ticket.id).then(e => {

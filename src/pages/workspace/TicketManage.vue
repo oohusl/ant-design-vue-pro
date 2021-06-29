@@ -1,20 +1,20 @@
 <template>
   <a-card>
     <div class="table-operator">
-      <a-select default-value="lucy" style="width: 120px">
-        <a-select-option value="jack">
-          已分配
-        </a-select-option>
-        <a-select-option value="lucy">
+      <a-select style="width: 120px" v-model="query.hasBelongUser">
+        <a-select-option :value="false">
           未分配
         </a-select-option>
-        <a-select-option value="Yiminghe">
+        <a-select-option :value="true">
+          已分配
+        </a-select-option>
+        <a-select-option value="">
           全部
         </a-select-option>
       </a-select>
-      <a-button type="primary" icon="search" @click="handleAdd">查询</a-button>
+      <a-button type="primary" icon="search" @click="doQuery">查询</a-button>
     </div>
-    <a-table :columns="columns" :data-source="data">
+    <a-table :columns="columns" :data-source="data" rowKey="id" @change="handleChange">
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
       </span>
@@ -53,7 +53,7 @@ const columns = [
     key: 'clientPhone'
   },
   {
-    title: '提交时间',
+    title: '添加时间',
     dataIndex: 'createdDate',
     key: 'createdDate',
     scopedSlots: { customRender: 'date' }
@@ -66,12 +66,11 @@ const columns = [
   }
 ]
 
-const data = []
-
 export default {
   data () {
     return {
-      data,
+      data: [],
+      query: { hasBelongUser: false },
       columns,
       ticketSelected: {},
       historyVisible: false,
@@ -83,12 +82,18 @@ export default {
     TicketOwner
   },
   created () {
-    console.log(queryTicketList)
-    queryTicketList().then(r => {
-      this.data = r
-    })
+    this.doQuery()
   },
   methods: {
+    handleChange (pagination, filters, sorter) {
+      Object.assign(this.query, pagination)
+      this.doQuery()
+    },
+    doQuery () {
+      queryTicketList(this.query).then(r => {
+        this.data = r
+      })
+    },
     viewTicketHistory (record) {
       this.historyVisible = true
       this.ticketSelected = record

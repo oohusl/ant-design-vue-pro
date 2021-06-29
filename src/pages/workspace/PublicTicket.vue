@@ -3,7 +3,7 @@
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleAdd">录入客户</a-button>
     </div>
-    <a-table :columns="columns" :data-source="data">
+    <a-table :columns="columns" :data-source="data" rowKey="id">
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
       </span>
@@ -41,7 +41,7 @@ const columns = [
     key: 'clientPhone'
   },
   {
-    title: '提交时间',
+    title: '录入时间',
     dataIndex: 'createdDate',
     key: 'createdDate',
     scopedSlots: { customRender: 'date' }
@@ -72,7 +72,7 @@ export default {
   },
   created () {
     console.log(queryTicketList)
-    queryTicketList().then(r => {
+    queryTicketList({ hasBelongUser: false }).then(r => {
       this.data = r
     })
   },

@@ -1,6 +1,6 @@
 <template>
   <a-card>
-    <a-table :columns="columns" :data-source="data">
+    <a-table :columns="columns" :data-source="data" rowKey="id">
       <span slot="action" slot-scope="record">
         <a-button type="link" @click="viewTicketHistory(record)"> 写跟进 </a-button>
         <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
