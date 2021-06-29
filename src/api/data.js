@@ -1452,3 +1452,15 @@ export const maritalStatusOptions = ['已婚', '未婚'].map(e => {
 export const paymentMethodOptions = ['按揭贷款', '一次付清'].map(e => {
   return { label: e, value: e }
 })
+
+export const roomTypeOptions = [
+  { label: '一房', value: '1' },
+  { label: '二房', value: '2' },
+  { label: '三房', value: '3' },
+  { label: '其他', value: '-1' }
+]
+
+export const genderOptions = [
+  { label: '先生', value: '1' },
+  { label: '女士', value: '0' }
+]

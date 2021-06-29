@@ -75,13 +75,7 @@
   </a-card>
 </template>
 <script>
-import {
-  typesOfHouseOptions,
-  purchasePurposeOptions,
-  paymentMethodOptions,
-  maritalStatusOptions,
-  registeredResidenceOptions
-} from '@/api/data'
+import { liftOptions, roomTypeOptions, transLabels, genderOptions, getLabel } from '@/api/data'
 import { getTicketInfo } from '@/api/manage'
 import { Affix } from 'ant-design-vue'
 
@@ -98,11 +92,6 @@ export default {
   data () {
     return {
       ticket: {},
-      typesOfHouseOptions,
-      purchasePurposeOptions,
-      paymentMethodOptions,
-      maritalStatusOptions,
-      registeredResidenceOptions,
       formItemLayout: {
         labelCol: {
           xs: { span: 24 },
@@ -126,6 +115,12 @@ export default {
   created () {
     getTicketInfo(this.id).then(e => {
       this.ticket = e
+      this.ticket['intentionHouseType'] = transLabels(
+        this.ticket['intentionHouseType'].split('/') || '',
+        roomTypeOptions
+      )
+      this.ticket['customerGender'] = getLabel(this.ticket['customerGender'], genderOptions)
+      this.ticket['lift'] = transLabels((this.ticket['lift'] || '').split('/'), liftOptions)
     })
   },
   methods: {

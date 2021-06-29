@@ -34,14 +34,7 @@
       <a-row>
         <a-col :md="12">
           <a-form-model-item label="客户称呼" name="customerGender">
-            <a-radio-group v-model="ticket.customerGender">
-              <a-radio value="0">
-                男士
-              </a-radio>
-              <a-radio value="1">
-                女士
-              </a-radio>
-            </a-radio-group>
+            <a-radio-group v-model="ticket.customerGender" :options="genderOptions"> </a-radio-group>
           </a-form-model-item>
         </a-col>
         <a-col :md="12">
@@ -73,12 +66,7 @@
       <a-row>
         <a-col :md="24">
           <a-form-model-item label="户型" prop="intentionHouseType" v-bind="formItemLayout2">
-            <a-checkbox-group v-model="ticket.intentionHouseType">
-              <a-checkbox value="1"> 一房 </a-checkbox>
-              <a-checkbox value="2"> 二房 </a-checkbox>
-              <a-checkbox value="3"> 三房 </a-checkbox>
-              <a-checkbox value="-1"> 其他 </a-checkbox>
-            </a-checkbox-group>
+            <a-checkbox-group v-model="ticket.intentionHouseType" :options="roomTypeOptions"> </a-checkbox-group>
           </a-form-model-item>
         </a-col>
       </a-row>
@@ -147,11 +135,7 @@
       <a-row>
         <a-col :md="12">
           <a-form-model-item label="电梯" prop="lift">
-            <a-checkbox-group v-model="ticket.lift">
-              <a-checkbox :value="1"> 有电梯 </a-checkbox>
-              <a-checkbox :value="0"> 无电梯 </a-checkbox>
-              <a-checkbox :value="2"> 其他 </a-checkbox>
-            </a-checkbox-group>
+            <a-checkbox-group v-model="ticket.lift" :options="liftOptions"> </a-checkbox-group>
           </a-form-model-item>
         </a-col>
       </a-row>
@@ -205,10 +189,15 @@ import {
   purchasePurposeOptions,
   paymentMethodOptions,
   maritalStatusOptions,
-  registeredResidenceOptions
+  registeredResidenceOptions,
+  roomTypeOptions,
+  liftOptions,
+  genderOptions
 } from '@/api/data'
 import { createTicketInfo, getTicketInfo } from '@/api/manage'
 import { Affix } from 'ant-design-vue'
+
+const fields = ['intentionHouseType', 'lift', 'housingStructure']
 
 export default {
   components: { 'a-affix': Affix },
@@ -224,12 +213,18 @@ export default {
     if (this.id) {
       getTicketInfo(this.id).then(e => {
         this.ticket = e
+        for (const f of fields) {
+          this.ticket[f] = (this.ticket[f] || '').split('/')
+        }
       })
     }
   },
   data () {
     return {
       typesOfHouseOptions,
+      liftOptions,
+      genderOptions,
+      roomTypeOptions,
       purchasePurposeOptions,
       paymentMethodOptions,
       maritalStatusOptions,
@@ -264,17 +259,26 @@ export default {
   },
   methods: {
     save (e) {
-      e.preventDefault()
       this.$refs.ticketForm.validate(err => {
         if (err) {
-          const data = Object.assign({}, this.ticket)
-          for (const key in data) {
-            if (Array.isArray(data[key])) {
-              data[key] = data[key].join('/')
+          this.$confirm({
+            content: '确认提交？',
+            onOk: () => {
+              const data = Object.assign({}, this.ticket)
+              for (const key in data) {
+                if (Array.isArray(data[key])) {
+                  data[key] = data[key].join('/')
+                }
+              }
+              createTicketInfo(data).then(e => {
+                console.log(e)
+              })
+              this.$router.push({ path: '/ticket-detail/' + this.ticket.id })
+              this.$message.success('提交成功')
+            },
+            onCancel () {
+              console.log('Cancel')
             }
-          }
-          createTicketInfo(data).then(e => {
-            console.log(e)
           })
         }
       })
