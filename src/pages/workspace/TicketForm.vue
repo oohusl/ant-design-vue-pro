@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <a-card>
     <a-affix :offset-top="100" :style="{ position: 'absolute', right: '100px' }">
       <a-button type="primary" @click="save">
         提交
+      </a-button>
+      <a-button @click="back">
+        取消
       </a-button>
     </a-affix>
     <a-form-model
@@ -68,7 +71,7 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :md="12">
+        <a-col :md="24">
           <a-form-model-item label="户型" prop="intentionHouseType" v-bind="formItemLayout2">
             <a-checkbox-group v-model="ticket.intentionHouseType">
               <a-checkbox value="1"> 一房 </a-checkbox>
@@ -144,7 +147,7 @@
       <a-row>
         <a-col :md="12">
           <a-form-model-item label="电梯" prop="lift">
-            <a-checkbox-group v-model="ticket.list">
+            <a-checkbox-group v-model="ticket.lift">
               <a-checkbox :value="1"> 有电梯 </a-checkbox>
               <a-checkbox :value="0"> 无电梯 </a-checkbox>
               <a-checkbox :value="2"> 其他 </a-checkbox>
@@ -194,7 +197,7 @@
         </a-col>
       </a-row>
     </a-form-model>
-  </div>
+  </a-card>
 </template>
 <script>
 import {
@@ -204,11 +207,26 @@ import {
   maritalStatusOptions,
   registeredResidenceOptions
 } from '@/api/data'
-import { createTicketInfo } from '@/api/manage'
+import { createTicketInfo, getTicketInfo } from '@/api/manage'
 import { Affix } from 'ant-design-vue'
 
 export default {
   components: { 'a-affix': Affix },
+  props: {
+    id: {
+      type: String,
+      default: function () {
+        return '0'
+      }
+    }
+  },
+  created () {
+    if (this.id) {
+      getTicketInfo(this.id).then(e => {
+        this.ticket = e
+      })
+    }
+  },
   data () {
     return {
       typesOfHouseOptions,
@@ -260,6 +278,9 @@ export default {
           })
         }
       })
+    },
+    back () {
+      this.$router.back(-1)
     }
   }
 }

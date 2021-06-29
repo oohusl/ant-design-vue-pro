@@ -42,11 +42,20 @@ export const asyncRouterMap = [
         meta: { title: '分单', keepAlive: true, icon: allot }
       },
       {
-        path: '/ticket-form',
+        path: '/ticket-form/:id',
         name: 'TicketForm',
         hidden: true,
         component: () => import('@/pages/workspace/TicketForm'),
+        props: true,
         meta: { title: '录入客户信息' }
+      },
+      {
+        path: '/ticket-detail/:id',
+        name: 'TicketDetail',
+        hidden: true,
+        props: true,
+        component: () => import('@/pages/workspace/TicketDetail'),
+        meta: { title: '订单详情' }
       },
       {
         path: '/yun-pan',

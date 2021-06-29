@@ -1,7 +1,18 @@
 <template>
-  <div>
+  <a-card>
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="handleAdd">录入客户</a-button>
+      <a-select default-value="lucy" style="width: 120px">
+        <a-select-option value="jack">
+          已分配
+        </a-select-option>
+        <a-select-option value="lucy">
+          未分配
+        </a-select-option>
+        <a-select-option value="Yiminghe">
+          全部
+        </a-select-option>
+      </a-select>
+      <a-button type="primary" icon="search" @click="handleAdd">查询</a-button>
     </div>
     <a-table :columns="columns" :data-source="data">
       <span slot="date" slot-scope="text">
@@ -18,7 +29,7 @@
     <a-modal title="分单" :visible="ownerVisible" :footer="null" @cancel="ownerVisible = false" width="500px">
       <ticket-owner :ticket="ticketSelected"></ticket-owner>
     </a-modal>
-  </div>
+  </a-card>
 </template>
 <script>
 import { queryTicketList } from '@/api/manage'
@@ -32,14 +43,14 @@ const columns = [
     key: 'id'
   },
   {
-    title: '客户电话',
-    dataIndex: 'clientPhone',
-    key: 'clientPhone'
-  },
-  {
     title: '客户姓名',
     dataIndex: 'clientName',
     key: 'clientName'
+  },
+  {
+    title: '客户电话',
+    dataIndex: 'clientPhone',
+    key: 'clientPhone'
   },
   {
     title: '提交时间',
@@ -85,9 +96,6 @@ export default {
     viewTicketOwner (record) {
       this.ownerVisible = true
       this.ticketSelected = record
-    },
-    handleAdd () {
-      this.$router.push({ path: 'ticket-form' })
     }
   }
 }

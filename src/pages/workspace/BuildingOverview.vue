@@ -7,7 +7,7 @@
       <a-layout :style="{ background: 'transparent', padding: '0', height: '100%', padding: '0 24px' }">
         <a-layout-header :style="{ background: 'transparent', padding: '0', height: '174px', color: 'white' }">
           <a-layout :style="{ background: 'transparent', padding: '0', height: '174px' }">
-            <a-layout-sider :style="{ background: 'transparent', padding: '0 10px', height: '174px' }" width=300>
+            <a-layout-sider :style="{ background: 'transparent', padding: '0 10px', height: '174px' }" width="300">
               <a-layout :style="{ background: 'transparent', padding: '0', height: '174px' }">
                 <a-layout-header :style="{ background: 'transparent', padding: '0', height: '48px' }">
                   <div class="community-header">
@@ -51,7 +51,7 @@
             <a-layout-content :style="{ background: 'transparent', padding: '0', height: '174px' }">
               <a-layout :style="{ background: 'transparent', padding: '0 5px 0 34px', height: '174px', lineHeight: '1.4' }">
                 <a-layout :style="{ background: 'transparent', padding: '0' }">
-                  <a-layout-sider :style="{ background: 'transparent', padding: '0'}" width=345>
+                  <a-layout-sider :style="{ background: 'transparent', padding: '0'}" width="345">
                     <div class="price7label">近7日挂牌行情</div>
                     <div class="price7">87864元/㎡</div>
                     <div class="price30label">近30日同比</div>
@@ -86,7 +86,7 @@
                           <a-descriptions title="" :column="4">
                             <template v-for="(metro, v) of houseSelect.metroInfo.slice(0,2)">
                               <a-descriptions-item :label="metro.distance+'米'" :span="2" :key="v">
-                                {{ metro.metroLine + metro.subwayStation}}
+                                {{ metro.metroLine + metro.subwayStation }}
                               </a-descriptions-item>
                             </template>
                           </a-descriptions>

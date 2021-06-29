@@ -1,8 +1,9 @@
 <template>
-  <div>
+  <a-card>
     <a-table :columns="columns" :data-source="data">
       <span slot="action" slot-scope="record">
-        <a-button type="primary" @click="viewTicketHistory(record)"> 写跟进 </a-button>
+        <a-button type="link" @click="viewTicketHistory(record)"> 写跟进 </a-button>
+        <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
       </span>
       <span slot="createdDate" slot-scope="text">
         {{ text | momentTime }}
@@ -11,7 +12,7 @@
     <a-modal title="跟进信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
       <ticket-history :ticket="ticketSelected" :edit="true"></ticket-history>
     </a-modal>
-  </div>
+  </a-card>
 </template>
 <script>
 import { queryMyTicketList } from '@/api/manage'
@@ -24,14 +25,14 @@ const columns = [
     key: 'id'
   },
   {
-    title: '客户电话',
-    dataIndex: 'ticketInfo.clientPhone',
-    key: 'clientPhone'
-  },
-  {
     title: '客户姓名',
     dataIndex: 'ticketInfo.clientName',
     key: 'clientName'
+  },
+  {
+    title: '客户电话',
+    dataIndex: 'ticketInfo.clientPhone',
+    key: 'clientPhone'
   },
   {
     title: '分配时间',
@@ -41,6 +42,7 @@ const columns = [
   {
     title: '操作',
     key: 'action',
+    align: 'center',
     scopedSlots: { customRender: 'action' }
   }
 ]
@@ -68,6 +70,9 @@ export default {
     viewTicketHistory (record) {
       this.historyVisible = true
       this.ticketSelected = record
+    },
+    viewDetail (record) {
+      this.$router.push({ path: 'ticket-detail/' + record.ticketId })
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <a-card>
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="handleAdd">录入客户</a-button>
     </div>
@@ -8,8 +8,7 @@
         {{ text | momentTime }}
       </span>
       <span slot="action" slot-scope="record">
-        <a-button type="link" @click="viewTicketOwner(record)">分单</a-button>
-        <a-button type="link" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
+        <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
       </span>
     </a-table>
     <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
@@ -18,7 +17,7 @@
     <a-modal title="分单" :visible="ownerVisible" :footer="null" @cancel="ownerVisible = false" width="500px">
       <ticket-owner :ticket="ticketSelected"></ticket-owner>
     </a-modal>
-  </div>
+  </a-card>
 </template>
 <script>
 import { queryTicketList } from '@/api/manage'
@@ -32,14 +31,14 @@ const columns = [
     key: 'id'
   },
   {
-    title: '客户电话',
-    dataIndex: 'clientPhone',
-    key: 'clientPhone'
-  },
-  {
     title: '客户姓名',
     dataIndex: 'clientName',
     key: 'clientName'
+  },
+  {
+    title: '客户电话',
+    dataIndex: 'clientPhone',
+    key: 'clientPhone'
   },
   {
     title: '提交时间',
@@ -87,7 +86,10 @@ export default {
       this.ticketSelected = record
     },
     handleAdd () {
-      this.$router.push({ path: 'ticket-form' })
+      this.$router.push({ path: 'ticket-form/0' })
+    },
+    viewDetail (record) {
+      this.$router.push({ path: 'ticket-detail/' + record.id })
     }
   }
 }

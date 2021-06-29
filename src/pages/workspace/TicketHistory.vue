@@ -5,16 +5,16 @@
         <a-col :span="20">
           <a-textarea
             v-model="ticketHistory.content"
-            placeholder="请输入跟单信息"
+            placeholder="请输入跟进信息"
             :auto-size="{ minRows: 3, maxRows: 5 }"
           />
         </a-col>
         <a-col :span="4">
-          <a-button type="primary" @click="onSubmit">发布</a-button>
+          <a-button type="primary" @click="onSubmit">确定</a-button>
         </a-col>
       </a-row>
     </a-form>
-    <a-divider v-if="edit">历史跟单信息({{ list.length }})</a-divider>
+    <a-divider v-if="edit">跟进信息({{ list.length }})</a-divider>
     <div class="list">
       <a-list item-layout="horizontal" :data-source="list">
         <a-list-item slot="renderItem" slot-scope="item">

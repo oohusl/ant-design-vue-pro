@@ -394,3 +394,10 @@ export function createTicketInfo (ticket) {
     method: 'post'
   })
 }
+
+export function getTicketInfo (id) {
+  return request({
+    url: api.ticketInfo + '/' + id,
+    method: 'get'
+  })
+}
