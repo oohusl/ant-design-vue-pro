@@ -8,7 +8,7 @@
         返回
       </a-button>
     </a-affix>
-    <a-descriptions title="核心信息" layout="vertical">
+    <a-descriptions title="核心信息">
       <a-descriptions-item label="客户姓名">
         {{ ticket.clientName }}
       </a-descriptions-item>
@@ -22,7 +22,7 @@
         {{ ticket.customerNotes }}
       </a-descriptions-item>
     </a-descriptions>
-    <a-descriptions title="买房需求" layout="vertical">
+    <a-descriptions title="买房需求">
       <a-descriptions-item label="区域">
         {{ ticket.region }}
       </a-descriptions-item>
@@ -55,7 +55,7 @@
       </a-descriptions-item>
     </a-descriptions>
 
-    <a-descriptions title="基本信息" layout="vertical">
+    <a-descriptions title="基本信息">
       <a-descriptions-item label="购房目的">
         {{ ticket.purchasePurpose }}
       </a-descriptions-item>

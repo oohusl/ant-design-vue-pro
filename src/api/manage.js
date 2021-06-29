@@ -391,7 +391,7 @@ export function createTicketInfo (ticket) {
   return request({
     url: api.ticketInfo,
     data: ticket,
-    method: 'post'
+    method: ticket.id ? 'put' : 'post'
   })
 }
 
