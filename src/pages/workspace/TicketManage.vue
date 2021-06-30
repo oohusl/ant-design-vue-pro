@@ -14,7 +14,7 @@
       </a-select>
       <a-button type="primary" icon="search" @click="doQuery">查询</a-button>
     </div>
-    <a-table :columns="columns" :data-source="data" rowKey="id" @change="handleChange">
+    <a-table :columns="columns" :data-source="data" rowKey="id">
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
       </span>

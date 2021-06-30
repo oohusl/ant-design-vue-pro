@@ -292,7 +292,7 @@ export function housePhotoUpload (param) {
 
 export function queryTicketList (data) {
   return request({
-    url: api.ticket,
+    url: `${api.ticket}?page=0&size=10000`,
     method: 'post',
     data: changePagination(data)
   })
@@ -300,7 +300,7 @@ export function queryTicketList (data) {
 
 export function queryMyTicketList () {
   return request({
-    url: api.myticket,
+    url: `${api.myticket}?page=0&size=10000`,
     method: 'post',
     data: { page: 0, size: 10 }
   })
