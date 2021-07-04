@@ -1056,6 +1056,10 @@ export const transactionOwnershipOptions = [
     value: '动迁房'
   },
   {
+    label: '经济适用房',
+    value: '经济适用房'
+  },
+  {
     label: '售后公房',
     value: '售后公房'
   },
