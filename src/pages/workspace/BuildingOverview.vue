@@ -81,72 +81,73 @@
           <div style="display:flex;height:100%">
             <div style="flex:1">
               <a-layout :style="{ background: 'transparent', padding: '0'}">
-                <a-layout-header :style="{ background: 'transparent', padding: '40px 0 0 0', height: '150px'}">
-                  <div class="living-around">
-                    <a-row :gutter="[16,16]">
-                      <a-col class="gutter-row" :span="12">
-                        <div class="gutter-box">
-                          <a-descriptions title="" :column="4">
+                <a-layout-header :style="{ background: 'transparent', padding: '10px 0 0 0', height: '200px'}">
+                  <a-layout style="background:white">
+                    <a-layout-header style="height: 20px;line-height: 20px;padding: 0;font-size: 16px;">
+                      <div class="lift-title"> 周边配置</div>
+                    </a-layout-header>
+                    <a-layout-content>
+                      <div class="live-around">
+                        <div class="live-item traffic">
+                          <div class="live-label">交通</div>
+                          <div class="live-content">
                             <template v-for="(metro, v) of houseSelect.metroInfo.slice(0,2)">
-                              <a-descriptions-item :label="metro.distance+'米'" :span="2" :key="v">
+                              <div :key="v">
+                                <span class="label">{{metro.distance+'米'}}</span>
                                 {{ metro.metroLine + metro.subwayStation }}
-                              </a-descriptions-item>
+                              </div>
                             </template>
-                          </a-descriptions>
+                          </div>
                         </div>
-                      </a-col>
-                      <a-col class="gutter-row" :span="12">
-                        <div class="gutter-box">
-                          <a-descriptions title="" :column="4">
-                            <a-descriptions-item label="358米" :span="2">
-                              上海明珠医院
-                            </a-descriptions-item>
-                          </a-descriptions>
+                        <div class="live-item hospital">
+                          <div class="live-label">医疗</div>
+                          <div class="live-content">
+                            <template v-for="(hospital, v) of hospitals">
+                              <div :key="v">
+                                <span class="label">{{hospital.distance+'米'}}</span>
+                                {{ hospital.name }}
+                              </div>
+                            </template>
+                          </div>
                         </div>
-                      </a-col>
-                    </a-row>
-                    <a-row :gutter="[16,16]">
-                      <a-col class="gutter-row" :span="12">
-                        <div class="gutter-box">
-                          <a-descriptions title="" :column="4">
-                            <a-descriptions-item label="697米" :span="2">
-                              亿丰时代广场
-                            </a-descriptions-item>
-                            <a-descriptions-item label="703米" :span="2">
-                              俪金生活广场
-                            </a-descriptions-item>
-                          </a-descriptions>
+                        <div class="live-item life">
+                          <div class="live-label">生活</div>
+                          <div class="live-content">
+                            <template v-for="(sm, v) of supermakets">
+                              <div :key="v">
+                                <span class="label">{{sm.distance+'米'}}</span>
+                                {{ sm.name }}
+                              </div>
+                            </template>
+                          </div>
                         </div>
-                      </a-col>
-                      <a-col class="gutter-row" :span="12">
-                        <div class="gutter-box">
-                          <a-descriptions title="" :column="4">
-                            <a-descriptions-item label="697米" :span="2">
-                              上南公园
-                            </a-descriptions-item>
-                            <a-descriptions-item label="1.5千米" :span="2">
-                              蔓趣公园
-                            </a-descriptions-item>
-                          </a-descriptions>
+                        <div class="live-item tree">
+                          <div class="live-label">休闲</div>
+                          <div class="live-content">
+                            <template v-for="(t, v) of trees">
+                              <div :key="v">
+                                <span class="label">{{t.distance+'米'}}</span>
+                                {{ t.name}}
+                              </div>
+                            </template>
+                          </div>
                         </div>
-                      </a-col>
-                      </a-col>
-                    </a-row>
-                    <a-row :gutter="[16,16]">
-                      <a-col class="gutter-row" :span="24">
-                        <div class="gutter-box">
-                          <a-descriptions title="" :column="4">
-                            <a-descriptions-item label="附  近" :span="2">
+                        <div class="live-item school">
+                          <div class="live-label">教育</div>
+                          <div class="live-content">
+                            <div>
+                              <span class="label">小初高</span>
                               {{ schoolText() }}
-                            </a-descriptions-item>
-                          </a-descriptions>
+                            </div>
+                          </div>
                         </div>
-                      </a-col>
-                    </a-row>
-                  </div>
+                      </div>
+                    </a-layout-content>
+                  </a-layout>
                 </a-layout-header>
                 <a-layout-content :style="{ background: 'transparent', padding: '0'}">
                   <div class="type-header">
+                    <div class="lift-title"> 户型图</div>
                     <img class="type-image" src="~@/assets/tmp/fangxing.png" alt="">
                   </div>
                 </a-layout-content>
@@ -181,7 +182,19 @@ export default {
   computed: {},
   data () {
     return {
-      houseSelect: {}
+      houseSelect: {},
+      hospitals: [{
+        name: '上海市黄浦区中西医结合医院',
+        distance: 200
+      }],
+      supermakets: [{
+        name: 'M2香港名都',
+        distance: 200
+      }],
+      trees: [{
+        name: '花神广场花神广场',
+        distance: 200
+      }]
     }
   },
   beforeMount () {
@@ -203,7 +216,7 @@ export default {
       let text = ''
       this.houseSelect.schoolDistrictInfo && this.houseSelect.schoolDistrictInfo.forEach(school => {
         if (text) {
-          text = text + '+'
+          text = text + '、'
         }
         text = text + school.schoolName + school.schoolType
       })
@@ -327,19 +340,89 @@ export default {
     margin-left: 12px;
   }
 }
-.living-around{
+.live-around{
   line-height: 1.4;
   font-size: 12px;
-  .gutter-row{
-    padding: 14px 8px !important;
-    height: 42px;
+}
+.live-item{
+  display: flex;
+  height: 32px;
+  padding: 8px 0;
+}
+.live-label{
+  width: 76px;
+  color: #030091;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  padding-left: 16px;
+  margin-left: 10px;
+}
+.live-content {
+  color: #000;
+  display: flex;
+  flex: 1;
+  font-size: 13px;
+  > div{
+    margin-right: 5px;
   }
-  .gutter-box{
-
+  .label{
+    width: 40px;
+    border-radius: 1px;
+    display: inline-block;
+    text-align: center;
+    color: white;
+    font-size: 11px;
   }
 }
+.traffic {
+  .label{
+    background: #4A83FE;
+  }
+  .live-label {
+    background-image: url(~@/assets/icons/icon_print_car.png);
+  }
+}
+.hospital {
+  .label{
+    background: #FB5A3B;
+  }
+  .live-label {
+    background-image: url(~@/assets/icons/icon_print_hospital.png);
+  }
+}
+.life {
+  .label{
+    background: #FFA92C;
+  }
+  .live-label {
+    background-image: url(~@/assets/icons/icon_print_shopping.png);
+  }
+}
+.tree {
+  .label{
+    background: #50BD20;
+  }
+  .live-label {
+    background-image: url(~@/assets/icons/icon_print_tree.png);
+  }
+}
+.school {
+  .label{
+    background: #41D6D7;
+  }
+  .live-label {
+    background-image: url(~@/assets/icons/icon_print_school.png);
+  }
+}
+.lift-title {
+  font-size: 16px;
+  border-left: 3px solid #030091;
+  padding-left: 10px;
+  color: #030091;
+}
 .type-header{
-  padding: 80px 20px 0;
+  padding: 0px;
 }
 .type-image{
   width: 100%
