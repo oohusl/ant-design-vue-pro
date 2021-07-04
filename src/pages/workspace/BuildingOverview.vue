@@ -65,7 +65,7 @@
                     </div>
                   </a-layout-content>
                 </a-layout>
-                <a-layout-footer :style="{ background: 'transparent', padding: '0'}">
+                <a-layout-footer :style="{ background: 'transparent', padding: '0', display: 'block'}">
                   <div class="print-sale">
                     <div class="sent-label">目前在售同户型房源 <span>1套</span></div>
                     <div class="sent-label">参考租金<span>4000元/月</span></div>
