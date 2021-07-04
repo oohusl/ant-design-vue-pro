@@ -33,13 +33,13 @@
                   <a-descriptions-item label="小区地址" :span="4">
                     {{ houseSelect.address }}
                   </a-descriptions-item>
-                  <a-descriptions-item label="楼盘类型" :span="4">
-                    {{ houseSelect.buildingType }}
+                  <a-descriptions-item label="建筑类型" :span="4">
+                    {{ transLabels(commView.buildingType, buildingTypeOptions) }}
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
                   <a-descriptions-item label="交易权属" :span="4">
-                    {{ houseSelect.transactionOwnership }}
+                    {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
                   </a-descriptions-item>
                   <a-descriptions-item label="建筑时间" :span="4">
                     {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
@@ -391,10 +391,12 @@ import {
   areaOptions,
   getMetroLineOptions,
   averageLlistedPriceOptions,
+  transactionOwnershipOptions,
   totalPriceOptions,
   roomAreaOptions,
   constructionAgeOptions,
   loopSummaryOptions,
+  buildingTypeOptions,
   booleanOptions,
   liftOptions,
   subwayOptions,
@@ -409,7 +411,8 @@ import {
   getHouseDetail,
   deleteAnalysis,
   deleteHouseDiary,
-  deleteHouseQuestion
+  deleteHouseQuestion,
+  commAnalysisView
 } from '@/api/manage'
 export default {
   name: 'HouseOverview',
@@ -432,8 +435,10 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
+      buildingTypeOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
+      transactionOwnershipOptions,
       totalPriceOptions,
       totalPriceEdit: false,
       roomAreaOptions,
@@ -467,7 +472,8 @@ export default {
       diaryEdit: null,
       questionEdit: null,
       previewImage: null,
-      imgViewerReflesh: 0
+      imgViewerReflesh: 0,
+      commView: {}
     }
   },
   created () {
@@ -478,18 +484,28 @@ export default {
   beforeMount () {
     console.log(this.$route.params)
     this.houseSelect = {}
-    this.houseSelect.id = this.$route.query.houseId
+    this.houseSelect.id = Number(this.$route.query.houseId)
     this.houseType.communityId = this.houseSelect.id
     this.queryHouse()
     this.queryAllAnalysis()
     this.queryAllHouseDiary()
     this.queryQuestion()
+    this.commAnalysisView()
   },
   methods: {
     moment,
     transLabels,
     closeDetail () {
       this.detailFlag = 0
+    },
+    commAnalysisView () {
+      commAnalysisView(this.houseSelect.id)
+        .then(e => {
+          this.commView = e
+        })
+        .catch(e => {
+          this.$message.warning('户型信息查询失败')
+        })
     },
     showDetail () {
       this.detailFlag = 1
@@ -667,6 +683,7 @@ export default {
       this.$refs.housetypeeditref.saveHouseType().then(e => {
         this.houseTypeVisible = false
         this.queryAllAnalysis()
+        this.commAnalysisView()
       })
     },
     saveHouseDiary () {

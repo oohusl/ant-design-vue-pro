@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <button @click="printpdf">print</button>
+      <a-button @click="printpdf">打印</a-button>
     </div>
     <div class="building-overview" ref="print">
       <a-layout :style="{ background: 'transparent', padding: '0', height: '100%', padding: '0' }">
