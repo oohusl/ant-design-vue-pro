@@ -438,6 +438,7 @@
           <a-descriptions-item label="卫生间">
             {{
               ([...commView.toilet] || [])
+                .filter(e => e)
                 .sort((a, b) => a - b)
                 .map(e => e + '卫')
                 .join('/')
@@ -559,9 +560,14 @@ export default {
     })
     this.getMetrolineDistrictInfo()
     this.houseTypeEdit.communityId = this.houseSelect.id
-    commAnalysisView(this.houseTypeEdit.communityId).then(e => {
-      this.commView = e
-    })
+    commAnalysisView(this.houseTypeEdit.communityId)
+      .then(e => {
+        this.commView = e
+        // this.spinning = false
+      })
+      .catch(e => {
+        this.$message.warning('户型信息查询失败')
+      })
 
     const _this = this
     getSchools().then(function (e) {

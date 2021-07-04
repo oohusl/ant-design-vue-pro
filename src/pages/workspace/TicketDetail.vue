@@ -74,7 +74,7 @@
   </a-layout>
 </template>
 <script>
-import { liftOptions, roomTypeOptions, transLabels, getLabel } from '@/api/data'
+import { liftOptions, roomTypeOptions, transLabels } from '@/api/data'
 import { getTicketSummary } from '@/api/ticket'
 import { getTicketInfo } from '@/api/manage'
 import { Affix } from 'ant-design-vue'
