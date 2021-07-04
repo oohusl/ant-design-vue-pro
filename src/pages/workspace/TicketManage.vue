@@ -112,7 +112,7 @@ export default {
       this.ownerVisible = true
     },
     viewDetail (record) {
-      this.$router.push({ path: 'ticket-detail/' + record.id })
+      this.$router.push({ path: `ticket-detail/2/${record.id}` })
     }
   }
 }

@@ -88,7 +88,7 @@ export default {
       this.ticket = record.ticketInfo
     },
     viewDetail (record) {
-      this.$router.push({ path: 'ticket-detail/' + record.ticketInfo.id })
+      this.$router.push({ path: `ticket-detail/0/${record.ticketInfo.id}` })
     }
   }
 }

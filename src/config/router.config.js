@@ -49,7 +49,7 @@ export const asyncRouterMap = [
         meta: { title: '录入客户信息' }
       },
       {
-        path: '/ticket-detail/:id',
+        path: '/ticket-detail/:target/:id',
         name: 'TicketDetail',
         hidden: true,
         props: true,

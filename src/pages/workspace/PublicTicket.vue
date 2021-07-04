@@ -99,7 +99,7 @@ export default {
       this.$router.push({ path: 'ticket-form/0' })
     },
     viewDetail (record) {
-      this.$router.push({ path: 'ticket-detail/' + record.id })
+      this.$router.push({ path: `ticket-detail/1/${record.id}` })
     }
   }
 }

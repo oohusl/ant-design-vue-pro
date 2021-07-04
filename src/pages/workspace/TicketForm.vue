@@ -272,7 +272,7 @@ export default {
               }
               createTicketInfo(data).then(e => {
                 console.log(e)
-                this.$router.push({ path: '/ticket-detail/' + e.id })
+                this.$router.go(-1)
                 this.$message.success('提交成功')
               })
             },

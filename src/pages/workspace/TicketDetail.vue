@@ -89,6 +89,12 @@ export default {
       default: function () {
         return '0'
       }
+    },
+    target: {
+      type: String,
+      default: function () {
+        return ''
+      }
     }
   },
   data () {
@@ -126,7 +132,13 @@ export default {
   },
   methods: {
     back () {
-      this.$router.back(-1)
+      if (this.target === '0') {
+        this.$router.push('/myticket')
+      } else if (this.target === '1') {
+        this.$router.push('/public-ticket')
+      } else if (this.target === '2') {
+        this.$router.push('/ticket-manage')
+      }
     },
     edit () {
       this.$router.push({ path: '/ticket-form/' + this.ticket.id })
