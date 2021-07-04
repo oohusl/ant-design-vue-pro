@@ -18,6 +18,9 @@
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
       </span>
+      <span slot="keyIntention" slot-scope="record">
+        {{ getTicketSummary(record) }}
+      </span>
       <span slot="action" slot-scope="record">
         <a-button type="link" @click="viewTicketOwner(record)">分单</a-button>
         <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
@@ -32,6 +35,7 @@
   </a-card>
 </template>
 <script>
+import { getTicketSummary } from '@/api/ticket'
 import { queryTicketList } from '@/api/manage'
 import TicketHistory from './TicketHistory.vue'
 import TicketOwner from './TicketOwner.vue'
@@ -51,6 +55,11 @@ const columns = [
     title: '客户电话',
     dataIndex: 'clientPhone',
     key: 'clientPhone'
+  },
+  {
+    title: '核心需求',
+    key: 'keyIntention',
+    scopedSlots: { customRender: 'keyIntention' }
   },
   {
     title: '添加时间',
@@ -85,6 +94,7 @@ export default {
     this.doQuery()
   },
   methods: {
+    getTicketSummary,
     handleChange (pagination, filters, sorter) {
       Object.assign(this.query, pagination)
       this.doQuery()

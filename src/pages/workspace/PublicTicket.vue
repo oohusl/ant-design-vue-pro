@@ -7,6 +7,9 @@
       <span slot="date" slot-scope="text">
         {{ text | momentTime }}
       </span>
+      <span slot="keyIntention" slot-scope="record">
+        {{ getTicketSummary(record) }}
+      </span>
       <span slot="action" slot-scope="record">
         <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
       </span>
@@ -20,6 +23,7 @@
   </a-card>
 </template>
 <script>
+import { getTicketSummary } from '@/api/ticket'
 import { queryTicketList } from '@/api/manage'
 import TicketHistory from './TicketHistory.vue'
 import TicketOwner from './TicketOwner.vue'
@@ -39,6 +43,11 @@ const columns = [
     title: '客户电话',
     dataIndex: 'clientPhone',
     key: 'clientPhone'
+  },
+  {
+    title: '核心需求',
+    key: 'keyIntention',
+    scopedSlots: { customRender: 'keyIntention' }
   },
   {
     title: '录入时间',
@@ -77,6 +86,7 @@ export default {
     })
   },
   methods: {
+    getTicketSummary,
     viewTicketHistory (record) {
       this.historyVisible = true
       this.ticketSelected = record
