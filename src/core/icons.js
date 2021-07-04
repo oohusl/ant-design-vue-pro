@@ -14,5 +14,7 @@ import house from '@/assets/icons/house.svg?inline' // path to your '*.svg?inlin
 import allot from '@/assets/icons/allot.svg?inline' // path to your '*.svg?inline' file.
 import users from '@/assets/icons/users.svg?inline' // path to your '*.svg?inline' file.
 import setting from '@/assets/icons/setting.svg?inline' // path to your '*.svg?inline' file.
+import man from '@/assets/icons/man.svg?inline' // path to your '*.svg?inline' file.
+import woman from '@/assets/icons/woman.svg?inline' // path to your '*.svg?inline' file.
 
-export { bxAnaalyse, pan, personal, common, house, allot, users, setting }
+export { bxAnaalyse, pan, personal, common, house, allot, users, setting, man, woman }

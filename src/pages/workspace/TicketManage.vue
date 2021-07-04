@@ -20,7 +20,7 @@
       </span>
       <span slot="action" slot-scope="record">
         <a-button type="link" @click="viewTicketOwner(record)">分单</a-button>
-        <a-button type="link" @click="viewTicketHistory(record)"> 跟单信息 </a-button>
+        <a-button type="link" @click="viewDetail(record)"> 查看详情 </a-button>
       </span>
     </a-table>
     <a-modal title="跟单信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
@@ -100,7 +100,9 @@ export default {
     },
     viewTicketOwner (record) {
       this.ownerVisible = true
-      this.ticketSelected = record
+    },
+    viewDetail (record) {
+      this.$router.push({ path: 'ticket-detail/' + record.id })
     }
   }
 }

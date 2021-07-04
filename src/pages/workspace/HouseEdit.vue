@@ -302,9 +302,7 @@
             <a-input v-model="houseSelect.propertyCompany" size="small" class="col2" />
           </a-descriptions-item>
           <a-descriptions-item label="类型">
-            <a-select v-model="houseSelect.cellAttributes" size="small" class="col1">
-              <a-select-option value="住宅"> 住宅 </a-select-option>
-              <a-select-option value="别墅"> 别墅 </a-select-option>
+            <a-select v-model="houseSelect.cellAttributes" size="small" class="col1" :options="cellAttributesOptions">
             </a-select>
           </a-descriptions-item>
           <a-descriptions-item label="年限">
@@ -486,7 +484,8 @@ import {
   popularComLevOptions,
   qualityComLevOptions,
   toiletOptions,
-  buildingTypeOptions
+  buildingTypeOptions,
+  cellAttributesOptions
 } from '@/api/data'
 import HouseDiary from './HouseDiary.vue'
 import InputTag from '../components/InputTag.vue'
@@ -517,6 +516,7 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
+      cellAttributesOptions,
       liftOptions,
       toiletOptions,
       metroLineOptions: getMetroLineOptions(),

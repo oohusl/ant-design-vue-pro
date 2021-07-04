@@ -37,7 +37,6 @@ export const asyncRouterMap = [
       {
         path: '/ticket-manage',
         name: 'TicketManage',
-        authority: ['ROLE_ADMIN'],
         component: () => import('@/pages/workspace/TicketManage'),
         meta: { title: '分单', keepAlive: true, icon: allot }
       },

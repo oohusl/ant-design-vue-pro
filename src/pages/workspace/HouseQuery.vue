@@ -401,11 +401,7 @@
             >
           </a-form-item>
           <a-form-item v-if="advanced" label="小区属性">
-            <a-checkbox-group v-model="queryParam.cellAttributes">
-              <a-checkbox value="住宅"> 住宅 </a-checkbox>
-              <a-checkbox value="别墅"> 别墅 </a-checkbox>
-              <a-checkbox value="其他"> 其他 </a-checkbox>
-            </a-checkbox-group>
+            <a-checkbox-group v-model="queryParam.cellAttributes" :options="cellAttributesOptions"> </a-checkbox-group>
           </a-form-item>
           <a-form-item v-if="advanced" label="小区权属">
             <a-checkbox-group v-model="queryParam.transactionOwnerships" :options="transactionOwnershipOptions">
@@ -693,7 +689,8 @@ import {
   ExcelInfo,
   getLabel,
   toiletOptions,
-  calScope
+  calScope,
+  cellAttributesOptions
 } from '@/api/data'
 import { AutoComplete, BackTop, Affix, Pagination } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
@@ -749,6 +746,7 @@ export default {
       plateOptions: [],
       editPlateOptions: [],
       areaOptions,
+      cellAttributesOptions,
       metroLineOptions: getMetroLineOptions(),
       averageLlistedPriceOptions,
       roomAreaOptions,

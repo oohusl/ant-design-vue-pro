@@ -47,23 +47,24 @@ export default {
     }
   },
   created () {
-    this.ticketHistory.ticketId = this.ticket.id
     this.queryTicketHistory()
   },
   watch: {
     ticket: function (newVal, oldVal) {
-      this.ticketHistory.ticketId = this.ticket.id
-      this.list = []
       this.queryTicketHistory()
     }
   },
   methods: {
     queryTicketHistory: function () {
-      queryTicketHistory(this.ticket.id).then(e => {
-        this.list = e
-      })
+      if (this.ticket) {
+        this.list = []
+        queryTicketHistory(this.ticket.id).then(e => {
+          this.list = e
+        })
+      }
     },
     onSubmit: function () {
+      this.ticketHistory.ticketId = this.ticket.id
       createTicketHistory(this.ticketHistory).then(e => {
         this.$message.success('发布成功')
         this.ticketHistory.content = ''

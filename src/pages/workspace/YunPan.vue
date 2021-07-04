@@ -6,36 +6,56 @@
           <a-menu-item key="1"> 区域规划 </a-menu-item>
           <a-menu-item key="2"> 学区政策</a-menu-item>
           <a-menu-item key="3"> 公司介绍</a-menu-item>
+          <a-menu-item key="4"> 客户方案</a-menu-item>
         </a-menu>
       </a-layout-header>
       <a-layout-content>
-        <div class="list-none" v-if="!fileList.length">暂无文件</div>
-        <div class="ant-upload-list ant-upload-list-text">
-          <div
-            class="ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-text"
-            v-for="f in fileList"
-            :key="f.filePath"
-          >
+        <a-empty v-if="!fileList.length" />
+        <div class="ant-upload-list" v-if="fileList.length">
+          <div class="ant-upload-list-item">
             <div class="ant-upload-list-item-info">
               <span>
-                <i class="anticon anticon-paper-clip">
-                  <img src="../../assets/attach.svg" />
-                </i>
-                <a class="ant-upload-list-item-name ant-upload-list-item-name-icon-count-1">
-                  {{ f.fileName }}
-                </a>
-                <i class="anticon ant-upload-list-item-card-actions anticon-download">
-                  <a :href="f.filePath" :download="f.fileName">
-                    <img src="../../assets/download.svg" />
-                  </a>
-                </i>
-                <i class="anticon ant-upload-list-item-card-actions anticon-share" @click="handleShare(f)">
-                  <img src="../../assets/share.svg" />
-                </i>
-                <i class="anticon ant-upload-list-item-card-actions anticon-delete" @click="handleRemove(f)">
-                  <img src="../../assets/delete.svg" />
-                </i>
+                <span class="file-name">文件名</span>
+                <span class="file-size">大小</span>
+                <span class="file-time">上传日期</span>
+                <span class="uploader">上传人</span>
               </span>
+            </div>
+          </div>
+          <div class="files">
+            <div
+              class="ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-text"
+              v-for="f in fileList"
+              :key="f.filePath"
+            >
+              <div class="ant-upload-list-item-info">
+                <span>
+                  <i class="anticon anticon-paper-clip">
+                    <img src="../../assets/attach.svg" />
+                  </i>
+                  <span class="ant-upload-list-item-name ant-upload-list-item-name-icon-count-1 file-name">
+                    {{ f.fileName }}
+                  </span>
+                  <span class="file-size">{{
+                    f.fileSize > 1024 * 1024
+                      ? (f.fileSize / 1024 / 1024).toFixed(2) + 'Mb'
+                      : (f.fileSize / 1024).toFixed(2) + 'Kb'
+                  }}</span>
+                  <span class="file-time">{{ f.createdDate | momentTime }}</span>
+                  <span class="uploader">{{ f.createdBy }}</span>
+                  <i class="anticon ant-upload-list-item-card-actions anticon-download">
+                    <a :href="f.filePath" :download="f.fileName">
+                      <img src="../../assets/download.svg" />
+                    </a>
+                  </i>
+                  <i class="anticon ant-upload-list-item-card-actions anticon-share" @click="handleShare(f)">
+                    <img src="../../assets/share.svg" />
+                  </i>
+                  <i class="anticon ant-upload-list-item-card-actions anticon-delete" @click="handleRemove(f)">
+                    <img src="../../assets/delete.svg" />
+                  </i>
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -61,11 +81,12 @@
 </template>
 
 <script>
+import { Empty } from 'ant-design-vue'
 import { communityFolderQuery, communityFolderDelete } from '@/api/manage'
 import { headers } from '@/utils/request'
 export default {
   name: 'YunPan',
-  components: {},
+  components: { 'a-empty': Empty },
   data () {
     return {
       current: ['1'],
@@ -162,13 +183,22 @@ export default {
   right: 60px;
 }
 .yun-pan {
+  span {
+    display: inline-block;
+  }
   .list-none {
     text-align: center;
   }
   .ant-layout-content {
     background-color: rgb(255, 255, 255);
     min-height: 400px;
-    max-height: 600px;
+    overflow: scroll;
+  }
+  .files {
+    height: 400px;
+    width: 920px;
+    overflow: scroll;
+    padding-right: 20px;
   }
   .ant-layout-footer {
     display: block;
@@ -177,8 +207,19 @@ export default {
     text-align: center;
   }
   .ant-upload-list {
-    width: 300px;
     margin-left: 50px;
+  }
+  .file-name {
+    width: 500px;
+  }
+  .file-size {
+    width: 100px;
+  }
+  .file-time {
+    width: 150px;
+  }
+  .uploader {
+    width: 100px;
   }
 }
 </style>

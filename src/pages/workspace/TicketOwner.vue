@@ -40,25 +40,25 @@ export default {
       owners: [],
       ticketOwner: { owner: '' },
       rules: {
-        owner: [{ required: true, message: '请选择业务员', trigger: 'blur' }]
+        owner: [{ required: true, message: '请选择业务员' }]
       }
     }
   },
   created () {
-    this.ticketOwner.ticketId = this.ticket.id
+    this.ticketOwner.ticketId = this.ticket.ticketId
     this.queryTicketOwner()
     this.queryUsers()
   },
   watch: {
     ticket: function (newVal, oldVal) {
-      this.ticketOwner.ticketId = this.ticket.id
+      this.ticketOwner.ticketId = this.ticket.ticketId
       this.queryTicketOwner()
     }
   },
   methods: {
     queryUsers: function () {
       queryNormalUsers().then(e => {
-        this.users = e
+        this.users = e.filter(u => u.firstName)
       })
     },
     getUserName: function (login) {
@@ -69,7 +69,7 @@ export default {
       return user.firstName || login
     },
     queryTicketOwner: function () {
-      queryTicketOwner(this.ticket.id).then(e => {
+      queryTicketOwner(this.ticket.ticketId).then(e => {
         this.owners = e
       })
     },

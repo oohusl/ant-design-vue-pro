@@ -8,20 +8,24 @@
       <span slot="createdDate" slot-scope="text">
         {{ text | momentTime }}
       </span>
+      <span slot="keyIntention" slot-scope="record">
+        {{ getTicketSummary(record) }}
+      </span>
     </a-table>
     <a-modal title="跟进信息" :visible="historyVisible" :footer="null" @cancel="historyVisible = false" width="800px">
-      <ticket-history :ticket="ticketSelected" :edit="true"></ticket-history>
+      <ticket-history :ticket="ticket" :edit="true"></ticket-history>
     </a-modal>
   </a-card>
 </template>
 <script>
+import { getTicketSummary } from '@/api/ticket'
 import { queryMyTicketList } from '@/api/manage'
 import TicketHistory from './TicketHistory.vue'
 
 const columns = [
   {
     title: 'ID',
-    dataIndex: 'id',
+    dataIndex: 'ticketInfo.id',
     key: 'id'
   },
   {
@@ -35,7 +39,18 @@ const columns = [
     key: 'clientPhone'
   },
   {
-    title: '分配时间',
+    title: '核心需求',
+    key: 'keyIntention',
+    dataIndex: 'ticketInfo',
+    scopedSlots: { customRender: 'keyIntention' }
+  },
+  {
+    title: '意向小区',
+    dataIndex: 'ticketInfo.intentionCommunity',
+    key: 'intentionCommunity'
+  },
+  {
+    title: '拉私时间',
     dataIndex: 'createdDate',
     scopedSlots: { customRender: 'createdDate' }
   },
@@ -54,7 +69,7 @@ export default {
     return {
       data,
       columns,
-      ticketSelected: {},
+      ticket: {},
       historyVisible: false
     }
   },
@@ -67,12 +82,13 @@ export default {
     })
   },
   methods: {
+    getTicketSummary,
     viewTicketHistory (record) {
       this.historyVisible = true
-      this.ticketSelected = record
+      this.ticket = record.ticketInfo
     },
     viewDetail (record) {
-      this.$router.push({ path: 'ticket-detail/' + record.ticketId })
+      this.$router.push({ path: 'ticket-detail/' + record.ticketInfo.id })
     }
   }
 }

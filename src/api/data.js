@@ -1453,6 +1453,8 @@ export const paymentMethodOptions = ['按揭贷款', '一次付清'].map(e => {
   return { label: e, value: e }
 })
 
+export const cellAttributesOptions = ['住宅', '别墅', '商业办公', '其他']
+
 export const roomTypeOptions = [
   { label: '一房', value: '1' },
   { label: '二房', value: '2' },
@@ -1464,3 +1466,17 @@ export const genderOptions = [
   { label: '先生', value: '1' },
   { label: '女士', value: '0' }
 ]
+
+export function transRange (min, max, unit = '') {
+  if (min && max) {
+    return `${min}-${max}${unit}`
+  } else if (min || max) {
+    return `${min || max}${unit}`
+  } else {
+    return ''
+  }
+}
+
+export function transHouseType (types) {
+  return transLabels((types || '').split('/') || '', roomTypeOptions)
+}
