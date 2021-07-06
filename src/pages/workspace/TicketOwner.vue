@@ -45,13 +45,12 @@ export default {
     }
   },
   created () {
-    this.ticketOwner.ticketId = this.ticket.ticketId
     this.queryTicketOwner()
     this.queryUsers()
   },
   watch: {
     ticket: function (newVal, oldVal) {
-      this.ticketOwner.ticketId = this.ticket.ticketId
+      this.ticketOwner.ticketId = this.ticket.id
       this.queryTicketOwner()
     }
   },
@@ -69,14 +68,16 @@ export default {
       return user.firstName || login
     },
     queryTicketOwner: function () {
-      queryTicketOwner(this.ticket.ticketId).then(e => {
+      queryTicketOwner(this.ticket.id).then(e => {
         this.owners = e
       })
     },
     onSubmit: function () {
       if (!this.ticketOwner.owner) {
         console.log('')
+        return
       }
+      this.ticketOwner.ticketId = this.ticket.id
       this.$refs.ticketOwnerForm.validate(err => {
         if (err) {
           addTiketOwner(this.ticketOwner).then(e => {

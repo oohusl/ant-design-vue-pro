@@ -19,7 +19,7 @@
     "core-js": "^3.1.2",
     "cropperjs": "^1.5.12",
     "enquire.js": "^2.1.6",
-    "excellentexport": "^3.6.0",
+    "excellentexport": "^3.7.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.get": "^4.4.2",
     "lodash.pick": "^4.4.0",

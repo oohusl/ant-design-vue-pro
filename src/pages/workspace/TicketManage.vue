@@ -105,10 +105,11 @@ export default {
       })
     },
     viewTicketHistory (record) {
-      this.historyVisible = true
       this.ticketSelected = record
+      this.historyVisible = true
     },
     viewTicketOwner (record) {
+      this.ticketSelected = record
       this.ownerVisible = true
     },
     viewDetail (record) {

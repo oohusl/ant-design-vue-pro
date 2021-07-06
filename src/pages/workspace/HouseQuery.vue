@@ -29,15 +29,15 @@
               <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
               <a-menu-item key="2"> 导入 </a-menu-item>
               <a-menu-item key="3">
-                <a download="985.xlsx" id="anchorNewApi" href="#" @click="dataExport">导出</a>
+                <a href="#" @click="dataExport" v-if="showExport()">导出</a>
               </a-menu-item>
             </a-menu>
             <a-button> 操作 <a-icon type="down" /> </a-button>
           </a-dropdown>
-
           <a :style="{ marginLeft: '8px', fontSize: '12px' }" @click="advanced = !advanced">
             {{ advanced ? '收起' : '展开' }} <a-icon :type="advanced ? 'up' : 'down'" />
           </a>
+          <a download="985.xlsx" style="visibility: hidden" id="anchorNewApi" href="#">导出</a>
         </Affix>
       </a-layout-header>
       <a-layout-content class="house-query-content" :style="{ background: '#ffffff', padding: '0 128px' }">
@@ -694,6 +694,7 @@ import {
 } from '@/api/data'
 import { AutoComplete, BackTop, Affix, Pagination } from 'ant-design-vue'
 import ExcellentExport from 'excellentexport'
+import { mapState } from 'vuex'
 
 export default {
   name: 'HouseQuery',
@@ -706,6 +707,9 @@ export default {
     Affix,
     'a-pagination': Pagination
   },
+  computed: mapState({
+    currentUser: state => state.user.info
+  }),
   data () {
     return {
       // 高级搜索 展开/关闭
@@ -768,7 +772,7 @@ export default {
       subwayStations: {},
       timer: undefined,
       schoolType,
-      dataExcel: [],
+      excelData: [],
       headers: Object.keys(ExcelInfo),
       fields: Object.values(ExcelInfo),
       schoolGroup: { 幼儿园: [], 小学: [], 中学: [] },
@@ -827,7 +831,6 @@ export default {
     searchData (size) {
       return this.makeSearchRequest(size).then(e => {
         this.results = e
-        this.dataExportQuery()
       })
     },
     pageChanged (event) {
@@ -837,6 +840,9 @@ export default {
       })
     },
     makeSearchRequest (size) {
+      return getHouse(this.makeSearchRequestParam(size))
+    },
+    makeSearchRequestParam (size) {
       const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
       requestParameters.plate = Object.values(this.plates).flat()
@@ -911,7 +917,7 @@ export default {
         })
         delete requestParameters.checkedList
       }
-      return getHouse(requestParameters)
+      return requestParameters
     },
 
     areaReset () {
@@ -1141,25 +1147,42 @@ export default {
       }
     },
 
+    showExport (add = 0) {
+      const key = this.currentUser.login + '_export' + moment(new Date()).format('yyyyMMdd')
+      const l = localStorage.getItem(key) || '{"time": 0}'
+      const s = JSON.parse(l)
+      if (add > 0) {
+        s.time = s.time + add
+        localStorage.setItem(key, JSON.stringify(s))
+        this.$forceUpdate()
+      }
+      return s.time < 3
+    },
+
     dataExport () {
-      return ExcellentExport.convert(
-        {
-          anchor: 'anchorNewApi',
-          filename: '985',
-          format: 'xlsx'
-        },
-        [
+      this.dataExportQuery().then(() => {
+        this.showExport(1)
+
+        ExcellentExport.convert(
           {
-            name: '房源信息',
-            from: {
-              array: this.excelData
+            openAsDownload: true,
+            filename: '985',
+            format: 'xlsx'
+          },
+          [
+            {
+              name: '房源信息',
+              from: {
+                array: this.excelData
+              }
             }
-          }
-        ]
-      )
+          ]
+        )
+        this.$forceUpdate()
+      })
     },
     dataExportQuery () {
-      this.makeSearchRequest(200).then(r => {
+      return this.makeSearchRequest(100).then(r => {
         if (r.length < 1) {
           return
         }

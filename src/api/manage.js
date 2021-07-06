@@ -11,6 +11,7 @@ const api = {
   permissionNoPager: '/permission/no-pager',
   orgTree: '/org/tree',
   house: '/community-infos/query',
+  houseAndView: '/community-infos/queryViews',
   getHouse: '/community-infos/',
   editHouse: '/community-infos',
   constants: '/set/constant-infos',
@@ -130,6 +131,14 @@ export function getHouseDetail (parameter) {
 export function getHouse (parameter) {
   return request({
     url: `${api.house}?page=${parameter.page}&sort=${parameter.sort}&size=${parameter.size}`,
+    method: 'post',
+    data: parameter
+  })
+}
+
+export function getHouseAndView (parameter) {
+  return request({
+    url: `${api.houseAndView}?page=${parameter.page}&sort=${parameter.sort}&size=${parameter.size}`,
     method: 'post',
     data: parameter
   })

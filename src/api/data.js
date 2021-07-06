@@ -1457,7 +1457,9 @@ export const paymentMethodOptions = ['按揭贷款', '一次付清'].map(e => {
   return { label: e, value: e }
 })
 
-export const cellAttributesOptions = ['住宅', '别墅', '商业办公', '其他']
+export const cellAttributesOptions = ['住宅', '别墅', '商业办公', '其他'].map(e => {
+  return { label: e, value: e }
+})
 
 export const roomTypeOptions = [
   { label: '一房', value: '1' },
