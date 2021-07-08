@@ -121,18 +121,11 @@ export default {
       modified: false
     }
   },
-  watch: {
-    houseId (houseId) {
-      this.queryPhotos()
-    }
-  },
-  created () {
-    this.queryPhotos()
-  },
   mounted () {},
   methods: {
     open () {
       this.visible = true
+      this.queryPhotos()
     },
     queryPhotos () {
       return photoQuery(this.houseId).then(e => {

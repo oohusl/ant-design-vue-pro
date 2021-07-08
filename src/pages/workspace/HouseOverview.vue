@@ -361,7 +361,8 @@
     <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
       <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
-    <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef" @changed="imageChange"> </house-image-edit>
+    <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef" @changed="imageChange">
+    </house-image-edit>
     <house-file-edit :houseId="houseSelect.id" ref="houseFileRef"></house-file-edit>
     <a-modal
       title="图片预览"

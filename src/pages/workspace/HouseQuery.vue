@@ -29,7 +29,7 @@
               <a-menu-item key="1" @click="newHouse()"> 新建 </a-menu-item>
               <a-menu-item key="2"> 导入 </a-menu-item>
               <a-menu-item key="3">
-                <a href="#" @click="dataExport" v-if="showExport()">导出</a>
+                <a href="#" @click="dataExport">导出</a>
               </a-menu-item>
             </a-menu>
             <a-button> 操作 <a-icon type="down" /> </a-button>
@@ -663,7 +663,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getHouse, getSchools } from '@/api/manage'
+import { getHouse, getSchools, getHouseAndView } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
 import {
   schoolType,
@@ -1160,29 +1160,33 @@ export default {
     },
 
     dataExport () {
-      this.dataExportQuery().then(() => {
-        this.showExport(1)
+      this.dataExportQuery()
+        .then(() => {
+          this.showExport(1)
 
-        ExcellentExport.convert(
-          {
-            openAsDownload: true,
-            filename: '985',
-            format: 'xlsx'
-          },
-          [
+          ExcellentExport.convert(
             {
-              name: '房源信息',
-              from: {
-                array: this.excelData
+              openAsDownload: true,
+              filename: '985',
+              format: 'xlsx'
+            },
+            [
+              {
+                name: '房源信息',
+                from: {
+                  array: this.excelData
+                }
               }
-            }
-          ]
-        )
-        this.$forceUpdate()
-      })
+            ]
+          )
+          this.$forceUpdate()
+        })
+        .catch(e => {
+          this.$message.warning('数据导出失败')
+        })
     },
     dataExportQuery () {
-      return this.makeSearchRequest(100).then(r => {
+      return getHouseAndView(this.makeSearchRequestParam(100)).then(r => {
         if (r.length < 1) {
           return
         }

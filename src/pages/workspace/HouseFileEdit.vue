@@ -70,14 +70,6 @@ export default {
       modified: false
     }
   },
-  watch: {
-    houseId (houseId) {
-      this.communityFolderQuery()
-    }
-  },
-  created () {
-    this.communityFolderQuery()
-  },
   methods: {
     headers,
     open () {
