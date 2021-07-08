@@ -34,12 +34,12 @@
                     {{ houseSelect.address }}
                   </a-descriptions-item>
                   <a-descriptions-item label="建筑类型" :span="4">
-                    {{ transLabels(commView.buildingType, buildingTypeOptions) }}
+                    {{ transLabels(houseSelect.view.buildingType, buildingTypeOptions) }}
                   </a-descriptions-item>
                 </a-descriptions>
                 <a-descriptions title="" :column="4">
                   <a-descriptions-item label="交易权属" :span="4">
-                    {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
+                    {{ transLabels(houseSelect.view.transactionOwnership, transactionOwnershipOptions) }}
                   </a-descriptions-item>
                   <a-descriptions-item label="建筑时间" :span="4">
                     {{ houseSelect.constructionAge ? houseSelect.constructionAge + '年' : '' }}
@@ -361,8 +361,7 @@
     <a-modal title="楼盘问答" :visible="houseQAVisible" @ok="saveHouseQuestion" @cancel="houseQAVisible = false">
       <HouseQA :houseSelect="houseSelect" :question="questionEdit" ref="houseQARef"></HouseQA>
     </a-modal>
-    <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef" @changed="imageChange">
-    </house-image-edit>
+    <house-image-edit :houseId="houseSelect.id" ref="housePhotoRef" @changed="imageChange"> </house-image-edit>
     <house-file-edit :houseId="houseSelect.id" ref="houseFileRef"></house-file-edit>
     <a-modal
       title="图片预览"
@@ -412,8 +411,7 @@ import {
   getHouseDetail,
   deleteAnalysis,
   deleteHouseDiary,
-  deleteHouseQuestion,
-  commAnalysisView
+  deleteHouseQuestion
 } from '@/api/manage'
 export default {
   name: 'HouseOverview',
@@ -453,7 +451,7 @@ export default {
       subwayStations: {},
       getLabel: getLabel,
       metrolineDistrictInfo: [],
-      houseSelect: {},
+      houseSelect: { view: {} },
       current: 0,
       detailFlag: 0,
       houseTypeVisible: false,
@@ -473,8 +471,7 @@ export default {
       diaryEdit: null,
       questionEdit: null,
       previewImage: null,
-      imgViewerReflesh: 0,
-      commView: {}
+      imgViewerReflesh: 0
     }
   },
   created () {
@@ -484,29 +481,18 @@ export default {
   },
   beforeMount () {
     console.log(this.$route.params)
-    this.houseSelect = {}
     this.houseSelect.id = Number(this.$route.query.houseId)
     this.houseType.communityId = this.houseSelect.id
     this.queryHouse()
     this.queryAllAnalysis()
     this.queryAllHouseDiary()
     this.queryQuestion()
-    this.commAnalysisView()
   },
   methods: {
     moment,
     transLabels,
     closeDetail () {
       this.detailFlag = 0
-    },
-    commAnalysisView () {
-      commAnalysisView(this.houseSelect.id)
-        .then(e => {
-          this.commView = e
-        })
-        .catch(e => {
-          this.$message.warning('户型信息查询失败')
-        })
     },
     showDetail () {
       this.detailFlag = 1
@@ -683,8 +669,8 @@ export default {
     saveHouseType () {
       this.$refs.housetypeeditref.saveHouseType().then(e => {
         this.houseTypeVisible = false
+        this.queryHouse()
         this.queryAllAnalysis()
-        this.commAnalysisView()
       })
     },
     saveHouseDiary () {

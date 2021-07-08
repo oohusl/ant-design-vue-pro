@@ -141,23 +141,23 @@
         </a-descriptions>
         <a-descriptions title="户型" :column="4">
           <a-descriptions-item label="权属">
-            {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
+            {{ transLabels(houseSelect.view.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
-            {{ transLabels(commView.buildingType, buildingTypeOptions) }}
+            {{ transLabels(houseSelect.view.buildingType, buildingTypeOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
-            {{ transLabels(commView.isLift, liftOptions) }}
+            {{ transLabels(houseSelect.view.isLift, liftOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
             {{
-              ([...commView.toilet] || [])
+              ([...houseSelect.view.toilet] || [])
                 .sort((a, b) => a - b)
                 .map(e => e + '卫')
                 .join('/')
             }}
           </a-descriptions-item>
-          <template v-for="roomType in commView.roomTypes">
+          <template v-for="roomType in houseSelect.view.roomTypes">
             <a-descriptions-item :label="roomType.room + '居面积'" :span="1" :key="roomType.room">
               {{ roomType.roomAreaMin ? roomType.roomAreaMin + '-' : ''
               }}{{ roomType.roomAreaMax ? roomType.roomAreaMax + 'm²' : '' }}
@@ -427,24 +427,24 @@
         </a-descriptions>
         <a-descriptions title="户型" :column="4">
           <a-descriptions-item label="权属">
-            {{ transLabels(commView.transactionOwnership, transactionOwnershipOptions) }}
+            {{ transLabels(houseSelect.view.transactionOwnership, transactionOwnershipOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="建筑类型">
-            {{ transLabels(commView.buildingType, buildingTypeOptions) }}
+            {{ transLabels(houseSelect.view.buildingType, buildingTypeOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="是否电梯">
-            {{ transLabels(commView.isLift, liftOptions) }}
+            {{ transLabels(houseSelect.view.isLift, liftOptions) }}
           </a-descriptions-item>
           <a-descriptions-item label="卫生间">
             {{
-              ([...commView.toilet] || [])
+              ([...houseSelect.view.toilet] || [])
                 .filter(e => e)
                 .sort((a, b) => a - b)
                 .map(e => e + '卫')
                 .join('/')
             }}
           </a-descriptions-item>
-          <template v-for="roomType in commView.roomTypes">
+          <template v-for="roomType in houseSelect.view.roomTypes">
             <a-descriptions-item :label="roomType.room + '居面积'" :span="1" :key="roomType.room">
               {{ roomType.roomAreaMin ? roomType.roomAreaMin + '-' : ''
               }}{{ roomType.roomAreaMax ? roomType.roomAreaMax + 'm²' : '' }}
@@ -462,7 +462,7 @@
 
 <script>
 import { AutoComplete } from 'ant-design-vue'
-import { saveHouse, getLabels, getSchools, commAnalysisView } from '@/api/manage'
+import { saveHouse, getLabels, getSchools } from '@/api/manage'
 import {
   areaOptions,
   getMetroLineOptions,
@@ -550,8 +550,7 @@ export default {
       houseTypeFiles: [],
       houseTypes: [],
       houseTypeEdit: {},
-      schoolEdit: {},
-      commView: {}
+      schoolEdit: {}
     }
   },
   created () {
@@ -560,15 +559,6 @@ export default {
     })
     this.getMetrolineDistrictInfo()
     this.houseTypeEdit.communityId = this.houseSelect.id
-    commAnalysisView(this.houseTypeEdit.communityId)
-      .then(e => {
-        this.commView = e
-        // this.spinning = false
-      })
-      .catch(e => {
-        this.$message.warning('户型信息查询失败')
-      })
-
     const _this = this
     getSchools().then(function (e) {
       e.forEach(s => {
@@ -696,9 +686,6 @@ export default {
     },
     showDetail () {
       this.edit = false
-      commAnalysisView(this.houseTypeEdit.communityId).then(e => {
-        this.commView = e
-      })
       console.log(this.houseSelect)
     },
 
