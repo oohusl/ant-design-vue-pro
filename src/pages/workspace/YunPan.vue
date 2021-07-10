@@ -19,6 +19,7 @@
                 <span class="file-size">大小</span>
                 <span class="file-time">上传日期</span>
                 <span class="uploader">上传人</span>
+                <span class="action">操作</span>
               </span>
             </div>
           </div>
@@ -43,17 +44,19 @@
                   }}</span>
                   <span class="file-time">{{ f.createdDate | momentTime }}</span>
                   <span class="uploader">{{ f.createdBy }}</span>
-                  <i class="anticon ant-upload-list-item-card-actions anticon-download">
-                    <a :href="f.filePath" :download="f.fileName">
-                      <img src="../../assets/download.svg" />
-                    </a>
-                  </i>
-                  <i class="anticon ant-upload-list-item-card-actions anticon-share" @click="handleShare(f)">
-                    <img src="../../assets/share.svg" />
-                  </i>
-                  <i class="anticon ant-upload-list-item-card-actions anticon-delete" @click="handleRemove(f)">
-                    <img src="../../assets/delete.svg" />
-                  </i>
+                  <span class="action">
+                    <i>
+                      <a :href="f.filePath" :download="f.fileName">
+                        <img src="../../assets/download.svg" />
+                      </a>
+                    </i>
+                    <i @click="handleShare(f)">
+                      <img src="../../assets/share.svg" />
+                    </i>
+                    <i @click="handleRemove(f)">
+                      <img src="../../assets/delete.svg" />
+                    </i>
+                  </span>
                 </span>
               </div>
             </div>
@@ -196,9 +199,8 @@ export default {
   }
   .files {
     height: 400px;
-    width: 920px;
+    width: 1050px;
     overflow: scroll;
-    padding-right: 20px;
   }
   .ant-layout-footer {
     display: block;
@@ -220,6 +222,11 @@ export default {
   }
   .uploader {
     width: 100px;
+  }
+  .action {
+    i {
+      padding-left: 5px;
+    }
   }
 }
 </style>
