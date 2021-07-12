@@ -157,7 +157,7 @@ export default {
       this.cropper.getCroppedCanvas().toBlob(blob => {
         const formData = new FormData()
         // Pass the image file name as the third parameter if necessary.
-        formData.append('file', blob)
+        formData.append('file', blob, 'blob.png')
         // Use `jQuery.ajax` method for example
         this.modified = true
         imageUPload(formData).then(e => {
