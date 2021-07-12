@@ -672,6 +672,7 @@ import {
   averageLlistedPriceOptions,
   totalPriceOptions,
   roomAreaOptions,
+  liftOptions,
   constructionAgeOptions,
   loopSummaryOptions,
   communityLevOptions,
@@ -685,11 +686,11 @@ import {
   parkingSpaceRatioOptions,
   volume2019Options,
   metroDistanceOption,
-  liftOptions,
   ExcelInfo,
   getLabel,
+  transLabels,
   toiletOptions,
-  calScope,
+  calViewScope,
   cellAttributesOptions
 } from '@/api/data'
 import { AutoComplete, BackTop, Affix, Pagination } from 'ant-design-vue'
@@ -793,6 +794,7 @@ export default {
   },
   mounted () {
     window.ExcellentExport = ExcellentExport
+    // cleanDuplicateData().then(e => {})
   },
   methods: {
     closeDetail () {
@@ -842,8 +844,9 @@ export default {
     makeSearchRequest (size) {
       return getHouse(this.makeSearchRequestParam(size))
     },
-    makeSearchRequestParam (size) {
+    makeSearchRequestParam (size, page) {
       const requestParameters = Object.assign({ sort: this.sort, size: size || this.size }, this.queryParam)
+
       requestParameters.subwayStation = Object.values(this.subwayStations).flat()
       requestParameters.plate = Object.values(this.plates).flat()
       if (requestParameters.toilet && requestParameters.toilet.length === toiletOptions.length) {
@@ -1147,23 +1150,9 @@ export default {
       }
     },
 
-    showExport (add = 0) {
-      const key = this.currentUser.login + '_export' + moment(new Date()).format('yyyyMMdd')
-      const l = localStorage.getItem(key) || '{"time": 0}'
-      const s = JSON.parse(l)
-      if (add > 0) {
-        s.time = s.time + add
-        localStorage.setItem(key, JSON.stringify(s))
-        this.$forceUpdate()
-      }
-      return s.time < 3
-    },
-
     dataExport () {
       this.dataExportQuery()
         .then(() => {
-          this.showExport(1)
-
           ExcellentExport.convert(
             {
               openAsDownload: true,
@@ -1186,67 +1175,83 @@ export default {
         })
     },
     dataExportQuery () {
-      return getHouseAndView(this.makeSearchRequestParam(100)).then(r => {
-        if (r.length < 1) {
-          return
-        }
-        let excelData = r.map(e => {
-          e.metroInfo = e.metroInfo || []
-          e.schoolDistrictInfo = e.schoolDistrictInfo || []
-          e.roomArea1 = calScope(e, 'roomArea', '1')
-          e.roomArea2 = calScope(e, 'roomArea', '2')
-          e.roomArea3 = calScope(e, 'roomArea', '3')
-          e.roomArea4 = calScope(e, 'roomArea', '4')
-
-          e.roomPriceRange1 = calScope(e, 'roomPriceRange', '1')
-          e.roomPriceRange2 = calScope(e, 'roomPriceRange', '2')
-          e.roomPriceRange3 = calScope(e, 'roomPriceRange', '3')
-          e.roomPriceRangeMore = calScope(e, 'roomPriceRange', 'More')
-          e.peopleAndVehicles = getLabel(e.peopleAndVehicles, peopleAndVehiclesOptions)
-          e.isLift = getLabel(e.isLift, liftOptions)
-
-          e.metroLine = []
-          e.metroInfo.forEach(m => {
-            e.metroLine.push(`${m.metroLine}-${m.subwayStation}-${m.distance != null ? m.distance + 'm' : ''}`)
-          })
-          e.metroLine = e.metroLine.join('/')
-
-          const school1 = []
-          const school2 = []
-          const school2Level = []
-          const school3 = []
-          const school3Level = []
-          const isConsistentSystem = []
-          e.schoolDistrictInfo.forEach(m => {
-            const s = this.getSchool(m.schoolName, m.schoolType)
-            if (m.schoolType === '幼儿园') {
-              school1.push(m.schoolName)
-            }
-            if (m.schoolType === '小学') {
-              school2.push(m.schoolName)
-              school2Level.push(s.level)
-            }
-            if (m.schoolType === '中学') {
-              school3.push(m.schoolName)
-              school3Level.push(s.level)
-              isConsistentSystem.push(s.isConsistentSystem)
-            }
-          })
-          e.school1 = school1.join('/')
-          e.school2 = school2.join('/')
-          e.school2Level = school2Level.join('/')
-          e.school3 = school3.join('/')
-          e.school3Level = school3Level.join('/')
-          e.isConsistentSystem = isConsistentSystem.join('/')
-          const row = []
-          this.fields.forEach(f => {
-            row.push(e[f])
-          })
-          return row
-        })
-        excelData = [this.headers, ...excelData]
-        this.excelData = excelData
+      this.excelData = [this.headers]
+      return getHouseAndView(this.makeSearchRequestParam(1000, 0)).then(r => {
+        this.dealData(r)
       })
+    },
+    dealData (r) {
+      const excelData = r.map(e => {
+        e.metroInfo = e.metroInfo || []
+        e.schoolDistrictInfo = e.schoolDistrictInfo || []
+        e.roomArea1 = calViewScope(e.view.roomTypes, 'roomArea', 1)
+        e.roomArea2 = calViewScope(e.view.roomTypes, 'roomArea', 2)
+        e.roomArea3 = calViewScope(e.view.roomTypes, 'roomArea', 3)
+        e.roomArea4 = calViewScope(e.view.roomTypes, 'roomArea', 4)
+        e.roomArea5 = calViewScope(e.view.roomTypes, 'roomArea', 5)
+        e.roomPriceRangeMore = calViewScope(e.view.roomTypes, 'roomArea')
+
+        e.roomPriceRange1 = calViewScope(e.view.roomTypes, 'roomPrice', 1)
+        e.roomPriceRange2 = calViewScope(e.view.roomTypes, 'roomPrice', 2)
+        e.roomPriceRange3 = calViewScope(e.view.roomTypes, 'roomPrice', 3)
+        e.roomPriceRange4 = calViewScope(e.view.roomTypes, 'roomPrice', 4)
+        e.roomPriceRange5 = calViewScope(e.view.roomTypes, 'roomPrice', 5)
+        e.roomPriceRangeMore = calViewScope(e.view.roomTypes, 'roomPrice')
+        e.peopleAndVehicles = getLabel(e.peopleAndVehicles, peopleAndVehiclesOptions)
+        e.communityLev = getLabel(e.communityLev, communityLevOptions)
+
+        e.metroLine = []
+        e.metroInfo.forEach(m => {
+          e.metroLine.push(`${m.metroLine}-${m.subwayStation}-${m.distance != null ? m.distance + 'm' : ''}`)
+        })
+        e.metroLine = e.metroLine.join('/')
+
+        const school1 = []
+        const school1Level = []
+        const school2 = []
+        const school2Level = []
+        const school3 = []
+        const school3Level = []
+        const isConsistentSystem = []
+        e.schoolDistrictInfo.forEach(m => {
+          const s = this.getSchool(m.schoolName, m.schoolType)
+          if (m.schoolType === '幼儿园') {
+            school1.push(m.schoolName)
+            school1Level.push(m.level)
+          }
+          if (m.schoolType === '小学') {
+            school2.push(m.schoolName)
+            school2Level.push(s.level)
+          }
+          if (m.schoolType === '中学') {
+            school3.push(m.schoolName)
+            school3Level.push(s.level)
+            isConsistentSystem.push(s.isConsistentSystem)
+          }
+        })
+        e.school1 = school1.join('/')
+        e.school1Level = school1Level.join('/')
+        e.school2 = school2.join('/')
+        e.school2Level = school2Level.join('/')
+        e.school3 = school3.join('/')
+        e.school3Level = school3Level.join('/')
+        e.isConsistentSystem = isConsistentSystem.join('/')
+        const row = []
+        const view = ['transactionOwnership', 'buildingType', 'isLift', 'toilet']
+        this.fields.forEach(f => {
+          if (view.includes(f)) {
+            if (f === 'isLift') {
+              row.push(transLabels(e['view'].isLift, liftOptions))
+            } else {
+              row.push(e['view'] && e['view'][f] && e['view'][f].join('/'))
+            }
+          } else {
+            row.push(e[f])
+          }
+        })
+        return row
+      })
+      this.excelData.push(...excelData)
     },
     search () {
       console.log('search')
