@@ -1176,7 +1176,7 @@ export default {
     },
     dataExportQuery () {
       this.excelData = [this.headers]
-      return getHouseAndView(this.makeSearchRequestParam(1000, 0)).then(r => {
+      return getHouseAndView(this.makeSearchRequestParam(100, 0)).then(r => {
         this.dealData(r)
       })
     },
