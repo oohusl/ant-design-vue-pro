@@ -511,7 +511,6 @@ export default {
     return {
       edit: this.toCreate,
       stationOptions: [],
-      toilet: this.houseSelect.toilet ? this.houseSelect.toilet.split(',') : [],
       labels: [],
       areaPlate,
       plateOptions: [],
@@ -661,7 +660,6 @@ export default {
     saveHouse () {
       // save
       console.log('save:', this.houseSelect)
-      this.houseSelect.toilet = this.toilet.join(',')
 
       saveHouse(this.houseSelect)
         .then(e => {

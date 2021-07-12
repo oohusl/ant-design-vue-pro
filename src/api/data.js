@@ -1274,18 +1274,17 @@ export const qualityComLevOptions = [
 ]
 export const ExcelInfo = {
   楼盘名称: 'communityName',
+  楼盘等级: 'communityLev',
   均价: 'averageLlistedPrice',
   楼盘地址: 'address',
   所属区域: 'area',
   所属板块: 'plate',
   环线: 'loopSummary',
-  楼盘等级: 'communityLev',
   区域规划: 'districtPlanning',
   地铁线路: 'metroLine',
   开发商: 'developer',
   物业公司: 'propertyCompany',
   类型: 'cellAttributes',
-  权属: 'transactionOwnership',
   年限: 'propertyRights',
   建筑时间: 'constructionAge',
   小区栋数: 'buildingNumber',
@@ -1294,35 +1293,58 @@ export const ExcelInfo = {
   人车分流: 'peopleAndVehicles',
   容积率: 'volumeRate',
   绿化率: 'greeningRate',
-  建筑类型: 'buildingType',
-  是否电梯: 'isLift',
   最大层数: 'maxFloor',
   最小层数: 'minFloor',
   物业类型: 'propertyAttributes',
   物业费: 'propertyCosts',
+  在售: 'inStock',
+  在租: 'positiveRent',
+  成交量: 'volume2019',
   幼儿园: 'school1',
   小学: 'school2',
   小学梯队: 'school2Level',
   初中: 'school3',
   初中梯队: 'school3Level',
   一贯制: 'isConsistentSystem',
+  权属: 'transactionOwnership',
+  建筑类型: 'buildingType',
+  是否电梯: 'isLift',
+  卫生间: 'toilet',
   '1居面积': 'roomArea1',
   '1居价格': 'roomPriceRange1',
   '2居面积': 'roomArea2',
   '2居价格': 'roomPriceRange2',
   '3居面积': 'roomArea3',
   '3居价格': 'roomPriceRange3',
+  '4居面积': 'roomArea4',
+  '4居价格': 'roomPriceRange4',
+  '5居面积': 'roomArea5',
+  '5居价格': 'roomPriceRange5',
   多居面积: 'roomAreaMore',
   多居价格: 'roomPriceRangeMore',
-  在售: 'inStock',
-  在租: 'positiveRent',
-  成交量: 'volume2019',
   概括介绍: 'communityDesc'
 }
 export function calScope (obj, key, number) {
   const min = obj[key + number + 'Min'] || ''
   const max = obj[key + number + 'Max'] || ''
   return min + '-' + max
+}
+export function calViewScope (obj, key, number) {
+  if (number) {
+    const o = obj.find(e => {
+      return e.room === number
+    })
+    const min = (o || {})[key + 'Min'] || ''
+    const max = (o || {})[key + 'Max'] || ''
+    return min + '-' + max
+  } else {
+    const o = obj.find(e => {
+      return e.room > 5
+    })
+    const min = (o || {})[key + 'Min'] || ''
+    const max = (o || {})[key + 'Max'] || ''
+    return min + '-' + max
+  }
 }
 export const toiletOptions = [
   {
