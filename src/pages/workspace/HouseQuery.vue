@@ -663,7 +663,7 @@
 <script>
 import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
-import { getHouse, getSchools, getHouseAndView } from '@/api/manage'
+import { getHouse, getSchools, getHouseAndView, getHouseDetail } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
 import {
   schoolType,
@@ -1010,8 +1010,10 @@ export default {
 
     showDetail (community) {
       this.detailFlag = 1
-      this.house = community
-      this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
+      getHouseDetail(community.id).then(e => {
+        this.house = e
+        this.$refs.houseeditref && this.$refs.houseeditref.showDetail()
+      })
     },
 
     sortChange (type, sort) {
@@ -1102,7 +1104,7 @@ export default {
 
     newHouse () {
       this.detailFlag = 2
-      this.house = {}
+      this.house = { view: {} }
       this.house.metroInfo = []
       this.house.schoolDistrictInfo = []
       this.$refs.houseeditref && this.$refs.houseeditref.newHouse()
