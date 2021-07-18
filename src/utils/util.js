@@ -47,7 +47,7 @@ export function handleScrollHeader (callback) {
 
 export function isIE () {
   const bw = window.navigator.userAgent
-  const compare = (s) => bw.indexOf(s) >= 0
+  const compare = s => bw.indexOf(s) >= 0
   const ie11 = (() => 'ActiveXObject' in window)()
   return compare('MSIE') || ie11
 }
@@ -64,4 +64,37 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
   setTimeout(() => {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
+}
+
+var isSupportWebp = function () {
+  try {
+    return (
+      document
+        .createElement('canvas')
+        .toDataURL('image/webp', 0.5)
+        .indexOf('data:image/webp') === 0
+    )
+  } catch (err) {
+    return false
+  }
+}
+
+export const WEBP = isSupportWebp()
+
+const sizes = {
+  s: 96,
+  m: 200,
+  l: 360,
+  xl: 560
+}
+
+export function getImg (url, size) {
+  const s = url.split('.')
+  const name = s[0]
+  const type = WEBP ? 'webp' : s[1]
+  if (size) {
+    return `${name}_tiny_${sizes[size]}.${type}`
+  } else {
+    return `${name}.${type}`
+  }
 }

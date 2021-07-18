@@ -66,7 +66,7 @@
             @mouseenter="handleHover(element, 'in')"
             @mouseleave="handleHover({}, 'out')"
           >
-            <img :src="element.url" style="width:100px; height:100px" />
+            <img :src="getImg(element.url, 'm')" style="width:100px; height:100px" />
             <div class="list-item-actions" v-if="element.imageId === actionElement.imageId">
               <a-icon type="eye" @click="handlePreview(element.url)" />
               <a-icon type="delete" @click="handleRemove(element, type)" style="margin-left:5px" />
@@ -83,6 +83,7 @@
 import 'cropperjs/dist/cropper.css'
 import Cropper from 'cropperjs'
 import { photoQuery, housePhotoUpload, imageUPload } from '@/api/manage'
+import { getImg } from '@/utils/util'
 import { EventBus } from '@/event-bus'
 import draggable from 'vuedraggable'
 export default {
@@ -121,8 +122,8 @@ export default {
       modified: false
     }
   },
-  mounted () {},
   methods: {
+    getImg,
     open () {
       this.visible = true
       this.queryPhotos()

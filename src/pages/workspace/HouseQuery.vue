@@ -542,7 +542,7 @@
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0 }" width="300">
                     <img
                       v-if="community.communityPhoto"
-                      :src="community.communityPhoto"
+                      :src="getImg(community.communityPhoto, 'xl')"
                       :style="{ 'border-radius': '4px' }"
                     />
                     <img v-else src="~@/assets/first.png" :style="{ 'border-radius': '4px' }" />
@@ -665,6 +665,7 @@ import moment from 'moment'
 import { STable, Ellipsis } from '@/components'
 import { getHouse, getSchools, getHouseAndView, getHouseDetail } from '@/api/manage'
 import HouseEdit from './HouseEdit.vue'
+import { getImg } from '@/utils/util'
 import {
   schoolType,
   areaOptions,
@@ -797,6 +798,7 @@ export default {
     // cleanDuplicateData().then(e => {})
   },
   methods: {
+    getImg,
     closeDetail () {
       this.detailFlag = 0
       this.searchData(this.size)

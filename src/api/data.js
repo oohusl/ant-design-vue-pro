@@ -1243,19 +1243,51 @@ export const districtPlanningOptions = [
 export const popularComLevOptions = [
   {
     value: 1,
-    label: '热门楼盘1'
+    label: '热门1'
   },
   {
     value: 2,
-    label: '热门楼盘2'
+    label: '热门2'
   },
   {
     value: 3,
-    label: '热门楼盘3'
+    label: '热门3'
   },
   {
     value: 4,
-    label: '热门楼盘4'
+    label: '热门4'
+  },
+  {
+    value: 1001,
+    label: '热搜1'
+  },
+  {
+    value: 1002,
+    label: '热搜2'
+  },
+  {
+    value: 1003,
+    label: '热搜3'
+  },
+  {
+    value: 1004,
+    label: '热搜4'
+  },
+  {
+    value: 2001,
+    label: '热销1'
+  },
+  {
+    value: 2002,
+    label: '热销2'
+  },
+  {
+    value: 2003,
+    label: '热销3'
+  },
+  {
+    value: 2004,
+    label: '热销4'
   }
 ]
 export const qualityComLevOptions = [

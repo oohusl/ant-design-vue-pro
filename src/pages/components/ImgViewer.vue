@@ -2,9 +2,9 @@
   <a-layout-sider :style="{ padding: '0', background: '#ffffff' }" width="560">
     <a-layout>
       <a-layout-header :style="{ height: '336px', padding: '0' }">
-        <a-carousel ref="carouselRef" effect="fade" class="house-picture" :dots="false" v-if="albumList.length > 0">
+        <a-carousel effect="fade" class="house-picture" :dots="false" v-if="albumList.length > 0" ref="carouselRef">
           <div class="picture-list" v-for="(p, i) of albumList" :key="i">
-            <img :src="p.url" />
+            <img :src="getImg(p.url)" v-if="activeIndexs.has(i)" />
             <span>{{ p.title }}</span>
           </div>
         </a-carousel>
@@ -26,7 +26,7 @@
             <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
               <a-list-item slot="renderItem" slot-scope="item, index" @click="selectAlbum(item, index)">
                 <div class="album-list-item" :class="index === activeIndex ? 'active' : null">
-                  <img :src="item.url" />
+                  <img :src="getImg(item.url, 'm')" />
                 </div>
               </a-list-item>
             </a-list>
@@ -70,6 +70,7 @@
 
 <script>
 import { photoQuery } from '@/api/manage'
+import { getImg } from '@/utils/util'
 export default {
   name: 'ImgViewer',
   props: ['houseId', 'refresh'],
@@ -79,7 +80,8 @@ export default {
       albumList: [],
       interval: -1,
       activeUrl: null,
-      activeIndex: 0
+      activeIndex: 0,
+      activeIndexs: new Set([0, 1])
     }
   },
   created () {
@@ -94,12 +96,15 @@ export default {
     }
   },
   methods: {
+    getImg,
     startCarousel () {
-      clearInterval(this.interval)
-      this.interval = setInterval(() => {
-        this.activeIndex = (this.activeIndex + 1) % this.albumList.length
-        this.refreshCarousel()
-      }, 3000)
+      if (this.albumList.length <= 0) {
+      }
+      // clearInterval(this.interval)
+      // this.interval = setInterval(() => {
+      //   this.activeIndex = (this.activeIndex + 1) % this.albumList.length
+      //   this.refreshCarousel()
+      // }, 3000)
     },
     queryPhotos () {
       const photosOption = ['', '楼盘平面图', '周边规划图', '楼盘实景图', '周边实景图']
@@ -116,10 +121,7 @@ export default {
             index: photo.type
           })
         }
-        this.$forceUpdate()
-        if (this.albumList.length > 0) {
-          this.startCarousel()
-        }
+        this.startCarousel()
       })
     },
     imgViewerExit () {
@@ -132,7 +134,7 @@ export default {
       if (index < 0) {
         index = len - 1
       }
-      this.activeIndex = index
+      this.updateActiveIndex(index)
       this.activeUrl = this.albumList[this.activeIndex].url
       this.refreshCarousel()
       return false
@@ -147,19 +149,19 @@ export default {
       if (index < 0) {
         index = len - 1
       }
-      this.activeIndex = index
+      this.updateActiveIndex(index)
       this.refreshCarousel()
       this.startCarousel()
     },
     selectAlbum (item, index) {
-      this.activeIndex = index
+      this.updateActiveIndex(index)
       this.refreshCarousel()
       this.startCarousel()
     },
     refreshCarousel () {
       const scroll = document.querySelector('.house-album-list  ul')
       const len = this.albumList.length
-      this.$refs.carouselRef.goTo(this.activeIndex)
+      this.$refs['carouselRef'].goTo(this.activeIndex)
       if (len <= 5 || !scroll) {
         return
       }
@@ -170,6 +172,12 @@ export default {
         scrollIndex = len - 5
       }
       scroll.style.transform = `translateX(${-1 * scrollIndex * 104}px)`
+    },
+    updateActiveIndex (index) {
+      this.activeIndex = index
+      this.activeIndexs.add(index)
+      this.activeIndexs.add(index + 1)
+      this.$forceUpdate()
     }
   }
 }

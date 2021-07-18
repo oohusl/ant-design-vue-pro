@@ -419,3 +419,10 @@ export function getTicketInfo (id) {
     method: 'get'
   })
 }
+
+export function scaleImage (start1, start2) {
+  return request({
+    url: `/house-analysis/scaleImage/${start1}/${start2}`,
+    method: 'get'
+  })
+}

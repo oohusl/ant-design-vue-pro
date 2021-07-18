@@ -137,7 +137,11 @@
                   class="house-type-item"
                 >
                   <a-layout-sider :style="{ background: '#ffffff', padding: 0, overflow: 'hidden' }" width="200">
-                    <img v-if="house.photoUrl" :src="house.photoUrl" @click="previewImage = house.photoUrl" />
+                    <img
+                      v-if="house.photoUrl"
+                      :src="getImg(house.photoUrl, 'xl')"
+                      @click="previewImage = house.photoUrl"
+                    />
                     <img v-else src="~@/assets/second.png" />
                   </a-layout-sider>
                   <a-layout-content :style="{ background: '#ffffff', 'padding-left': '20px' }">
@@ -413,6 +417,7 @@ import {
   deleteHouseDiary,
   deleteHouseQuestion
 } from '@/api/manage'
+import { getImg } from '@/utils/util'
 export default {
   name: 'HouseOverview',
   components: {
@@ -490,6 +495,7 @@ export default {
   },
   methods: {
     moment,
+    getImg,
     transLabels,
     closeDetail () {
       this.detailFlag = 0
