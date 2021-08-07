@@ -89,12 +89,16 @@ const sizes = {
 }
 
 export function getImg (url, size) {
-  const s = url.split('.')
-  const name = s[0]
-  const type = WEBP ? 'webp' : s[1]
-  if (size) {
-    return `${name}_tiny_${sizes[size]}.${type}`
+  if (url) {
+    const s = url.split('.')
+    const name = s[0]
+    const type = WEBP ? 'webp' : s[1]
+    if (size) {
+      return `${name}_tiny_${sizes[size]}.${type}`
+    } else {
+      return `${name}.${type}`
+    }
   } else {
-    return `${name}.${type}`
+    return url
   }
 }

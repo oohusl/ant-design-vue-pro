@@ -4,7 +4,7 @@
       <a-layout-header :style="{ height: '336px', padding: '0' }">
         <a-carousel effect="fade" class="house-picture" :dots="false" v-if="albumList.length > 0" ref="carouselRef">
           <div class="picture-list" v-for="(p, i) of albumList" :key="i">
-            <img :src="getImg(p.url)" v-if="activeIndexs.has(i)" />
+            <img :src="getImg(p.url, 'xl')" v-if="activeIndexs.has(i)" />
             <span>{{ p.title }}</span>
           </div>
         </a-carousel>
@@ -26,7 +26,7 @@
             <a-list :data-source="albumList" class="house-album-list" itemLayout="vertical">
               <a-list-item slot="renderItem" slot-scope="item, index" @click="selectAlbum(item, index)">
                 <div class="album-list-item" :class="index === activeIndex ? 'active' : null">
-                  <img :src="getImg(item.url, 'm')" />
+                  <img :src="getImg(item.url, 'm')" v-if="index < num" />
                 </div>
               </a-list-item>
             </a-list>
@@ -51,7 +51,7 @@
       <div>
         <img
           style="position:absolute;top: 50%; left: 60px; z-index: 10001; cursor: pointer;"
-          src="../../assets/left.svg"
+          src="~@/assets/left.svg"
           @click="imgViewerFlip(-1)"
         />
         <img
@@ -60,7 +60,7 @@
         />
         <img
           style="position:absolute;top: 50%; right: 60px; z-index: 10001; cursor: pointer;"
-          src="../../assets/right.svg"
+          src="~@/assets/right.svg"
           @click="imgViewerFlip(1)"
         />
       </div>
@@ -79,6 +79,7 @@ export default {
       show: true,
       albumList: [],
       interval: -1,
+      num: 5,
       activeUrl: null,
       activeIndex: 0,
       activeIndexs: new Set([0, 1])
@@ -177,6 +178,9 @@ export default {
       this.activeIndex = index
       this.activeIndexs.add(index)
       this.activeIndexs.add(index + 1)
+      if (this.num === 5 && (index < 0 || index > 2)) {
+        this.num = 1000
+      }
       this.$forceUpdate()
     }
   }
@@ -323,7 +327,9 @@ export default {
   top: 304px;
 }
 .picture-list img {
-  width: 100%;
+  width: 560px;
+  height: 336px;
+  object-fit: cover;
 }
 .house-album-list >>> ul {
   transform: translateX(0px);
